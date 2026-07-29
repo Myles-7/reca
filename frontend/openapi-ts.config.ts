@@ -9,6 +9,7 @@ export default defineConfig({
   output: path.join(frontendRoot, "src", "client"),
 
   plugins: [
+    "@hey-api/typescript",
     "legacy/axios",
     {
       name: "@hey-api/sdk",
