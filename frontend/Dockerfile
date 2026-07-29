@@ -13,6 +13,8 @@ RUN bun install --frozen-lockfile
 
 COPY ./frontend /app/frontend
 ARG VITE_API_URL
+ARG VITE_APP_ENV
+ARG VITE_DEMO_MODE
 
 RUN bun run build
 

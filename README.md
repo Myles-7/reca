@@ -2120,7 +2120,18 @@ Linux CI 可调用等价的 `scripts/compose.sh`。默认仅将前端和 API 绑
 `127.0.0.1`；PostgreSQL、Valkey、MinIO 和 GROBID 只在内部 Compose 网络中可达。
 在共享环境启动前，必须创建本地 `.env` 并替换 `.env.example` 中的全部占位符。
 
-## 34. 核心成功标准
+## 34. M0 配置边界
+
+后端通过单一 Pydantic Settings 入口读取 `.env` 或容器环境，并支持
+`local`、`test`、`demo` 和 `production`。`MODEL_API_KEY` 与
+`OPENALEX_API_KEY` 可留空；它们会保持 `UNCONFIGURED`，不会阻止基础 API
+启动。生产环境必须提供至少 32 位、非占位的 `SECRET_KEY`，且不得使用
+`BACKEND_CORS_ORIGINS=*`。
+
+浏览器构建只接受 `VITE_API_URL`、`VITE_APP_ENV` 和 `VITE_DEMO_MODE`。
+不得以 `VITE_` 前缀传入数据库、对象存储、认证或 Provider 密钥。
+
+## 35. 核心成功标准
 
 RECA 0.1 的成功不以“页面数量”或“智能体数量”衡量。
 

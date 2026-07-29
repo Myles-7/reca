@@ -1,4 +1,26 @@
+import os
 from collections.abc import Generator
+
+# Settings are constructed at application import time. These test-only defaults
+# permit isolated configuration tests without creating a local .env file.
+_TEST_ENVIRONMENT = {
+    "ENVIRONMENT": "test",
+    "SECRET_KEY": "test-secret-key-not-for-production-1234567890",
+    "FIRST_SUPERUSER": "admin@example.com",
+    "FIRST_SUPERUSER_PASSWORD": "test-admin-password",
+    "POSTGRES_SERVER": "localhost",
+    "POSTGRES_DB": "reca_test",
+    "POSTGRES_USER": "reca",
+    "POSTGRES_PASSWORD": "test-postgres-password",
+    "VALKEY_URL": "valkey://localhost:6379/0",
+    "MINIO_ENDPOINT": "http://localhost:9000",
+    "MINIO_ROOT_USER": "reca-test-admin",
+    "MINIO_ROOT_PASSWORD": "test-minio-password",
+    "GROBID_URL": "http://localhost:8070",
+}
+
+for _name, _value in _TEST_ENVIRONMENT.items():
+    os.environ.setdefault(_name, _value)
 
 import pytest
 from fastapi.testclient import TestClient

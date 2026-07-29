@@ -7,6 +7,8 @@ services:
       dockerfile: frontend/Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+        VITE_APP_ENV: ${VITE_APP_ENV:-local}
+        VITE_DEMO_MODE: ${VITE_DEMO_MODE:-false}
     depends_on:
       api:
         condition: service_started
@@ -30,6 +32,11 @@ services:
     environment:
       PROJECT_NAME: ${PROJECT_NAME:-RECA}
       ENVIRONMENT: ${ENVIRONMENT:-local}
+      DEMO_MODE: ${DEMO_MODE:-false}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-50000000}
+      CONNECT_TIMEOUT_SECONDS: ${CONNECT_TIMEOUT_SECONDS:-5}
+      REQUEST_TIMEOUT_SECONDS: ${REQUEST_TIMEOUT_SECONDS:-30}
       FRONTEND_HOST: ${FRONTEND_HOST:-http://localhost:5173}
       BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-http://localhost:5173}
       SECRET_KEY: ${SECRET_KEY:-reca-local-only-secret-key-change-before-shared-use}
@@ -40,6 +47,18 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-reca}
       POSTGRES_USER: ${POSTGRES_USER:-reca}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-reca-local-only-postgres-password}
+      VALKEY_URL: valkey://valkey:6379/0
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-reca-local-admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
+      MINIO_BUCKET: ${MINIO_BUCKET:-reca}
+      GROBID_URL: http://grobid:8070
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-}
+      MODEL_BASE_URL: ${MODEL_BASE_URL:-}
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      OPENALEX_API_URL: ${OPENALEX_API_URL:-https://api.openalex.org}
+      OPENALEX_API_KEY: ${OPENALEX_API_KEY:-}
       SENTRY_DSN: ${SENTRY_DSN:-}
     ports:
       - "127.0.0.1:${API_PORT:-8000}:8000"

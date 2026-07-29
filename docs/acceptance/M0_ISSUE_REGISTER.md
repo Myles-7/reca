@@ -26,10 +26,13 @@
 - Severity: MEDIUM
 - Status: OPEN
 - Area: Local toolchain
-- Summary: The local environment lacked the project package managers and backend
-  quality tools needed to rerun imported application checks.
-- Evidence: `uv`, Bun, pytest, Ruff, and mypy were unavailable; Python syntax
-  compilation completed successfully.
+- Summary: The local environment lacks the locked RECA Python and frontend
+  toolchains needed to rerun application quality checks.
+- Evidence: M0-03 found a standalone `pytest` executable, but its interpreter
+  could not import `sqlmodel`; `python -m pytest` selected a different Python
+  without pytest. The workstation provides Python 3.13 while the project
+  requires Python 3.14 or later. Bun, uv, Ruff, and mypy remain unavailable.
+  `python -m compileall -q backend/app backend/tests` completed successfully.
 - Reproduction: Run the M0-01 lint, type-check, test, and frontend build
   commands in the current workstation environment.
 - Impact: Full M0-01 runtime quality verification remains pending.
@@ -38,12 +41,15 @@
 - Root cause: Local development runtime does not include project tooling.
 - Planned resolution: M0-FIX or CI clean-environment verification.
 - Resolution target: M0-FIX
-- Related tests: Backend format/lint/type/test; frontend install/lint/type/build.
-- Related files: `pyproject.toml`, `uv.lock`, `package.json`, `bun.lock`.
+- Related tests: Backend format/lint/type/test; frontend install/lint/type/build;
+  M0-03 configuration unit tests.
+- Related files: `pyproject.toml`, `uv.lock`, `package.json`, `bun.lock`,
+  `backend/tests/core/test_config.py`.
 - Introduced commit: `5bd3be0`
 - Resolved commit: Not resolved.
 - Resolution evidence: Not available.
-- Notes: No security control was relaxed to bypass the checks.
+- Notes: M0-03 added configuration tests but did not relax the locked Python
+  version or install unpinned tooling to bypass the environment limitation.
 
 ### M0-ISSUE-0002
 
