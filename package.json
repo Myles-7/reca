@@ -9,5 +9,10 @@
     "lint": "bun run --filter reca-frontend lint",
     "test": "bun run --filter reca-frontend test",
     "test:ui": "bun run --filter reca-frontend test:ui"
+  },
+  "overrides": {
+    "@babel/core": "7.28.6",
+    "js-yaml": "5.2.2",
+    "picomatch": "4.0.5"
   }
 }

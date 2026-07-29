@@ -83,21 +83,23 @@ test("system status keeps a loading state and handles API failures", async ({
   page,
 }) => {
   await page.route("**/api/v1/health/live", async (route) => {
-    await new Promise((resolve) => setTimeout(resolve, 300))
+    await new Promise((resolve) => setTimeout(resolve, 1_000))
     await route.fulfill({ json: { status: "HEALTHY", service: "api" } })
   })
-  await page.route("**/api/v1/health/ready", (route) =>
-    route.fulfill({
+  await page.route("**/api/v1/health/ready", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1_000))
+    await route.fulfill({
       status: 503,
       json: {
         error: { code: "UNAVAILABLE", message: "redacted" },
         request_id: "test",
       },
-    }),
-  )
-  await page.route("**/api/v1/health/dependencies", (route) =>
-    route.abort("failed"),
-  )
+    })
+  })
+  await page.route("**/api/v1/health/dependencies", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1_000))
+    await route.abort("failed")
+  })
   await page.goto("/system-status")
 
   await expect(page.getByText("Loading dependency status")).toBeVisible()

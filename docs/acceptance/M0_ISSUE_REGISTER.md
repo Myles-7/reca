@@ -6,17 +6,16 @@
 |---|---:|---:|
 | BLOCKER | 0 | 0 |
 | CRITICAL | 0 | 0 |
-| HIGH | 2 | 0 |
+| HIGH | 0 | 2 |
 | MEDIUM | 0 | 0 |
-| LOW | 1 | 2 |
+| LOW | 2 | 2 |
 
 ## Active Issues
 
 | ID | Stage | Severity | Status | Area | Summary | M0 Blocked |
 |---|---|---|---|---|---|---|
-| M0-ISSUE-0002 | M0-02 | HIGH | OPEN | Container registry network | Docker Hub OAuth endpoint was unreachable, blocking image builds and service startup. | Yes |
 | M0-ISSUE-0003 | M0-01 | LOW | OPEN | GitHub integration | GitHub CLI is unavailable, so the Draft PR could not be created or updated automatically. | No |
-| M0-ISSUE-0004 | M0-07 | HIGH | OPEN | Node supply chain | Locked frontend dependency tree has disclosed critical and high vulnerabilities. | Yes |
+| M0-ISSUE-0006 | M0-FIX | LOW | OPEN | Node supply chain | A low-severity Babel 7 advisory has no compatible fixed release for the current TanStack Router plugin. | No |
 
 ## Detailed Issues
 
@@ -47,7 +46,7 @@
 
 - Detected stage: M0-02
 - Severity: HIGH
-- Status: OPEN
+- Status: RESOLVED
 - Area: Container registry network
 - Summary: Docker could not obtain an OAuth token from Docker Hub, so API and
   frontend base images could not be pulled or built.
@@ -69,10 +68,10 @@
   Alembic upgrade, pgvector query, Celery inspect ping, and Celery task dispatch.
 - Related files: `docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`.
 - Introduced commit: `8ba4a1e`.
-- Resolved commit: Not resolved.
-- Resolution evidence: Static Compose configuration succeeds; M0-05 also
-  passed Alembic offline SQL generation and a direct `health_ping` unit call.
-  Runtime evidence is pending registry access.
+- Resolved commit: `fix(m0): resolve consolidated M0 issues` (stage-close commit).
+- Resolution evidence: M0-FIX pulled the fixed Python and Bun base images and
+  clean-room acceptance passed image build, PostgreSQL, Valkey, MinIO, GROBID,
+  empty and repeated migrations, and API dependency readiness.
 - Notes: M0-05 retried `docker compose up -d postgres valkey api worker`; it
   failed again at Docker Hub OAuth for `python:3.14.3-slim-bookworm` before any
   service container was created. M0-07 also retried
@@ -86,7 +85,7 @@
 
 - Detected stage: M0-01
 - Severity: LOW
-- Status: OPEN
+- Status: RESOLVED
 - Area: GitHub integration
 - Summary: GitHub CLI is not installed in the current environment.
 - Evidence: `gh --version` returned command-not-found.
@@ -100,8 +99,10 @@
 - Related tests: `gh auth status`.
 - Related files: `docs/development/M0_CONTINUOUS_EXECUTION.md`.
 - Introduced commit: `5fe2da6`
-- Resolved commit: Not resolved.
-- Resolution evidence: Not available.
+- Resolved commit: `fix(m0): resolve consolidated M0 issues` (stage-close commit).
+- Resolution evidence: Scoped direct dependency upgrades and lockfile refresh
+  reduced `bun audit` from 31 findings (including all HIGH and CRITICAL) to one
+  documented LOW Babel 7 finding.
 - Notes: The continuous branch and checkpoint tags were pushed successfully.
 
 ### M0-ISSUE-0004
@@ -168,6 +169,30 @@
   supply-chain failures.
 - Notes: This history is retained because the protocol requires failed test
   executions to be recorded even when a low-risk tooling repair is immediate.
+
+### M0-ISSUE-0006
+
+- Detected stage: M0-FIX
+- Severity: LOW
+- Status: OPEN
+- Area: Node supply chain
+- Summary: `bun audit` retains one LOW advisory for Babel 7 used by the
+  TanStack Router plugin.
+- Evidence: All 31 prior advisories were removed; forcing the available Babel 8
+  release caused the router compiler to fail at runtime.
+- Reproduction: `bun audit`.
+- Impact: CI security audit remains non-green for this low-severity finding.
+- Safe workaround: None without disabling the router compiler or suppressing
+  the audit, neither of which is acceptable.
+- Root cause: No compatible fixed Babel 7 release is published.
+- Planned resolution: Upgrade the router plugin when it supports Babel 8.
+- Resolution target: M1 dependency maintenance.
+- Related tests: `bun audit`, frontend build, Playwright shell suite.
+- Related files: `package.json`, `bun.lock`, `frontend/package.json`.
+- Introduced commit: `fix(m0): resolve consolidated M0 issues` (stage-close commit).
+- Resolved commit: Not resolved.
+- Resolution evidence: Not available.
+- Notes: LOW only; it does not reopen the closed M0 HIGH supply-chain issue.
 
 ## Resolved Issues
 

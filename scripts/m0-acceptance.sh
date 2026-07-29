@@ -18,7 +18,7 @@ PROJECT_NAME=RECA
 ENVIRONMENT=test
 DEMO_MODE=false
 SECRET_KEY=$secret
-FIRST_SUPERUSER=acceptance@example.invalid
+FIRST_SUPERUSER=acceptance@example.com
 FIRST_SUPERUSER_PASSWORD=acceptance-admin-$(openssl rand -hex 16)
 POSTGRES_DB=reca_acceptance
 POSTGRES_USER=reca_acceptance
@@ -33,6 +33,8 @@ FRONTEND_PORT=15173
 VITE_API_URL=http://127.0.0.1:18000
 VITE_APP_ENV=test
 VITE_DEMO_MODE=false
+FRONTEND_HOST=http://127.0.0.1:15173
+BACKEND_CORS_ORIGINS=["http://127.0.0.1:15173"]
 EOF
 cd "$root"
 docker compose --project-name "$project" --env-file "$env_file" down -v --remove-orphans >/dev/null 2>&1 || true

@@ -70,3 +70,15 @@ services, migrations, pgvector, Worker, MinIO, front-end runtime, and restart
 persistence could not be observed, and the Node supply-chain gate fails.
 Resolve M0-ISSUE-0002 and M0-ISSUE-0004, then rerun the same acceptance script
 from a Docker Hub-reachable environment before final review.
+
+## M0-FIX re-verification
+
+On 2026-07-29, the fixed Python and Bun base images were pulled and the isolated
+acceptance run completed real container checks. Image build, infrastructure
+startup, empty and repeated Alembic upgrades, API live/ready/dependencies,
+request ID, restart persistence, backend checks, frontend build, Playwright,
+repository secret scan, and Python audit passed. `bun audit` is reduced to one
+LOW Babel 7 advisory; no compatible Babel 7 fix exists for the installed
+TanStack Router plugin, and forcing Babel 8 was verified to break its compiler.
+Worker ping and the MinIO SigV4 private-object probe remain failed acceptance
+steps and require final review before M0 can be declared PASS.

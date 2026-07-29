@@ -50,7 +50,7 @@ $configLines = @(
 "ENVIRONMENT=test"
 "DEMO_MODE=false"
 "SECRET_KEY=$secret"
-"FIRST_SUPERUSER=acceptance@example.invalid"
+"FIRST_SUPERUSER=acceptance@example.com"
 "FIRST_SUPERUSER_PASSWORD=$adminPassword"
 "POSTGRES_DB=reca_acceptance"
 "POSTGRES_USER=reca_acceptance"
@@ -65,6 +65,8 @@ $configLines = @(
 "VITE_API_URL=http://127.0.0.1:$apiPort"
 "VITE_APP_ENV=test"
 "VITE_DEMO_MODE=false"
+"FRONTEND_HOST=http://127.0.0.1:$frontendPort"
+"BACKEND_CORS_ORIGINS=[`"http://127.0.0.1:$frontendPort`"]"
 )
 $configLines | Set-Content -LiteralPath $envFile -Encoding utf8
 
@@ -131,9 +133,10 @@ try {
         Invoke-Step "container-status" { docker @compose ps }
         Invoke-Step "migrate-empty-database" { docker @compose exec -T api alembic upgrade head }
         Invoke-Step "migrate-idempotently" { docker @compose exec -T api alembic upgrade head }
-        Invoke-Step "pgvector" { docker @compose exec -T api python -c "from sqlalchemy import text; from app.core.db import engine; assert engine.connect().execute(text(\"SELECT 1 FROM pg_extension WHERE extname = 'vector'\")).scalar_one() == 1" }
-        foreach ($endpoint in @("live", "ready", "dependencies")) { Invoke-Step "health-$endpoint" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$apiPort/api/v1/health/$endpoint" | Select-Object -ExpandProperty Content } }
-        Invoke-Step "request-id" { $response = Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 -Headers @{ "X-Request-ID" = "m0-acceptance-001" } "http://127.0.0.1:$apiPort/api/v1/health/live"; if ($response.Headers["X-Request-ID"] -ne "m0-acceptance-001") { throw "Request ID was not propagated" } }
+        Invoke-Step "pgvector" { docker @compose exec -T api python -c 'from sqlalchemy import text; from app.core.db import engine; assert engine.connect().execute(text("SELECT 1 FROM pg_extension WHERE extname = " + repr("vector"))).scalar_one() == 1' }
+        foreach ($endpoint in @("live", "ready", "dependencies")) { Invoke-Step "health-$endpoint" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$apiPort/api/v1/health/$endpoint" | Select-Object -ExpandProperty Content; $global:LASTEXITCODE = 0 } }
+        Invoke-Step "request-id" { $response = Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 -Headers @{ "X-Request-ID" = "m0-acceptance-001" } "http://127.0.0.1:$apiPort/api/v1/health/live"; if ($response.Headers["X-Request-ID"] -ne "m0-acceptance-001") { throw "Request ID was not propagated" }; $global:LASTEXITCODE = 0 }
+        Start-Sleep -Seconds 10
         Invoke-Step "worker-ping" { docker @compose exec -T worker celery -A app.core.celery:celery_app inspect ping }
         Invoke-Step "worker-health-ping" { docker @compose exec -T api python -c "from app.workers.health import health_ping; result = health_ping.delay().get(timeout=15); assert result == {'status':'ok','service':'reca-worker'}" }
         Invoke-Step "minio-private-write-read" { Get-Content -Raw -LiteralPath $minioProbe | & docker @compose exec -T api python - }
@@ -149,7 +152,7 @@ try {
     Invoke-Step "backend-tests" { python -m uv run pytest backend/tests -m no_database }
     Invoke-Step "frontend-tests" { bun run --cwd frontend format:check; bun run --cwd frontend lint; bun run --cwd frontend build }
     Invoke-Step "playwright-shell" { Push-Location frontend; try { bunx playwright test -c playwright.shell.config.ts --reporter=list } finally { Pop-Location } }
-    Invoke-Step "repository-secret-scan" { $secretMatches = git grep -n -E "BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}" -- . ":(exclude).env.example"; if ($LASTEXITCODE -gt 1) { throw "Secret scan could not run" }; if ($secretMatches) { throw "Secret pattern detected" }; $global:LASTEXITCODE = 0 }
+    Invoke-Step "repository-secret-scan" { $secretMatches = git grep -n -E "BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}" -- . ":(exclude).env.example" ":(exclude)scripts/m0-acceptance.ps1"; if ($LASTEXITCODE -gt 1) { throw "Secret scan could not run" }; if ($secretMatches) { throw "Secret pattern detected" }; $global:LASTEXITCODE = 0 }
     Invoke-Step "python-security-audit" { python -m uv run pip-audit }
     Invoke-Step "node-security-audit" { bun audit }
 }

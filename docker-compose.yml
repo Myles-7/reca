@@ -38,7 +38,7 @@ services:
       CONNECT_TIMEOUT_SECONDS: ${CONNECT_TIMEOUT_SECONDS:-5}
       REQUEST_TIMEOUT_SECONDS: ${REQUEST_TIMEOUT_SECONDS:-30}
       FRONTEND_HOST: ${FRONTEND_HOST:-http://localhost:5173}
-      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-http://localhost:5173}
+      BACKEND_CORS_ORIGINS: '${BACKEND_CORS_ORIGINS:-["http://localhost:5173"]}'
       SECRET_KEY: ${SECRET_KEY:-reca-local-only-secret-key-change-before-shared-use}
       FIRST_SUPERUSER: ${FIRST_SUPERUSER:-admin@example.com}
       FIRST_SUPERUSER_PASSWORD: ${FIRST_SUPERUSER_PASSWORD:-reca-local-only-admin-password}
