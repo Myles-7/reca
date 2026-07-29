@@ -8,7 +8,7 @@
 | CRITICAL | 0 | 0 |
 | HIGH | 2 | 0 |
 | MEDIUM | 0 | 0 |
-| LOW | 1 | 1 |
+| LOW | 1 | 2 |
 
 ## Active Issues
 
@@ -78,6 +78,9 @@
   service container was created. M0-07 also retried
   `docker compose build api worker frontend`; Docker Hub OAuth timed out for
   both `python:3.14.3-slim-bookworm` and `oven/bun:1.2.22`.
+  M0-08 clean-room acceptance retried the isolated build on 2026-07-29 and
+  received the same Docker Hub OAuth timeout. No `reca_m0_acceptance` service
+  container was started, and its scoped resources were cleaned up.
 
 ### M0-ISSUE-0003
 
@@ -130,7 +133,41 @@
 - Resolved commit: Not resolved.
 - Resolution evidence: Not available.
 - Notes: The CI job remains required and intentionally fails rather than hiding
-  the advisories.
+  the advisories. M0-08 reran `bun audit` and reproduced the same 31 findings;
+  no ignore list or automatic dependency upgrade was introduced.
+
+### M0-ISSUE-0005
+
+- Detected stage: M0-08
+- Severity: LOW
+- Status: RESOLVED
+- Area: Clean-room acceptance tooling
+- Summary: The first acceptance-script execution used APIs and command forms
+  incompatible with Windows PowerShell 5 and its path handling.
+- Evidence: The first run failed at `RandomNumberGenerator.Fill`, a Windows
+  glob passed to `rg`, and an incorrectly rooted Playwright command. The final
+  rerun passed tool/version, source-policy, backend, frontend, Playwright, and
+  repository-secret checks.
+- Reproduction: Run `./scripts/m0-acceptance.ps1` in Windows PowerShell 5.
+- Impact: The initial script could not provide a clean acceptance result; no
+  production application path, container resource, or secret was affected.
+- Safe workaround: Use the corrected script, which relies on
+  `RandomNumberGenerator.Create()`, Git pathspecs, and the frontend-local
+  Playwright command.
+- Root cause: The initial cross-platform draft assumed newer PowerShell APIs
+  and Unix-style glob behaviour.
+- Planned resolution: Completed in M0-08.
+- Resolution target: M0-08
+- Related tests: PowerShell parser check, `bash -n scripts/m0-acceptance.sh`,
+  and the final `./scripts/m0-acceptance.ps1` run.
+- Related files: `scripts/m0-acceptance.ps1`, `scripts/m0-acceptance.sh`.
+- Introduced commit: M0-08 working tree before the final acceptance rerun.
+- Resolved commit: `test(m0-08): add clean environment acceptance` (stage-close commit).
+- Resolution evidence: Final clean-room run at 2026-07-29T20:10+08:00 passed
+  all independent checks and reported only the pre-existing Docker Hub and Node
+  supply-chain failures.
+- Notes: This history is retained because the protocol requires failed test
+  executions to be recorded even when a low-risk tooling repair is immediate.
 
 ## Resolved Issues
 

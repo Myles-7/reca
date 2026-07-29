@@ -1,5 +1,11 @@
 # 研证链 AI（RECA）
 
+> M0 clean-room acceptance: run `./scripts/m0-acceptance.ps1` on Windows
+> PowerShell or `./scripts/m0-acceptance.sh` on Linux/macOS. It uses only the
+> scoped `reca_m0_acceptance` project and temporary random test secrets, never
+> a developer `.env` or default volumes. M0 intentionally has no business seed
+> data; an approved demonstration-data workflow begins in M1.
+
 > 面向高校科研训练的全流程可信科研智能体
 > Research Evidence Chain Agent
 

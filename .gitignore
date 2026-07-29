@@ -26,6 +26,7 @@ uploads/
 artifacts/
 storage/
 *.log
+m0-acceptance-*/
 
 # Editors and operating systems
 .vscode/
