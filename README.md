@@ -12,7 +12,7 @@
 | 文档名称   | README.md                      |
 | 文档版本   | 1.0.0                          |
 | 适用项目版本 | RECA 0.1 Competition Edition   |
-| 文档状态   | Draft                          |
+| 文档状态   | Approved                       |
 | 项目类型   | Web 前后端项目 / 科研智能体平台            |
 | 主要用户   | 本科生、研究生、教师                     |
 | 维护团队   | RECA Team                      |

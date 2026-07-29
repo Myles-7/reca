@@ -13,7 +13,7 @@
 | 文档名称   | `AGENTS.md`                                                                                                                                                                                          |
 | 文档版本   | 1.0.0                                                                                                                                                                                                |
 | 适用项目版本 | RECA 0.1 Competition Edition                                                                                                                                                                         |
-| 文档状态   | Active                                                                                                                                                                                               |
+| 文档状态   | Approved                                                                                                                                                                                             |
 | 文档位置   | 仓库根目录                                                                                                                                                                                                |
 | 主要读者   | Codex、代码智能体、开发人员、测试人员、代码审查人员                                                                                                                                                                         |
 | 负责人    | RECA Team                                                                                                                                                                                            |
