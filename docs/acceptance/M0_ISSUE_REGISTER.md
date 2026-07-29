@@ -6,7 +6,7 @@
 |---|---:|---:|
 | BLOCKER | 0 | 0 |
 | CRITICAL | 0 | 0 |
-| HIGH | 1 | 3 |
+| HIGH | 0 | 4 |
 | MEDIUM | 0 | 0 |
 | LOW | 2 | 3 |
 
@@ -15,7 +15,7 @@
 | ID | Stage | Severity | Status | Area | Summary | M0 Blocked |
 |---|---|---|---|---|---|---|
 | M0-ISSUE-0006 | M0-FIX | LOW | OPEN | Node supply chain | A low-severity Babel 7 advisory has no compatible fixed release for the current TanStack Router plugin. | No |
-| M0-ISSUE-0008 | M0-FINAL-REVIEW-2 | HIGH | OPEN | CI core gates | The current remote CI run fails security, frontend-quality, migration-test, and compose-smoke jobs for reproducible repository defects. | Yes |
+| M0-ISSUE-0008 | M0-FINAL-REVIEW-2 | HIGH | RESOLVED | CI core gates | Required PR CI now passes on the reviewed commit. | No |
 | M0-ISSUE-0009 | M0-FINAL-REVIEW-2 | LOW | OPEN | Frontend local test command | The generic `bun run test` command cannot start the inherited Playwright server on Windows because `cmd.exe` cannot resolve Bun. | No |
 
 ## Detailed Issues
@@ -240,7 +240,7 @@
 
 - Detected stage: M0-FINAL-REVIEW-2
 - Severity: HIGH
-- Status: OPEN
+- Status: RESOLVED
 - Area: CI core gates
 - Summary: The remote M0 workflow at run `30454226516` fails four required jobs
   on the current repair checkpoint.
@@ -264,10 +264,13 @@
 - Related files: `.github/workflows/m0-quality.yml`, `scripts/ci/`, and
   `frontend/openapi-ts.config.ts`.
 - Introduced commit: `1e6a8e34741ebdd402ba1994106d7cd0d2b2cf95` verification.
-- Resolved commit: Not resolved.
-- Resolution evidence: Not available.
-- Notes: This is a final-review finding; it does not erase local clean-room
-  Worker or MinIO evidence.
+- Resolved commit: `e975b67184f40c31d048d49780d9917a6f62dcc9`.
+- Resolution evidence: Pull-request run `30467938346` for the resolved commit
+  passed all required jobs: backend-quality, frontend-quality, migration-test,
+  compose-smoke, security-supply-chain, and e2e-smoke.
+- Notes: The concurrent push run `30467933944` is stalled during dependency
+  installation, but it has the same head SHA and is not the completed PR
+  required-check result.
 
 ### M0-ISSUE-0009
 

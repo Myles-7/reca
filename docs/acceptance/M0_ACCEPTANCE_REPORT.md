@@ -150,3 +150,34 @@ Remote required CI and the Windows default Playwright execution still require
 separate verification.
 Worker recovery and authenticated/anonymous MinIO semantics need a complete
 fresh isolated acceptance run.
+
+## M0-FIX-7 Final Revalidation
+
+### Reviewed Commit
+
+`e975b67184f40c31d048d49780d9917a6f62dcc9`.
+
+### Adapter and Playwright
+
+PASS. The generated fetch client returns HTTP failures as result objects rather
+than throwing. The adapter now converts failed results and network errors to a
+stable, redacted `ApiError`; the six-case shell suite passed at
+`D:\Temp\User\reca-playwright-20260729-234902`.
+
+### Latest Clean-Room
+
+PASS, exit code `0`. Evidence:
+`D:\Temp\User\reca-m0-final-20260729-235219`. Empty/repeated migration,
+pgvector, API health, Worker, MinIO private read/write plus anonymous denial,
+frontend, shell Playwright, two API restarts, persistence, and scans passed.
+
+### Remote CI
+
+PASS. Pull-request run `30467938346` on the reviewed SHA passed all six
+required jobs. The concurrent push run `30467933944` remains stalled during
+dependency installation and is not used as passing evidence.
+
+### Remaining Risks
+
+`bun audit` reports only the tracked Babel 7 LOW advisory (M0-ISSUE-0006).
+Critical and High findings are zero.

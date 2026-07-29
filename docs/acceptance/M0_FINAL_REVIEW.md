@@ -2,16 +2,15 @@
 
 ## Verdict
 
-FAIL
+PASS
 
 ## M1 Entry Decision
 
-BLOCKED
+ALLOWED
 
 ## Reviewed Commit
 
-`1e6a8e34741ebdd402ba1994106d7cd0d2b2cf95` (`m0-fix-2-checkpoint`) on
-`codex/m0-continuous`.
+`e975b67184f40c31d048d49780d9917a6f62dcc9` on `codex/m0-continuous`.
 
 ## Baseline and Checkpoints
 
@@ -207,3 +206,47 @@ required CI jobs are not passing.
 DO NOT MERGE. Draft PR [#1](https://github.com/Myles-7/reca/pull/1) exists and
 must remain Draft/Open. `m0-complete` must not be created. Execute a focused
 M0-FIX-3 for M0-ISSUE-0007 and M0-ISSUE-0008, then repeat independent review.
+
+## Third Review Revalidation
+
+### Review History
+
+| Review | Commit | Verdict | Main Reason |
+|---|---|---|---|
+| Initial review | `834382e...` | FAIL | Worker and MinIO evidence was incomplete. |
+| Second review | `2528373...` | FAIL | Clean-room and required CI remained incomplete. |
+| Third review | `e975b67...` | PASS | Latest-head clean-room and required PR CI pass. |
+
+### Latest Evidence
+
+The fresh isolated acceptance run at
+`D:\Temp\User\reca-m0-final-20260729-235219` exited `0`. It passed empty and
+repeat migrations, pgvector, API health/request ID, Worker inspect and task,
+MinIO private write/read/anonymous denial/persistence, frontend pages,
+Playwright, two API restart recoveries, and repository/container scans.
+
+Pull-request workflow `30467938346`, on this exact SHA, passed
+backend-quality, frontend-quality, migration-test, compose-smoke,
+security-supply-chain, and e2e-smoke. The stale concurrent push workflow is
+not used as required-check evidence.
+
+### Issue Register Summary
+
+| Severity | Open | Resolved |
+|---|---:|---:|
+| BLOCKER | 0 | 0 |
+| CRITICAL | 0 | 0 |
+| HIGH | 0 | 4 |
+| MEDIUM | 0 | 0 |
+| LOW | 2 | 3 |
+
+### Remaining Risks
+
+M0-ISSUE-0006 remains an explicit LOW Babel 7 advisory with no compatible
+patch. M0-ISSUE-0009 remains a LOW Windows developer-experience issue. Neither
+changes the validated M0 runtime, security, or exit criteria.
+
+### Merge Decision
+
+PASS: mark PR #1 ready and merge only after its required checks remain green;
+then create the annotated `m0-complete` tag on updated `main`.
