@@ -42,14 +42,16 @@
 - Planned resolution: M0-FIX or CI clean-environment verification.
 - Resolution target: M0-FIX
 - Related tests: Backend format/lint/type/test; frontend install/lint/type/build;
-  M0-03 configuration unit tests.
+  M0-03 configuration unit tests; M0-04 health and observability tests.
 - Related files: `pyproject.toml`, `uv.lock`, `package.json`, `bun.lock`,
-  `backend/tests/core/test_config.py`.
+  `backend/tests/core/test_config.py`, `backend/tests/api/routes/test_health.py`.
 - Introduced commit: `5bd3be0`
 - Resolved commit: Not resolved.
 - Resolution evidence: Not available.
-- Notes: M0-03 added configuration tests but did not relax the locked Python
-  version or install unpinned tooling to bypass the environment limitation.
+- Notes: M0-03 and M0-04 added configuration and health tests but did not relax
+  the locked Python version or install unpinned tooling to bypass the environment
+  limitation. M0-04 syntax compilation completed successfully; its pytest run
+  remains blocked before collection by the missing `sqlmodel` dependency.
 
 ### M0-ISSUE-0002
 
@@ -74,7 +76,7 @@
 - Resolution target: M0-FIX
 - Related tests: `docker compose build`, `up -d`, `ps`, `logs`, `restart`.
 - Related files: `docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`.
-- Introduced commit: Pending M0-02 commit.
+- Introduced commit: `8ba4a1e`.
 - Resolved commit: Not resolved.
 - Resolution evidence: Static Compose configuration succeeds; runtime evidence
   is pending registry access.

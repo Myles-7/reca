@@ -2131,7 +2131,15 @@ Linux CI 可调用等价的 `scripts/compose.sh`。默认仅将前端和 API 绑
 浏览器构建只接受 `VITE_API_URL`、`VITE_APP_ENV` 和 `VITE_DEMO_MODE`。
 不得以 `VITE_` 前缀传入数据库、对象存储、认证或 Provider 密钥。
 
-## 35. 核心成功标准
+## 35. M0 API 健康检查
+
+API 提供 `GET /api/v1/health/live`（仅 API 进程存活）、
+`/api/v1/health/ready`（PostgreSQL、pgvector、Valkey、MinIO 就绪）及
+`/api/v1/health/dependencies`（完整且脱敏的依赖状态）。Compose 的 API
+healthcheck 使用 `live`，因此它只判断进程可响应；流量就绪判断应使用
+`ready`。所有 API 响应都会返回 `X-Request-ID`。
+
+## 36. 核心成功标准
 
 RECA 0.1 的成功不以“页面数量”或“智能体数量”衡量。
 
