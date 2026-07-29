@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 
-import type { UserPublic } from "@/client"
+import type { UserPublic } from "@/api/adapter"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { UserActionsMenu } from "./UserActionsMenu"

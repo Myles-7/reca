@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 
-import { UsersService } from "@/client"
+import { UsersService } from "@/api/adapter"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

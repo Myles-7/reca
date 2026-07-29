@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { UsersService, type UserUpdateMe } from "@/client"
+import { UsersService, type UserUpdateMe } from "@/api/adapter"
 import { Button } from "@/components/ui/button"
 import {
   Form,

@@ -1,5 +1,5 @@
 import { AxiosError } from "axios"
-import type { ApiError } from "./client"
+import type { ApiError } from "./api/adapter"
 
 function extractErrorMessage(err: ApiError): string {
   if (err instanceof AxiosError) {

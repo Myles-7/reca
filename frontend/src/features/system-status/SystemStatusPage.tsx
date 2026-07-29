@@ -14,7 +14,7 @@ import {
   type DependencyCheck,
   type DependencyStatus,
   HealthService,
-} from "@/client"
+} from "@/api/adapter"
 import { ErrorState, LoadingState } from "@/components/Common/PageState"
 import { Badge } from "@/components/ui/badge"
 import {

@@ -8,7 +8,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
 import ReactDOM from "react-dom/client"
 import { ErrorBoundary } from "react-error-boundary"
-import { ApiError, OpenAPI } from "./client"
+import { ApiError, configureApi } from "./api/adapter"
 import { AppErrorBoundary } from "./components/Common/AppErrorBoundary"
 import { ThemeProvider } from "./components/theme-provider"
 import { Toaster } from "./components/ui/sonner"
@@ -16,10 +16,9 @@ import { publicEnvironment } from "./shared/environment"
 import "./index.css"
 import { routeTree } from "./routeTree.gen"
 
-OpenAPI.BASE = publicEnvironment.apiUrl
-OpenAPI.TOKEN = async () => {
-  return localStorage.getItem("access_token") || ""
-}
+configureApi(publicEnvironment.apiUrl, () =>
+  localStorage.getItem("access_token"),
+)
 
 const handleApiError = (error: Error) => {
   if (error instanceof ApiError && [401, 403].includes(error.status)) {
