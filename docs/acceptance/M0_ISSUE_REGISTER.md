@@ -6,17 +6,18 @@
 |---|---:|---:|
 | BLOCKER | 0 | 0 |
 | CRITICAL | 0 | 0 |
-| HIGH | 0 | 2 |
+| HIGH | 2 | 2 |
 | MEDIUM | 0 | 0 |
-| LOW | 2 | 2 |
+| LOW | 2 | 3 |
 
 ## Active Issues
 
 | ID | Stage | Severity | Status | Area | Summary | M0 Blocked |
 |---|---|---|---|---|---|---|
-| M0-ISSUE-0003 | M0-01 | LOW | OPEN | GitHub integration | GitHub CLI is unavailable, so the Draft PR could not be created or updated automatically. | No |
 | M0-ISSUE-0006 | M0-FIX | LOW | OPEN | Node supply chain | A low-severity Babel 7 advisory has no compatible fixed release for the current TanStack Router plugin. | No |
-| M0-ISSUE-0007 | M0-FINAL-REVIEW | HIGH | OPEN | Clean-room acceptance | Worker ping/health_ping and private MinIO object verification lack passing evidence. | Yes |
+| M0-ISSUE-0007 | M0-FINAL-REVIEW | HIGH | OPEN | Clean-room acceptance | Worker and MinIO probes now pass, but the clean-room entry point exits nonzero because its pgvector probe is syntactically invalid and the retained Node audit reports one LOW advisory. | Yes |
+| M0-ISSUE-0008 | M0-FINAL-REVIEW-2 | HIGH | OPEN | CI core gates | The current remote CI run fails security, frontend-quality, migration-test, and compose-smoke jobs for reproducible repository defects. | Yes |
+| M0-ISSUE-0009 | M0-FINAL-REVIEW-2 | LOW | OPEN | Frontend local test command | The generic `bun run test` command cannot start the inherited Playwright server on Windows because `cmd.exe` cannot resolve Bun. | No |
 
 ## Detailed Issues
 
@@ -89,28 +90,30 @@
 - Status: RESOLVED
 - Area: GitHub integration
 - Summary: GitHub CLI is not installed in the current environment.
-- Evidence: `gh --version` returned command-not-found.
+- Evidence: The initial environment lacked `gh`; on 2026-07-29 the authenticated
+  GitHub CLI created Draft PR #1 for `codex/m0-continuous` to `main`.
 - Reproduction: Run `gh --version` in the repository shell.
-- Impact: The required Draft pull request was not created automatically.
-- Safe workaround: Create or update the Draft PR from a GitHub CLI-enabled
-  environment without modifying branch history.
-- Root cause: Local toolchain omission.
-- Planned resolution: M0-FIX or release-environment preparation.
-- Resolution target: M0-FIX
+- Impact: Resolved; the PR now exists and remains Draft pending a passing review.
+- Safe workaround: Not required.
+- Root cause: Local toolchain omission, later remedied in the review environment.
+- Planned resolution: Completed in M0-FINAL-REVIEW-2.
+- Resolution target: M0-FINAL-REVIEW-2
 - Related tests: `gh auth status`.
 - Related files: `docs/development/M0_CONTINUOUS_EXECUTION.md`.
 - Introduced commit: `5fe2da6`
-- Resolved commit: `fix(m0): resolve consolidated M0 issues` (stage-close commit).
-- Resolution evidence: Scoped direct dependency upgrades and lockfile refresh
-  reduced `bun audit` from 31 findings (including all HIGH and CRITICAL) to one
-  documented LOW Babel 7 finding.
-- Notes: The continuous branch and checkpoint tags were pushed successfully.
+- Resolved commit: `docs(m0): complete second final M0 review` (this review
+  stage-close commit).
+- Resolution evidence: `gh pr create --repo Myles-7/reca --base main --head
+  codex/m0-continuous --draft` returned
+  `https://github.com/Myles-7/reca/pull/1`.
+- Notes: The earlier unrelated Node-audit text was a ledger transcription error;
+  that evidence belongs to M0-ISSUE-0004 and M0-ISSUE-0006.
 
 ### M0-ISSUE-0004
 
 - Detected stage: M0-07
 - Severity: HIGH
-- Status: OPEN
+- Status: RESOLVED
 - Area: Node supply chain
 - Summary: `bun audit` reports 31 vulnerabilities, including two critical and
   sixteen high findings, in the locked frontend dependency tree.
@@ -132,11 +135,13 @@
 - Related files: `frontend/package.json`, `bun.lock`, and
   `.github/workflows/m0-quality.yml`.
 - Introduced commit: `5bd3be0` (imported dependency baseline).
-- Resolved commit: Not resolved.
-- Resolution evidence: Not available.
-- Notes: The CI job remains required and intentionally fails rather than hiding
-  the advisories. M0-08 reran `bun audit` and reproduced the same 31 findings;
-  no ignore list or automatic dependency upgrade was introduced.
+- Resolved commit: `834382ec4b2854956dc20d7dfe8e3fdcf3e3c8d2`.
+- Resolution evidence: M0-FIX updated direct, transitive, and generator
+  dependencies deliberately; `bun audit` now reports only the separately
+  tracked LOW Babel 7 advisory in M0-ISSUE-0006.
+- Notes: The CI security gate remains required and fails on the remaining LOW
+  advisory without an ignore list. Its additional false-positive `.env.example`
+  failure is tracked separately by M0-ISSUE-0008.
 
 ### M0-ISSUE-0005
 
@@ -201,20 +206,94 @@
 - Severity: HIGH
 - Status: OPEN
 - Area: Clean-room acceptance
-- Summary: Worker ping/health_ping and private MinIO object verification failed in the latest real clean-room run.
-- Evidence: `reca-m0-acceptance-20260729-203319` records worker restart and MinIO HTTP 403.
+- Summary: The worker and private-MinIO blockers are repaired, but the required
+  clean-room entry point is still non-passing.
+- Evidence: `D:\Temp\User\reca-m0-acceptance-20260729-210538` records PASS for
+  `worker-ping`, `worker-health-ping`, `minio-private-write-read`, restart, and
+  persistence. It records FAIL for `pgvector` because the PowerShell command
+  loses SQL quoting, and FAIL for the retained LOW `bun audit` advisory.
 - Reproduction: `./scripts/m0-acceptance.ps1` after images are available.
-- Impact: Worker and clean-room exit criteria are unmet.
+- Impact: The Worker and MinIO-specific evidence now passes, but the full
+  clean-room script exits 1 and cannot satisfy the M0 exit criterion.
 - Safe workaround: None; no mock Worker or public bucket is acceptable.
-- Root cause: Not yet established independently from acceptance tooling.
-- Planned resolution: Diagnose worker runtime and signed MinIO request path.
-- Resolution target: M0-FIX follow-up.
+- Root cause: The former worker root-owned tmpfs and MinIO literal `\\n` SigV4
+  canonical-request defects were repaired in `1e6a8e3`. The remaining failure
+  is an acceptance-script quoting defect plus the documented LOW audit result.
+- Planned resolution: Correct the pgvector command with an argument-safe smoke
+  probe and establish explicit non-blocking LOW-audit reporting without
+  suppressing it; rerun the full script.
+- Resolution target: M0-FIX-3.
 - Related tests: Worker inspect ping, `health_ping`, MinIO private write/read.
 - Related files: `docker-compose.yml`, `backend/app/core/celery.py`, `scripts/m0-acceptance.ps1`.
 - Introduced commit: `834382ec4b2854956dc20d7dfe8e3fdcf3e3c8d2`.
 - Resolved commit: Not resolved.
+- Resolution evidence: Not available because `scripts/m0-acceptance.ps1`
+  returned exit code 1 in the second final review.
+- Notes: Do not mark this issue resolved until the full entry point exits zero
+  with pgvector, Worker, MinIO, and all required clean-room checks evidenced.
+
+### M0-ISSUE-0008
+
+- Detected stage: M0-FINAL-REVIEW-2
+- Severity: HIGH
+- Status: OPEN
+- Area: CI core gates
+- Summary: The remote M0 workflow at run `30454226516` fails four required jobs
+  on the current repair checkpoint.
+- Evidence: `gh run view 30454226516 --log-failed` shows: security smoke treats
+  `.env.example` as tracked `.env`; frontend client generation removes the
+  output directory on a clean Linux runner; migration smoke uses
+  `ci@example.invalid`, which Pydantic rejects; and compose smoke curls API
+  before readiness, receiving connection reset.
+- Reproduction: `gh run view 30454226516 --repo Myles-7/reca --log-failed`.
+- Impact: Required CI core checks are not passing; M0 cannot be merged.
+- Safe workaround: None. Do not disable failing checks or use
+  `continue-on-error`.
+- Root cause: CI script correctness and readiness handling defects.
+- Planned resolution: Apply minimal script fixes, rerun the same pinned CI
+  workflow, and retain the LOW Babel audit as a visible risk rather than a
+  suppressed failure.
+- Resolution target: M0-FIX-3.
+- Related tests: `scripts/ci/security-smoke.sh`,
+  `scripts/ci/frontend-quality.sh`, `scripts/ci/migration-smoke.sh`, and
+  `scripts/ci/compose-smoke.sh`.
+- Related files: `.github/workflows/m0-quality.yml`, `scripts/ci/`, and
+  `frontend/openapi-ts.config.ts`.
+- Introduced commit: `1e6a8e34741ebdd402ba1994106d7cd0d2b2cf95` verification.
+- Resolved commit: Not resolved.
 - Resolution evidence: Not available.
-- Notes: This supersedes unsupported claims of full clean-room sufficiency.
+- Notes: This is a final-review finding; it does not erase local clean-room
+  Worker or MinIO evidence.
+
+### M0-ISSUE-0009
+
+- Detected stage: M0-FINAL-REVIEW-2
+- Severity: LOW
+- Status: OPEN
+- Area: Frontend local test command
+- Summary: The default frontend Playwright command is not Windows-portable.
+- Evidence: `bun run --cwd frontend test` fails before tests begin with
+  `'bun' is not recognized as an internal or external command` from the
+  inherited Playwright `webServer` command.
+- Reproduction: `bun run --cwd frontend test` in Windows PowerShell.
+- Impact: The dedicated, Windows-aware shell configuration passes all six M0
+  browser checks; CI E2E has a separate Compose configuration. This is a local
+  developer-experience failure, not evidence of a passing generic command.
+- Safe workaround: `bun run --cwd frontend test:shell`.
+- Root cause: `frontend/playwright.config.ts` runs `bun run dev` through
+  Windows `cmd.exe` without resolving the Bun executable.
+- Planned resolution: Make the default config use the same platform-safe
+  executable resolution as the shell config, preserving CI behavior.
+- Resolution target: M1 developer-experience maintenance or M0-FIX-3 if the
+  CI repair touches Playwright configuration.
+- Related tests: `bun run --cwd frontend test` and `bun run --cwd frontend
+  test:shell`.
+- Related files: `frontend/playwright.config.ts`.
+- Introduced commit: M0-01 imported frontend test configuration.
+- Resolved commit: Not resolved.
+- Resolution evidence: Not available.
+- Notes: This issue is not used to reduce the severity of the current HIGH
+  clean-room or CI failures.
 
 ## Resolved Issues
 
