@@ -1,4 +1,4 @@
-FROM python:3.14
+FROM python:3.14.3-slim-bookworm
 
 ENV PYTHONUNBUFFERED=1
 
@@ -42,4 +42,15 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 WORKDIR /app/backend/
 
-CMD ["fastapi", "run", "--workers", "4"]
+RUN groupadd --gid 10001 reca \
+    && useradd --uid 10001 --gid reca --create-home --shell /usr/sbin/nologin reca \
+    && mkdir -p /tmp/reca \
+    && chown reca:reca /tmp/reca
+
+ENV TMPDIR=/tmp/reca
+
+USER reca
+
+EXPOSE 8000
+
+CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]

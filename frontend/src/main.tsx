@@ -7,16 +7,18 @@ import {
 import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
 import ReactDOM from "react-dom/client"
-import { ApiError, OpenAPI } from "./client"
+import { ErrorBoundary } from "react-error-boundary"
+import { ApiError, configureApi } from "./api/adapter"
+import { AppErrorBoundary } from "./components/Common/AppErrorBoundary"
 import { ThemeProvider } from "./components/theme-provider"
 import { Toaster } from "./components/ui/sonner"
+import { publicEnvironment } from "./shared/environment"
 import "./index.css"
 import { routeTree } from "./routeTree.gen"
 
-OpenAPI.BASE = import.meta.env.VITE_API_URL
-OpenAPI.TOKEN = async () => {
-  return localStorage.getItem("access_token") || ""
-}
+configureApi(publicEnvironment.apiUrl, () =>
+  localStorage.getItem("access_token"),
+)
 
 const handleApiError = (error: Error) => {
   if (error instanceof ApiError && [401, 403].includes(error.status)) {
@@ -44,7 +46,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <ErrorBoundary FallbackComponent={AppErrorBoundary}>
+          <RouterProvider router={router} />
+        </ErrorBoundary>
         <Toaster richColors closeButton />
       </QueryClientProvider>
     </ThemeProvider>

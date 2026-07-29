@@ -1,118 +1,190 @@
-import secrets
-import warnings
-from typing import Annotated, Any, Literal, Self
+from __future__ import annotations
+
+from functools import cached_property
+from pathlib import Path
+from typing import Any, Literal, Self
 
 from pydantic import (
-    AnyUrl,
-    BeforeValidator,
+    AnyHttpUrl,
     EmailStr,
-    HttpUrl,
-    PostgresDsn,
-    computed_field,
+    Field,
+    SecretStr,
+    field_validator,
     model_validator,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+EnvironmentName = Literal["local", "test", "demo", "production"]
+ProviderConfigurationStatus = Literal["CONFIGURED", "UNCONFIGURED"]
 
-def parse_cors(v: Any) -> list[str] | str:
-    if isinstance(v, str) and not v.startswith("["):
-        return [i.strip() for i in v.split(",") if i.strip()]
-    elif isinstance(v, list | str):
-        return v
-    raise ValueError(v)
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+_PLACEHOLDER_PREFIXES = ("<replace", "change-me", "changethis", "example-")
+
+
+def _is_placeholder(value: str) -> bool:
+    return value.strip().lower().startswith(_PLACEHOLDER_PREFIXES)
 
 
 class Settings(BaseSettings):
+    """Single, validated configuration entry point for the RECA API.
+
+    Constructing settings only parses local configuration. It does not open any
+    database, cache, object-storage, or external-provider connection.
+    """
+
     model_config = SettingsConfigDict(
-        # Use top level .env file (one level above ./backend/)
-        env_file="../.env",
+        env_file=_REPOSITORY_ROOT / ".env",
+        env_file_encoding="utf-8",
         env_ignore_empty=True,
+        hide_input_in_errors=True,
         extra="ignore",
     )
+
+    # Application and environment
+    PROJECT_NAME: str = "RECA"
+    ENVIRONMENT: EnvironmentName = "local"
     API_V1_STR: str = "/api/v1"
-    SECRET_KEY: str = secrets.token_urlsafe(32)
-    # 60 minutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
-    FRONTEND_HOST: str = "http://localhost:5173"
-    ENVIRONMENT: Literal["local", "staging", "production"] = "local"
+    DEMO_MODE: bool = False
+    LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
+    MAX_UPLOAD_BYTES: int = Field(default=50_000_000, gt=0)
+    CONNECT_TIMEOUT_SECONDS: float = Field(default=5.0, gt=0, le=60)
+    REQUEST_TIMEOUT_SECONDS: float = Field(default=30.0, gt=0, le=300)
 
-    BACKEND_CORS_ORIGINS: Annotated[
-        list[AnyUrl] | str, BeforeValidator(parse_cors)
-    ] = []
+    # Authentication
+    SECRET_KEY: SecretStr
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=60 * 24 * 8, gt=0)
+    FIRST_SUPERUSER: EmailStr
+    FIRST_SUPERUSER_PASSWORD: SecretStr
 
-    @computed_field  # type: ignore[prop-decorator]
-    @property
-    def all_cors_origins(self) -> list[str]:
-        return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGINS] + [
-            self.FRONTEND_HOST
-        ]
+    # PostgreSQL
+    POSTGRES_SERVER: str = Field(min_length=1)
+    POSTGRES_PORT: int = Field(default=5432, ge=1, le=65535)
+    POSTGRES_DB: str = Field(min_length=1)
+    POSTGRES_USER: str = Field(min_length=1)
+    POSTGRES_PASSWORD: SecretStr
 
-    PROJECT_NAME: str
-    SENTRY_DSN: HttpUrl | None = None
-    POSTGRES_SERVER: str
-    POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = ""
+    # Core infrastructure
+    VALKEY_URL: str
+    MINIO_ENDPOINT: AnyHttpUrl
+    MINIO_ROOT_USER: str = Field(min_length=3)
+    MINIO_ROOT_PASSWORD: SecretStr
+    MINIO_BUCKET: str = Field(default="reca", min_length=3)
+    GROBID_URL: AnyHttpUrl
 
-    @computed_field  # type: ignore[prop-decorator]
-    @property
-    def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
-        return PostgresDsn.build(
-            scheme="postgresql+psycopg",
-            username=self.POSTGRES_USER,
-            password=self.POSTGRES_PASSWORD,
-            host=self.POSTGRES_SERVER,
-            port=self.POSTGRES_PORT,
-            path=self.POSTGRES_DB,
-        )
+    # Reserved task infrastructure
+    CELERY_BROKER_URL: str | None = None
+    CELERY_RESULT_BACKEND: str | None = None
 
+    # Optional external providers
+    MODEL_BASE_URL: AnyHttpUrl | None = None
+    MODEL_API_KEY: SecretStr | None = None
+    OPENALEX_API_URL: AnyHttpUrl = AnyHttpUrl("https://api.openalex.org")
+    OPENALEX_API_KEY: SecretStr | None = None
+
+    # Email, observability, and browser access
+    FRONTEND_HOST: AnyHttpUrl = AnyHttpUrl("http://localhost:5173")
+    BACKEND_CORS_ORIGINS: list[str] = Field(default_factory=list)
+    SENTRY_DSN: AnyHttpUrl | None = None
     SMTP_TLS: bool = True
     SMTP_SSL: bool = False
-    SMTP_PORT: int = 587
+    SMTP_PORT: int = Field(default=587, ge=1, le=65535)
     SMTP_HOST: str | None = None
     SMTP_USER: str | None = None
-    SMTP_PASSWORD: str | None = None
+    SMTP_PASSWORD: SecretStr | None = None
     EMAILS_FROM_EMAIL: EmailStr | None = None
     EMAILS_FROM_NAME: str | None = None
+    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = Field(default=48, gt=0)
+    EMAIL_TEST_USER: EmailStr = "test@example.com"
+
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, value: Any) -> list[str]:
+        if value is None or value == "":
+            return []
+        if isinstance(value, str):
+            return [origin.strip() for origin in value.split(",") if origin.strip()]
+        if isinstance(value, list) and all(isinstance(origin, str) for origin in value):
+            return value
+        raise ValueError(
+            "BACKEND_CORS_ORIGINS must be a comma-separated string or list"
+        )
+
+    @field_validator("SENTRY_DSN", "MODEL_BASE_URL", mode="before")
+    @classmethod
+    def empty_optional_urls_are_none(cls, value: Any) -> Any:
+        return None if value == "" else value
+
+    @field_validator(
+        "MODEL_API_KEY", "OPENALEX_API_KEY", "SMTP_PASSWORD", mode="before"
+    )
+    @classmethod
+    def empty_optional_secrets_are_none(cls, value: Any) -> Any:
+        return None if value == "" else value
+
+    @field_validator("VALKEY_URL", "CELERY_BROKER_URL", "CELERY_RESULT_BACKEND")
+    @classmethod
+    def validate_service_url(cls, value: str | None) -> str | None:
+        if value is None or value == "":
+            return None
+        if not value.startswith(("valkey://", "redis://", "rediss://")):
+            raise ValueError("service URL must use valkey://, redis://, or rediss://")
+        return value
 
     @model_validator(mode="after")
-    def _set_default_emails_from(self) -> Self:
-        if not self.EMAILS_FROM_NAME:
-            self.EMAILS_FROM_NAME = self.PROJECT_NAME
+    def validate_environment_security(self) -> Self:
+        if self.SMTP_TLS and self.SMTP_SSL:
+            raise ValueError("SMTP_TLS and SMTP_SSL cannot both be enabled")
+
+        if self.ENVIRONMENT == "production":
+            secret_value = self.SECRET_KEY.get_secret_value()
+            if len(secret_value) < 32 or _is_placeholder(secret_value):
+                raise ValueError("production SECRET_KEY is invalid")
+            if "*" in self.BACKEND_CORS_ORIGINS:
+                raise ValueError("production CORS cannot use wildcard origins")
+
         return self
 
-    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
+    @cached_property
+    def all_cors_origins(self) -> list[str]:
+        return list(
+            dict.fromkeys(
+                [*self.BACKEND_CORS_ORIGINS, str(self.FRONTEND_HOST).rstrip("/")]
+            )
+        )
 
-    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def database_url(self) -> str:
+        password = self.POSTGRES_PASSWORD.get_secret_value()
+        return (
+            "postgresql+psycopg://"
+            f"{self.POSTGRES_USER}:{password}@{self.POSTGRES_SERVER}:"
+            f"{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
+
+    @property
+    def secret_key_value(self) -> str:
+        return self.SECRET_KEY.get_secret_value()
+
+    @property
+    def first_superuser_password_value(self) -> str:
+        return self.FIRST_SUPERUSER_PASSWORD.get_secret_value()
+
+    @property
+    def smtp_password_value(self) -> str | None:
+        return self.SMTP_PASSWORD.get_secret_value() if self.SMTP_PASSWORD else None
+
     @property
     def emails_enabled(self) -> bool:
         return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
-    EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    @property
+    def model_status(self) -> ProviderConfigurationStatus:
+        return "CONFIGURED" if self.MODEL_API_KEY else "UNCONFIGURED"
 
-    def _check_default_secret(self, var_name: str, value: str | None) -> None:
-        if value == "changethis":
-            message = (
-                f'The value of {var_name} is "changethis", '
-                "for security, please change it, at least for deployments."
-            )
-            if self.ENVIRONMENT == "local":
-                warnings.warn(message, stacklevel=1)
-            else:
-                raise ValueError(message)
-
-    @model_validator(mode="after")
-    def _enforce_non_default_secrets(self) -> Self:
-        self._check_default_secret("SECRET_KEY", self.SECRET_KEY)
-        self._check_default_secret("POSTGRES_PASSWORD", self.POSTGRES_PASSWORD)
-        self._check_default_secret(
-            "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
-        )
-
-        return self
+    @property
+    def openalex_status(self) -> ProviderConfigurationStatus:
+        return "CONFIGURED" if self.OPENALEX_API_KEY else "UNCONFIGURED"
 
 
-settings = Settings()  # type: ignore
+# Pydantic Settings resolves required values from the environment at runtime.
+settings = Settings()  # type: ignore[call-arg]

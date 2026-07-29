@@ -1,5 +1,5 @@
-# Stage 0, "build-stage", based on Bun, to build and compile the frontend
-FROM oven/bun:1 AS build-stage
+# Build and preview the Vite frontend with the version locked in bun.lock.
+FROM oven/bun:1.2.22
 
 WORKDIR /app
 
@@ -9,18 +9,16 @@ COPY frontend/package.json /app/frontend/
 
 WORKDIR /app/frontend
 
-RUN bun install
+RUN bun install --frozen-lockfile
 
 COPY ./frontend /app/frontend
 ARG VITE_API_URL
+ARG VITE_APP_ENV
+ARG VITE_DEMO_MODE
 
 RUN bun run build
 
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1
+EXPOSE 5173
 
-COPY --from=build-stage /app/frontend/dist/ /usr/share/nginx/html
-
-COPY ./frontend/nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./frontend/nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
+CMD ["bun", "run", "preview", "--", "--host", "0.0.0.0", "--port", "5173"]

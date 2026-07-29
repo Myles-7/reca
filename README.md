@@ -1,5 +1,11 @@
 # 研证链 AI（RECA）
 
+> M0 clean-room acceptance: run `./scripts/m0-acceptance.ps1` on Windows
+> PowerShell or `./scripts/m0-acceptance.sh` on Linux/macOS. It uses only the
+> scoped `reca_m0_acceptance` project and temporary random test secrets, never
+> a developer `.env` or default volumes. M0 intentionally has no business seed
+> data; an approved demonstration-data workflow begins in M1.
+
 > 面向高校科研训练的全流程可信科研智能体
 > Research Evidence Chain Agent
 
@@ -2102,7 +2108,52 @@ vendor/licenses/
 
 ---
 
-## 33. 核心成功标准
+## 33. 本地 Compose 启动（M0-02）
+
+Docker Desktop 或 Docker Engine 安装后，可直接使用仓库脚本。脚本优先读取
+本地未提交的 `.env`，不存在时仅读取占位的 `.env.example`：
+
+```powershell
+./scripts/compose.ps1 config
+./scripts/compose.ps1 build
+./scripts/compose.ps1 up
+./scripts/compose.ps1 ps
+./scripts/compose.ps1 logs
+./scripts/compose.ps1 down
+```
+
+Linux CI 可调用等价的 `scripts/compose.sh`。默认仅将前端和 API 绑定到
+`127.0.0.1`；PostgreSQL、Valkey、MinIO 和 GROBID 只在内部 Compose 网络中可达。
+在共享环境启动前，必须创建本地 `.env` 并替换 `.env.example` 中的全部占位符。
+
+## 34. M0 配置边界
+
+后端通过单一 Pydantic Settings 入口读取 `.env` 或容器环境，并支持
+`local`、`test`、`demo` 和 `production`。`MODEL_API_KEY` 与
+`OPENALEX_API_KEY` 可留空；它们会保持 `UNCONFIGURED`，不会阻止基础 API
+启动。生产环境必须提供至少 32 位、非占位的 `SECRET_KEY`，且不得使用
+`BACKEND_CORS_ORIGINS=*`。
+
+浏览器构建只接受 `VITE_API_URL`、`VITE_APP_ENV` 和 `VITE_DEMO_MODE`。
+不得以 `VITE_` 前缀传入数据库、对象存储、认证或 Provider 密钥。
+
+## 35. M0 API 健康检查
+
+API 提供 `GET /api/v1/health/live`（仅 API 进程存活）、
+`/api/v1/health/ready`（PostgreSQL、pgvector、Valkey、MinIO 就绪）及
+`/api/v1/health/dependencies`（完整且脱敏的依赖状态）。Compose 的 API
+healthcheck 使用 `live`，因此它只判断进程可响应；流量就绪判断应使用
+`ready`。所有 API 响应都会返回 `X-Request-ID`。
+
+## 36. M0 Worker 与迁移
+
+`worker` 是唯一的 Celery 进程，使用 Valkey 的 Redis 兼容协议作为 broker
+和短期 result backend；它不是业务事实数据库。启动后可在 API 容器中运行
+`alembic upgrade head`（重复执行安全），并使用
+`celery -A app.core.celery:celery_app inspect ping` 验证 worker。M0 仅提供
+无副作用的 `reca.health_ping`，正式异步业务任务保留至 M1。
+
+## 37. 核心成功标准
 
 RECA 0.1 的成功不以“页面数量”或“智能体数量”衡量。
 

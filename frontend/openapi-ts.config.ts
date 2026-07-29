@@ -1,33 +1,14 @@
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { defineConfig } from "@hey-api/openapi-ts"
 
+const frontendRoot = path.dirname(fileURLToPath(import.meta.url))
+
 export default defineConfig({
-  input: "./openapi.json",
-  output: "./src/client",
-
-  plugins: [
-    "legacy/axios",
-    {
-      name: "@hey-api/sdk",
-      // NOTE: this doesn't allow tree-shaking
-      asClass: true,
-      operationId: true,
-      classNameBuilder: "{{name}}Service",
-      methodNameBuilder: (operation) => {
-        // @ts-expect-error
-        let name: string = operation.name
-        // @ts-expect-error
-        const service: string = operation.service
-
-        if (service && name.toLowerCase().startsWith(service.toLowerCase())) {
-          name = name.slice(service.length)
-        }
-
-        return name.charAt(0).toLowerCase() + name.slice(1)
-      },
-    },
-    {
-      name: "@hey-api/schemas",
-      type: "json",
-    },
-  ],
+  input: path.join(frontendRoot, "openapi.json"),
+  output: {
+    path: path.join(frontendRoot, "src", "api", "generated"),
+    clean: true,
+  },
+  plugins: ["@hey-api/typescript", "@hey-api/client-fetch", "@hey-api/sdk"],
 })

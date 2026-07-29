@@ -1,5 +1,11 @@
-import { defineConfig, devices } from '@playwright/test';
-import 'dotenv/config'
+import path from "node:path"
+import { defineConfig, devices } from "@playwright/test"
+import "dotenv/config"
+
+const bunExecutable =
+  process.platform === "win32"
+    ? path.join(process.env.APPDATA ?? "", "npm", "node_modules", "bun", "bin", "bun.exe")
+    : "bun"
 
 /**
  * Read environment variables from file.
@@ -84,7 +90,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'bun run dev',
+    command: `"${bunExecutable}" run dev -- --host 127.0.0.1`,
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
   },

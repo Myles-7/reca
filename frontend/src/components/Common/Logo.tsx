@@ -15,11 +15,21 @@ export function Logo({
 }: LogoProps) {
   const content =
     variant === "responsive" ? (
-      <span className={cn("font-semibold group-data-[collapsible=icon]:hidden", className)}>
+      <span
+        className={cn(
+          "font-semibold group-data-[collapsible=icon]:hidden",
+          className,
+        )}
+      >
         RECA
       </span>
     ) : (
-      <span className={cn(variant === "full" ? "font-semibold" : "font-bold", className)}>
+      <span
+        className={cn(
+          variant === "full" ? "font-semibold" : "font-bold",
+          className,
+        )}
+      >
         RECA
       </span>
     )
