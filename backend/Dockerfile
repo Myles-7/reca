@@ -1,4 +1,4 @@
-FROM python:3.14
+FROM python:3.14.3-slim-bookworm
 
 ENV PYTHONUNBUFFERED=1
 
@@ -42,4 +42,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 WORKDIR /app/backend/
 
-CMD ["fastapi", "run", "--workers", "4"]
+EXPOSE 8000
+
+CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]

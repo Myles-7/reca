@@ -2102,7 +2102,25 @@ vendor/licenses/
 
 ---
 
-## 33. 核心成功标准
+## 33. 本地 Compose 启动（M0-02）
+
+Docker Desktop 或 Docker Engine 安装后，可直接使用仓库脚本。脚本优先读取
+本地未提交的 `.env`，不存在时仅读取占位的 `.env.example`：
+
+```powershell
+./scripts/compose.ps1 config
+./scripts/compose.ps1 build
+./scripts/compose.ps1 up
+./scripts/compose.ps1 ps
+./scripts/compose.ps1 logs
+./scripts/compose.ps1 down
+```
+
+Linux CI 可调用等价的 `scripts/compose.sh`。默认仅将前端和 API 绑定到
+`127.0.0.1`；PostgreSQL、Valkey、MinIO 和 GROBID 只在内部 Compose 网络中可达。
+在共享环境启动前，必须创建本地 `.env` 并替换 `.env.example` 中的全部占位符。
+
+## 34. 核心成功标准
 
 RECA 0.1 的成功不以“页面数量”或“智能体数量”衡量。
 
