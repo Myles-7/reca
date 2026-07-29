@@ -16,6 +16,7 @@
 |---|---|---|---|---|---|---|
 | M0-ISSUE-0003 | M0-01 | LOW | OPEN | GitHub integration | GitHub CLI is unavailable, so the Draft PR could not be created or updated automatically. | No |
 | M0-ISSUE-0006 | M0-FIX | LOW | OPEN | Node supply chain | A low-severity Babel 7 advisory has no compatible fixed release for the current TanStack Router plugin. | No |
+| M0-ISSUE-0007 | M0-FINAL-REVIEW | HIGH | OPEN | Clean-room acceptance | Worker ping/health_ping and private MinIO object verification lack passing evidence. | Yes |
 
 ## Detailed Issues
 
@@ -193,6 +194,27 @@
 - Resolved commit: Not resolved.
 - Resolution evidence: Not available.
 - Notes: LOW only; it does not reopen the closed M0 HIGH supply-chain issue.
+
+### M0-ISSUE-0007
+
+- Detected stage: M0-FINAL-REVIEW
+- Severity: HIGH
+- Status: OPEN
+- Area: Clean-room acceptance
+- Summary: Worker ping/health_ping and private MinIO object verification failed in the latest real clean-room run.
+- Evidence: `reca-m0-acceptance-20260729-203319` records worker restart and MinIO HTTP 403.
+- Reproduction: `./scripts/m0-acceptance.ps1` after images are available.
+- Impact: Worker and clean-room exit criteria are unmet.
+- Safe workaround: None; no mock Worker or public bucket is acceptable.
+- Root cause: Not yet established independently from acceptance tooling.
+- Planned resolution: Diagnose worker runtime and signed MinIO request path.
+- Resolution target: M0-FIX follow-up.
+- Related tests: Worker inspect ping, `health_ping`, MinIO private write/read.
+- Related files: `docker-compose.yml`, `backend/app/core/celery.py`, `scripts/m0-acceptance.ps1`.
+- Introduced commit: `834382ec4b2854956dc20d7dfe8e3fdcf3e3c8d2`.
+- Resolved commit: Not resolved.
+- Resolution evidence: Not available.
+- Notes: This supersedes unsupported claims of full clean-room sufficiency.
 
 ## Resolved Issues
 
