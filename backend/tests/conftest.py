@@ -17,24 +17,34 @@ _TEST_ENVIRONMENT = {
     "MINIO_ROOT_USER": "reca-test-admin",
     "MINIO_ROOT_PASSWORD": "test-minio-password",
     "GROBID_URL": "http://localhost:8070",
+    "CELERY_BROKER_URL": "redis://localhost:6379/0",
+    "CELERY_RESULT_BACKEND": "redis://localhost:6379/1",
 }
 
 for _name, _value in _TEST_ENVIRONMENT.items():
     os.environ.setdefault(_name, _value)
 
-import pytest
-from fastapi.testclient import TestClient
-from sqlmodel import Session, delete
+# These imports must follow the test-only environment defaults above.
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
+from sqlmodel import Session, delete  # noqa: E402
 
-from app.core.config import settings
-from app.core.db import engine, init_db
-from app.main import app
-from app.models import User
-from tests.utils.user import authentication_token_from_email
-from tests.utils.utils import get_superuser_token_headers
+from app.core.config import settings  # noqa: E402
+from app.core.db import engine, init_db  # noqa: E402
+from app.main import app  # noqa: E402
+from app.models import User  # noqa: E402
+from tests.utils.user import authentication_token_from_email  # noqa: E402
+from tests.utils.utils import get_superuser_token_headers  # noqa: E402
 
 
-@pytest.fixture(scope="session", autouse=True)
+def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
+    """Keep pure unit tests independent from the integration database fixture."""
+    for item in items:
+        if "no_database" not in item.keywords:
+            item.add_marker(pytest.mark.usefixtures("db"))
+
+
+@pytest.fixture(scope="session")
 def db() -> Generator[Session]:
     with Session(engine) as session:
         init_db(session)

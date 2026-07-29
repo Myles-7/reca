@@ -12,6 +12,7 @@ dependencies = [
     "emails>=1.1.2,<2.0",
     "jinja2<4.0.0,>=3.1.4",
     "alembic<2.0.0,>=1.12.1",
+    "celery[redis]==5.5.3",
     "httpx<1.0.0,>=0.25.1",
     "psycopg[binary]<4.0.0,>=3.1.13",
     "sqlmodel>=0.0.39,<1.0.0",
@@ -81,3 +82,8 @@ error-on-warning = true
 
 [tool.fastapi]
 entrypoint = "app.main:app"
+
+[tool.pytest.ini_options]
+markers = [
+    "no_database: unit test that must not initialize the PostgreSQL integration fixture",
+]

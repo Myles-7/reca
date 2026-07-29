@@ -53,8 +53,8 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
       MINIO_BUCKET: ${MINIO_BUCKET:-reca}
       GROBID_URL: http://grobid:8070
-      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-}
-      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://valkey:6379/0}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://valkey:6379/1}
       MODEL_BASE_URL: ${MODEL_BASE_URL:-}
       MODEL_API_KEY: ${MODEL_API_KEY:-}
       OPENALEX_API_URL: ${OPENALEX_API_URL:-https://api.openalex.org}
@@ -103,6 +103,42 @@ services:
       start_period: 5s
     volumes:
       - valkey_data:/data
+    networks:
+      - internal
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["celery", "-A", "app.core.celery:celery_app", "worker", "--loglevel=INFO", "--pool=solo", "--concurrency=1", "--hostname=reca-worker@%h", "--pidfile=/tmp/reca/celery.pid", "--without-gossip", "--without-mingle"]
+    depends_on:
+      valkey:
+        condition: service_healthy
+    environment:
+      PROJECT_NAME: ${PROJECT_NAME:-RECA}
+      ENVIRONMENT: ${ENVIRONMENT:-local}
+      SECRET_KEY: ${SECRET_KEY:-reca-local-only-secret-key-change-before-shared-use}
+      FIRST_SUPERUSER: ${FIRST_SUPERUSER:-admin@example.com}
+      FIRST_SUPERUSER_PASSWORD: ${FIRST_SUPERUSER_PASSWORD:-reca-local-only-admin-password}
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-reca}
+      POSTGRES_USER: ${POSTGRES_USER:-reca}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-reca-local-only-postgres-password}
+      VALKEY_URL: valkey://valkey:6379/0
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-reca-local-admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
+      GROBID_URL: http://grobid:8070
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://valkey:6379/0}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://valkey:6379/1}
+    read_only: true
+    tmpfs:
+      - /tmp/reca:rw,nosuid,nodev,size=64m
+    stop_grace_period: 30s
+    mem_limit: 512m
+    cpus: 1.0
     networks:
       - internal
     restart: unless-stopped

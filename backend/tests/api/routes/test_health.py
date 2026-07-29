@@ -6,15 +6,17 @@ import logging
 from collections.abc import Awaitable, Callable
 from typing import cast
 
+import pytest
 from fastapi import Request
 from fastapi.testclient import TestClient
-import pytest
 
 from app.api.routes.health import health_service
 from app.api.schemas.health import DependencyCheck, DependencyStatus
 from app.core.config import settings
 from app.core.observability import JsonFormatter
 from app.main import app, unhandled_exception_handler
+
+pytestmark = pytest.mark.no_database
 
 
 def healthy(name: str) -> Callable[[], Awaitable[DependencyCheck]]:
@@ -82,6 +84,7 @@ def test_dependencies_reports_degraded_grobid_and_unconfigured_providers(
         )
 
     monkeypatch.setattr(health_service.probe, "grobid", degraded_grobid)
+    monkeypatch.setattr(health_service.probe, "worker", unavailable("worker"))
     monkeypatch.setattr(settings, "MODEL_API_KEY", None)
     monkeypatch.setattr(settings, "OPENALEX_API_KEY", None)
 
@@ -90,6 +93,7 @@ def test_dependencies_reports_degraded_grobid_and_unconfigured_providers(
     statuses = {item["name"]: item["status"] for item in response.json()["dependencies"]}
     assert statuses["api"] == "HEALTHY"
     assert statuses["grobid"] == "DEGRADED"
+    assert statuses["worker"] == "UNAVAILABLE"
     assert statuses["model"] == "UNCONFIGURED"
     assert statuses["openalex"] == "UNCONFIGURED"
 

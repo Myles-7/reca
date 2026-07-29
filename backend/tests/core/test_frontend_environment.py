@@ -1,6 +1,10 @@
 import re
 from pathlib import Path
 
+import pytest
+
+pytestmark = pytest.mark.no_database
+
 
 def test_frontend_environment_layer_has_an_explicit_public_whitelist() -> None:
     repository_root = Path(__file__).resolve().parents[3]
@@ -50,6 +54,8 @@ def test_environment_template_covers_required_core_configuration() -> None:
         "MINIO_ROOT_PASSWORD",
         "MINIO_BUCKET",
         "GROBID_URL",
+        "CELERY_BROKER_URL",
+        "CELERY_RESULT_BACKEND",
         "MODEL_API_KEY",
         "OPENALEX_API_KEY",
     )

@@ -34,3 +34,16 @@ The production application must not depend on the local `upstream-lab` directory
 
 Image digests are intentionally not recorded because this task validates the
 published tags at build time; the fixed tags must not be replaced with `latest`.
+
+## M0-05 worker dependencies
+
+| Dependency | Fixed version | License verification status | RECA usage |
+| --- | --- | --- | --- |
+| `celery[redis]` | `5.5.3` | Verified: BSD-3-Clause / New BSD | The sole controlled task-worker runtime; M0 registers only `reca.health_ping`. |
+| `redis` | `5.2.1` | Verified: MIT | Celery's Redis-compatible transport for the existing Valkey broker and short-lived task result backend. |
+
+Celery is necessary because the approved architecture specifies a Celery worker.
+The existing Valkey service is the compatible broker alternative; no additional
+queue service is introduced. The Redis transport adds a small pure-Python client
+dependency, while Celery brings its documented task-queue dependency set. Neither
+package is used to store RECA business facts.

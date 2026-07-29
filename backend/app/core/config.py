@@ -4,7 +4,14 @@ from functools import cached_property
 from pathlib import Path
 from typing import Any, Literal, Self
 
-from pydantic import AnyHttpUrl, EmailStr, Field, SecretStr, field_validator, model_validator
+from pydantic import (
+    AnyHttpUrl,
+    EmailStr,
+    Field,
+    SecretStr,
+    field_validator,
+    model_validator,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 EnvironmentName = Literal["local", "test", "demo", "production"]
@@ -71,11 +78,11 @@ class Settings(BaseSettings):
     # Optional external providers
     MODEL_BASE_URL: AnyHttpUrl | None = None
     MODEL_API_KEY: SecretStr | None = None
-    OPENALEX_API_URL: AnyHttpUrl = "https://api.openalex.org"
+    OPENALEX_API_URL: AnyHttpUrl = AnyHttpUrl("https://api.openalex.org")
     OPENALEX_API_KEY: SecretStr | None = None
 
     # Email, observability, and browser access
-    FRONTEND_HOST: AnyHttpUrl = "http://localhost:5173"
+    FRONTEND_HOST: AnyHttpUrl = AnyHttpUrl("http://localhost:5173")
     BACKEND_CORS_ORIGINS: list[str] = Field(default_factory=list)
     SENTRY_DSN: AnyHttpUrl | None = None
     SMTP_TLS: bool = True
@@ -171,4 +178,5 @@ class Settings(BaseSettings):
         return "CONFIGURED" if self.OPENALEX_API_KEY else "UNCONFIGURED"
 
 
-settings = Settings()
+# Pydantic Settings resolves required values from the environment at runtime.
+settings = Settings()  # type: ignore[call-arg]

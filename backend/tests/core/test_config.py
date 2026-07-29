@@ -5,6 +5,8 @@ from pydantic import ValidationError
 
 from app.core.config import Settings
 
+pytestmark = pytest.mark.no_database
+
 
 def build_settings(**overrides: object) -> Settings:
     values: dict[str, object] = {

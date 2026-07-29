@@ -2139,7 +2139,15 @@ API 提供 `GET /api/v1/health/live`（仅 API 进程存活）、
 healthcheck 使用 `live`，因此它只判断进程可响应；流量就绪判断应使用
 `ready`。所有 API 响应都会返回 `X-Request-ID`。
 
-## 36. 核心成功标准
+## 36. M0 Worker 与迁移
+
+`worker` 是唯一的 Celery 进程，使用 Valkey 的 Redis 兼容协议作为 broker
+和短期 result backend；它不是业务事实数据库。启动后可在 API 容器中运行
+`alembic upgrade head`（重复执行安全），并使用
+`celery -A app.core.celery:celery_app inspect ping` 验证 worker。M0 仅提供
+无副作用的 `reca.health_ping`，正式异步业务任务保留至 M1。
+
+## 37. 核心成功标准
 
 RECA 0.1 的成功不以“页面数量”或“智能体数量”衡量。
 

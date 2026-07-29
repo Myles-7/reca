@@ -91,6 +91,36 @@ class HealthProbe:
             return result.model_copy(update={"status": DependencyStatus.DEGRADED})
         return result
 
+    async def worker(self) -> DependencyCheck:
+        if not settings.CELERY_BROKER_URL:
+            return DependencyCheck(
+                name="worker",
+                status=DependencyStatus.UNCONFIGURED,
+                detail="worker broker is not configured",
+            )
+        try:
+            responded = await asyncio.wait_for(
+                asyncio.to_thread(self._inspect_worker), timeout=self.timeout_seconds
+            )
+        except Exception:
+            return DependencyCheck(
+                name="worker",
+                status=DependencyStatus.UNAVAILABLE,
+                detail="worker is unavailable",
+            )
+        if not responded:
+            return DependencyCheck(
+                name="worker",
+                status=DependencyStatus.UNAVAILABLE,
+                detail="worker did not respond",
+            )
+        return DependencyCheck(name="worker", status=DependencyStatus.HEALTHY, detail="available")
+
+    def _inspect_worker(self) -> bool:
+        from app.core.celery import celery_app
+
+        return bool(celery_app.control.ping(timeout=self.timeout_seconds))
+
     async def _http_probe(self, name: str, url: str) -> DependencyCheck:
         try:
             async with httpx.AsyncClient(timeout=self.timeout_seconds) as client:
@@ -120,13 +150,14 @@ class HealthService:
         )
 
     async def all_dependencies(self) -> list[DependencyCheck]:
-        core, grobid = await asyncio.gather(
-            self.core_dependencies(), self.probe.grobid()
+        core, grobid, worker = await asyncio.gather(
+            self.core_dependencies(), self.probe.grobid(), self.probe.worker()
         )
         return [
             DependencyCheck(name="api", status=DependencyStatus.HEALTHY, detail="available"),
             *core,
             grobid,
+            worker,
             DependencyCheck(
                 name="model",
                 status=(
