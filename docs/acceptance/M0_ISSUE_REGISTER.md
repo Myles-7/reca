@@ -38,7 +38,7 @@
 - Related tests: `bun install --frozen-lockfile`, `bun run build`, `bunx biome check`, and `bun run test:shell`.
 - Related files: `package.json`, `bun.lock`.
 - Introduced commit: `5bd3be0`
-- Resolved commit: Pending M0-06 commit.
+- Resolved commit: `656eec6238d7ec895bb9a0525f160ac609e4e0e7`.
 - Resolution evidence: Bun `1.2.22`; six Playwright tests passed; production build and Biome check passed.
 - Notes: The local Bun installation is a workstation tool only; no project dependency version or lockfile changed.
 
