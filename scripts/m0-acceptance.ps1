@@ -1,11 +1,17 @@
 [CmdletBinding()]
-param()
+param(
+    [string]$EvidenceDirectory
+)
 
 $ErrorActionPreference = "Continue"
 $env:PYTHONUTF8 = "1"
 $root = Split-Path -Parent $PSScriptRoot
 $project = "reca_m0_acceptance"
-$evidenceRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("reca-m0-acceptance-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
+$evidenceRoot = if ($EvidenceDirectory) {
+    $EvidenceDirectory
+} else {
+    Join-Path ([System.IO.Path]::GetTempPath()) ("reca-m0-acceptance-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
+}
 $envFile = Join-Path $evidenceRoot "acceptance.env"
 $results = [System.Collections.Generic.List[object]]::new()
 $apiPort = 18000
@@ -104,11 +110,15 @@ try {
     Invoke-Step "build-images" { docker @compose build api worker frontend }
     $build = $results | Where-Object Name -eq "build-images" | Select-Object -Last 1
     if ($build.Status -eq "PASS") {
-        Invoke-Step "start-services" { docker @compose up -d postgres valkey minio grobid api worker frontend }
+        # Bring up the database dependencies before migration so the acceptance
+        # environment does not compete with GROBID, Vite, and Playwright for RAM.
+        Invoke-Step "start-core-services" { docker @compose up -d postgres valkey minio }
+        Invoke-Step "core-container-status" { docker @compose ps postgres valkey minio }
+        Invoke-Step "migrate-empty-database" { docker @compose run --rm api alembic upgrade head }
+        Invoke-Step "migrate-idempotently" { docker @compose run --rm api alembic upgrade head }
+        Invoke-Step "start-services" { docker @compose up -d grobid api worker frontend }
         Invoke-Step "container-status" { docker @compose ps }
         Invoke-Step "api-live" { python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/live" --timeout 90 }
-        Invoke-Step "migrate-empty-database" { docker @compose exec -T api alembic upgrade head }
-        Invoke-Step "migrate-idempotently" { docker @compose exec -T api alembic upgrade head }
         Invoke-Step "pgvector" { docker @compose exec -T api python -m app.cli.pgvector_smoke }
         Invoke-Step "api-ready" { python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/ready" --timeout 90 }
         foreach ($endpoint in @("live", "ready", "dependencies")) { Invoke-Step "health-$endpoint" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$apiPort/api/v1/health/$endpoint" | Select-Object -ExpandProperty Content; $global:LASTEXITCODE = 0 } }
@@ -120,7 +130,9 @@ try {
         Invoke-Step "minio-private-write-read" { docker @compose exec -T api python -m app.cli.minio_smoke --bucket $minioBucket --verify-anonymous-denial }
         Invoke-Step "frontend-home" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$frontendPort/" | Select-Object -ExpandProperty StatusCode }
         Invoke-Step "frontend-system-status" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$frontendPort/system-status" | Select-Object -ExpandProperty StatusCode }
-        Invoke-Step "restart-services" { docker @compose restart; Start-Sleep -Seconds 10; docker @compose ps }
+        Invoke-Step "restart-services" { docker @compose restart; docker @compose ps }
+        Invoke-Step "api-restart-recovery-1" { python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/live" --timeout 90; python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/ready" --timeout 90 }
+        Invoke-Step "api-restart-recovery-2" { docker @compose restart api; python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/live" --timeout 90; python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/ready" --timeout 90 }
         Invoke-Step "persistence" { docker @compose exec -T api alembic current; docker @compose exec -T api python -c "from sqlalchemy import text; from app.core.db import engine; assert engine.connect().execute(text('SELECT 1')).scalar_one() == 1"; docker @compose exec -T api python -m app.cli.minio_smoke --bucket $minioBucket --verify-persistence --verify-anonymous-denial --cleanup }
         Invoke-Step "container-log-secret-scan" { $matches = docker @compose logs --no-color | Select-String -Pattern "(postgresql\+psycopg://[^\s]+:|Authorization: Bearer|BEGIN PRIVATE KEY)"; if ($matches) { throw "Sensitive log pattern detected" } }
     }
@@ -142,4 +154,7 @@ finally {
 
 $results | Format-Table -AutoSize
 $failed = @($results | Where-Object { $_.Status -eq "FAIL" }).Count
-if ($failed -gt 0) { exit 1 }
+$exitCode = if ($failed -gt 0) { 1 } else { 0 }
+$results | ConvertTo-Json -Depth 3 | Set-Content -LiteralPath (Join-Path $evidenceRoot "summary.json") -Encoding utf8
+$exitCode | Set-Content -LiteralPath (Join-Path $evidenceRoot "exit-code.txt") -Encoding ascii
+exit $exitCode

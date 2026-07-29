@@ -103,9 +103,9 @@ test("system status keeps a loading state and handles API failures", async ({
   await page.goto("/system-status")
 
   await expect(page.getByText("Loading dependency status")).toBeVisible()
-  await expect(
-    page.getByText(/health information could not be loaded/i),
-  ).toBeVisible()
+  await expect(page.getByRole("alert")).toContainText(
+    /health information could not be loaded/i,
+  )
   await expect(page.getByLabel("PostgreSQL: UNAVAILABLE")).toBeVisible()
 })
 

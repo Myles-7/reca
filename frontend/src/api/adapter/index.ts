@@ -38,6 +38,15 @@ export class ApiError extends Error {
   public readonly body: unknown = undefined
   constructor(
     public readonly status: number,
+    public readonly kind:
+      | "NETWORK"
+      | "TIMEOUT"
+      | "UNAUTHORIZED"
+      | "FORBIDDEN"
+      | "VALIDATION"
+      | "SERVER"
+      | "SERVICE_UNAVAILABLE"
+      | "UNKNOWN",
     message: string,
   ) {
     super(message)
@@ -52,62 +61,95 @@ export function configureApi(baseUrl: string, getToken: () => string | null) {
   })
 }
 
+type GeneratedResult<T> = {
+  data?: T
+  error?: unknown
+  response?: Response
+}
+
+function errorKind(status: number): ApiError["kind"] {
+  if (status === 0) return "NETWORK"
+  if (status === 401) return "UNAUTHORIZED"
+  if (status === 403) return "FORBIDDEN"
+  if (status === 422) return "VALIDATION"
+  if (status === 503) return "SERVICE_UNAVAILABLE"
+  if (status >= 500) return "SERVER"
+  return "UNKNOWN"
+}
+
+function errorMessage(status: number): string {
+  if (status >= 500) return "The API reported a server error."
+  if (status === 0) return "The API could not be reached."
+  return "The API request could not be completed."
+}
+
+async function unwrap<T>(request: Promise<GeneratedResult<T>>): Promise<T> {
+  try {
+    const result = await request
+    const status = result.response?.status ?? 0
+    if (result.error || !result.response?.ok || result.data === undefined) {
+      throw new ApiError(status, errorKind(status), errorMessage(status))
+    }
+    return result.data
+  } catch (error) {
+    if (error instanceof ApiError) throw error
+    throw new ApiError(0, "NETWORK", "The API could not be reached.")
+  }
+}
+
 export class HealthApi {
-  static live = async () => (await healthLiveHealthGetApiV1HealthLive()).data!
-  static ready = async () =>
-    (await healthReadyHealthGetApiV1HealthReady()).data!
-  static dependencies = async () =>
-    (await healthDependenciesHealthGetApiV1HealthDependencies()).data!
+  static live = () => unwrap(healthLiveHealthGetApiV1HealthLive())
+  static ready = () => unwrap(healthReadyHealthGetApiV1HealthReady())
+  static dependencies = () =>
+    unwrap(healthDependenciesHealthGetApiV1HealthDependencies())
 }
 
 export class AuthApi {
   static login = async (body: { username: string; password: string }) =>
-    (
-      await loginLoginAccessTokenPostApiV1LoginAccessToken({
+    unwrap(
+      loginLoginAccessTokenPostApiV1LoginAccessToken({
         body: { ...body, grant_type: "password" },
-      })
-    ).data!
+      }),
+    )
   static recoverPassword = async (email: string) =>
-    (
-      await loginRecoverPasswordPostApiV1PasswordRecoveryEmail({
+    unwrap(
+      loginRecoverPasswordPostApiV1PasswordRecoveryEmail({
         path: { email },
-      })
-    ).data!
+      }),
+    )
   static resetPassword = async (body: {
     token: string
     new_password: string
-  }) => (await loginResetPasswordPostApiV1ResetPassword({ body })).data!
+  }) => unwrap(loginResetPasswordPostApiV1ResetPassword({ body }))
 }
 
 export class UsersApi {
-  static current = async () => (await usersReadUserMeGetApiV1UsersMe()).data!
+  static current = async () => unwrap(usersReadUserMeGetApiV1UsersMe())
   static list = async (skip = 0, limit = 100) =>
-    (await usersReadUsersGetApiV1Users({ query: { skip, limit } })).data!
+    unwrap(usersReadUsersGetApiV1Users({ query: { skip, limit } }))
   static create = async (body: import("../generated/types.gen").UserCreate) =>
-    (await usersCreateUserPostApiV1Users({ body })).data!
+    unwrap(usersCreateUserPostApiV1Users({ body }))
   static signup = async (body: import("../generated/types.gen").UserRegister) =>
-    (await usersRegisterUserPostApiV1UsersSignup({ body })).data!
+    unwrap(usersRegisterUserPostApiV1UsersSignup({ body }))
   static updateMe = async (
     body: import("../generated/types.gen").UserUpdateMe,
-  ) => (await usersUpdateUserMePatchApiV1UsersMe({ body })).data!
+  ) => unwrap(usersUpdateUserMePatchApiV1UsersMe({ body }))
   static changePassword = async (
     body: import("../generated/types.gen").UpdatePassword,
-  ) => (await usersUpdatePasswordMePatchApiV1UsersMePassword({ body })).data!
-  static deleteMe = async () =>
-    (await usersDeleteUserMeDeleteApiV1UsersMe()).data!
+  ) => unwrap(usersUpdatePasswordMePatchApiV1UsersMePassword({ body }))
+  static deleteMe = async () => unwrap(usersDeleteUserMeDeleteApiV1UsersMe())
   static update = async (
     userId: string,
     body: import("../generated/types.gen").UserUpdate,
   ) =>
-    (
-      await usersUpdateUserPatchApiV1UsersUserId({
+    unwrap(
+      usersUpdateUserPatchApiV1UsersUserId({
         path: { user_id: userId },
         body,
-      })
-    ).data!
+      }),
+    )
   static delete = async (userId: string) =>
-    (await usersDeleteUserDeleteApiV1UsersUserId({ path: { user_id: userId } }))
-      .data!
+    unwrap(usersDeleteUserDeleteApiV1UsersUserId({ path: { user_id: userId } }))
 }
 
 // Temporary names retain the upstream UI call shape while routing exclusively

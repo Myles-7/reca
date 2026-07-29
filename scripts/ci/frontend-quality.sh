@@ -5,6 +5,7 @@ cd frontend
 bun install --frozen-lockfile
 bun run format:check
 bun run lint
-bun run build
 bun run generate-client
-git diff --exit-code -- src/client
+bun run check-generated-client
+bun run build
+git diff --exit-code -- src/api/generated

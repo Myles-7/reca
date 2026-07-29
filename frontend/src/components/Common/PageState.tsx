@@ -20,6 +20,7 @@ export function EmptyState({ children }: { children: ReactNode }) {
 export function ErrorState({ message }: { message: string }) {
   return (
     <div
+      role="alert"
       aria-live="polite"
       className="flex items-start gap-2 text-sm text-destructive"
     >
