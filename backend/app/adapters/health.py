@@ -44,7 +44,9 @@ class HealthProbe:
                 status=DependencyStatus.UNAVAILABLE,
                 detail="pgvector extension is unavailable",
             )
-        return DependencyCheck(name=name, status=DependencyStatus.HEALTHY, detail="available")
+        return DependencyCheck(
+            name=name, status=DependencyStatus.HEALTHY, detail="available"
+        )
 
     @staticmethod
     def _execute_database_probe(statement: str) -> bool:
@@ -61,10 +63,12 @@ class HealthProbe:
             )
             writer.write(b"PING\r\n")
             await writer.drain()
-            response = await asyncio.wait_for(reader.readline(), timeout=self.timeout_seconds)
+            response = await asyncio.wait_for(
+                reader.readline(), timeout=self.timeout_seconds
+            )
             writer.close()
             await writer.wait_closed()
-        except (OSError, TimeoutError, ValueError):
+        except OSError, TimeoutError, ValueError:
             return DependencyCheck(
                 name="valkey",
                 status=DependencyStatus.UNAVAILABLE,
@@ -76,7 +80,9 @@ class HealthProbe:
                 status=DependencyStatus.UNAVAILABLE,
                 detail="valkey returned an unexpected response",
             )
-        return DependencyCheck(name="valkey", status=DependencyStatus.HEALTHY, detail="available")
+        return DependencyCheck(
+            name="valkey", status=DependencyStatus.HEALTHY, detail="available"
+        )
 
     async def minio(self) -> DependencyCheck:
         return await self._http_probe(
@@ -114,7 +120,9 @@ class HealthProbe:
                 status=DependencyStatus.UNAVAILABLE,
                 detail="worker did not respond",
             )
-        return DependencyCheck(name="worker", status=DependencyStatus.HEALTHY, detail="available")
+        return DependencyCheck(
+            name="worker", status=DependencyStatus.HEALTHY, detail="available"
+        )
 
     def _inspect_worker(self) -> bool:
         from app.core.celery import celery_app
@@ -132,7 +140,9 @@ class HealthProbe:
                 status=DependencyStatus.UNAVAILABLE,
                 detail=f"{name} is unavailable",
             )
-        return DependencyCheck(name=name, status=DependencyStatus.HEALTHY, detail="available")
+        return DependencyCheck(
+            name=name, status=DependencyStatus.HEALTHY, detail="available"
+        )
 
 
 class HealthService:
@@ -154,7 +164,9 @@ class HealthService:
             self.core_dependencies(), self.probe.grobid(), self.probe.worker()
         )
         return [
-            DependencyCheck(name="api", status=DependencyStatus.HEALTHY, detail="available"),
+            DependencyCheck(
+                name="api", status=DependencyStatus.HEALTHY, detail="available"
+            ),
             *core,
             grobid,
             worker,

@@ -14,7 +14,11 @@ router = APIRouter(prefix="/health", tags=["health"])
 health_service = HealthService()
 
 
-@router.get("/live", response_model=LiveHealthResponse, responses={500: {"model": ErrorResponse}})
+@router.get(
+    "/live",
+    response_model=LiveHealthResponse,
+    responses={500: {"model": ErrorResponse}},
+)
 async def live_health() -> LiveHealthResponse:
     """Process-only liveness endpoint; intentionally performs no dependency probe."""
     return LiveHealthResponse()
@@ -44,4 +48,6 @@ async def ready_health() -> ReadyHealthResponse | JSONResponse:
     responses={500: {"model": ErrorResponse}},
 )
 async def dependencies_health() -> DependenciesHealthResponse:
-    return DependenciesHealthResponse(dependencies=await health_service.all_dependencies())
+    return DependenciesHealthResponse(
+        dependencies=await health_service.all_dependencies()
+    )

@@ -6,7 +6,7 @@
 |---|---:|---:|
 | BLOCKER | 0 | 0 |
 | CRITICAL | 0 | 0 |
-| HIGH | 1 | 0 |
+| HIGH | 2 | 0 |
 | MEDIUM | 0 | 0 |
 | LOW | 1 | 1 |
 
@@ -16,6 +16,7 @@
 |---|---|---|---|---|---|---|
 | M0-ISSUE-0002 | M0-02 | HIGH | OPEN | Container registry network | Docker Hub OAuth endpoint was unreachable, blocking image builds and service startup. | Yes |
 | M0-ISSUE-0003 | M0-01 | LOW | OPEN | GitHub integration | GitHub CLI is unavailable, so the Draft PR could not be created or updated automatically. | No |
+| M0-ISSUE-0004 | M0-07 | HIGH | OPEN | Node supply chain | Locked frontend dependency tree has disclosed critical and high vulnerabilities. | Yes |
 
 ## Detailed Issues
 
@@ -74,7 +75,9 @@
   Runtime evidence is pending registry access.
 - Notes: M0-05 retried `docker compose up -d postgres valkey api worker`; it
   failed again at Docker Hub OAuth for `python:3.14.3-slim-bookworm` before any
-  service container was created.
+  service container was created. M0-07 also retried
+  `docker compose build api worker frontend`; Docker Hub OAuth timed out for
+  both `python:3.14.3-slim-bookworm` and `oven/bun:1.2.22`.
 
 ### M0-ISSUE-0003
 
@@ -97,6 +100,37 @@
 - Resolved commit: Not resolved.
 - Resolution evidence: Not available.
 - Notes: The continuous branch and checkpoint tags were pushed successfully.
+
+### M0-ISSUE-0004
+
+- Detected stage: M0-07
+- Severity: HIGH
+- Status: OPEN
+- Area: Node supply chain
+- Summary: `bun audit` reports 31 vulnerabilities, including two critical and
+  sixteen high findings, in the locked frontend dependency tree.
+- Evidence: `bun audit` reports vulnerable transitive packages including `tar`,
+  `handlebars`, `postcss`, and a direct advisory for
+  `@hey-api/openapi-ts` `0.73.0`.
+- Reproduction: Run `bun audit` at the repository root after `bun install --frozen-lockfile`.
+- Impact: The new `security-supply-chain` gate correctly fails until vulnerable
+  locked dependencies are updated and verified.
+- Safe workaround: None. Do not suppress advisories or use an ignore list.
+- Root cause: M0-01 retained upstream frontend dependency versions; multiple
+  advisories have since been published for direct and transitive packages.
+- Planned resolution: Review compatible fixed versions, regenerate the frontend
+  client if required, update the lockfile deliberately, and rerun the complete
+  frontend quality and security suite.
+- Resolution target: M0-FIX
+- Related tests: `bun audit`, `scripts/ci/security-smoke.sh`, and the GitHub
+  `security-supply-chain` job.
+- Related files: `frontend/package.json`, `bun.lock`, and
+  `.github/workflows/m0-quality.yml`.
+- Introduced commit: `5bd3be0` (imported dependency baseline).
+- Resolved commit: Not resolved.
+- Resolution evidence: Not available.
+- Notes: The CI job remains required and intentionally fails rather than hiding
+  the advisories.
 
 ## Resolved Issues
 

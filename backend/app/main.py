@@ -20,7 +20,9 @@ from app.core.observability import (
 def custom_generate_unique_id(route: APIRoute) -> str:
     tag = route.tags[0] if route.tags else "default"
     method = sorted(route.methods)[0].lower() if route.methods else "request"
-    path = route.path_format.strip("/").replace("/", "_").replace("{", "").replace("}", "")
+    path = (
+        route.path_format.strip("/").replace("/", "_").replace("{", "").replace("}", "")
+    )
     return f"{tag}_{route.name}_{method}_{path or 'root'}"
 
 
@@ -71,7 +73,9 @@ async def http_exception_handler(
 async def validation_exception_handler(
     _request: Request, _error: RequestValidationError
 ) -> JSONResponse:
-    return error_response(422, "validation_error", "Request validation failed", _request)
+    return error_response(
+        422, "validation_error", "Request validation failed", _request
+    )
 
 
 @app.exception_handler(Exception)
@@ -79,6 +83,7 @@ async def unhandled_exception_handler(
     _request: Request, _error: Exception
 ) -> JSONResponse:
     return error_response(500, "internal_error", "Internal server error", _request)
+
 
 # Set all CORS enabled origins
 if settings.all_cors_origins:

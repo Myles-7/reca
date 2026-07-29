@@ -47,3 +47,14 @@ The existing Valkey service is the compatible broker alternative; no additional
 queue service is introduced. The Redis transport adds a small pure-Python client
 dependency, while Celery brings its documented task-queue dependency set. Neither
 package is used to store RECA business facts.
+
+## M0-07 CI supply-chain tooling
+
+| Dependency | Fixed version | License verification status | RECA usage |
+| --- | --- | --- | --- |
+| `pip-audit` | `2.9.0` | Verified: Apache-2.0 | Locked CI-only Python dependency vulnerability audit. |
+
+`pip-audit` makes Python vulnerability scanning reproducible. The alternative
+is a hosted external scanner; the locked local CLI avoids a provider integration.
+It adds only CI/development audit tooling and transitive metadata libraries, not
+application or container runtime dependencies.

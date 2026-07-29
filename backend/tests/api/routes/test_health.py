@@ -31,7 +31,9 @@ def healthy(name: str) -> Callable[[], Awaitable[DependencyCheck]]:
 def unavailable(name: str) -> Callable[[], Awaitable[DependencyCheck]]:
     async def probe() -> DependencyCheck:
         return DependencyCheck(
-            name=name, status=DependencyStatus.UNAVAILABLE, detail=f"{name} is unavailable"
+            name=name,
+            status=DependencyStatus.UNAVAILABLE,
+            detail=f"{name} is unavailable",
         )
 
     return probe
@@ -56,19 +58,25 @@ def test_live_is_process_only_and_does_not_probe_dependencies(
     assert response.json() == {"status": "HEALTHY", "service": "api"}
 
 
-@pytest.mark.parametrize("failed_dependency", ["postgres", "pgvector", "valkey", "minio"])
+@pytest.mark.parametrize(
+    "failed_dependency", ["postgres", "pgvector", "valkey", "minio"]
+)
 def test_ready_returns_503_when_a_core_dependency_is_unavailable(
     client: TestClient, monkeypatch: pytest.MonkeyPatch, failed_dependency: str
 ) -> None:
     configure_healthy_core(monkeypatch)
-    monkeypatch.setattr(health_service.probe, failed_dependency, unavailable(failed_dependency))
+    monkeypatch.setattr(
+        health_service.probe, failed_dependency, unavailable(failed_dependency)
+    )
 
     response = client.get("/api/v1/health/ready")
 
     assert response.status_code == 503
     body = response.json()
     assert body["status"] == "UNAVAILABLE"
-    failed = next(item for item in body["dependencies"] if item["name"] == failed_dependency)
+    failed = next(
+        item for item in body["dependencies"] if item["name"] == failed_dependency
+    )
     assert failed["status"] == "UNAVAILABLE"
     assert settings.POSTGRES_PASSWORD.get_secret_value() not in response.text
 
@@ -80,7 +88,9 @@ def test_dependencies_reports_degraded_grobid_and_unconfigured_providers(
 
     async def degraded_grobid() -> DependencyCheck:
         return DependencyCheck(
-            name="grobid", status=DependencyStatus.DEGRADED, detail="grobid is unavailable"
+            name="grobid",
+            status=DependencyStatus.DEGRADED,
+            detail="grobid is unavailable",
         )
 
     monkeypatch.setattr(health_service.probe, "grobid", degraded_grobid)
@@ -90,7 +100,9 @@ def test_dependencies_reports_degraded_grobid_and_unconfigured_providers(
 
     response = client.get("/api/v1/health/dependencies")
 
-    statuses = {item["name"]: item["status"] for item in response.json()["dependencies"]}
+    statuses = {
+        item["name"]: item["status"] for item in response.json()["dependencies"]
+    }
     assert statuses["api"] == "HEALTHY"
     assert statuses["grobid"] == "DEGRADED"
     assert statuses["worker"] == "UNAVAILABLE"
@@ -102,7 +114,9 @@ def test_request_id_is_generated_forwarded_and_sanitized(client: TestClient) -> 
     generated = client.get("/api/v1/health/live")
     forwarded = client.get("/api/v1/health/live", headers={"X-Request-ID": "trace-123"})
     oversized = client.get("/api/v1/health/live", headers={"X-Request-ID": "x" * 65})
-    illegal = client.get("/api/v1/health/live", headers={"X-Request-ID": "invalid space"})
+    illegal = client.get(
+        "/api/v1/health/live", headers={"X-Request-ID": "invalid space"}
+    )
 
     assert len(generated.headers["X-Request-ID"]) == 32
     assert forwarded.headers["X-Request-ID"] == "trace-123"
@@ -138,7 +152,9 @@ def test_unhandled_errors_do_not_expose_exception_content() -> None:
 
 
 def test_structured_logs_include_duration_and_omit_sensitive_request_values() -> None:
-    record = logging.LogRecord("reca.api", logging.INFO, __file__, 1, "request.completed", (), None)
+    record = logging.LogRecord(
+        "reca.api", logging.INFO, __file__, 1, "request.completed", (), None
+    )
     record.request_id = "trace-123"
     record.method = "GET"
     record.path = "/api/v1/health/live"

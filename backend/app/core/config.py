@@ -105,14 +105,18 @@ class Settings(BaseSettings):
             return [origin.strip() for origin in value.split(",") if origin.strip()]
         if isinstance(value, list) and all(isinstance(origin, str) for origin in value):
             return value
-        raise ValueError("BACKEND_CORS_ORIGINS must be a comma-separated string or list")
+        raise ValueError(
+            "BACKEND_CORS_ORIGINS must be a comma-separated string or list"
+        )
 
     @field_validator("SENTRY_DSN", "MODEL_BASE_URL", mode="before")
     @classmethod
     def empty_optional_urls_are_none(cls, value: Any) -> Any:
         return None if value == "" else value
 
-    @field_validator("MODEL_API_KEY", "OPENALEX_API_KEY", "SMTP_PASSWORD", mode="before")
+    @field_validator(
+        "MODEL_API_KEY", "OPENALEX_API_KEY", "SMTP_PASSWORD", mode="before"
+    )
     @classmethod
     def empty_optional_secrets_are_none(cls, value: Any) -> Any:
         return None if value == "" else value
@@ -142,7 +146,11 @@ class Settings(BaseSettings):
 
     @cached_property
     def all_cors_origins(self) -> list[str]:
-        return list(dict.fromkeys([*self.BACKEND_CORS_ORIGINS, str(self.FRONTEND_HOST).rstrip("/")]))
+        return list(
+            dict.fromkeys(
+                [*self.BACKEND_CORS_ORIGINS, str(self.FRONTEND_HOST).rstrip("/")]
+            )
+        )
 
     @property
     def database_url(self) -> str:
