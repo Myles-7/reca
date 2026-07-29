@@ -1,0 +1,13 @@
+{
+  "name": "reca",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "bun run --filter reca-frontend dev",
+    "lint": "bun run --filter reca-frontend lint",
+    "test": "bun run --filter reca-frontend test",
+    "test:ui": "bun run --filter reca-frontend test:ui"
+  }
+}
