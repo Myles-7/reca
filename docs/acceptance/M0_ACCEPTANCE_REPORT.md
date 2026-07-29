@@ -82,3 +82,34 @@ LOW Babel 7 advisory; no compatible Babel 7 fix exists for the installed
 TanStack Router plugin, and forcing Babel 8 was verified to break its compiler.
 Worker ping and the MinIO SigV4 private-object probe remain failed acceptance
 steps and require final review before M0 can be declared PASS.
+
+## M0-FIX-2 Revalidation
+
+### Reviewed Commit
+
+Pending `fix(m0): resolve worker and MinIO acceptance blockers`.
+
+### Worker Evidence
+
+The real worker log identified `Permission denied: /tmp/reca/celery.pid` under
+the non-root `reca` user. The tmpfs mount is now explicitly owned by UID/GID
+10001 with mode 700.
+
+### MinIO Private Object Evidence
+
+The prior HTTP 403 was traced to the acceptance probe signing literal `\\n`
+characters rather than canonical newlines. The probe now constructs real
+newlines. Full rerun remains required.
+
+### Full Clean-Room Result
+
+NOT_RUN after the final mount/signature correction in this update.
+
+### Issue Resolution
+
+M0-ISSUE-0007 remains OPEN until the full Worker and MinIO checks pass.
+
+### Remaining Risks
+
+Worker recovery and authenticated/anonymous MinIO semantics need a complete
+fresh isolated acceptance run.

@@ -90,13 +90,13 @@ def request(method: str, path: str, body: bytes = b"") -> bytes:
     host = endpoint.removeprefix("http://").removeprefix("https://")
     headers = {"host": host, "x-amz-content-sha256": payload_hash, "x-amz-date": stamp}
     signed_headers = ";".join(headers)
-    canonical_headers = "".join(f"{key}:{headers[key]}\\n" for key in headers)
-    canonical_request = f"{method}\\n{path}\\n\\n{canonical_headers}\\n{signed_headers}\\n{payload_hash}"
+    canonical_headers = "".join(f"{key}:{headers[key]}\n" for key in headers)
+    canonical_request = f"{method}\n{path}\n\n{canonical_headers}\n{signed_headers}\n{payload_hash}"
     scope = f"{day}/{region}/s3/aws4_request"
     signing_key = hmac.new(("AWS4" + secret_key).encode(), day.encode(), hashlib.sha256).digest()
     for component in (region, "s3", "aws4_request"):
         signing_key = hmac.new(signing_key, component.encode(), hashlib.sha256).digest()
-    signature = hmac.new(signing_key, f"AWS4-HMAC-SHA256\\n{stamp}\\n{scope}\\n{hashlib.sha256(canonical_request.encode()).hexdigest()}".encode(), hashlib.sha256).hexdigest()
+    signature = hmac.new(signing_key, f"AWS4-HMAC-SHA256\n{stamp}\n{scope}\n{hashlib.sha256(canonical_request.encode()).hexdigest()}".encode(), hashlib.sha256).hexdigest()
     headers["Authorization"] = f"AWS4-HMAC-SHA256 Credential={access_key}/{scope}, SignedHeaders={signed_headers}, Signature={signature}"
     with urllib.request.urlopen(urllib.request.Request(endpoint + path, data=body or None, method=method, headers=headers), timeout=10) as response:
         return response.read()
