@@ -11,7 +11,7 @@ import useAuth from "@/hooks/useAuth"
 
 function getUsersQueryOptions() {
   return {
-    queryFn: () => UsersService.readUsers({ skip: 0, limit: 100 }),
+    queryFn: () => UsersService.readUsersGetApiV1Users({ skip: 0, limit: 100 }),
     queryKey: ["users"],
   }
 }
@@ -19,7 +19,7 @@ function getUsersQueryOptions() {
 export const Route = createFileRoute("/_layout/admin")({
   component: Admin,
   beforeLoad: async () => {
-    const user = await UsersService.readUserMe()
+    const user = await UsersService.readUserMeGetApiV1UsersMe()
     if (!user.is_superuser) {
       throw redirect({
         to: "/",

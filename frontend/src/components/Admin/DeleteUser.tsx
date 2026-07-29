@@ -31,7 +31,7 @@ const DeleteUser = ({ id, onSuccess }: DeleteUserProps) => {
   const { handleSubmit } = useForm()
 
   const deleteUser = async (id: string) => {
-    await UsersService.deleteUser({ userId: id })
+    await UsersService.deleteUserDeleteApiV1UsersUserId({ userId: id })
   }
 
   const mutation = useMutation({
@@ -66,9 +66,8 @@ const DeleteUser = ({ id, onSuccess }: DeleteUserProps) => {
           <DialogHeader>
             <DialogTitle>Delete User</DialogTitle>
             <DialogDescription>
-              This user account will be <strong>permanently deleted.</strong>
-              {" "}Are you sure? You will not
-              be able to undo this action.
+              This user account will be <strong>permanently deleted.</strong>{" "}
+              Are you sure? You will not be able to undo this action.
             </DialogDescription>
           </DialogHeader>
 

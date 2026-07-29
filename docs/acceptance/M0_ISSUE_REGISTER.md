@@ -8,13 +8,12 @@
 | CRITICAL | 0 | 0 |
 | HIGH | 1 | 0 |
 | MEDIUM | 0 | 0 |
-| LOW | 2 | 0 |
+| LOW | 1 | 1 |
 
 ## Active Issues
 
 | ID | Stage | Severity | Status | Area | Summary | M0 Blocked |
 |---|---|---|---|---|---|---|
-| M0-ISSUE-0001 | M0-01 | LOW | OPEN | Local frontend toolchain | Bun remains unavailable for host-side frontend checks. | No |
 | M0-ISSUE-0002 | M0-02 | HIGH | OPEN | Container registry network | Docker Hub OAuth endpoint was unreachable, blocking image builds and service startup. | Yes |
 | M0-ISSUE-0003 | M0-01 | LOW | OPEN | GitHub integration | GitHub CLI is unavailable, so the Draft PR could not be created or updated automatically. | No |
 
@@ -24,26 +23,24 @@
 
 - Detected stage: M0-01
 - Severity: LOW
-- Status: OPEN
+- Status: RESOLVED
 - Area: Local frontend toolchain
 - Summary: Bun remains unavailable for host-side frontend checks.
-- Evidence: M0-05 installed the fixed uv `0.9.26`, which provisioned CPython
-  3.14.2 and ran Ruff, mypy, and 25 backend tests successfully. `bun` is still
-  not available on the workstation.
-- Reproduction: Run `bun run --cwd frontend build` in the current workstation.
-- Impact: Host-side frontend lint/type/build verification remains pending.
-- Safe workaround: Run the locked Bun toolchain in CI or a prepared developer
-  environment without changing frontend dependency versions.
-- Root cause: Local development runtime does not include Bun.
-- Planned resolution: M0-06 or CI clean-environment verification.
+- Evidence: M0-06 installed fixed Bun `1.2.22` without changing project
+  dependency constraints, then ran the locked install, production build, Biome
+  check, and the six-case Playwright shell suite.
+- Reproduction: `bun --version`, `bun install --frozen-lockfile`, and `bun run build`.
+- Impact: Resolved; host-side frontend verification is available.
+- Safe workaround: Not required.
+- Root cause: Local development runtime previously did not include Bun.
+- Planned resolution: Completed in M0-06.
 - Resolution target: M0-06
-- Related tests: Frontend install/lint/type/build.
+- Related tests: `bun install --frozen-lockfile`, `bun run build`, `bunx biome check`, and `bun run test:shell`.
 - Related files: `package.json`, `bun.lock`.
 - Introduced commit: `5bd3be0`
-- Resolved commit: Not resolved.
-- Resolution evidence: Not available.
-- Notes: M0-05 resolved the backend-toolchain portion without changing project
-  dependency constraints; no frontend tooling was installed outside the lockfile.
+- Resolved commit: Pending M0-06 commit.
+- Resolution evidence: Bun `1.2.22`; six Playwright tests passed; production build and Biome check passed.
+- Notes: The local Bun installation is a workstation tool only; no project dependency version or lockfile changed.
 
 ### M0-ISSUE-0002
 
@@ -103,4 +100,4 @@
 
 ## Resolved Issues
 
-No resolved issues recorded.
+M0-ISSUE-0001 is retained above with its complete resolution history.
