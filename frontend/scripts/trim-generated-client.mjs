@@ -1,7 +1,13 @@
-import { readdir, readFile, writeFile } from "node:fs/promises"
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 
-const clientDirectory = path.resolve("src/client")
+const frontendRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+)
+const clientDirectory = path.join(frontendRoot, "src", "client")
+await mkdir(clientDirectory, { recursive: true })
 const files = await readdir(clientDirectory)
 
 await Promise.all(

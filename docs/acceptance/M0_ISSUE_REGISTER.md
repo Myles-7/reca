@@ -6,7 +6,7 @@
 |---|---:|---:|
 | BLOCKER | 0 | 0 |
 | CRITICAL | 0 | 0 |
-| HIGH | 2 | 2 |
+| HIGH | 1 | 3 |
 | MEDIUM | 0 | 0 |
 | LOW | 2 | 3 |
 
@@ -15,7 +15,6 @@
 | ID | Stage | Severity | Status | Area | Summary | M0 Blocked |
 |---|---|---|---|---|---|---|
 | M0-ISSUE-0006 | M0-FIX | LOW | OPEN | Node supply chain | A low-severity Babel 7 advisory has no compatible fixed release for the current TanStack Router plugin. | No |
-| M0-ISSUE-0007 | M0-FINAL-REVIEW | HIGH | OPEN | Clean-room acceptance | Worker and MinIO probes now pass, but the clean-room entry point exits nonzero because its pgvector probe is syntactically invalid and the retained Node audit reports one LOW advisory. | Yes |
 | M0-ISSUE-0008 | M0-FINAL-REVIEW-2 | HIGH | OPEN | CI core gates | The current remote CI run fails security, frontend-quality, migration-test, and compose-smoke jobs for reproducible repository defects. | Yes |
 | M0-ISSUE-0009 | M0-FINAL-REVIEW-2 | LOW | OPEN | Frontend local test command | The generic `bun run test` command cannot start the inherited Playwright server on Windows because `cmd.exe` cannot resolve Bun. | No |
 
@@ -204,7 +203,7 @@
 
 - Detected stage: M0-FINAL-REVIEW
 - Severity: HIGH
-- Status: OPEN
+- Status: RESOLVED
 - Area: Clean-room acceptance
 - Summary: The worker and private-MinIO blockers are repaired, but the required
   clean-room entry point is still non-passing.
@@ -226,11 +225,16 @@
 - Related tests: Worker inspect ping, `health_ping`, MinIO private write/read.
 - Related files: `docker-compose.yml`, `backend/app/core/celery.py`, `scripts/m0-acceptance.ps1`.
 - Introduced commit: `834382ec4b2854956dc20d7dfe8e3fdcf3e3c8d2`.
-- Resolved commit: Not resolved.
-- Resolution evidence: Not available because `scripts/m0-acceptance.ps1`
-  returned exit code 1 in the second final review.
-- Notes: Do not mark this issue resolved until the full entry point exits zero
-  with pgvector, Worker, MinIO, and all required clean-room checks evidenced.
+- Resolved commit: `fix(m0): repair clean-room and CI blockers` (stage-close
+  commit).
+- Resolution evidence: `scripts/m0-acceptance.ps1` run
+  `reca-m0-acceptance-20260729-215418` records PASS for pgvector, Worker ping,
+  registered task, `health_ping`, MinIO authenticated write/read, anonymous
+  denial, restart persistence, cleanup, and every blocking step. The only
+  advisory is explicitly `PASS_WITH_LOW_ADVISORY` for M0-ISSUE-0006.
+- Notes: The run uses the isolated `reca_m0_acceptance` project and random,
+  unlogged credentials. The former PowerShell quoting and MinIO coverage gaps
+  are closed.
 
 ### M0-ISSUE-0008
 

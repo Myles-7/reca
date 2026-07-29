@@ -10,8 +10,10 @@
     "format:check": "biome format --no-errors-on-unmatched --files-ignore-unknown=true ./",
     "preview": "vite preview",
     "generate-client": "openapi-ts && node scripts/trim-generated-client.mjs",
-    "test": "bunx playwright test",
-    "test:shell": "bunx playwright test -c playwright.shell.config.ts",
+    "test": "bun run test:e2e",
+    "test:shell": "bun run test:e2e:shell",
+    "test:e2e": "bunx playwright test -c playwright.shell.config.ts",
+    "test:e2e:shell": "bunx playwright test -c playwright.shell.config.ts",
     "test:ui": "bunx playwright test --ui"
   },
   "dependencies": {

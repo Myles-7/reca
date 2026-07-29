@@ -111,5 +111,42 @@ M0-ISSUE-0007 remains OPEN until the full Worker and MinIO checks pass.
 
 ### Remaining Risks
 
+## M0-FIX-3 Revalidation
+
+### Reviewed Commit
+
+Pending `fix(m0): repair clean-room and CI blockers` stage-close commit.
+
+### pgvector
+
+PASS. The acceptance script calls `python -m app.cli.pgvector_smoke` in the API
+container, verifying the extension and a vector distance operation without
+PowerShell inline SQL.
+
+### MinIO Anonymous Denial
+
+PASS. The isolated probe uses a random private bucket, checks authenticated
+write/read and SHA256-equivalent content, performs an unsigned GET that is
+denied, verifies the object after restart, then removes the object and bucket.
+
+### Local Clean-Room
+
+PASS. `scripts/m0-acceptance.ps1` evidence directory:
+`D:\Temp\User\reca-m0-acceptance-20260729-215418`. All blocking steps pass;
+the retained Babel audit is reported as `PASS_WITH_LOW_ADVISORY`, not hidden.
+
+### Remote CI
+
+Pending the pushed repair commit.
+
+### Dependency Audit
+
+Python audit PASS. Bun audit reports one LOW Babel 7 advisory, recorded as
+M0-ISSUE-0006; no HIGH or CRITICAL advisory is present.
+
+### Remaining Risks
+
+Remote required CI and the Windows default Playwright execution still require
+separate verification.
 Worker recovery and authenticated/anonymous MinIO semantics need a complete
 fresh isolated acceptance run.

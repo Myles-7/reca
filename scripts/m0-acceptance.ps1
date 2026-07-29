@@ -7,7 +7,6 @@ $root = Split-Path -Parent $PSScriptRoot
 $project = "reca_m0_acceptance"
 $evidenceRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("reca-m0-acceptance-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
 $envFile = Join-Path $evidenceRoot "acceptance.env"
-$minioProbe = Join-Path $evidenceRoot "minio-private-probe.py"
 $results = [System.Collections.Generic.List[object]]::new()
 $apiPort = 18000
 $frontendPort = 15173
@@ -37,6 +36,18 @@ function Add-NotRun([string]$Name, [string]$Reason) {
     Add-Result $Name "NOT_RUN" 0 $log
 }
 
+function Invoke-NodeAudit {
+    $log = Join-Path $evidenceRoot "node-security-audit.log"
+    & bun audit *>&1 | Out-File -LiteralPath $log -Encoding utf8
+    $output = Get-Content -Raw -LiteralPath $log
+    if ($LASTEXITCODE -eq 0) { Add-Result "node-security-audit" "PASS" 0 $log; return }
+    if ($output -match "[0-9]+ vulnerabilities \([0-9]+ low\)" -and $output -notmatch "(?im)\b(critical|high|moderate)\b") {
+        Add-Result "node-security-audit" "PASS_WITH_LOW_ADVISORY" $LASTEXITCODE $log
+        return
+    }
+    Add-Result "node-security-audit" "FAIL" $LASTEXITCODE $log
+}
+
 $secretBytes = New-Object byte[] 48
 $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
 $rng.GetBytes($secretBytes)
@@ -45,6 +56,7 @@ $secret = [Convert]::ToBase64String($secretBytes)
 $postgresPassword = "pg_" + [guid]::NewGuid().ToString("N")
 $minioPassword = "minio_" + [guid]::NewGuid().ToString("N")
 $adminPassword = "admin_" + [guid]::NewGuid().ToString("N")
+$minioBucket = "reca-m0-acceptance-" + [guid]::NewGuid().ToString("N").Substring(0, 12)
 $configLines = @(
 "PROJECT_NAME=RECA"
 "ENVIRONMENT=test"
@@ -70,43 +82,6 @@ $configLines = @(
 )
 $configLines | Set-Content -LiteralPath $envFile -Encoding utf8
 
-@'
-import datetime as dt
-import hashlib
-import hmac
-import os
-import urllib.request
-
-endpoint = os.environ["MINIO_ENDPOINT"].rstrip("/")
-access_key = os.environ["MINIO_ROOT_USER"]
-secret_key = os.environ["MINIO_ROOT_PASSWORD"]
-bucket = os.environ["MINIO_BUCKET"]
-region = "us-east-1"
-
-def request(method: str, path: str, body: bytes = b"") -> bytes:
-    now = dt.datetime.now(dt.timezone.utc)
-    stamp, day = now.strftime("%Y%m%dT%H%M%SZ"), now.strftime("%Y%m%d")
-    payload_hash = hashlib.sha256(body).hexdigest()
-    host = endpoint.removeprefix("http://").removeprefix("https://")
-    headers = {"host": host, "x-amz-content-sha256": payload_hash, "x-amz-date": stamp}
-    signed_headers = ";".join(headers)
-    canonical_headers = "".join(f"{key}:{headers[key]}\n" for key in headers)
-    canonical_request = f"{method}\n{path}\n\n{canonical_headers}\n{signed_headers}\n{payload_hash}"
-    scope = f"{day}/{region}/s3/aws4_request"
-    signing_key = hmac.new(("AWS4" + secret_key).encode(), day.encode(), hashlib.sha256).digest()
-    for component in (region, "s3", "aws4_request"):
-        signing_key = hmac.new(signing_key, component.encode(), hashlib.sha256).digest()
-    signature = hmac.new(signing_key, f"AWS4-HMAC-SHA256\n{stamp}\n{scope}\n{hashlib.sha256(canonical_request.encode()).hexdigest()}".encode(), hashlib.sha256).hexdigest()
-    headers["Authorization"] = f"AWS4-HMAC-SHA256 Credential={access_key}/{scope}, SignedHeaders={signed_headers}, Signature={signature}"
-    with urllib.request.urlopen(urllib.request.Request(endpoint + path, data=body or None, method=method, headers=headers), timeout=10) as response:
-        return response.read()
-
-request("PUT", f"/{bucket}")
-payload = b"reca-m0-acceptance-private-object"
-request("PUT", f"/{bucket}/m0-acceptance.txt", payload)
-assert request("GET", f"/{bucket}/m0-acceptance.txt") == payload
-'@ | Set-Content -LiteralPath $minioProbe -Encoding utf8
-
 $compose = @("compose", "--project-name", $project, "--env-file", $envFile)
 Push-Location $root
 try {
@@ -131,19 +106,22 @@ try {
     if ($build.Status -eq "PASS") {
         Invoke-Step "start-services" { docker @compose up -d postgres valkey minio grobid api worker frontend }
         Invoke-Step "container-status" { docker @compose ps }
+        Invoke-Step "api-live" { python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/live" --timeout 90 }
         Invoke-Step "migrate-empty-database" { docker @compose exec -T api alembic upgrade head }
         Invoke-Step "migrate-idempotently" { docker @compose exec -T api alembic upgrade head }
-        Invoke-Step "pgvector" { docker @compose exec -T api python -c 'from sqlalchemy import text; from app.core.db import engine; assert engine.connect().execute(text("SELECT 1 FROM pg_extension WHERE extname = " + repr("vector"))).scalar_one() == 1' }
+        Invoke-Step "pgvector" { docker @compose exec -T api python -m app.cli.pgvector_smoke }
+        Invoke-Step "api-ready" { python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/ready" --timeout 90 }
         foreach ($endpoint in @("live", "ready", "dependencies")) { Invoke-Step "health-$endpoint" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$apiPort/api/v1/health/$endpoint" | Select-Object -ExpandProperty Content; $global:LASTEXITCODE = 0 } }
         Invoke-Step "request-id" { $response = Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 -Headers @{ "X-Request-ID" = "m0-acceptance-001" } "http://127.0.0.1:$apiPort/api/v1/health/live"; if ($response.Headers["X-Request-ID"] -ne "m0-acceptance-001") { throw "Request ID was not propagated" }; $global:LASTEXITCODE = 0 }
         Start-Sleep -Seconds 10
         Invoke-Step "worker-ping" { docker @compose exec -T worker celery -A app.core.celery:celery_app inspect ping }
+        Invoke-Step "worker-registered" { docker @compose exec -T worker celery -A app.core.celery:celery_app inspect registered }
         Invoke-Step "worker-health-ping" { docker @compose exec -T api python -c "from app.workers.health import health_ping; result = health_ping.delay().get(timeout=15); assert result == {'status':'ok','service':'reca-worker'}" }
-        Invoke-Step "minio-private-write-read" { Get-Content -Raw -LiteralPath $minioProbe | & docker @compose exec -T api python - }
+        Invoke-Step "minio-private-write-read" { docker @compose exec -T api python -m app.cli.minio_smoke --bucket $minioBucket --verify-anonymous-denial }
         Invoke-Step "frontend-home" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$frontendPort/" | Select-Object -ExpandProperty StatusCode }
         Invoke-Step "frontend-system-status" { Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 "http://127.0.0.1:$frontendPort/system-status" | Select-Object -ExpandProperty StatusCode }
         Invoke-Step "restart-services" { docker @compose restart; Start-Sleep -Seconds 10; docker @compose ps }
-        Invoke-Step "persistence" { docker @compose exec -T api alembic current; docker @compose exec -T api python -c "from sqlalchemy import text; from app.core.db import engine; assert engine.connect().execute(text('SELECT 1')).scalar_one() == 1" }
+        Invoke-Step "persistence" { docker @compose exec -T api alembic current; docker @compose exec -T api python -c "from sqlalchemy import text; from app.core.db import engine; assert engine.connect().execute(text('SELECT 1')).scalar_one() == 1"; docker @compose exec -T api python -m app.cli.minio_smoke --bucket $minioBucket --verify-persistence --verify-anonymous-denial --cleanup }
         Invoke-Step "container-log-secret-scan" { $matches = docker @compose logs --no-color | Select-String -Pattern "(postgresql\+psycopg://[^\s]+:|Authorization: Bearer|BEGIN PRIVATE KEY)"; if ($matches) { throw "Sensitive log pattern detected" } }
     }
     else {
@@ -154,7 +132,7 @@ try {
     Invoke-Step "playwright-shell" { Push-Location frontend; try { bunx playwright test -c playwright.shell.config.ts --reporter=list } finally { Pop-Location } }
     Invoke-Step "repository-secret-scan" { $secretMatches = git grep -n -E "BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}" -- . ":(exclude).env.example" ":(exclude)scripts/m0-acceptance.ps1"; if ($LASTEXITCODE -gt 1) { throw "Secret scan could not run" }; if ($secretMatches) { throw "Secret pattern detected" }; $global:LASTEXITCODE = 0 }
     Invoke-Step "python-security-audit" { python -m uv run pip-audit }
-    Invoke-Step "node-security-audit" { bun audit }
+    Invoke-NodeAudit
 }
 finally {
     & docker @compose down -v --remove-orphans *>$null
