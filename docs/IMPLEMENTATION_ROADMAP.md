@@ -33,13 +33,13 @@
 | 项目     | 内容                                                                                                                                              |
 | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | 文档名称   | `IMPLEMENTATION_ROADMAP.md`                                                                                                                     |
-| 文档版本   | 1.3.0                                                                                                                                           |
+| 文档版本   | 1.4.0                                                                                                                                           |
 | 适用项目版本 | RECA 0.1 Competition Edition                                                                                                                    |
 | 文档状态   | Conditional Approval                                                                                                                           |
 | 文档类型   | 实施路线图、里程碑计划、任务依赖与交付门禁                                                                                                                           |
 | 主要读者   | 项目负责人、产品负责人、架构负责人、前端开发、后端开发、AI 开发、测试人员、Codex                                                                                                    |
 | 负责人    | RECA Team                                                                                                                                       |
-| 最后更新时间 | 2026-07-30                                                                                                                                      |
+| 最后更新时间 | 2026-07-31                                                                                                                                      |
 | 建议位置   | `docs/IMPLEMENTATION_ROADMAP.md`                                                                                                                |
 | 上位文档   | `README.md`、`AGENTS.md`、`docs/PRODUCT_REQUIREMENTS.md`、`docs/ARCHITECTURE.md`、`docs/DATA_MODEL_AND_WORKFLOW.md`、`docs/API_AI_TOOL_CONTRACTS.md` |
 | 关联文档   | `docs/TEST_AND_ACCEPTANCE.md`、`docs/SECURITY_AND_OPEN_SOURCE.md`                                                                                |
@@ -55,6 +55,7 @@
 | 1.1.0 | 2026-07-29 | Approved | 确认为 M0 开发前正式基准 | Myles-7 |
 | 1.2.0 | 2026-07-30 | Approved | 吸收 ARS-Codex 的阶段、快照、审核与降级设计 | RECA Team |
 | 1.3.0 | 2026-07-30 | Conditional Approval | M0 As-Built 同步、M1 门禁、Prompt 治理前移与跨文档一致性修复 | RECA Team |
+| 1.4.0 | 2026-07-31 | Conditional Approval | 同步效果优先的开源复用、轻量许可证审查和 Competition Edition 安全分层 | RECA Team |
 
 ---
 
@@ -120,7 +121,7 @@
 发现路线图与核心文档冲突时：
 
 1. 不得通过修改路线图绕过正式需求；
-2. 不得通过调整排期降低安全要求；
+2. 不得通过调整排期降低 Competition Edition 最小硬护栏；企业生产强化按安全权威文档延期；
 3. 不得通过“演示需要”覆盖数据不可变和审批规则；
 4. 不得在路线图中自行新增 P0 功能；
 5. 应先识别冲突所属领域；
@@ -219,6 +220,16 @@ Agent 只能编排已经独立可用、已通过测试且拥有正式 Tool Contr
 * 图表生成；
 * DOCX 自动修复；
 * 复现包导出；
+
+只读查询、检索、解析、质量扫描、候选生成和预览可自动执行；低风险采用使用轻量确认。正式审批集中于改变科研数据、正式结果、版本关系或不可逆输出的高风险操作，不能把每次读取、模型调用或低风险 ToolCall 都升级为 `ApprovalRecord`。
+
+## 3.5 效果优先的开源复用
+
+每个 M1-M9 里程碑都可以选择成熟开源实现，不要求先自行重写，也不要求预先建设复杂 Adapter。集成 PR 必须同时完成轻量许可证与来源检查、固定上游 Commit/Tag、选择集成模式、保留归属并记录修改；无许可证或来源不明内容不得复制。
+
+直接依赖、独立服务、Fork、Vendor、Git Submodule、选择性复制和清洁室重实现均为可选模式。是否使用 Adapter 取决于替换需求、领域污染、离线 Mock、许可证或安全边界和维护成本。企业级安全强化不阻塞 Competition Core，但科研真实性、原始不可变、项目隔离、正式统计确定性和高风险审批不得降低。
+
+ARS-Codex 的实际复制或运行时接入必须在相关开发阶段单独完成许可证、归属和架构记录；允许复用不提前 M8，不改变单总控 Agent，也不允许自由多 Agent。
 * 有副作用的 Agent 工具。
 
 ## 3.5 确定性能力必须可脱离 Agent 运行

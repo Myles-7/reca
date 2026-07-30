@@ -5,6 +5,10 @@
 
 RECA 将研究问题、真实文献、原文证据、数据版本、确定性分析、图表、论文论述、人工确认和复现材料连接为可追溯的科研证据链。
 
+RECA 0.1 当前面向个人使用和校级比赛。项目优先复用成熟开源能力，以提升
+功能效果、交付速度和演示稳定性；科研真实性、原始材料不可变和确定性统计
+仍是不能交换的核心边界。
+
 ## 文档信息
 
 | 项目 | 内容 |
@@ -14,7 +18,7 @@ RECA 将研究问题、真实文献、原文证据、数据版本、确定性分
 | 文档状态 | Conditional Approval |
 | 当前产品版本 | RECA 0.1 Competition Edition |
 | 当前工程阶段 | M0 COMPLETED；M1 Entry `ALLOWED` |
-| 最后更新 | 2026-07-30 |
+| 最后更新 | 2026-07-31 |
 
 本文件只负责项目定位、当前工程事实、启动入口和正式文档导航。业务需求、架构、数据模型、契约、测试、安全和实施顺序以各自权威文档为准。
 
@@ -118,7 +122,7 @@ RECA 0.1 的目标闭环是：
 - 数据库是业务状态事实来源，Agent Session 不是；
 - 原始文件和原始数据版本不可覆盖；
 - 正式统计数字只能来自确定性程序；
-- 高风险写操作必须经过 Service、Schema 和 `ApprovalRecord`；
+- 影响正式科研事实、数据版本或不可逆结果的高风险写操作必须经过 Service、Schema 和正式 `ApprovalRecord`；只读、扫描、候选生成和预览可自动执行；
 - AI 输出是建议或结构化候选，不自动成为业务事实；
 - 采用单总控 Agent，不采用自由多 Agent；
 - 工具白名单、项目隔离、审计和失败披露不可绕过。
@@ -316,15 +320,19 @@ M1 的首要工作是建立项目与文件基础，包括 `ResearchProject`、�
 - 降低六项 required CI 或 clean-room 基线；
 - 把计划对象写成已经实现。
 
-## ARS-Codex 参考边界
+## 开源复用与 ARS-Codex
 
-`academic-research-skills-codex` 仅作为科研工作流、Prompt 契约、审核和测试方法的上游研究参考。
+第三方代码、Prompt、工作流、脚本和测试可以在许可证允许、来源和归属明确
+的前提下采用依赖、独立服务、Fork、Vendor、Git Submodule、选择性复制或
+清洁室重新实现。接入时记录上游仓库、固定 Commit/Tag、许可证、复制路径
+和修改，不把第三方贡献表述为 RECA 原创。
 
-- RECA 不把 ARS-Codex Skill 作为运行时依赖；
-- 不复制其自由会话状态作为业务状态；
-- 不引入自动自由多 Agent；
-- 不让模型替代确定性统计、绘图、解析、哈希或版本管理；
-- 来源、固定 commit、许可证和清洁室重写决策记录在 [source research](./docs/source-research/academic-research-skills-codex.md) 与 [ADR-001](./docs/decisions/ADR-001-ARS-CODEX-USAGE.md)。
+`academic-research-skills-codex` 当前状态为 `NONCOMMERCIAL_INTENT_DECLARED`，
+允许在完成许可证与归属审查后选择性或整体复用；本仓库目前没有实际复制、
+Vendor、Fork、Submodule 或运行时引入 ARS-Codex。复用不会改变数据库事实
+状态、单总控 Agent、M8 接入、白名单 Tool 和确定性统计边界。完整记录见
+[source research](./docs/source-research/academic-research-skills-codex.md) 与
+[ADR-001](./docs/decisions/ADR-001-ARS-CODEX-USAGE.md)。
 
 ## 许可证状态
 
@@ -335,6 +343,7 @@ RECA 根目录当前没有项目 `LICENSE`，状态为 `PENDING_GOVERNANCE_DECIS
 - 不得声称 RECA 已采用某一根许可证；
 - 不得根据上游模板许可证推断 RECA 根许可证；
 - 第三方依赖和研究材料继续由 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) 与来源记录单独管理；
+- 第三方文件继续受其自身许可证约束，不由未来 RECA 根许可证覆盖；
 - 不得通过删除声明或模糊来源绕过许可证限制。
 
 详细规则见 [SECURITY_AND_OPEN_SOURCE.md](./docs/SECURITY_AND_OPEN_SOURCE.md)。

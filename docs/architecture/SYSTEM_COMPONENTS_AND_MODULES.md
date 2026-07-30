@@ -551,6 +551,10 @@ flowchart TD
 
 不得把具体业务逻辑放入 `shared/`。
 
+## 13.4 第三方能力接入
+
+模块可采用 `DIRECT_LIBRARY_INTEGRATION`、`ADAPTER_INTEGRATION` 或 `ISOLATED_SERVICE_OR_VENDOR`。小而稳定、不会泄漏第三方对象的库允许由 Service 内部直接调用；需要替换、离线 Mock、许可证隔离、安全边界或复杂响应转换时使用 Adapter 或隔离服务。Router、Worker 和 Agent Tool 仍不得绕过 Service 直接操作第三方 SDK 或核心业务表。
+
 ---
 
 # 24. 文件与对象存储架构

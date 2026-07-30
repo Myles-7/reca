@@ -20,6 +20,10 @@
 - [RISK_SCOPE_AND_RELEASE.md](../RISK_SCOPE_AND_RELEASE.md)
 - [M0 Regression Baseline](../../testing/M0_REGRESSION_BASELINE.md)
 
+## 开源复用与安全分层
+
+本里程碑允许选择成熟开源实现，不要求先自行重写或预建复杂 Adapter。依赖、服务、Fork、Vendor、Submodule 或选择性复制必须在同一 PR 完成许可证核验、上游 Commit/Tag、归属和修改记录；无许可证或来源不明内容不得复制。企业生产强化不阻塞 Competition Core，Competition Edition 最小护栏仍必须满足。实际复制 ARS-Codex 内容需要单独记录许可证、归属和架构决定，且不提前 M8 或改变单总控 Agent 边界。
+
 ## 里程碑契约覆盖索引
 
 | 必需内容 | 本文件权威位置 |

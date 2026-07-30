@@ -12,7 +12,7 @@
 | 文档状态 | Conditional Approval |
 | 适用对象 | Codex、代码智能体、开发者、测试者和审查者 |
 | 当前阶段 | M0 COMPLETED；M1 Entry `ALLOWED` |
-| 最后更新 | 2026-07-30 |
+| 最后更新 | 2026-07-31 |
 
 本文件与 [development 规则](./docs/development/) 共同构成开发执行基准。根文件负责全仓决策、红线、阅读路由、任务流程和完成定义；子文档负责详细规范。两者冲突属于文档缺陷，不得自行猜测。
 
@@ -150,7 +150,8 @@ bun run --cwd frontend test:shell
 | Agent / Prompt / Tool | `AGENTS.md`、`docs/architecture/AGENT_ASYNC_AND_DEGRADATION.md`、`docs/data-model/STATE_MACHINES_AND_INVARIANTS.md`、`docs/contracts/AI_SCHEMA_CONTRACTS.md`、`docs/contracts/AGENT_TOOL_CONTRACTS.md`、`docs/roadmap/milestones/M8_AGENT.md` |
 | Backend / Service / Async | `AGENTS.md`、`docs/ARCHITECTURE.md`、`docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md`、`docs/architecture/AGENT_ASYNC_AND_DEGRADATION.md`、`docs/development/BACKEND_DATA_AND_ASYNC_RULES.md` |
 | Frontend / OpenAPI Client / Artifact UI | `AGENTS.md`、`docs/ARCHITECTURE.md`、`docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md`、`docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md`、相关资源 API 子契约 |
-| Security / Open Source | `AGENTS.md`、`docs/SECURITY_AND_OPEN_SOURCE.md`、与任务对应的一份 `docs/security/` 子文档、`docs/testing/CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md`；许可证或 ARS-Codex 决策另读 `docs/decisions/ADR-001-ARS-CODEX-USAGE.md` |
+| Security / Open Source | `AGENTS.md`、`docs/SECURITY_AND_OPEN_SOURCE.md`、与任务对应的一份 `docs/security/` 子文档、`docs/testing/CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md` |
+| Open-source Reuse / Vendor / Fork | `AGENTS.md`、`docs/security/OPEN_SOURCE_GOVERNANCE.md`、`THIRD_PARTY_NOTICES.md`、对应 `docs/source-research/` 记录和 ADR；ARS-Codex 另读 `docs/decisions/ADR-001-ARS-CODEX-USAGE.md` |
 | Test / CI / Delivery | `AGENTS.md`、`docs/TEST_AND_ACCEPTANCE.md`、与任务对应的一份 `docs/testing/` 子文档、`docs/development/TEST_GIT_AND_DELIVERY_RULES.md`、对应里程碑文件 |
 | M0 Regression | `AGENTS.md`、`docs/testing/M0_REGRESSION_BASELINE.md`、`docs/reports/M0_DEVELOPMENT_SUMMARY.md`、相关 `docs/acceptance/` 证据文件 |
 | Codex Planning / Scope Control | `AGENTS.md`、`docs/development/CODEX_TASK_WORKFLOW.md`、`docs/IMPLEMENTATION_ROADMAP.md`、对应里程碑文件 |
@@ -178,7 +179,7 @@ bun run --cwd frontend test:shell
 - 业务状态保存在数据库，不保存在 Agent Session；
 - 原始文件、原始数据和正式版本对象不可覆盖；
 - 正式统计数字只能来自确定性工具；
-- 用户确认使用正式 `ApprovalRecord`。
+- 操作确认分为无需审批、轻量确认和正式审批；影响正式科研事实、数据版本或不可逆结果的高风险操作使用正式 `ApprovalRecord`。
 
 ## 7. 全仓红线
 
@@ -215,7 +216,7 @@ bun run --cwd frontend test:shell
 
 ### 7.4 人工确认
 
-高风险操作必须遵循：
+影响正式科研事实、数据版本或不可逆结果的高风险操作必须遵循：
 
 ```text
 Agent 或系统建议
@@ -228,6 +229,11 @@ Agent 或系统建议
 ```
 
 聊天中的“同意”、前端布尔值或 Agent 自述不能替代 `ApprovalRecord`。
+
+查询、检索、解析、候选抽取、质量扫描、只读证据查询、规划和预览可以在
+权限、Schema 和审计检查后自动执行。采用候选研究问题、修正候选字段、
+选择图表类型和低风险格式修复使用轻量确认；不得为这些操作强制套用正式
+高风险审批流程。
 
 ### 7.5 Agent 与模型
 
@@ -250,8 +256,31 @@ Agent 或系统建议
 - 不执行任意外部 URL；
 - RECA 根许可证为 `PENDING_GOVERNANCE_DECISION`；
 - 不得凭记忆填写许可证或自行替项目负责人决定；
-- ARS-Codex 只作为清洁室研究参考，不是运行时依赖；
-- 第三方源码必须记录来源、固定 commit、许可证、使用决定和风险。
+- 允许 Fork 成熟项目、Vendor 完整模块、使用 Git Submodule、选择性复制代码、复制和修改 Prompt、复制脚本和测试、直接使用稳定库，以及经评估后不建立无收益的 Adapter；
+- ARS-Codex 可以在许可证与归属审查后复用，但不自动改变 M8、单总控 Agent 或 Tool 边界；
+- 复用后的 Tool 仍必须遵守 Schema、项目权限、Service、版本、审批和审计；
+- 第三方源码必须记录来源、固定 Commit/Tag、许可证、集成模式、复制路径、修改和特殊限制。
+
+开始复制、Fork、Vendor、Submodule 或修改前必须：
+
+1. 检查固定版本的仓库许可证原文；
+2. 固定上游 Commit 或 Tag；
+3. 确认目标使用和分发方式符合许可证；
+4. 选择依赖、独立服务、Fork、Vendor、Submodule、选择性复制、研究参考或清洁室重实现；
+5. 创建或更新来源研究记录；
+6. 保留许可证、版权归属和适用 NOTICE；
+7. 记录复制路径和修改；
+8. 检查非商业、署名、Copyleft、相同许可证、源码提供或其他特殊条件；
+9. 实际纳入内容时同步 `THIRD_PARTY_NOTICES.md`。
+
+禁止：
+
+- 复制无许可证项目或来源不明内容；
+- 删除版权、许可证或 NOTICE；
+- 把第三方贡献声称为 RECA 原创；
+- 用未来根许可证覆盖特殊许可证文件；
+- 为了快速集成破坏科研真实性、确定性统计或原始不可变；
+- 为了复用绕过项目数据、版本、Service 和审批规则。
 
 ## 8. 明确禁止行为
 

@@ -310,7 +310,7 @@ Project ID 从上下文注入。
 | 属性  | 值                |
 | --- | ---------------- |
 | 副作用 | CREATE_DRAFT     |
-| 审批  | 正式确认需要，工具执行本身不需要 |
+| 审批  | 工具执行不需要；采用候选时轻量确认 |
 | 幂等  | 是                |
 | 超时  | 90秒              |
 | 权限  | project.update   |
@@ -945,18 +945,20 @@ EXPORT_DATA
 
 # 69. 智能体工具审批矩阵
 
+本矩阵按现有字段表达新的风险分层，不新增 Tool 参数、API 字段或稳定 Enum：只读和候选生成工具 `approval_required = false`；采用低风险候选结果使用规范性 `LIGHT_CONFIRMATION`；改变科研数据、正式结果或文件的工具需要 `FORMAL_APPROVAL` 和有效 `ApprovalRecord`；禁止能力不加入白名单。
+
 | 工具                             | 是否修改业务数据 |           是否需要审批 |
 | ------------------------------ | -------: | ---------------: |
 | get_project_state              |        否 |                否 |
-| parse_research_question        |     创建候选 |           正式确认需要 |
+| parse_research_question        |     创建候选 |      否；采用时轻量确认 |
 | generate_query_plan            |     创建草稿 |                否 |
 | search_literature              |   创建检索记录 |                否 |
 | verify_literature_record       |   更新验证状态 |                否 |
 | parse_document                 |   创建解析产物 |                否 |
-| extract_literature_fields      |   创建候选抽取 |           字段确认需要 |
+| extract_literature_fields      |   创建候选抽取 |      否；采用时轻量确认 |
 | retrieve_evidence              |        否 |                否 |
-| summarize_evidence_set         |   创建候选总结 |        Claim确认需要 |
-| generate_topic_candidates      |     创建候选 |             采用需要 |
+| summarize_evidence_set         |   创建候选总结 |      否；采用时轻量确认 |
+| generate_topic_candidates      |     创建候选 |      否；采用时轻量确认 |
 | profile_dataset                |   创建质量报告 |                否 |
 | suggest_cleaning_plan          |     创建草稿 |                否 |
 | preview_cleaning_plan          |        否 |                否 |
@@ -970,7 +972,7 @@ EXPORT_DATA
 | recommend_figure               |     创建建议 |                否 |
 | render_figure                  |     创建图表 | FigurePlan确认策略决定 |
 | check_manuscript               |     创建问题 |                否 |
-| suggest_manuscript_issues      |   创建候选问题 |          高风险采纳需要 |
+| suggest_manuscript_issues      |   创建候选问题 | 否；高风险内容采纳需正式审批 |
 | audit_claim                    |     创建审核 |                否 |
 | export_repro_package           |     导出数据 |          是或需导出确认 |
 

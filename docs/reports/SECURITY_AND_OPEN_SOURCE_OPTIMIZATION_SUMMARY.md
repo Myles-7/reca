@@ -2,170 +2,92 @@
 
 Document status: `Conditional Approval`
 
-Phase: Security and Open-Source Governance Optimization, Phase 2
+Phase: Security and Open-Source Governance Optimization, Phase 3 final synchronization
 
 Date: 2026-07-31
 
 Root license: `PENDING_GOVERNANCE_DECISION`
 
-Phase result: `CONDITIONAL PASS`
+Phase result: `PASS`
 
 ## 1. Scope
 
-This phase rewrote the authoritative security entry, four security child
-specifications, ARS-Codex ADR and source-research record. It applied the Phase 1
-inventory in
-[SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md](./SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md).
+This report closes the three-phase documentation-only optimization. Phase 1 inventoried the old policy, Phase 2 rewrote the authoritative security, open-source and ARS-Codex policy, and Phase 3 synchronized active entry documents, implementation guidance, contracts, testing, milestones and third-party registration guidance.
 
-Modified policy files:
+No third-party Prompt, code, script, test or other asset was copied. No dependency, code, container, CI, migration, lock file, generated client or runtime configuration changed.
 
-```text
-docs/SECURITY_AND_OPEN_SOURCE.md
-docs/security/SECURITY_CONTROLS.md
-docs/security/FILE_MODEL_AND_AGENT_SECURITY.md
-docs/security/OPERATIONS_DATA_AND_INCIDENTS.md
-docs/security/OPEN_SOURCE_GOVERNANCE.md
-docs/decisions/ADR-001-ARS-CODEX-USAGE.md
-docs/source-research/academic-research-skills-codex.md
-```
+## 2. Policy Change
 
-All paths matched the modular documentation structure described by the task.
+| Area | Previous policy | Current policy |
+| --- | --- | --- |
+| Security objective | Production-style controls broadly treated as delivery requirements | Competition-first minimum safeguards, visible warnings and deferred production hardening |
+| Approval | Broad confirmation posture could imply formal approval for ordinary actions | `NONE`, `LIGHT_CONFIRMATION` and `FORMAL_APPROVAL` are selected by research risk |
+| Open-source reuse | Research reference and clean-room reimplementation were the default posture | Effect-first licensed reuse through dependency, service, Fork, Vendor, Submodule or selective copy |
+| Adapter | Broad architectural default for third-party capability | Chosen by replacement, domain, Mock, license, security and maintenance benefit |
+| ARS-Codex | Research-only and mandatory clean-room posture | Selective or full reuse permitted after exact license, attribution and purpose review |
 
-This phase did not modify README, AGENTS, architecture, product, data-model,
-API/Tool, test or roadmap details. Their policy alignment belongs to Phase 3.
+Competition Edition remains aimed at personal use and school competition. Scientific truthfulness, original-object immutability, minimum privacy and lawful attribution remain hard boundaries.
 
-## 2. Core Policy Changes
+## 3. Competition Safeguards
 
-### 2.1 Competition-first security
+### 3.1 RELEASE_BLOCKER
 
-The entry policy now defines:
+- real Secrets committed, bundled into frontend output or written to ordinary logs;
+- original PDF, data or DOCX can be overwritten;
+- a model produces formal statistical numbers;
+- literature, EvidenceSpan or citations are fabricated;
+- uploaded files can execute or escape controlled paths;
+- Agent can execute arbitrary Shell, SQL or Python;
+- no-license or unknown-source content is copied;
+- required third-party license, copyright or NOTICE is removed;
+- CC BY-NC or other special-license content is not isolated or attributed;
+- demo material includes unauthorized sensitive or restricted content;
+- failure or degradation is represented as formal success;
+- a Critical supply-chain issue is reachable from the actual execution path;
+- any of the six M0 required CI jobs or applicable infrastructure clean-room acceptance is bypassed.
 
-```text
-COMPETITION_REQUIRED
-COMPETITION_RECOMMENDED
-FUTURE_PRODUCTION
-RELEASE_BLOCKER
-```
+### 3.2 COMPETITION_REQUIRED
 
-`RELEASE_BLOCKER` is limited to direct competition-delivery failures involving
-Secrets, original-object overwrite, fabricated research evidence, model-created
-formal statistics, file execution/path traversal, arbitrary Agent execution,
-unlicensed copying, removed attribution, unisolated special-license content,
-unauthorized demo material, hidden failure, reachable Critical supply-chain risk
-or bypassed M0 required CI/clean-room acceptance.
+- keep Secrets out of source, frontend bundles and ordinary logs;
+- preserve original PDF, dataset and DOCX objects and create derived versions;
+- obtain formal approval before high-risk data, formal-result, version or sensitive-export changes;
+- prevent Agent self-approval, Service bypass and arbitrary execution;
+- keep deterministic statistics, real evidence and project isolation;
+- validate upload type, signature and actual parsing; prevent traversal and execution;
+- expose model data scope, failures and degradation;
+- record upstream repository, Commit/Tag, license, copied paths, attribution and modifications;
+- reject no-license and unknown-source copying;
+- keep demo data licensed, permitted and non-sensitive;
+- preserve the M0 regression baseline and two disclosed LOW risks.
 
-Low/Medium vulnerabilities, missing enterprise SBOM, missing off-site disaster
-recovery and missing formal recovery exercises are no longer competition
-release blockers.
+### 3.3 COMPETITION_RECOMMENDED
 
-### 2.2 Deployment profiles
-
-`SECURITY_CONTROLS.md` now uses:
-
-| Profile | Policy role |
-| --- | --- |
-| `DEMO_LOCAL` | Default Competition Edition target for single-machine or trusted local-network use |
-| `SHARED_SCHOOL` | Optional school-sharing enhancement with basic login, project authorization, simple roles, private files, limits and audit |
-| `PUBLIC_PRODUCTION` | Future public/commercial profile that activates enterprise security and compliance design |
-
-Existing authentication, backend authorization, Secret hygiene and project
-isolation were retained. The policy does not remove any M0 security feature.
-
-### 2.3 File, model and Agent policy
-
-Minimum file controls retained:
-
-- size and parser resource limits;
-- extension, MIME, signature and actual parse validation;
-- display-only user file names and system-generated storage keys;
-- SHA-256;
-- ZIP/DOCX traversal protection;
-- upload non-execution;
-- parsing failure without original overwrite.
-
-Model access retains:
-
-```text
-requested_data_access_level
-max_allowed_data_access_level
-effective_data_access_level
-```
-
-The Competition Edition requirement is now minimal necessary content, no
-Secrets, no default full sensitive dataset transfer, visible data scope and
-visible failure/degradation. Enterprise DLP and full automated classification
-were moved to future production.
-
-Agent operations now use:
-
-```text
-AUTO_ALLOWED
-LIGHT_CONFIRMATION
-FORMAL_APPROVAL
-PROHIBITED
-```
-
-Read-only and candidate/preview workflows may run continuously. Formal approval
-remains for irreversible operations, research-data modification, formal plan
-execution, high-risk manuscript changes, result invalidation and sensitive/raw
-exports. Agent self-approval, arbitrary code, Service bypass, original overwrite
-and model-generated formal numbers remain prohibited.
-
-## 3. Rules Downgraded to Competition Recommended
-
-- fine-grained RBAC beyond the simple project role model;
-- basic login/expensive-endpoint rate limiting for exposed deployments;
-- antivirus scanning and advanced content sanitization;
-- a full file quarantine/audit platform;
-- signed URLs when authorized backend streaming is sufficient;
+- finer-grained RBAC and exposed-login rate limiting;
+- antivirus, advanced content sanitization and full quarantine platforms;
+- signed URLs where backend streaming is sufficient;
 - automated SBOM and automated license scanning;
-- automatic blocking of Medium/Low vulnerabilities;
+- automatic blocking of LOW or unrelated MEDIUM advisories;
 - full model-data classification and automated masking;
-- container non-root/read-only/resource hardening beyond practical defaults;
-- formal backup drills and extended log retention;
-- local database export and MinIO demo copies.
+- read-only container filesystems and advanced network policy;
+- formal backup exercises, longer log retention and richer monitoring;
+- simple database export and MinIO demo copies.
 
-These controls remain useful and may be elevated when the deployment profile
-changes, but they do not block school-competition delivery by default.
+These items are recorded as warnings or enhancements and do not block the school-competition build by themselves.
 
-## 4. Rules Moved to Future Production
+### 3.4 FUTURE_PRODUCTION
 
-- enterprise SSO, organization hierarchy, complex RBAC and access review;
-- large-scale multi-tenant administration;
-- formal privacy-law, legal deletion and data-retention workflows;
-- enterprise Secret Manager and automatic key rotation;
-- DLP, SIEM, centralized monitoring and staffed incident response;
-- formal vulnerability remediation SLA and enterprise supply-chain governance;
-- RPO/RTO, off-site backup, multi-region recovery and automatic failover;
-- advanced ingress/network policy, WAF and host/container hardening;
-- long-term security archives, legal notification and regulatory reporting;
-- multi-region data residency and compliance evidence.
+- enterprise SSO, organization hierarchy, access review and complex RBAC;
+- public multi-tenant administration and regulatory privacy workflows;
+- enterprise Secret Manager, DLP, SIEM and staffed incident response;
+- formal vulnerability SLA and enterprise supply-chain governance;
+- RPO/RTO, off-site backup, multi-region recovery and disaster exercises;
+- advanced WAF, ingress, host and container hardening;
+- legal deletion, retention, notification and long-term security archives;
+- regional data-residency and compliance evidence.
 
-The documents explicitly require re-evaluation if RECA becomes public,
-commercial, large-scale or handles high-risk real data.
+## 4. Open-Source Reuse Policy
 
-## 5. Hard Safeguards Retained
-
-- real Secrets do not enter source, frontend bundles, exports or ordinary logs;
-- original PDF/data/DOCX and formal source versions are immutable;
-- formal statistics come from deterministic programs;
-- literature, EvidenceSpan, citations and formal status cannot be fabricated;
-- uploaded files do not execute and cannot escape storage/temporary roots;
-- existing authentication and backend authorization are preserved;
-- multi-user deployments cannot cross project boundaries;
-- Agent tools remain allowlisted and Service-mediated;
-- Agent cannot self-approve or execute arbitrary Shell, SQL or Python;
-- high-risk research changes retain version-bound formal approval;
-- failures and degradation cannot be reported as formal success;
-- no-license or unknown-source content cannot be copied;
-- attribution, license, upstream Commit and modification history are retained;
-- demo data cannot expose unauthorized sensitive/restricted material;
-- actual-path Critical supply-chain risk blocks delivery;
-- six M0 required CI jobs and infrastructure clean-room acceptance remain mandatory.
-
-## 6. Open-Source Reuse Modes
-
-The authoritative governance policy now defines:
+Allowed modes:
 
 ```text
 PACKAGE_DEPENDENCY
@@ -178,132 +100,122 @@ RESEARCH_REFERENCE
 CLEAN_ROOM_REIMPLEMENTATION
 ```
 
-`CLEAN_ROOM_REIMPLEMENTATION` is an optional mode rather than the default.
+`CLEAN_ROOM_REIMPLEMENTATION` is optional, not the default.
 
-The minimum incorporation record includes project/repository, fixed Commit or
-Tag, actual license and path, integration mode, copied and modified paths,
-modification summary, attribution location, special restrictions,
-commercialization review flag, reviewer and review date.
-
-License classifications are:
+Before incorporation, record:
 
 ```text
-PERMISSIVE_REUSE_ALLOWED
-COPYLEFT_REVIEW_REQUIRED
-NONCOMMERCIAL_RESTRICTION
-NO_DERIVATIVES_RESTRICTION
-CUSTOM_LICENSE_REVIEW
-NO_LICENSE_DO_NOT_COPY
-UNKNOWN_SOURCE_DO_NOT_COPY
+project_name
+repository
+upstream_commit_or_tag
+license
+license_file_path
+integration_mode
+copied_paths
+modified_paths
+modification_summary
+attribution_location
+special_restrictions
+commercialization_review_required
+reviewed_by
+reviewed_at
 ```
 
-Permissive and Copyleft content is not blanket-prohibited. The selected mode
-must satisfy the exact license obligations and preserve path-level provenance.
-No-license content may be studied but not copied/Vendored/distributed without
-authorization; unknown-source content cannot enter the formal repository.
+Prohibited actions include copying no-license or unknown-source content, removing attribution, claiming third-party work as wholly original, using a future root license to overwrite path-specific licenses, or bypassing RECA project, version, evidence and approval rules for integration speed.
 
-No Vendor directory, Fork, Submodule, dependency or copied third-party content
-was added in this phase.
+`THIRD_PARTY_NOTICES.md` now includes a neutral registration template. It does not create a false ARS-Codex attribution. The existing Full Stack FastAPI Template and M0 dependency/image records remain factual.
 
-## 7. Adapter Policy
+## 5. Adapter Decision
 
-The old near-absolute Adapter posture was replaced with a conditional rule.
+Third-party integration uses one of:
 
-Adapter is required for unstable/replaceable external APIs, multiple
-implementations, domain-object isolation, offline Mock/Recorded alternatives,
-license/security boundaries or clear testing/degradation benefits.
+```text
+DIRECT_LIBRARY_INTEGRATION
+ADAPTER_INTEGRATION
+ISOLATED_SERVICE_OR_VENDOR
+```
 
-Direct integration is allowed for mature, stable, small-interface libraries
-with no replacement need, no domain-model pollution and lower maintenance cost.
+Use Adapter when an external API may change, multiple implementations or offline Mock are needed, third-party objects must not leak into the domain, or a license/security boundary or testing benefit is material. Direct integration is allowed for mature, stable, small-interface libraries without replacement need or domain pollution. Large components and special-license boundaries may use an isolated service, Fork or Vendor.
 
-Both modes remain subject to Service authorization, project isolation,
-scientific truthfulness, immutable versions, Schema, approval and audit.
+Every mode remains behind the appropriate business Service. Direct integration does not permit Router, Worker or Agent Tool to operate a third-party SDK outside project, permission, version, evidence, audit or formal-result rules.
 
-## 8. ARS-Codex Decision
+## 6. Approval Decision
 
-ADR-001 was amended rather than deleting its history. The old research-only,
-mandatory-clean-room decision is retained in the change record and replaced by
-licensed effect-first reuse.
+The documentation now uses the following normative policy classification:
 
-Current purpose status:
+```text
+NONE
+LIGHT_CONFIRMATION
+FORMAL_APPROVAL
+```
+
+- `NONE`: query, retrieval, parsing, extraction candidates, quality scans, suggestions and previews;
+- `LIGHT_CONFIRMATION`: adoption of a candidate question or field, chart choice and low-risk formatting repair;
+- `FORMAL_APPROVAL`: research-data modification, imputation, outlier deletion, recoding, formal AnalysisPlan execution, high-risk manuscript change, formal-result invalidation and raw/sensitive export.
+
+These labels do not add an API field, persisted database enum or Tool parameter. Existing `requires_approval`, confirmation records and `ApprovalRecord` express the implementation. Prohibited tools remain absent from the allowlist.
+
+## 7. ARS-Codex Decision
 
 ```text
 NONCOMMERCIAL_INTENT_DECLARED
+selective_or_full_reuse_allowed_after_license_and_attribution_review
+no_actual_copy_in_this_documentation_task
+commercialization_re_review_required
 ```
 
-It is not `LEGALLY_CONFIRMED_NONCOMMERCIAL`.
+This is not a legal conclusion that a school competition is NonCommercial. Exact upstream license text and path coverage must be checked before copying. Attribution, repository, fixed Commit, copied paths and modifications must be retained; special-license content must remain distinct from the root-license decision.
 
-After exact license/path review, RECA may selectively copy Prompts, workflow
-templates, scripts, test structures and test materials; Vendor or Fork the
-project; keep it as a development resource; or consider runtime use through a
-separate architecture ADR.
+Reuse does not move Agent runtime before M8, change the single-orchestrator design, permit free multi-Agent operation or bypass Project, Approval, Evidence and Tool contracts.
 
-Reuse does not automatically:
+## 8. Cross-Document Synchronization
 
-- change the single-orchestrator architecture;
-- move Agent runtime before M8;
-- permit free multi-Agent state;
-- move business truth to Agent sessions;
-- replace deterministic statistics, evidence or parsing;
-- bypass Project, Approval, Evidence or Tool contracts.
+| Files | Synchronization |
+| --- | --- |
+| `README.md` | Added Competition Edition positioning, effect-first reuse, attribution and root-license separation |
+| `AGENTS.md` | Replaced old copy prohibitions, added pre-copy checklist, task reading rule and Agent/AI reuse boundary |
+| Product entry and UX requirements | Narrowed formal approval to high-risk actions and stated reuse as delivery strategy, not P0 functionality |
+| Architecture entry and child specifications | Added direct, Adapter and isolated-service/Vendor modes while retaining Service and domain boundaries |
+| Data-model entry and child specifications | Clarified approval policy without deleting ApprovalRecord, AuditLog, ToolCall, ModelInvocation or lineage |
+| API/Tool entry and Tool contracts | Applied risk-based approval semantics without changing paths, errors, Schema or Tool names |
+| Test entry and child specifications | Added license/source/attribution tests, blocker versus warning rules and approval-risk cases |
+| Roadmap entry, common files and M1-M9 | Added lightweight source review in the integration PR and removed mandatory self-rewrite/Adapter assumptions |
+| `THIRD_PARTY_NOTICES.md` | Added a registration template and explicit no-actual-ARS-copy statement |
+| `backend/README.md` | Repaired its obsolete link to the current root quick-start guide; no backend behavior changed |
+| Security, ADR and source-research files | Retained the Phase 2 authoritative competition-first and ARS-Codex decisions |
 
-Current actual incorporation remains `RESEARCH_REFERENCE`; copied content,
-Vendor, Fork, Submodule and runtime dependency are all absent.
+Historical reports and previous-decision sections may retain old wording as evidence. Active authoritative instructions no longer impose mandatory ARS clean-room reimplementation or universal Adapter use.
 
-## 9. Unresolved License Questions
+## 9. Contract Preservation
 
-The following remain unresolved and require exact-use review or legal advice:
+Stable identifier comparison against `docs/reports/document-split-baseline/` confirms no intentional business-contract change:
 
-1. Whether the specific school competition, prize, sponsorship and distribution
-   qualify as NonCommercial under CC BY-NC 4.0.
-2. Whether public repository, download, portfolio or hosted use changes that
-   analysis.
-3. Whether every relevant ARS-Codex file and tracked/vendored asset uses the
-   same license.
-4. Which attribution/change-notice form applies to each copied path and reuse
-   mode.
-5. How future commercial/public product use would replace, isolate, relicense
-   or remove CC BY-NC content.
-6. Which root license RECA will adopt.
-7. Whether competition datasets, PDFs, visual assets and fixtures allow public
-   redistribution.
+| Type | Result |
+| --- | --- |
+| Requirement ID | preserved |
+| Acceptance ID | preserved |
+| API Path | preserved |
+| Error Code | preserved |
+| AI Schema name | preserved |
+| Agent Tool name | preserved |
+| Domain Enum value | preserved; policy labels are normative, not persisted Enum additions |
+| Milestone ID | preserved |
 
-## 10. Deferred Phase 3 Alignment
+Literal baseline coverage is 181/181 Requirement IDs, 16/16 Acceptance IDs, 236/236 API paths, 87/87 error codes, 16/16 Schema names, 51/51 Tool names and 20/20 milestone identifiers. The broad Phase 0 enum-candidate inventory already had 23 non-domain candidates absent at the starting HEAD; the current tree has the same 23 absent candidates, so this phase introduced zero enum removals.
 
-Phase 3 must align README/AGENTS, architecture/development Adapter prose,
-ApprovalRecord/data/API/Tool contracts, testing gates and roadmap milestones.
-This Phase 2 intentionally did not change those documents.
+M0 remains `COMPLETED`, M1 Entry remains `ALLOWED`, commit `79825914c7c975e8be256a5a89abe812f486769e` and tag `m0-complete` remain unchanged. The six required CI jobs, infrastructure clean-room trigger, `M0-ISSUE-0006`, `M0-ISSUE-0009`, Git-managed Prompt manifest, data-access three-layer semantics, minimal ProjectContextSnapshot, EvidenceSpan non-fabrication, MANU-P0-018 boundary and M8 Agent timing remain intact.
 
-During the temporary transition, the security entry and four security child
-documents are authoritative for security-policy classification. Existing code,
-Schema, API and test behavior is not implicitly changed.
+## 10. Deferred
 
-Repository-wide restriction scanning found two active entry summaries outside
-the Phase 2 modification scope:
+- selection of additional GitHub projects;
+- actual Fork, Vendor, Submodule or selective copy;
+- actual ARS-Codex copying or runtime integration;
+- exact legal review for each special-license path and competition use;
+- root project license decision;
+- formal `APPROVED FOR M1 DEVELOPMENT` status;
+- `docs-m1-approved` tag;
+- enterprise production security implementation.
 
-- `README.md` still describes ARS-Codex as research-only and not a runtime
-  dependency;
-- `AGENTS.md` still describes ARS-Codex as a clean-room research reference and
-  not a runtime dependency.
+## 11. No-Code-Change Confirmation
 
-Historical migration/baseline reports also retain the prior decision, which is
-correct as historical evidence. The active README/AGENTS summaries must be
-updated in Phase 3 before the repository-wide old-policy scan can pass without
-qualification. This is the reason for `CONDITIONAL PASS`; it does not invalidate
-the new authoritative security policy or ADR.
-
-## 11. Validation and Scope Confirmation
-
-- Documentation status: `Conditional Approval`.
-- Root license: `PENDING_GOVERNANCE_DECISION`.
-- M0 required CI removed or weakened: no.
-- Infrastructure clean-room acceptance removed or weakened: no.
-- Existing authentication removed: no.
-- Project isolation removed: no.
-- Model formal statistics allowed: no.
-- Agent arbitrary code execution allowed: no.
-- Third-party content copied: no.
-- Dependency or lock file changed: no.
-- Vendor/Submodule created: no.
-- Backend/frontend/Compose/CI/migration changed: no.
-- Phase 3 executed: no.
+This phase modified Markdown documentation and documentation governance records only. The only file under `backend/` was `backend/README.md`, whose broken documentation link was repaired. No backend or frontend source, `docker-compose.yml`, `.github/workflows/`, migration, dependency manifest, lock file, generated client or runtime asset changed.

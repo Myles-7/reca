@@ -25,6 +25,16 @@ Adapter Protocol，以及文献、PDF、数据、分析、图表、DOCX、Eviden
 
 # 14. 适配器层
 
+第三方能力接入不再默认等同于 Adapter。实现应在以下三种模式中按收益选择：
+
+```text
+DIRECT_LIBRARY_INTEGRATION
+ADAPTER_INTEGRATION
+ISOLATED_SERVICE_OR_VENDOR
+```
+
+外部 API 可能变化、需要多实现或离线 Mock、第三方对象可能污染领域层、存在许可证或安全边界时使用 Adapter；成熟稳定、接口很小、无替换需求且不会污染领域模型的库可以直接集成；大型运行组件或需要许可证隔离的来源可以采用独立服务、Fork 或 Vendor。无论采用哪种模式，第三方对象都必须在进入核心领域前转换，Service 仍控制项目、版本、审批、EvidenceSpan 和正式结果。
+
 ## 14.1 文献数据源接口
 
 ```python

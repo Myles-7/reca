@@ -28,7 +28,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 文档名称 | `TEST_AND_ACCEPTANCE.md` |
-| 文档版本 | 1.3.0 |
+| 文档版本 | 1.4.0 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
 | 文档状态 | Conditional Approval |
 | 文档类型 | 测试权威入口、核心原则、缺陷等级、完成定义与门禁索引 |
@@ -47,6 +47,7 @@
 | 1.1.0 | 2026-07-30 | Approved | 增加 Agent 合同、注入、Claim 审核与降级黄金测试 | RECA Team |
 | 1.2.0 | 2026-07-30 | Conditional Approval | 建立 M0 Regression Baseline、MANU-P0-018 AC 与真实 Bun 命令约束 | RECA Team |
 | 1.3.0 | 2026-07-31 | Conditional Approval | 拆分测试策略、黄金指标、契约安全测试和 E2E 验收；入口保留核心决策与索引 | RECA Team |
+| 1.4.0 | 2026-07-31 | Conditional Approval | 同步校赛最小安全护栏、开源来源验收和按风险分层的审批测试 | RECA Team |
 
 ---
 
@@ -339,6 +340,13 @@ RECA 按以下层次组织测试：
 * 导出泄露密钥或敏感数据；
 * Docker 无法启动；
 * 演示项目无法打开。
+* 真实 Secret 进入仓库、前端包或普通日志；
+* 无许可证或来源不明内容被复制进正式仓库；
+* 必须保留的 LICENSE、NOTICE 或归属缺失；
+* 上传文件可执行或存在明显路径穿越；
+* 模型生成正式统计数字或虚构 EvidenceSpan；
+* Critical 供应链风险与实际执行路径相关且可达；
+* required CI 或适用 clean-room 被规避。
 
 发布要求：
 
@@ -374,6 +382,8 @@ Critical = 0
 * 某类论文格式无法识别；
 * 非主流程降级错误；
 * 性能明显不达标但可继续操作。
+
+以下校赛版缺口应记录为警告或后续强化，不因其自身阻断 Competition Edition：已披露 LOW advisory、与主演示和实际执行路径无关的 MEDIUM、缺少完整 SBOM、企业 Secret Manager、灾备演练、正式事件响应、高级容器强化或企业监控。它们不得被隐藏，也不得掩盖真实 Blocker 或可达 Critical 风险。
 
 发布要求：
 
@@ -451,6 +461,8 @@ Critical = 0
 | 版本 | 原始文件及 Original 版本覆盖次数为 0，派生结果创建新版本 |
 | 回归 | 六项 required CI、适用 clean-room 和核心 E2E 全部通过 |
 | 缺陷 | `Blocker = 0`、`Critical = 0`、主演示路径 `Major = 0` |
+
+开源复用和审批专项验收至少覆盖：来源与上游 Commit/Tag 可追踪；Fork/Vendor/选择性复制所需归属文件完整；特殊许可证内容隔离；ARS-Codex 的 `NONCOMMERCIAL_INTENT_DECLARED` 和商业化复审门存在且未被误写为已完成复制；无许可证复制被拒绝；只读与候选生成工具不要求正式审批；改变科研数据、正式结果或文件的高风险工具仍要求有效审批。
 
 ---
 

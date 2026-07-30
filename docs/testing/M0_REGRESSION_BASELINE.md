@@ -88,6 +88,8 @@ clean-room 必须验证：
 
 M1-M9 的新增测试是叠加关系，不得替换、删除或降低本基线。任何 required CI、clean-room 检查或 LOW 风险披露退化都阻止里程碑 Exit 和发布。
 
+新的 Competition Edition 安全分层不改变上述要求。`M0-ISSUE-0006` 和 `M0-ISSUE-0009` 仍是已披露、非阻断 LOW 风险；“非阻断”不允许删除披露，“继续披露”也不把 LOW 本身升级为校赛发布阻断项。
+
 ## 原章节保留
 
 ### 4.8 M0 Regression Baseline

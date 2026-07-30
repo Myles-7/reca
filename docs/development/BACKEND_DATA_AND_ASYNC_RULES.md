@@ -48,7 +48,7 @@ module/
 API → Service → Repository / Domain
 Worker → Service
 Tool → Service
-Service → Adapter Protocol
+Service → Direct Library / Adapter Protocol / Isolated Service
 Adapter → External Library / Provider
 ```
 
@@ -179,9 +179,9 @@ docker compose exec -T worker celery -A app.core.celery:celery_app inspect ping
 
 不得注册任意代码执行、SQL、Shell、文件系统或无限网络工具。
 
-## 9. Adapter 与外部服务
+## 9. 第三方能力与外部服务
 
-外部依赖通过 Protocol 和 Adapter 隔离：
+按替换需求、领域污染、离线 Mock、许可证或安全边界与维护成本选择直接库、Protocol/Adapter 或隔离服务。以下复杂边界继续通过转换层隔离：
 
 - OpenAlex 响应转换为内部 Schema；
 - GROBID/pypdf 转换为统一文档页和 chunk；
@@ -190,6 +190,8 @@ docker compose exec -T worker celery -A app.core.celery:celery_app inspect ping
 - 统计和图表引擎返回确定性结构化结果。
 
 Adapter 不决定产品状态，不直接创建业务审批，也不吞掉外部错误。
+
+成熟稳定、接口很小、无替换需求且不污染领域模型的库允许由 Service 直接集成。直接集成不允许 Router、Worker 或 Tool 绕过 Service，也不改变项目隔离、版本血缘、正式统计和高风险审批规则。
 
 ## 10. 配置与错误
 

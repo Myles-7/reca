@@ -247,9 +247,13 @@ OTHER
 
 # 20. 人工确认模型
 
+操作审批采用规范性风险分类：`NONE`、`LIGHT_CONFIRMATION`、`FORMAL_APPROVAL`。前两类不要求创建 `ApprovalRecord`：只读、扫描、候选生成和预览通常为 `NONE`，低风险采用或格式修正通常为 `LIGHT_CONFIRMATION`。只有修改科研数据、正式结果、版本关系或不可逆输出的高风险操作使用 `FORMAL_APPROVAL` 并创建下述记录。
+
+这三个名称是政策分类，不是本文件新增的数据库 Enum 或字段；现有实现可通过 `requires_approval`、普通确认记录与 `ApprovalRecord` 表达。
+
 ## 20.1 ApprovalRecord
 
-ApprovalRecord 是正式科研决策记录。
+ApprovalRecord 是高风险正式科研决策记录，不用于记录每次读取、模型调用或低风险 ToolCall。
 
 ### approval_type
 

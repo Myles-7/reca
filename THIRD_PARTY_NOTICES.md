@@ -1,5 +1,23 @@
 # Third-Party Notices
 
+## Registration template
+
+Use this template when a dependency, independent service, Fork, Vendor, Git Submodule or selective copy is actually incorporated. Do not create an attribution entry from research intent alone.
+
+```text
+Project:
+Repository:
+Commit/Tag:
+License:
+Integration mode:
+Copied paths:
+Modifications:
+Attribution:
+Special restrictions:
+```
+
+ARS-Codex is not listed as incorporated content because this documentation task copied no ARS-Codex Prompt, code, script, test or other asset. Its research and reuse decision remains recorded in the corresponding source-research document and ADR.
+
 ## Full Stack FastAPI Template
 
 - Upstream project: Full Stack FastAPI Template
@@ -10,6 +28,7 @@
 - License: MIT
 - Import date: 2026-07-29
 - Import method: Controlled source integration from a pinned local snapshot
+- Integration mode: `SELECTIVE_COPY`
 - Git history retained in RECA: No
 - Usage: Initial engineering foundation for RECA
 - Planned modifications: Remove upstream example business functionality and replace it with RECA-specific modules

@@ -25,6 +25,12 @@
 
 阶段 8 迁移已完成。本文件与入口文档共同构成测试与验收正式开发基准；发生冲突时视为文档缺陷，不得自行猜测或降低标准。
 
+## Competition Edition 供应链验收
+
+开源复用测试必须验证：许可证分类和上游 Commit/Tag 已记录；Fork、Vendor、Submodule 或选择性复制的 LICENSE/NOTICE/归属满足上游要求；特殊许可证内容与根项目许可证声明隔离；无许可证或来源不明内容被拒绝；ARS-Codex 仅记录 `NONCOMMERCIAL_INTENT_DECLARED`、用途变化复审门和实际复制状态。当前文档任务不得制造不存在的第三方使用记录。
+
+真实 Secret、上传执行、路径穿越、原始覆盖、Agent 任意执行、模型正式统计、虚构 EvidenceSpan、可达 Critical 供应链风险和 required CI 规避必须阻断。已披露 LOW、与主演示无关且不可达的 MEDIUM、缺少完整 SBOM 或企业安全平台只产生警告，不得伪装为零风险。
+
 ---
 
 ## 18. Agent 工具测试
@@ -45,6 +51,8 @@ Agent 只能看到注册工具。
 * 不产生文件变化。
 
 ### 18.2 审批测试
+
+审批测试按风险分层：只读查询、检索、解析、质量扫描、候选生成和预览应在权限与审计边界内执行，且不创建正式 `ApprovalRecord`；采用低风险候选结果验证轻量确认；改变科研数据、正式结果或文件的工具仍必须进入 `WAITING_APPROVAL` 并绑定有效审批。
 
 Agent 请求执行 CleaningPlan 时：
 

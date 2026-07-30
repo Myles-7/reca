@@ -8,6 +8,7 @@
 - Import method: controlled file-level copy from the verified, read-only local
   snapshot. Git metadata, `.env` files, caches, build output, IDE settings,
   runtime data, and the upstream root `LICENSE` were excluded.
+- Integration mode: `SELECTIVE_COPY`.
 - Git history retained in RECA: no.
 
 The import retains the FastAPI application foundation, React/Vite/TypeScript

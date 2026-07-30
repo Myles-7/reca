@@ -25,13 +25,13 @@
 | 项目     | 内容                                                                                                             |
 | ------ | -------------------------------------------------------------------------------------------------------------- |
 | 文档名称   | `ARCHITECTURE.md`                                                                                              |
-| 文档版本   | 1.2.0                                                                                                          |
+| 文档版本   | 1.3.0                                                                                                          |
 | 适用项目版本 | RECA 0.1 Competition Edition                                                                                   |
 | 文档状态   | Conditional Approval                                                                                          |
 | 文档类型   | 技术架构基准                                                                                                         |
 | 主要读者   | 架构负责人、后端开发、前端开发、AI 开发、测试人员、运维人员、Codex                                                                          |
 | 负责人    | RECA Team                                                                                                      |
-| 最后更新时间 | 2026-07-30                                                                                                     |
+| 最后更新时间 | 2026-07-31                                                                                                     |
 | 上位文档   | `README.md`、`AGENTS.md`、`PRODUCT_REQUIREMENTS.md`                                                              |
 | 关联文档   | `DATA_MODEL_AND_WORKFLOW.md`、`API_AI_TOOL_CONTRACTS.md`、`TEST_AND_ACCEPTANCE.md`、`SECURITY_AND_OPEN_SOURCE.md` |
 
@@ -45,6 +45,7 @@
 | 1.0.0 | 2026-07-29 | Approved | 确认为 M0 开发前正式基准 | Myles-7 |
 | 1.1.0 | 2026-07-30 | Approved | 增加派生项目上下文、阶段解析、显式降级与论文修订漂移架构；保持单总控 Agent 与 M8 接入边界 | RECA Team |
 | 1.2.0 | 2026-07-30 | Conditional Approval | 写入 M0 As-Built、当前/目标目录分离、Prompt manifest 与数据访问三层语义 | RECA Team |
+| 1.3.0 | 2026-07-31 | Conditional Approval | 同步 effect-first 开源复用与按收益选择 Adapter；核心领域和单 Agent 边界不变 | RECA Team |
 
 ---
 
@@ -277,26 +278,27 @@ statsmodels Result
 → AnalysisResult
 ```
 
-## 5.4 适配器隔离
+## 5.4 第三方接入按收益选择边界
 
-业务服务只能依赖抽象接口，不直接依赖具体第三方库。
+RECA 使用三类接入方式：
 
-错误示例：
-
-```python
-from pyalex import Works
-
-def search_literature(...):
-    return Works().search(...)
+```text
+DIRECT_LIBRARY_INTEGRATION
+ADAPTER_INTEGRATION
+ISOLATED_SERVICE_OR_VENDOR
 ```
 
-推荐方式：
+选择依据是能力是否可能更换、第三方对象是否污染领域模型、是否需要离线
+Mock、是否存在许可证或安全边界、接口复杂度、直接集成能否明显缩短工期，
+以及后续维护成本。
 
-```python
-class LiteratureProvider(Protocol):
-    async def search(self, query: QueryPlan) -> list[LiteratureRecord]:
-        ...
-```
+- 成熟稳定、接口很小、无替换需求且不污染领域模型的库可以直接集成；
+- 外部 API、多实现、离线替代、复杂降级或领域转换使用 Adapter；
+- 大型项目、特殊许可证、独立运行时或需要清晰升级边界的能力使用隔离服务、Fork 或 Vendor。
+
+直接集成不等于 Router 或 Agent 直接操作第三方 SDK。复杂业务仍由 Service
+负责权限、事务、状态、版本、审批和审计；第三方对象不得直接成为核心领域
+模型，统计结果、EvidenceSpan 和版本关系仍由 RECA 规则控制。
 
 ## 5.5 确定性程序优先
 
@@ -545,7 +547,14 @@ RECA 继续采用单 FastAPI 应用的模块化单体。模块通过 Service 和
 
 # 11. 数据流与适配器边界
 
-外部文献、PDF 解析、对象存储、模型服务和其他 Provider 必须通过 Adapter Protocol 转换为 RECA 内部 Schema。外部响应不得直接成为领域事实，业务 Service 不得依赖供应商原始结构。
+外部文献 API、可替换 PDF 解析器、对象存储 Provider、模型服务和其他复杂
+边界通过 Adapter Protocol 转换为 RECA 内部 Schema。成熟小型库可以按
+`DIRECT_LIBRARY_INTEGRATION` 使用；大型或特殊许可证能力可以采用
+`ISOLATED_SERVICE_OR_VENDOR`。无论方式如何，外部响应不得直接成为领域
+事实，第三方结构不得泄漏为持久化核心契约。
+
+通用能力尽量复用；RECA 自研重点集中在项目状态、EvidenceSpan、版本血缘、
+ClaimEvidenceLink、审核规则和跨文献—数据—分析—图表—论文证据链。
 
 文献、PDF、数据、分析、图表、DOCX 和 Evidence 的完整数据流，以及外部服务转换边界，见 [数据流与适配器](architecture/DATA_FLOWS_AND_ADAPTERS.md)。
 

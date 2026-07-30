@@ -80,7 +80,7 @@
 → 领域模型
 → 数据库约束和迁移
 → Repository / Service
-→ Adapter
+→ 按需选择 Direct Library / Adapter / Isolated Service
 → Tool
 → 测试
 → API
@@ -96,6 +96,8 @@
 - 前端不得发明后端状态；
 - 高风险执行不得先于 `ApprovalRecord`；
 - 正式 Agent 不得早于 M8。
+
+只读、扫描、候选生成和预览不因使用 AI 或 Tool 而自动升级为正式审批。复用第三方能力前必须核验许可证、固定上游版本、建立来源与归属记录；无需替换、隔离或复杂转换的小型稳定库不强制增加 Adapter。
 
 ## 5. 工作树保护
 

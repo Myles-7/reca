@@ -111,7 +111,7 @@ M4 数据质量与版本
 → Repository
 → Domain Policy
 → Application Service
-→ Adapter
+→ 按需选择 Direct Library / Adapter / Isolated Service
 → Worker
 → API
 → OpenAPI
@@ -224,9 +224,9 @@ API 契约冻结
 → 契约测试
 ```
 
-## 20.3 Adapter 与业务服务并行
+## 20.3 第三方集成与业务服务并行
 
-业务服务依赖 Protocol，不依赖具体 SDK。
+需要替换、离线 Mock、许可证隔离、安全边界或复杂转换时，业务服务依赖 Protocol，不依赖具体 SDK。
 
 例如：
 
@@ -237,6 +237,8 @@ class LiteratureProvider(Protocol):
 ```
 
 业务服务可使用 Mock Provider 测试，Adapter 可独立开发。
+
+成熟稳定、接口很小、没有替换需求且不污染领域模型的库可由 Service 直接集成；大型或特殊许可证组件可使用独立服务、Fork 或 Vendor。集成 PR 必须同步许可证、上游 Commit/Tag、归属和修改记录，不要求为了形式完整先实现 Adapter。
 
 ## 20.4 禁止并行的场景
 

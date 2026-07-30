@@ -8,10 +8,10 @@
 | 项目 | 内容 |
 | --- | --- |
 | 文档名称 | `DATA_MODEL_AND_WORKFLOW.md` |
-| 文档版本 | 1.2.0 |
+| 文档版本 | 1.3.0 |
 | 文档状态 | Conditional Approval |
 | 文档类型 | 领域模型与状态机基准入口 |
-| 最后更新时间 | 2026-07-30 |
+| 最后更新时间 | 2026-07-31 |
 
 # 1. 文档目的
 
@@ -215,6 +215,18 @@ AuditLog、ApprovalRecord、ToolCall、ModelInvocation 原则上采用追加写�
 * 审计；
 * 必要时审批；
 * 事务。
+
+审批要求按操作风险采用以下规范性分类：
+
+```text
+NONE
+LIGHT_CONFIRMATION
+FORMAL_APPROVAL
+```
+
+`NONE` 适用于只读查询、检索、解析、质量扫描、候选生成和预览；`LIGHT_CONFIRMATION` 适用于采用候选研究问题、修正候选字段、选择图表类型和低风险格式修复；`FORMAL_APPROVAL` 仅适用于修改科研数据、改变正式科研事实、执行正式 AnalysisPlan、失效正式结果、导出原始或敏感数据等高风险操作。该分类是领域政策语义，不自动新增持久化字段或稳定枚举；实现可复用现有 `requires_approval`、确认记录和 `ApprovalRecord` 表达等效含义。
+
+模型调用和低风险 ToolCall 不因“由 AI 发起”而自动需要正式审批。需要正式审批的副作用必须在执行前绑定有效 `ApprovalRecord`；Agent 不得自行批准。
 
 ## 3.10 JSONB 只保存可变细节
 
