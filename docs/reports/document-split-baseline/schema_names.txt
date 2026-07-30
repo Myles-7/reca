@@ -1,0 +1,16 @@
+AnalysisPlanDTO
+AnalysisResultDTO
+DatasetProfileDTO
+EvidenceCandidateDTO
+FigurePlanDTO
+FigureRenderResultDTO
+LiteratureRecordDTO
+LiteratureSearchResultDTO
+LiteratureVerificationDTO
+ManuscriptCheckResultDTO
+ManuscriptProjectContextDTO
+ParsedScholarlyDocumentDTO
+QueryPlanDTO
+ResearchQuestionScopingInput
+ResearchQuestionScopingOutput
+ResearchQuestionSpec

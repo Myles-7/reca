@@ -1,5 +1,9 @@
 # RECA M0 Development Summary
 
+> Status: FINAL HISTORICAL MILESTONE RECORD
+> Authority: M0 completion evidence only; do not use this file as requirements authority for M1 or later.
+> Current planning: `README.md` and `docs/IMPLEMENTATION_ROADMAP.md`; evidence: `docs/acceptance/`, `m0-complete`.
+
 ## 1. 执行摘要
 
 M0 的目标是把 RECA 从批准的产品、架构和安全文档，落实为可继续开发的模块化单体工程底座，而不是提前交付科研业务。最终交付包含 FastAPI、React/Vite/TypeScript、PostgreSQL+pgvector、Valkey、Celery、MinIO、GROBID、Docker Compose、Alembic、现代 OpenAPI client 与 GitHub Actions 质量门禁。
