@@ -1,10 +1,17 @@
 # Academic Research Skills Codex source record
 
+Document version: `1.1.0`
+
+Document status: `Conditional Approval`
+
+Last updated: 2026-07-31
+
 ## 1. Source metadata
 
 ```yaml
+project_name: academic-research-skills-codex
 repository: https://github.com/Imbad0202/academic-research-skills-codex
-upstream_commit: f8d6b061efe98564a3f554c917fce66dcef6ca54
+upstream_commit_or_tag: f8d6b061efe98564a3f554c917fce66dcef6ca54
 upstream_commit_date: 2026-07-23T10:22:52+08:00
 adapter_version: 0.1.22
 adapter_tag: v0.1.22
@@ -14,238 +21,206 @@ tracked_ars_commit: 828ef3b613b0e8b91830da3328a1e33d4eb5ab4c
 tracked_experiment_agent_repository: https://github.com/Imbad0202/experiment-agent
 tracked_experiment_agent_commit: 9b063fa895eaf1f63ac99ac03f924f8d31aa8d26
 license: CC-BY-NC-4.0
-usage_decision: research-and-independent-reimplementation
+license_file_path: LICENSE at the fixed upstream commit
+purpose_status: NONCOMMERCIAL_INTENT_DECLARED
+integration_mode: RESEARCH_REFERENCE
 runtime_dependency: false
 vendored_into_reca: false
-reviewed_at: 2026-07-30
-reviewer: RECA Team (documentation review)
-copied_content: none
-prompt_copying_policy: prohibited; independent reimplementation only
-commercialization_risk: CC-BY-NC-4.0 upstream material must not be copied into a potentially commercial/distributed RECA product
+fork_integrated: false
+submodule_added: false
+copied_paths: []
+modified_paths: []
+modification_summary: none; policy update only
+attribution_location: this source record; future THIRD_PARTY_NOTICES entry required upon incorporation
+special_restrictions:
+  - noncommercial restriction requires purpose/distribution review
+  - preserve CC BY-NC 4.0 and attribution
+  - inspect separately licensed vendored or tracked upstream material
+commercialization_review_required: true
+reviewed_by: RECA Team documentation review
+reviewed_at: 2026-07-31
 ```
 
 Fixed source:
 <https://github.com/Imbad0202/academic-research-skills-codex/tree/f8d6b061efe98564a3f554c917fce66dcef6ca54>
 
-The researched snapshot was cloned into a temporary external directory. It is
-not part of RECA's source tree, build context, dependency graph, container
-images, or runtime.
+## 2. Change record
 
-## 2. Executive decision
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-30 | Reviewed | Recorded fixed source and research-only clean-room decision |
+| 1.1.0 | 2026-07-31 | Conditional Approval | Recorded effect-first permitted modes, noncommercial intent and incorporation prerequisites; no content copied |
 
-ARS-Codex is useful to RECA as a design-research and test-pattern source, not
-as product backend code or a runtime dependency.
+## 3. Current decision
 
-RECA may independently reimplement these ideas:
+The governing decision is
+[ADR-001](../decisions/ADR-001-ARS-CODEX-USAGE.md).
 
-- staged academic workflows and explicit phase boundaries;
-- intent routing and Socratic research-question scoping;
-- human checkpoints and fail-closed continuation rules;
-- claim, citation, reading-scope, and revision-drift audits;
-- degradation records and visible fallback behavior;
-- schema, fixture, golden-set, and deterministic quality-gate patterns.
+ARS-Codex may be used through licensed `SELECTIVE_COPY`, `FORK`, `VENDOR`,
+`GIT_SUBMODULE`, development-time `RESEARCH_REFERENCE`, optional
+`CLEAN_ROOM_REIMPLEMENTATION`, or a separately approved runtime architecture.
 
-RECA must retain its own architecture:
+The current actual mode remains:
 
-- database-owned domain state;
-- a single controlled research orchestrator;
-- service-mediated writes and project authorization;
-- explicit `ApprovalRecord` checks;
-- allowlisted Agent tools;
-- deterministic statistics and figures;
-- immutable artifacts and versioned research objects;
-- auditable `AgentRun`, `ToolCall`, and model-invocation records.
+```text
+RESEARCH_REFERENCE
+```
 
-No ARS-Codex prompt, workflow file, schema, script, or fixture is copied into
-RECA by this decision.
+No ARS-Codex Prompt, workflow, code, schema, script, test corpus, fixture or
+other copyrightable file has been copied into RECA by this policy update.
 
-## 3. Verified upstream facts
+## 4. Purpose and license caution
+
+The project owner currently intends RECA for personal development/use and
+school-competition demonstration. The recorded state is:
+
+```text
+NONCOMMERCIAL_INTENT_DECLARED
+```
+
+This source record does not state `LEGALLY_CONFIRMED_NONCOMMERCIAL`. It does not
+conclude that a competition, prize, sponsorship, public repository, download,
+portfolio or hosted deployment satisfies the CC BY-NC 4.0 NonCommercial
+condition. Exact use and distribution must be reviewed before incorporation and
+again before commercialization or public product deployment.
+
+The fixed upstream license text must be re-read at the time of incorporation.
+The review must also check whether tracked/vendored workflow material, fixtures,
+datasets or subprojects contain additional licenses or attribution obligations.
+
+## 5. Verified upstream facts
 
 | Fact | Evidence | Confidence |
-|---|---|---:|
-| The researched repository commit is `f8d6b06...`; package version is `0.1.22` and it tracks ARS `v3.19.0`. | [Repository README](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/README.md), [VERSION](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/VERSION) | High |
-| The package pins the upstream ARS and experiment-agent repositories by commit. | [Suite manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/manifest.json) | High |
-| The Codex entry point is one root `academic-research-suite` skill which routes to five workflow entry files. | [Root skill](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md), [full-runtime manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/codex/full-runtime-manifest.json) | High |
-| A broad paper topic without a clear research question is routed to `deep-research` Socratic mode before outlining or drafting. | [Paper Topic Scoping Override](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#paper-topic-scoping-override) | High |
-| Normal Codex behavior runs role prompts inline. Automatic subagent spawning is not the default. | [Codex runtime mapping](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#codex-runtime-mapping) | High |
-| The optional full-runtime, agent-team, and hook profile is disabled by default. | [Full-runtime manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/codex/full-runtime-manifest.json) | High |
-| External cross-model review requires explicit configuration and content consent; unpublished material must not be sent merely because credentials exist. | [Security boundaries](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#security-boundaries) | High |
-| The package contains schemas, degradation contracts, held-out/gold fixtures, and deterministic validators for citation, PDF-read, human-read, and revision behavior. | [Shared resources](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#shared-resources), [quality-gate registry](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/codex/full-runtime-manifest.json) | High |
-| The root and vendored workflow material are licensed under CC BY-NC 4.0. | [License](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/LICENSE) | High |
+| --- | --- | ---: |
+| The reviewed Codex repository is fixed at `f8d6b061...`, package `0.1.22`, tracking ARS `3.19.0`. | [Repository README](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/README.md), [VERSION](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/VERSION) | High |
+| The package pins ARS and experiment-agent repositories by Commit. | [Suite manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/manifest.json) | High |
+| One root skill routes to research, paper, reviewer, pipeline and experiment workflows. | [Root skill](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md) | High |
+| Broad topics are routed through Socratic scoping before drafting. | [Scoping override](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#paper-topic-scoping-override) | High |
+| Normal Codex behavior runs role prompts inline; automatic subagent spawning is not the default. | [Runtime mapping](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#codex-runtime-mapping) | High |
+| Optional full-runtime, Agent-team and hook profiles are disabled by default. | [Full-runtime manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/codex/full-runtime-manifest.json) | High |
+| External cross-model review requires explicit configuration and content consent. | [Security boundaries](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#security-boundaries) | High |
+| The package contains schemas, degradation contracts, gold/held-out fixtures and deterministic validators. | [Shared resources](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md#shared-resources) | High |
+| The root and included workflow material are presented under CC BY-NC 4.0 in the reviewed snapshot. | [LICENSE](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/LICENSE) | High for root; file-level review still required before copying |
 
-## 4. Important corrections and limits
+## 6. Reusable asset categories
 
-### 4.1 Prompt copying is not the recommended use
+Subject to exact license and path review, useful asset categories include:
 
-The statement “可以大规模复制提示词” is rejected.
+| Asset category | Potential RECA use | Recommended initial mode |
+| --- | --- | --- |
+| Root routing and workflow selection | StageResolver and prompt-mode design | `SELECTIVE_COPY` or `RESEARCH_REFERENCE` |
+| Socratic research-question scoping | Candidate research question workflow | `SELECTIVE_COPY` with RECA Schema adaptation |
+| Academic pipeline templates | Milestone and checkpoint flow | `SELECTIVE_COPY` or `FORK` |
+| Claim, citation and reading-scope audits | Evidence and manuscript audit policy | `SELECTIVE_COPY` with deterministic validators |
+| Degradation contracts | Failure and fallback records | `SELECTIVE_COPY` or direct schema adaptation after review |
+| Prompt and output schemas | Prompt manifest and golden tests | `SELECTIVE_COPY`, preserving attribution |
+| Scripts and deterministic validators | Development/test tooling | `SELECTIVE_COPY`, `VENDOR` or `FORK` depending coupling |
+| Gold, held-out and mutation tests | Prompt/Schema CI and adversarial cases | `SELECTIVE_COPY`; check fixture/data rights separately |
+| Whole workflow suite | Development resource or possible runtime | `FORK`/`VENDOR`; runtime requires separate ADR |
 
-CC BY-NC 4.0 permits reproduction and adaptation only within its license
-conditions, including attribution and the non-commercial restriction. A
-competition project that may later be distributed, sponsored, licensed, or
-commercialized should not assume that wholesale prompt copying is compatible
-with its intended use.
+This table authorizes review, not automatic copying. The exact `copied_paths`
+and `modified_paths` must be recorded before content enters RECA.
 
-RECA therefore uses clean-room reimplementation:
+## 7. Required attribution and modification record
 
-1. record the upstream idea and fixed commit;
-2. write a RECA-owned requirement and domain contract;
-3. independently author prompts, schemas, code, and fixtures;
-4. avoid distinctive upstream wording, examples, and file-level copying;
-5. perform a license review before any future direct reuse.
+For any incorporated content, preserve at minimum:
 
-This is a project risk decision, not legal advice.
+- project and author attribution required by upstream;
+- CC BY-NC 4.0 license text and applicable notices;
+- upstream repository and fixed Commit/Tag;
+- copied file/path list;
+- RECA modification list and summary;
+- date and reviewer;
+- special restrictions and commercialization review flag;
+- location in `THIRD_PARTY_NOTICES.md`;
+- separation from the future RECA root-license coverage.
 
-### 4.2 “Prompt CI” is a design pattern, not a verified hosted CI guarantee
+For a whole or large Vendor/Fork, use the structure recommended in
+[Open Source Governance](../security/OPEN_SOURCE_GOVERNANCE.md), including
+`LICENSE`, applicable `NOTICE`, `UPSTREAM.md`, `ORIGINAL_COMMIT` and
+`MODIFICATIONS.md`.
 
-The fixed Codex repository has no root GitHub Actions workflow for these
-vendored tests; its root `.github` tree only contains funding metadata. The
-upstream workflow files and test harnesses are vendored under the skill for
-traceability and local execution.
+## 8. RECA architecture mapping
 
-It is accurate to say that ARS-Codex provides:
+Reuse does not mean importing upstream runtime assumptions unchanged.
 
-- local quality-gate runners;
-- deterministic validators;
-- schemas and manifests;
-- gold and held-out corpora;
-- mutation and fixture tests;
-- explicit degradation and parity records.
+| ARS-Codex asset/concept | Required RECA mapping |
+| --- | --- |
+| Workflow router | `StageResolver` using persisted ResearchProject state |
+| Material Passport | Read-only, database-regenerable `ProjectContextSnapshot` |
+| Human checkpoint | Appropriate `LIGHT_CONFIRMATION` or version-bound `FORMAL_APPROVAL` |
+| Role prompt | Prompt mode inside the single `ResearchOrchestrator` unless a later ADR decides otherwise |
+| Tool/action | Allowlisted Tool calling a tested Service |
+| Model result | Strict Schema, ModelInvocation audit and no direct business truth |
+| Statistical or figure output | Deterministic RECA tool result, never model calculation |
+| Citation/claim audit | EvidenceSpan/ClaimEvidenceLink validation and AuditResult |
+| Degradation | Persisted/user-visible DegradationRecord or equivalent audit state |
 
-It is not accurate to claim, from this snapshot alone, that all of those gates
-run automatically on every ARS-Codex pull request.
+The single orchestrator remains scheduled for M8. Reuse does not introduce free
+multi-Agent state, move business state into sessions, or advance Agent runtime
+before deterministic capabilities and approval contracts exist.
 
-### 4.3 RECA target design is ahead of current implementation
+## 9. Integration mode recommendations
 
-RECA's approved documents define objects such as `ResearchProject`,
-`Artifact`, `ApprovalRecord`, `EvidenceSpan`, `ClaimEvidenceLink`,
-`AnalysisRun`, and `AgentRun`. The current repository implementation is the M0
-foundation and does not yet implement those business models, tables, services,
-or Agent runtime.
+### Development-time assets
 
-Therefore:
+Prefer `RESEARCH_REFERENCE` or reviewed `SELECTIVE_COPY` for Prompt, workflow,
+schema and test assets. Keep copied files isolated enough to preserve attribution
+and make upstream comparison practical.
 
-- “RECA already defines these objects” is true at the design-contract level;
-- “RECA already has these objects in the running product” is false at M0;
-- ARS-derived runtime work must not bypass the approved M1–M8 milestone order.
+### Highly coupled workflow suite
 
-### 4.4 Agent-oriented implementation must remain late
+Prefer `FORK` or `VENDOR` if RECA needs a large coherent portion. Record upstream
+Commit, modifications, upgrade policy and license boundary.
 
-`ProjectContextSnapshot`, `StageResolver`, prompt modes, and the orchestrator
-may be designed early as schemas and tests. Their production implementation
-belongs with M8 after the required domain queries, approvals, deterministic
-tools, and evidence-chain services exist.
+### Runtime component
 
-For the current M1 entry point, the relevant ARS benefit is limited to:
+Requires a separate ADR covering exact package/service, data access, Tool and
+Service mapping, offline/degradation behavior, license packaging, upgrade and
+removal. No runtime integration exists today.
 
-- approval semantics;
-- append-only audit thinking;
-- artifact provenance;
-- failure-state vocabulary;
-- future contract test cases.
+### Clean-room mode
 
-## 5. RECA adoption matrix
+Use `CLEAN_ROOM_REIMPLEMENTATION` only when direct reuse creates unacceptable
+license, commercialization, coupling or maintenance risk. It is optional.
 
-| Upstream pattern | RECA adaptation | Implementation authority | Timing |
-|---|---|---|---|
-| Single root router | `StageResolver` using persisted project state and explicit intent | RECA query services and Agent policy | Design now; implement M8 |
-| Material Passport | Read-only `ProjectContextSnapshot`, regenerated from database facts | RECA query service | Design after core IDs stabilize; implement M8 |
-| Socratic scoping | Structured RQ scoping with evidence-bounded candidates and user approval | Research-question service and Prompt contract | M2/M3 UI and service; Agent orchestration M8 |
-| Workflow checkpoint | Version-bound `ApprovalRecord` plus service precondition | Approval service | M1 onward |
-| Claim/citation audit | `ClaimEvidenceLink`, deterministic existence/version checks, bounded semantic review | Evidence and manuscript services | M6/M7 |
-| Human-read scope | Evidence verification status and explicit review scope | Literature/evidence service | M3 |
-| Revision drift | Deterministic number, citation, qualifier, causal-word, and figure-version diff | Manuscript quality service | M6 |
-| Data-access declaration | Enforced server-side model-data policy and minimal payload builder | Model invocation service | M8 |
-| Degradation registry | Persisted/user-visible `DegradationRecord` or equivalent audit event | Adapter/service layer | M1 foundation, extended by module |
-| Quality-gate suite | RECA-owned schemas, fixtures, golden tests, injection tests, and version gates | RECA test suite and CI | Incrementally from M1 |
+## 10. Commercialization and public-deployment review gate
 
-### Adoption ledger
+Re-review is mandatory before:
 
-The ledger records RECA's independent adoption decisions. It must not be used
-to imply that upstream text, prompts, schemas, scripts, or fixtures were
-copied. New upstream reviews append a dated review entry; they do not silently
-replace the fixed commit above.
+- paid or commercial SaaS use;
+- sponsorship or competition terms that may affect NonCommercial analysis;
+- public hosted product deployment;
+- downloadable/public redistribution of copied content;
+- root-license publication covering a mixed repository;
+- transfer to an organization with different use objectives;
+- upgrading to a different upstream Commit or license.
 
-| Pattern | Adoption status | RECA authority | Milestone | Direct copy |
-|---|---|---|---|---|
-| Socratic scoping | Planned | Product/API contract | M2 | No |
-| Evidence verification and read scope | Planned | Domain model/API/test contract | M3 | No |
-| Revision drift audit | Planned | Manuscript/evidence/test contract | M6 | No |
-| Claim finding codes | Planned | Evidence/API/test contract | M7 | No |
-| Context snapshot and stage resolver | Planned | Agent architecture/API/tool contract | M8 | No |
-| Prompt manifest and contract gates | Planned | Agent/API/test contract | M8, with test scaffolding earlier | No |
-| Degradation disclosure | Planned | Adapter/service/security contract | M1 onward | No |
+The review may result in continued use, additional attribution, isolation,
+replacement, relicensing request or removal. This document does not prejudge the
+legal outcome.
 
-## 6. Priority recommendation
+## 11. Current incorporation confirmation
 
-### Now: M1-safe work
+As of 2026-07-31:
 
-1. Keep this source record and the corresponding ADR.
-2. Implement the approved M1 objects: Project, Artifact, Approval, Job, and
-   audit foundations.
-3. Add RECA-owned approval-bypass, project-isolation, immutable-artifact, and
-   degradation-state tests.
-4. Define only the minimum future Agent DTO interfaces needed to avoid blocking
-   later work; do not add an Agent runtime.
+```text
+ARS-Codex content copied into RECA: none
+ARS-Codex runtime dependency: no
+ARS-Codex Vendor directory: no
+ARS-Codex Fork integrated: no
+ARS-Codex Git Submodule: no
+THIRD_PARTY_NOTICES entry required by actual incorporation: no
+```
 
-### M2–M7
+The temporary external research clone was not added to RECA's source tree,
+build context, dependency graph, container images or runtime.
 
-1. Implement RQ versioning and Socratic-scoping outputs as normal service/API
-   contracts.
-2. Implement real literature, document, and evidence objects.
-3. Implement deterministic analysis, figure, manuscript, and evidence-chain
-   checks.
-4. Build golden fixtures from RECA-owned synthetic or licensed material.
+## 12. Sources
 
-### M8
-
-1. Implement `ProjectContextSnapshot`.
-2. Implement `StageResolver`.
-3. Register RECA-owned prompt modes and strict output schemas.
-4. Connect the single `ResearchOrchestrator` to allowlisted service tools.
-5. Run routing, injection, approval, schema, degradation, and consistency
-   golden tests before enabling side effects.
-
-## 7. Local verification record
-
-The following read-only checks were run against the fixed temporary snapshot:
-
-- `git rev-parse HEAD` returned
-  `f8d6b061efe98564a3f554c917fce66dcef6ca54`;
-- the adapter quality-gate runner returned `ok: true` for all six reported
-  groups: desktop plugin bundle, hook safety, manifest, reviewer fixture,
-  single root skill, and upstream lock;
-- the manifest reported adapter version `0.1.22`, 16 command routes, five
-  workflow templates, and upstream lock `828ef3b...`;
-- repository enumeration found 270 Python test files, 62 JSON Schema files,
-  and five workflow entry points. These are file counts, not proof that every
-  test passes.
-
-A supplementary full-test claim was deliberately not made:
-
-- the active Python environment did not contain `pytest` or `pypdf`;
-- direct `unittest` execution confirmed the revision-conservation tests and
-  most human-read tests, but PDF tests correctly degraded to `UNAVAILABLE`
-  without `pypdf`;
-- two permission tests call POSIX-only `os.geteuid()` and errored on Windows.
-
-These limits reinforce the decision to copy test ideas into RECA's own
-cross-platform test suite rather than importing the upstream harness.
-
-## 8. Overall confidence
-
-**High** for repository structure, versions, license, routing behavior, default
-runtime behavior, and the recommended non-runtime relationship. These facts
-were checked against the pinned source and executable adapter gates.
-
-**Medium** for the exact future benefit of individual patterns, because RECA is
-currently at M0 and the value will depend on its later domain implementation
-and competition constraints.
-
-## 9. Sources
-
-1. [ARS-Codex fixed repository snapshot](https://github.com/Imbad0202/academic-research-skills-codex/tree/f8d6b061efe98564a3f554c917fce66dcef6ca54)
-2. [ARS-Codex root skill and router](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md)
-3. [ARS-Codex suite manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/manifest.json)
-4. [ARS-Codex optional full-runtime manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/codex/full-runtime-manifest.json)
-5. [ARS-Codex license](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/LICENSE)
-6. [Creative Commons BY-NC 4.0 license deed](https://creativecommons.org/licenses/by-nc/4.0/)
+- [ARS-Codex repository at fixed Commit](https://github.com/Imbad0202/academic-research-skills-codex/tree/f8d6b061efe98564a3f554c917fce66dcef6ca54)
+- [ARS-Codex LICENSE](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/LICENSE)
+- [ARS-Codex root skill](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/SKILL.md)
+- [ARS-Codex suite manifest](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/skills/academic-research-suite/manifest.json)
+- [RECA ADR-001](../decisions/ADR-001-ARS-CODEX-USAGE.md)
+- [RECA Open Source Governance](../security/OPEN_SOURCE_GOVERNANCE.md)

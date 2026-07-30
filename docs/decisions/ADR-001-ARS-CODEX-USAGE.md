@@ -1,20 +1,26 @@
 <a id="adr-001-ars-codex-usage"></a>
 
-# ADR-001: Use ARS-Codex as a non-runtime research reference
+# ADR-001: Adopt ARS-Codex through licensed, effect-first reuse
 
 ADR ID: `ADR-001-ARS-CODEX-USAGE`
 
 ## Status
 
-Accepted
+Accepted, amended 2026-07-31
+
+Documentation status: `Conditional Approval`
+
+Decision version: `1.1.0`
 
 ## Date
 
-2026-07-30
+Original decision: 2026-07-30
+
+Current amendment: 2026-07-31
 
 ## Decision owners
 
-RECA Team
+RECA Team / Project Owner
 
 ## Scope
 
@@ -22,147 +28,228 @@ RECA 0.1 Competition Edition
 
 ## Source record
 
-[`docs/source-research/academic-research-skills-codex.md`](../source-research/academic-research-skills-codex.md)
+[Academic Research Skills Codex source record](../source-research/academic-research-skills-codex.md)
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-30 | Accepted | Limited ARS-Codex to non-runtime research reference and clean-room reimplementation |
+| 1.1.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Replaced blanket copy/runtime prohibitions with licensed effect-first reuse and explicit review gates |
 
 ## Context
 
-ARS-Codex packages mature academic-research workflow prompts, routing rules,
-human checkpoints, integrity protocols, schemas, deterministic validators, and
-test corpora. Its default product form is a Codex Skill and prompt-driven
-workflow suite, not a Web backend with database-owned domain state.
+ARS-Codex packages mature academic-research workflows, routing rules, human
+checkpoints, integrity protocols, schemas, deterministic validators, scripts and
+test materials. These assets may materially improve RECA's effect, development
+speed and demonstration stability.
 
-RECA requires persisted project facts, immutable artifacts, versioned domain
-objects, service-enforced authorization and approval, deterministic statistics,
-allowlisted Agent tools, and complete auditability. RECA is currently at M0:
-these business capabilities are approved in design documents but are not yet
-implemented in the running product.
+The original ADR selected research-only, independent reimplementation because
+the upstream snapshot uses CC BY-NC 4.0 and RECA's future distribution and
+commercialization path was uncertain. That decision protected provenance but
+made clean-room reimplementation the default even when licensed reuse could be
+more effective.
 
-The upstream snapshot uses CC BY-NC 4.0. It is not an unreviewed runtime or
-wholesale source-copy dependency for a competition project that may later be
-distributed or commercialized.
+The project owner has now declared the current intended use as personal
+development/use and school-competition demonstration. The recorded purpose
+status is:
+
+```text
+NONCOMMERCIAL_INTENT_DECLARED
+```
+
+This is an intent declaration, not a legal conclusion. This ADR does not claim
+that a school competition, prize, sponsorship, public repository, download,
+portfolio or hosted deployment is legally NonCommercial under CC BY-NC 4.0.
+
+RECA still requires database-owned business state, immutable artifacts,
+versioned domain objects, Service authorization, explicit high-risk approval,
+deterministic statistics, allowlisted Tool contracts and auditable failures.
+Reuse cannot replace those boundaries.
 
 ## Decision
 
-RECA uses the fixed ARS-Codex snapshot
-`f8d6b061efe98564a3f554c917fce66dcef6ca54` only as:
+RECA may reuse the fixed ARS-Codex snapshot
+`f8d6b061efe98564a3f554c917fce66dcef6ca54` through any reviewed mode supported
+by the open-source governance policy:
 
-1. a research source for academic-workflow decomposition;
-2. a reference for routing, checkpoint, integrity, and degradation concepts;
-3. a source of ideas for RECA-owned schemas, prompts, fixtures, and tests.
+```text
+PACKAGE_DEPENDENCY
+INDEPENDENT_SERVICE
+FORK
+VENDOR
+GIT_SUBMODULE
+SELECTIVE_COPY
+RESEARCH_REFERENCE
+CLEAN_ROOM_REIMPLEMENTATION
+```
 
-RECA will not:
+For ARS-Codex specifically, RECA may:
 
-1. add ARS-Codex as a runtime, build, package, container, or deployment
-   dependency;
-2. make Agent sessions or Material Passports the source of business truth;
-3. import multi-role prompts as independently stateful product Agents;
-4. let model output replace deterministic statistics, figures, hashes,
-   document parsing, or version checks;
-5. copy prompts, schemas, scripts, or test corpora wholesale;
-6. enable external cross-model content transfer without a separate provider,
-   data-classification, consent, and audit decision.
+1. selectively copy Prompts;
+2. copy workflow templates;
+3. copy scripts;
+4. copy test structures and test materials;
+5. Vendor the whole project;
+6. Fork and modify the project;
+7. use it as a development-time resource;
+8. make it a runtime component after a separate architecture decision.
 
-All adopted ideas must be independently expressed through RECA-owned domain
-models, services, policies, prompts, schemas, tests, and user interfaces.
+`CLEAN_ROOM_REIMPLEMENTATION` remains available when license, coupling,
+commercialization or maintenance risk makes direct reuse unattractive. It is no
+longer mandatory.
+
+## Mandatory prerequisites
+
+Before direct copying, Fork, Vendor, Submodule or runtime incorporation:
+
+1. verify the actual license text in the fixed upstream snapshot;
+2. preserve CC BY-NC 4.0 and all applicable upstream notices;
+3. preserve author and project attribution;
+4. record repository, Commit/Tag and copied paths;
+5. record modified paths and a modification summary;
+6. identify any differently licensed vendored assets, fixtures or upstream projects;
+7. keep upstream license coverage distinguishable from the future RECA root license;
+8. update `THIRD_PARTY_NOTICES.md` when copyrightable content is actually incorporated or distributed;
+9. do not describe upstream contributions as RECA's original work;
+10. re-review before commercialization, sponsorship changes, public product deployment or materially different distribution;
+11. record reviewer, review date, special restrictions and commercialization-review requirement;
+12. obtain a separate architecture decision before runtime integration.
+
+If the actual source has no license or an unknown source chain, it must not be
+copied. Mere public availability or ability to Fork is not permission.
+
+## Architecture constraints retained
+
+Licensed reuse does not automatically change RECA's architecture:
+
+- business truth remains in RECA's database, not Agent sessions or Material Passports;
+- `ProjectContextSnapshot` remains a read-only, database-regenerable minimal snapshot;
+- RECA retains one controlled `ResearchOrchestrator` rather than a free multi-Agent team;
+- formal Agent runtime remains scheduled for M8;
+- reuse does not automatically permit independently stateful Agents;
+- model output cannot replace deterministic statistics, figures, hashes, parsing or version checks;
+- writes remain mediated by Service, Schema, project authorization and the applicable confirmation level;
+- external cross-model transfer remains separately consented and audited;
+- failures and degradation remain user-visible.
+
+Copied material must be adapted to RECA's own:
+
+- ResearchProject and versioned domain state;
+- Artifact and DatasetVersion immutability;
+- `AUTO_ALLOWED`, `LIGHT_CONFIRMATION`, `FORMAL_APPROVAL` and `PROHIBITED` operation classes;
+- EvidenceSpan and ClaimEvidenceLink semantics;
+- Prompt manifest and ModelInvocation records;
+- allowlisted Agent Tool contracts;
+- deterministic calculation and audit requirements.
+
+Direct reuse cannot silently introduce a second source of truth or bypass these
+contracts.
+
+## Runtime integration decision
+
+ARS-Codex is not a runtime dependency at the time of this amendment. Runtime
+use is permitted in principle only after a separate ADR defines:
+
+- exact component and version;
+- integration mode and deployment boundary;
+- license/attribution packaging;
+- data sent to the component;
+- Service, Tool and approval mapping;
+- failure, offline and removal strategy;
+- testing and upgrade ownership.
+
+Permission to consider runtime use is not evidence that runtime integration has
+already occurred.
+
+## Adapter decision
+
+ARS-Codex integration is not required to use a complex Adapter solely because
+it is third-party. An Adapter is required when the selected component is an
+unstable/replaceable external API, needs multiple implementations or offline
+Mocking, would leak third-party objects into the domain layer, or creates a
+license/security boundary.
+
+A stable, small-interface library or copied isolated asset may be integrated
+directly when that is cheaper to test and maintain. Direct integration still
+cannot bypass Service, authorization, evidence, version or approval rules.
 
 ## Alternatives considered
 
-### Install ARS-Codex as a runtime dependency
+### Continue mandatory clean-room reimplementation
 
-- Benefit: fast access to its workflow prompts.
-- Rejected: product behavior would depend on a Codex installation and
-  conversation state rather than RECA's database, authorization, and API
-  contracts.
+Benefit: simplest separation from upstream expression and restrictive license
+risk.
 
-### Copy upstream prompts and scripts into RECA
+Rejected as the default because it discards mature assets, increases duplicated
+work and conflicts with the project's effect-first competition objective. It
+remains an optional mode.
 
-- Benefit: lower short-term authoring effort.
-- Rejected: CC BY-NC 4.0 obligations and future distribution uncertainty;
-  copied content would also bypass RECA's own contracts and cross-platform
-  testing requirements.
+### Copy without a provenance ledger
 
-### Use a free multi-Agent team as the product core
+Benefit: fastest short-term import.
 
-- Benefit: mirrors upstream role naming.
-- Rejected: duplicated context, conflicting state, hard-to-audit approvals,
-  and unstable demonstration behavior. RECA retains one orchestrator with
-  prompt modes and allowlisted tools.
+Rejected because it loses license, attribution, Commit and modification
+traceability and could misrepresent third-party contributions as original.
 
-### Store workflow state in an Agent session or Material Passport
+### Import the full Agent architecture unchanged
 
-- Benefit: simple conversational continuation.
-- Rejected: sessions are not durable, queryable, project-authorized business
-  state. RECA uses a read-only derived context snapshot instead.
+Benefit: minimal adaptation work.
 
-## Architectural mapping
+Rejected because license permission does not make session-owned state, free
+multi-Agent coordination or uncontrolled side effects compatible with RECA's
+database and evidence architecture.
 
-```text
-ARS-Codex concept
-    ↓ independent RECA specification
-RECA domain/service contract
-    ↓ authorization + approval + version checks
-Allowlisted deterministic tool or model task
-    ↓ schema validation + audit
-Persisted RECA result
-```
+### Permit runtime integration immediately
 
-The Material Passport concept maps only to a read-only,
-database-regenerable `ProjectContextSnapshot`. It must never become a second
-writeable source of truth.
+Benefit: fastest path to upstream behavior.
 
-The ARS router maps to a future `StageResolver` inside RECA's single
-`ResearchOrchestrator`. The resolver uses persisted project state and service
-queries, not conversation memory.
-
-## Timing
-
-- M1: implement Project, Artifact, Approval, Job, audit, isolation, and
-  degradation foundations. Do not implement the Agent runtime.
-- M2–M7: implement and test the deterministic research capabilities and
-  evidence chain.
-- M8: implement context snapshots, stage resolution, RECA-owned prompt
-  contracts, allowlisted tools, and the single orchestrator.
-
-Agent schemas may be designed earlier, but no Agent may execute formal side
-effects before the corresponding service and approval contracts are complete.
+Rejected because no exact runtime component, license package, data boundary,
+Tool mapping or removal strategy has been approved. A separate ADR is required.
 
 ## Consequences
 
 ### Positive
 
-- RECA gains mature workflow and test ideas without coupling product behavior
-  to a Codex installation or conversation session.
-- Database state, approvals, deterministic computation, and evidence lineage
-  remain authoritative.
-- Prompts and schemas evolve with RECA's own versioning and golden tests.
-- The upstream non-commercial license does not silently enter the runtime
-  dependency graph.
+- Mature Prompt, workflow, script and test assets can be reused when lawful.
+- Fork/Vendor/Selective Copy become legitimate engineering choices.
+- Development can prioritize product effect and demo stability.
+- Provenance and special-license boundaries remain explicit.
+- RECA's trusted research architecture remains authoritative.
 
-### Cost
+### Costs and risks
 
-- RECA independently authors and validates every adopted prompt, schema,
-  policy, and test fixture.
-- Pattern adoption waits for the relevant RECA domain object and service.
-- Upstream improvements require periodic manual review rather than automatic
-  package upgrades.
+- CC BY-NC 4.0 use requires purpose and distribution review.
+- Copied paths and modifications require ongoing maintenance.
+- Upstream assets may contain separately licensed material.
+- Commercialization or public productization may require replacement,
+  relicensing or removal.
+- Runtime use adds architecture, data-transfer and upgrade risk.
 
-### Risk controls
+## Current incorporation state
 
-- Pin every research review to a source commit.
-- Record each adopted pattern and its RECA owner.
-- Use clean-room wording and implementation.
-- Run similarity and license review before release if any direct reuse is
-  proposed.
-- Do not add ARS-Codex to `THIRD_PARTY_NOTICES.md` merely for idea-level
-  research; add the appropriate notice and license material if direct
-  copyrightable content is ever incorporated or distributed.
+At the time of this amendment:
+
+```text
+runtime_dependency: false
+vendored_into_reca: false
+fork_integrated: false
+submodule_added: false
+copied_content: none
+third_party_notice_entry_for_ars: not_required_yet
+```
+
+This task changes policy only. It does not copy ARS-Codex Prompt, code, workflow,
+script, schema, test or fixture content.
 
 ## Revisit triggers
 
-Revisit this ADR if:
+Revisit this ADR when:
 
-- RECA proposes direct code, prompt, schema, or fixture reuse;
-- the upstream license changes;
-- RECA's distribution or commercial model changes;
-- an officially supported API/runtime integration becomes necessary;
-- M8 requirements materially change the single-orchestrator architecture.
+- a specific path is proposed for copying;
+- a Fork, Vendor, Submodule or package/runtime dependency is proposed;
+- the upstream license or fixed source changes;
+- competition terms, prizes, sponsorship or distribution change;
+- RECA moves toward commercialization or public product deployment;
+- M8 architecture changes the single-orchestrator or Tool boundary;
+- legal/license review produces a different conclusion.
