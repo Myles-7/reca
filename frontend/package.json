@@ -12,7 +12,7 @@
     "generate-client": "node ../node_modules/@hey-api/openapi-ts/bin/run.js && biome format --write src/api/generated && node scripts/check-generated-client.mjs",
     "check-generated-client": "node scripts/check-generated-client.mjs",
     "test": "bun run test:e2e",
-    "test:shell": "bun run test:e2e:shell",
+    "test:shell": "node ../node_modules/@playwright/test/cli.js test -c playwright.shell.config.ts",
     "test:e2e": "bunx playwright test -c playwright.shell.config.ts",
     "test:e2e:shell": "bunx playwright test -c playwright.shell.config.ts",
     "test:ui": "bunx playwright test --ui"
