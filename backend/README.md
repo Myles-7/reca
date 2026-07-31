@@ -23,19 +23,23 @@ The only migration directory is `backend/app/alembic/`. The only Celery App is
 `app.core.celery:celery_app`; M0 registers only the side-effect-free
 `reca.health_ping` task.
 
-## Ownership
+## Current and planned ownership
 
-| Area | Responsibility |
-| --- | --- |
-| `domain/` | RECA policies and value objects; never third-party SDK models |
-| `modules/` | Domain-owned project, literature, data, analysis, manuscript, evidence and export modules |
-| `services/` | All business authority, transactions, state transitions, approval and provenance |
-| `repositories/` | Project-scoped persistence and pgvector queries |
-| `adapters/` | External APIs, multiple implementations, complex conversion, offline substitution and isolation boundaries |
-| `workers/` | Celery execution mechanics; Job/ProcessingRun remain database authority |
-| `tools/` | Deterministic tools and separate Agent Tool wrappers over Services |
-| `agents/` | M1 Prompt manifest governance and M8 single-Orchestrator runtime |
-| `shared/` | Small cross-cutting primitives only |
+Only `api/`, `core/`, `adapters/`, `workers/`, `cli/` and `alembic/` currently
+have tracked implementation. The other rows define milestone boundaries and do
+not claim that their directories or business flows already exist.
+
+| Area | Status | Responsibility |
+| --- | --- | --- |
+| `domain/` | Planned | RECA policies and value objects; never third-party SDK models, queue states or Agent sessions |
+| `modules/` | Planned | Domain-owned project, literature, data, analysis, manuscript, evidence and export modules; each capability has one owning module |
+| `services/` | Planned | All business authority, permissions, transactions, state transitions, approval, provenance, invalidation and audit |
+| `repositories/` | Planned | Project-scoped persistence and pgvector queries; external objects are converted before persistence |
+| `adapters/` | Present | External APIs, multiple implementations, complex conversion, offline substitution and isolation boundaries |
+| `workers/` | Present | Celery execution mechanics; Job/ProcessingRun remain database authority and tasks call Services |
+| `tools/` | Planned | Deterministic tools and separate Agent Tool wrappers over Services; no arbitrary Python, Shell or SQL |
+| `agents/` | Planned | M1 Prompt manifest governance and M8 single-Orchestrator runtime; SDK Session/Trace are not business state or audit |
+| `shared/` | Planned | Small cross-cutting IDs, time helpers, errors, DTO primitives and logging context only |
 
 ## Open-source integration
 
@@ -57,11 +61,8 @@ upgrading a third-party capability.
 ## Module guides
 
 - [Adapters](./app/adapters/README.md)
-- [Agents](./app/agents/README.md)
-- [Domain](./app/domain/README.md)
-- [Modules](./app/modules/README.md)
-- [Repositories](./app/repositories/README.md)
-- [Services](./app/services/README.md)
-- [Shared](./app/shared/README.md)
-- [Tools](./app/tools/README.md)
 - [Workers](./app/workers/README.md)
+
+Planned package boundaries remain in the ownership table until their milestone
+creates real implementation. Do not create README-only directories to mirror the
+future architecture.

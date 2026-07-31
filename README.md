@@ -353,8 +353,8 @@ reca/
 
 | 区域 | 导航 |
 | --- | --- |
-| 后端 | [Backend README](./backend/README.md)，包含各 `backend/app/` 模块说明索引 |
-| 前端 | [Frontend README](./frontend/README.md)，包含 API、App、Feature、Shared 与 Vendor integration 索引 |
+| 后端 | [Backend README](./backend/README.md)，包含当前模块和计划边界说明 |
+| 前端 | [Frontend README](./frontend/README.md)，包含 API、Feature、Shared 和计划接入边界说明 |
 | 测试 | [Unit](./tests/unit/README.md)、[Integration](./tests/integration/README.md)、[E2E](./tests/e2e/README.md)、[Golden](./tests/golden/README.md) |
 | 开源研究 | [Open-Source Integration Master Plan](./docs/source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md)，包含全部 26 个项目研究记录索引 |
 | 当前批准状态 | [M1 Documentation Baseline Approval](./docs/reports/M1_DOCUMENTATION_BASELINE_APPROVAL.md) |
