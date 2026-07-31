@@ -22,6 +22,20 @@ Commercialization review:
 
 ARS-Codex is not listed as incorporated content because this documentation task copied no ARS-Codex Prompt, code, script, test or other asset. Its research and reuse decision remains recorded in the corresponding source-research document and ADR.
 
+`Status` is restricted to the following vocabulary:
+
+```text
+ALREADY_INTEGRATED
+RESEARCHED
+PLANNED
+VENDORED
+SELECTIVELY_COPIED
+DIRECT_DEPENDENCY
+INDEPENDENT_SERVICE
+```
+
+Use `ALREADY_INTEGRATED` for the incorporation index when repository evidence exists, and use the more specific incorporation status when a future entry needs to distinguish `VENDORED`, `SELECTIVELY_COPIED`, `DIRECT_DEPENDENCY` or `INDEPENDENT_SERVICE`. `Integration mode` may use the architecture decision vocabulary and is not a status. Research records and recommendations alone remain `RESEARCHED` or `PLANNED`.
+
 ## Incorporation status index
 
 `ALREADY_INTEGRATED` means that repository evidence exists for a package,
@@ -81,7 +95,7 @@ The production application must not depend on the local `upstream-lab` directory
 
 | Image | Fixed version | License verification status | RECA usage |
 | --- | --- | --- | --- |
-| `pgvector/pgvector` | `0.8.2-pg17` | Verified: PostgreSQL License plus pgvector MIT | PostgreSQL with the `vector` extension installed during empty-volume initialization. |
+| `pgvector/pgvector` | `0.8.2-pg17` | Verified: PostgreSQL License | PostgreSQL with the `vector` extension installed during empty-volume initialization. |
 | `valkey/valkey` | `8.1.7-alpine` | Verified: BSD-3-Clause | Internal cache and future task-broker persistence foundation. |
 | `minio/minio` | `RELEASE.2025-04-22T22-12-26Z` | Verified: AGPL-3.0-only; deployment use requires project review before distribution | Internal S3-compatible object-storage foundation. |
 | `lfoppiano/grobid` | `0.8.2` | Verified: Apache-2.0 upstream GROBID; image packaging provenance recorded | Internal scholarly-document processing service foundation; no parsing workflow is enabled in M0-02. |

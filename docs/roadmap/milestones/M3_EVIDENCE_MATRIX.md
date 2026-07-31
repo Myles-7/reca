@@ -24,6 +24,13 @@
 
 本里程碑允许选择成熟开源实现，不要求先自行重写或预建复杂 Adapter。依赖、服务、Fork、Vendor、Submodule 或选择性复制必须在同一 PR 完成许可证核验、上游 Commit/Tag、归属和修改记录；无许可证或来源不明内容不得复制。企业生产强化不阻塞 Competition Core，Competition Edition 最小护栏仍必须满足。实际复制 ARS-Codex 内容需要单独记录许可证、归属和架构决定，且不提前 M8 或改变单总控 Agent 边界。
 
+### M3 开源接入步骤
+
+- `Research`：读取 PaperQA2、ASReview、pgvector/pgvector-python 和 TanStack Table 研究记录及 ADR-003/ADR-006。
+- `Spike`：比较原生检索与 PaperQA2 候选证据效果，验证 ASReview 固定 Seed/反馈排序、project-scoped pgvector 精确检索和文献矩阵交互。
+- `Decision`：PaperQA2 仅选择性复用且输出 CandidateEvidence；ASReview 仅提供筛选建议；pgvector 索引/过滤和 UI 边界由 RECA 决定。
+- `Integration`：候选必须经页码和原文验证才能形成 EvidenceSpan；排序不得写 LiteratureDecision；同一 PR 完成来源、测试、Notices 和回退。
+
 ## 里程碑契约覆盖索引
 
 | 必需内容 | 本文件权威位置 |

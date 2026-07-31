@@ -33,6 +33,23 @@
 - 历史材料是否明确为非权威；
 - 移动后是否仍能从入口到达。
 
+对于开源集成任务，还必须按顺序完成：
+
+```text
+Read research record
+→ Verify pinned commit
+→ Verify license
+→ Run minimal spike
+→ Compare with fallback
+→ Choose boundary
+→ Implement
+→ Run upstream-adapted tests
+→ Update attribution
+→ Record limitations
+```
+
+对应来源研究和 ADR 是任务输入，不是“已集成”证明。Spike 必须使用目标环境和主案例验证效果、失败、资源和离线能力；只有边界与许可证决策完成后才修改依赖、Compose、Vendor 或运行时。
+
 ## 2. 范围控制
 
 最小改动不是最少文件，而是完成请求所需的最小语义范围。
@@ -98,6 +115,8 @@
 - 正式 Agent 不得早于 M8。
 
 只读、扫描、候选生成和预览不因使用 AI 或 Tool 而自动升级为正式审批。复用第三方能力前必须核验许可证、固定上游版本、建立来源与归属记录；无需替换、隔离或复杂转换的小型稳定库不强制增加 Adapter。
+
+选择边界时记录直接库、Provider/Adapter、独立/隔离服务、选择性 Vendor、资源快照、设计参考或延期的理由。实现完成后必须同步固定版本、实现元数据、输出转换、回退、上游改造测试来源、`THIRD_PARTY_NOTICES.md`（仅实际纳入时）和已知限制。
 
 ## 5. 工作树保护
 

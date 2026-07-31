@@ -24,6 +24,13 @@
 
 本里程碑允许选择成熟开源实现，不要求先自行重写或预建复杂 Adapter。依赖、服务、Fork、Vendor、Submodule 或选择性复制必须在同一 PR 完成许可证核验、上游 Commit/Tag、归属和修改记录；无许可证或来源不明内容不得复制。企业生产强化不阻塞 Competition Core，Competition Edition 最小护栏仍必须满足。实际复制 ARS-Codex 内容需要单独记录许可证、归属和架构决定，且不提前 M8 或改变单总控 Agent 边界。
 
+### M5 开源接入步骤
+
+- `Research`：读取 SciPy、statsmodels 和 Matplotlib 研究记录及 ADR-004。
+- `Spike`：用独立基准验证数值、Warning、NaN、前提失败、回归结果字段，以及五类图表的 Headless/中文字体/PNG-SVG-PDF 输出。
+- `Decision`：SciPy/statsmodels 提供结构化确定性数值，Matplotlib 提供固定模板渲染；文本 Summary 和图形对象不成为业务权威。
+- `Integration`：正式数字只写入 AnalysisResult，图表绑定相同输入版本和参数；记录引擎、字体、样式、配置与许可证。
+
 ## 里程碑契约覆盖索引
 
 | 必需内容 | 本文件权威位置 |

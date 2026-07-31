@@ -134,6 +134,17 @@ Windows 的默认 Playwright 入口存在 `M0-ISSUE-0009` LOW 风险；当前使
 - 表格、对话框、图谱和阅读器满足基本辅助技术语义；
 - 文本不得与按钮、卡片或相邻内容重叠。
 
+## 11.1 第三方前端集成
+
+PDF.js、TanStack Table、React Flow、引用处理器或其他前端包接入前，必须读取研究记录和 ADR，核验固定版本/许可证，运行包含移动端、键盘、失败和大数据量的最小 Spike，并与现有简单 viewer/table/tree/formatter 回退比较。
+
+- 第三方组件只呈现后端授权数据，不保存正式业务事实；
+- package 对象、客户端选择和图节点/边不得进入公共领域契约；
+- generated client 与 API adapter 边界保持不变；
+- Worker、字体、样式、locale 和复制的示例/测试资产分别核验许可证；
+- 上游改造测试保留来源，集成 PR 更新归属、限制和降级 UI；
+- Zotero 和 Zotero Web Library 默认只作 UX/交换格式参考，不复制 AGPL 源码或资产。
+
 ## 12. 前端完成检查
 
 - Bun 命令通过；

@@ -31,6 +31,59 @@
 
 真实 Secret、上传执行、路径穿越、原始覆盖、Agent 任意执行、模型正式统计、虚构 EvidenceSpan、可达 Critical 供应链风险和 required CI 规避必须阻断。已披露 LOW、与主演示无关且不可达的 MEDIUM、缺少完整 SBOM 或企业安全平台只产生警告，不得伪装为零风险。
 
+## 第三方科研能力验收矩阵
+
+以下项目只有在实际进入依赖、服务、Vendor、选择性复制或资源快照后才执行对应验收；`RESEARCHED` 或 `PLANNED` 不等于已接入。
+
+| 验收维度 | 每个实际引入项目的最低证据 |
+| --- | --- |
+| Pinned version | 包版本、镜像版本/摘要、资源 Commit 或 Vendor 上游 Commit 与锁文件、Compose、来源记录一致 |
+| License and attribution | 实际许可证文本已核验；LICENSE/NOTICE/文件级 rights、版权和修改记录位于规定位置 |
+| Compatibility | 当前运行时、ORM、数据库扩展、浏览器或服务协议通过最小兼容 Spike |
+| Main demo effect | 对对应 Competition Core/P0-Full 场景产生可复核的效果提升，不以“能安装”代替验收 |
+| Failure behavior | 超时、损坏输入、无效响应、资源不足和服务不可用返回稳定失败或可见降级 |
+| Resource usage | 记录 CPU、内存、磁盘、启动时间和主演示数据规模下的上界或观测值 |
+| Offline/Recorded behavior | 外网依赖有 Recorded/离线 fixture、缓存或明确的功能降级；不得用随机 Mock 冒充真实结果 |
+| Output schema conversion | 第三方对象转换为 Provider-neutral RECA Schema；未知字段、无效输出和版本不兼容被拒绝 |
+| Project isolation | 查询、缓存、向量、Artifact、日志和导出均不能跨 `project_id` |
+| Reproducibility | 记录引擎、版本、上游 Commit、配置哈希、规则/Prompt/Schema 版本和输入 Artifact 哈希 |
+
+允许改造上游测试、fixture 和黄金材料，但必须记录来源、固定 Commit、许可证、复制路径和 RECA 修改；上游测试通过不能替代 RECA 领域边界、项目隔离和降级测试。
+
+## 第三方项目专项验收
+
+### GROBID
+
+固定可授权 PDF 语料至少覆盖双栏、中文、页码、参考文献和损坏文件。验证原始 TEI 可追溯，TEI 到 `DocumentPage`、`DocumentChunk` 和引用候选的转换稳定；GROBID 不可用或输出不可验证时走显式 pypdf 回退，降低定位置信度且不生成虚假坐标。
+
+### PaperQA2 候选证据能力
+
+测量 Evidence Recall 和 Citation accuracy，并覆盖无证据拒答、冲突证据、重复索引和跨项目负例。任何 PaperQA 输出只能是候选；只有解析到不可变 PDF 版本、页码和原文文本并通过 RECA 验证后才可形成 `EvidenceSpan`。
+
+### ASReview 排序建议
+
+固定 Seed、训练标签和模型配置，验证初始排序、用户反馈后的可重复更新和无模型回退。ASReview 只能返回筛选建议，不得直接创建、修改或批准 `LiteratureDecision`。
+
+### Pandera 数据质量
+
+验证规则问题检出、lazy `FailureCase` 到 `DataQualityIssue` 的字段转换、误报样本、规则集版本、输入不可变和主演示数据规模下的性能。Great Expectations 参考材料不得形成第二套 P0 运行时结果权威。
+
+### SciPy 与 statsmodels
+
+使用独立基准值验证数值、容差、Warning、NaN/有效样本量和前提失败。`statsmodels` 文本 `Summary` 不得被解析为 `AnalysisResult`；正式数字必须来自结构化返回值和已批准的 AnalysisPlan。
+
+### Matplotlib
+
+验证 Figure 数据与 `AnalysisResult` 一致、参数与样式清单一致、PNG/SVG/PDF 输出、中文字体、Headless 后端和重复渲染元数据。字体及其许可证必须随实际打包范围核验。
+
+### Citation stack
+
+固定合法 CSL 样式或确定性模板，覆盖 GB/T 7714、APA、中英文、同年、多作者和 DOI。渲染器只格式化已验证元数据；citeproc-js 若被选择，必须先通过 CPAL/AGPL 隔离或替代决策和对应许可证验收。
+
+### OpenAI Agents SDK 与 ARS-Codex
+
+验证 Tool approval/恢复、Guardrail、三层数据访问、trace 脱敏、usage 到 `ModelInvocation` 的记录，以及 Scoping、Checkpoint、Claim verification、Prompt Schema 和 Policy Marker。SDK Session/Trace 不得替代 ResearchProject/AuditLog；ARS 资产必须固定来源、保留 CC BY-NC 4.0 归属与隔离，并保持单总控 Agent 和 M8 接入边界。
+
 ---
 
 ## 18. Agent 工具测试

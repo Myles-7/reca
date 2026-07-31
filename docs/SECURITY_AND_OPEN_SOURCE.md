@@ -23,7 +23,7 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 文档版本 | 1.4.0 |
+| 文档版本 | 1.5.0 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
 | 文档状态 | Conditional Approval |
 | 默认部署场景 | `DEMO_LOCAL` |
@@ -39,6 +39,7 @@
 | 1.2.0 | 2026-07-30 | Conditional Approval | 同步根许可证待决状态和数据访问三层语义 |
 | 1.3.0 | 2026-07-31 | Conditional Approval | 拆分控制、文件/模型/Agent、运维和开源治理规范 |
 | 1.4.0 | 2026-07-31 | Conditional Approval | 建立 competition-first 安全分级和 effect-first 开源复用政策 |
+| 1.5.0 | 2026-07-31 | Conditional Approval | 增加研究项目许可证分类索引、实际引入验收和 Notices 状态准确性要求 |
 
 ## 1. 适用场景与非目标
 
@@ -202,7 +203,8 @@ CLEAN_ROOM_REIMPLEMENTATION
 - 来源不明内容不得进入正式仓库；
 - 用途变化、商业化或公开产品部署前重新审查特殊许可证。
 
-完整规则见 [OPEN_SOURCE_GOVERNANCE.md](./security/OPEN_SOURCE_GOVERNANCE.md)。
+完整规则及全部研究项目的许可证分类矩阵见
+[OPEN_SOURCE_GOVERNANCE.md](./security/OPEN_SOURCE_GOVERNANCE.md)。研究记录不等于实际复制或依赖；`THIRD_PARTY_NOTICES.md` 必须描述仓库中的实际状态。
 
 ## 8. Adapter 总则
 
@@ -244,11 +246,11 @@ PENDING_GOVERNANCE_DECISION
 自动决定 RECA 根许可证。未来根许可证只覆盖 RECA 有权授权的内容，不能
 覆盖第三方文件自身许可证。
 
-## 11. 变更与阶段边界
+## 11. 变更与文档边界
 
-本阶段只重写核心政策、ADR 和来源记录。产品需求、数据模型、API、Tool、
-测试门禁和路线图的详细对齐属于阶段 3。出现暂时差异时，以本入口和四份
-安全子文档为安全政策权威，但不得自行改变现有实现或契约。
+本入口与四份安全子文档是安全与开源政策权威；产品、数据、契约、测试和
+路线图只引用并验收这些规则，不得建立更宽松的平行许可证解释。研究、
+计划、Spike、依赖声明和实际复制必须使用不同状态，且不得自行改变现有实现或稳定契约。
 
 任何后续政策变更必须同步唯一完整定义、入口摘要、测试门禁和路线图；
 不得静默选择根许可证、降低科研真实性或规避 M0 回归基线。

@@ -24,6 +24,13 @@
 
 本里程碑允许选择成熟开源实现，不要求先自行重写或预建复杂 Adapter。依赖、服务、Fork、Vendor、Submodule 或选择性复制必须在同一 PR 完成许可证核验、上游 Commit/Tag、归属和修改记录；无许可证或来源不明内容不得复制。企业生产强化不阻塞 Competition Core，Competition Edition 最小护栏仍必须满足。实际复制 ARS-Codex 内容需要单独记录许可证、归属和架构决定，且不提前 M8 或改变单总控 Agent 边界。
 
+### M6 开源接入步骤
+
+- `Research`：读取 python-docx、CSL Styles、citeproc-js、Zotero 和 ADR-005。
+- `Spike`：验证 python-docx 加受控 OOXML 的修订/域/引用边界，最小 GB/T/APA 样式集，Citation engine 的隔离/替代方案和 Zotero 格式往返。
+- `Decision`：原 DOCX 永不覆盖；CSL 按文件 rights 快照；citeproc-js 许可证未决时使用确定性简化格式器或替代处理器；Zotero 仅作交换/UX 兼容。
+- `Integration`：记录样式 Commit/hash/rights、处理器和依赖版本；引用渲染不得证明来源有效，任何派生 DOCX 创建新 Artifact/版本。
+
 ## 里程碑契约覆盖索引
 
 | 必需内容 | 本文件权威位置 |

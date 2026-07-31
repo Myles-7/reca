@@ -26,6 +26,23 @@
 
 阶段 8 迁移已完成。本文件与入口文档共同构成测试与验收正式开发基准；发生冲突时视为文档缺陷，不得自行猜测或降低标准。
 
+## 第三方科研能力黄金指标
+
+第三方实现不因上游自带测试而免除 RECA 黄金集。至少维护以下可比较指标或判定：
+
+| 能力 | 黄金指标或判定 |
+| --- | --- |
+| GROBID | 双栏/中文文本覆盖、页码和参考文献转换、损坏文件失败、pypdf 回退不伪造坐标 |
+| PaperQA2 | Evidence Recall、Citation accuracy、无证据拒答、冲突证据披露、候选到 EvidenceSpan 验证通过率 |
+| ASReview | 固定 Seed 排序可复现、反馈后排序变化合理、零自动写入 LiteratureDecision |
+| Pandera | 预期问题检出率、FailureCase 转换完整性、误报记录、规则集版本一致 |
+| SciPy/statsmodels | 独立基准数值、方法级容差、Warning/NaN/前提失败符合策略 |
+| Matplotlib | 输入数据和图形数据一致、参数清单一致、格式可打开、中文字体与 Headless 渲染通过 |
+| Citation | GB/T 7714、APA、中英文、同年、多作者和 DOI 固定样例与预期文本一致 |
+| Agents SDK/ARS | Tool approval、Guardrail、数据访问、trace 脱敏、Scoping/Checkpoint/Claim verification 和 Prompt Schema 判定 |
+
+黄金 fixture 必须是合成、获授权或可合法再分发材料，并记录引擎版本、上游 Commit、配置、规则/Prompt/Schema 版本。许可证受限材料只保存允许的派生断言或本地获取说明。
+
 ---
 
 ## 10. 黄金测试集总则

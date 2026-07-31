@@ -181,6 +181,17 @@ docker compose exec -T worker celery -A app.core.celery:celery_app inspect ping
 
 ## 9. 第三方能力与外部服务
 
+每个后端开源集成任务先读取对应 source-research 与 ADR，核验固定 Commit/Tag 和实际许可证，再用最小 Spike 比较真实组件与回退。边界选择后才实现，并以 RECA Service、Provider-neutral Schema、项目隔离和实现元数据为验收中心。
+
+后端 PR 必须说明：
+
+- 直接依赖、Provider/Adapter、独立服务或 Vendor 的选择理由；
+- 上游输出如何转换、校验并拒绝无效版本；
+- Job/ProcessingRun 如何保持业务状态权威；
+- 超时、重试、取消、幂等、资源不足和服务不可用如何降级；
+- 改造的上游测试、fixture 或代码路径及其许可证/归属；
+- 回退方案、已知限制、版本和配置如何进入运行记录或 ReproPackage。
+
 按替换需求、领域污染、离线 Mock、许可证或安全边界与维护成本选择直接库、Protocol/Adapter 或隔离服务。以下复杂边界继续通过转换层隔离：
 
 - OpenAlex 响应转换为内部 Schema；

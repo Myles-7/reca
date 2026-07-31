@@ -24,6 +24,13 @@
 
 本里程碑允许选择成熟开源实现，不要求先自行重写或预建复杂 Adapter。依赖、服务、Fork、Vendor、Submodule 或选择性复制必须在同一 PR 完成许可证核验、上游 Commit/Tag、归属和修改记录；无许可证或来源不明内容不得复制。企业生产强化不阻塞 Competition Core，Competition Edition 最小护栏仍必须满足。实际复制 ARS-Codex 内容需要单独记录许可证、归属和架构决定，且不提前 M8 或改变单总控 Agent 边界。
 
+### M8 开源接入步骤
+
+- `Research`：读取 OpenAI Agents SDK、ARS-Codex、PaperQA2/ASReview Tool 边界和 ADR-001/ADR-007。
+- `Spike`：验证单 Orchestrator、Function Tool 白名单、审批暂停/恢复、Guardrail、usage、trace 脱敏，以及 ARS Prompt/Workflow/Test 对 RECA Schema 的质量增益。
+- `Decision`：SDK Session/Trace 不替代 Project/Audit；不采用自由多 Agent或 P0 Handoff；ARS 选择性/完整复用需固定路径、归属、隔离和商业化复审。
+- `Integration`：PaperQA/ASReview 能力只通过 RECA Service 和 Provider-neutral Tool；Prompt manifest、ToolCall、ModelInvocation 和 AgentRun 保持权威，正式运行时仍从 M8 开始。
+
 ## 里程碑契约覆盖索引
 
 | 必需内容 | 本文件权威位置 |

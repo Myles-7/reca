@@ -28,7 +28,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 文档名称 | `TEST_AND_ACCEPTANCE.md` |
-| 文档版本 | 1.4.0 |
+| 文档版本 | 1.5.0 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
 | 文档状态 | Conditional Approval |
 | 文档类型 | 测试权威入口、核心原则、缺陷等级、完成定义与门禁索引 |
@@ -48,6 +48,7 @@
 | 1.2.0 | 2026-07-30 | Conditional Approval | 建立 M0 Regression Baseline、MANU-P0-018 AC 与真实 Bun 命令约束 | RECA Team |
 | 1.3.0 | 2026-07-31 | Conditional Approval | 拆分测试策略、黄金指标、契约安全测试和 E2E 验收；入口保留核心决策与索引 | RECA Team |
 | 1.4.0 | 2026-07-31 | Conditional Approval | 同步校赛最小安全护栏、开源来源验收和按风险分层的审批测试 | RECA Team |
+| 1.5.0 | 2026-07-31 | Conditional Approval | 建立第三方科研能力验收矩阵并同步运行效果、失败、离线、隔离和复现要求 | RECA Team |
 
 ---
 
@@ -188,6 +189,23 @@ RECA 的完成标准不是“页面能够打开”或“模型能够回答”，
 * 全新 Docker 环境可启动；
 * 演示项目可恢复；
 * 录屏内容与真实产品能力一致。
+
+## 3.7 第三方科研能力可验收
+
+每个实际引入的第三方项目必须在其集成 PR 中证明：
+
+* 固定版本、许可证和归属与实际制品一致；
+* 当前 Python、Bun/Node、数据库或服务环境兼容；
+* 主演示效果达到对应里程碑要求；
+* 超时、无效输出、资源不足和服务不可用不会伪装为成功；
+* 存在可重复的 Offline 或 Recorded 路径，或明确说明为何不适用；
+* 第三方输出经过 RECA Schema/转换层，不直接成为业务事实；
+* 项目隔离、权限、审批和原始不可变规则仍成立；
+* ReproPackage 或运行记录可追溯版本、配置、规则、Prompt 和上游 Commit。
+
+完整矩阵和项目专项用例由
+[CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md](./testing/CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md)
+定义。研究记录、推荐或计划状态本身不触发运行时验收，也不得被写成已经集成。
 
 ---
 

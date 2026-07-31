@@ -1,7 +1,7 @@
 # Open Source Governance
 
 - 文档名称：Open Source Governance
-- 文档版本：1.1.0
+- 文档版本：1.2.0
 - 所属入口文档：[SECURITY_AND_OPEN_SOURCE.md](../SECURITY_AND_OPEN_SOURCE.md)
 - 文档状态：Conditional Approval
 - 最后更新时间：2026-07-31
@@ -13,6 +13,7 @@
 | --- | --- | --- | --- |
 | 1.0.0 | 2026-07-31 | Conditional Approval | 文档拆分后的依赖、许可证、Vendor、来源和发布治理基线 |
 | 1.1.0 | 2026-07-31 | Conditional Approval | 采用 effect-first 复用模式、保守许可证分类和条件式 Adapter 政策 |
+| 1.2.0 | 2026-07-31 | Conditional Approval | 增加全部研究项目的许可证分类矩阵、隔离条件和实际状态边界 |
 
 ## 权威范围
 
@@ -182,6 +183,41 @@ reviewed_at: ""
 
 无法确认作者、仓库、Commit 或来源链的内容不得进入正式仓库。不得从不明
 网盘、聊天粘贴、截图反推或无来源压缩包复制。
+
+### 4.8 研究项目许可证分类矩阵
+
+下表基于已固定的研究 Commit 或当前实际采用版本，用于选择工程边界，不构成法律意见。实际引入时仍须重新读取对应版本的许可证、NOTICE、文件级 rights 和打包内容；`RESEARCHED`/`PLANNED` 不代表已复制、安装或分发。
+
+| 项目 | 当前分类 | 默认治理边界 | 采用前必须确认 |
+| --- | --- | --- | --- |
+| Full Stack FastAPI Template | `PERMISSIVE_REUSE_ALLOWED`（MIT） | 已选择性内化的 M0 基线；不整体覆盖 RECA 特化树 | 保留 MIT snapshot、来源 Commit 和修改事实 |
+| Celery | `PERMISSIVE_REUSE_ALLOWED`（BSD-3-Clause；文档另有 CC BY-SA） | 直接依赖；业务状态仍在 Job/ProcessingRun | 实际包及复制文档的不同许可证 |
+| Valkey | `PERMISSIVE_REUSE_ALLOWED`（BSD-3-Clause，含文件级第三方许可） | 独立服务；仅作 broker/cache/短期状态 | 镜像内容、文件级 notices 和固定版本 |
+| pgvector | `PERMISSIVE_REUSE_ALLOWED`（PostgreSQL License） | PostgreSQL 扩展独立服务边界 | 扩展/镜像版本、PostgreSQL License 归属 |
+| pgvector-python | `PERMISSIVE_REUSE_ALLOWED`（MIT） | 计划直接依赖；不得泄漏 ORM 对象到公共契约 | 实际包版本和兼容性 Spike |
+| PyAlex | `PERMISSIVE_REUSE_ALLOWED`（MIT） | 直接依赖加轻量 Provider | OpenAlex 服务条款、限流与原始响应权利另审 |
+| GROBID | `PERMISSIVE_REUSE_ALLOWED`（Apache-2.0） | 独立服务；TEI 经 RECA 转换 | 镜像来源、NOTICE、模型/资源和 PDF 权利 |
+| grobid-client-python | `PERMISSIVE_REUSE_ALLOWED`（Apache-2.0） | 先做 client 与自研 HTTP Spike；选择性 Vendor 需逐路径登记 | Vendor 路径、NOTICE、修改和文件系统边界 |
+| PDF.js | `PERMISSIVE_REUSE_ALLOWED`（Apache-2.0） | 前端直接依赖；只负责显示和交互 | 包/worker 同版本、NOTICE、字体/示例资产 |
+| PaperQA2 | `PERMISSIVE_REUSE_ALLOWED`（Apache-2.0） | 可选择性 Vendor 检索、Prompt 或测试；只产出候选证据 | 精确复制路径、NOTICE、修改及依赖许可证 |
+| ASReview | `PERMISSIVE_REUSE_ALLOWED`（Apache-2.0） | Provider/算法边界；只给排序建议 | 是否复制 Web/素材、模型保存与依赖许可证 |
+| Pandera | `PERMISSIVE_REUSE_ALLOWED`（MIT） | P0 唯一主要数据质量运行时 | 实际 extras、依赖和版本兼容 |
+| SciPy | `PERMISSIVE_REUSE_ALLOWED`（BSD-3-Clause，含 bundled licenses） | 确定性统计直接依赖 | wheel/二进制捆绑许可证和运行平台 |
+| statsmodels | `PERMISSIVE_REUSE_ALLOWED`（BSD-3-Clause） | 结构化数值直接依赖；Summary 非业务结果 | 依赖、版本和结果字段兼容 |
+| Matplotlib | `CUSTOM_LICENSE_REVIEW`（Matplotlib 自定义许可及 bundled licenses/fonts） | 直接依赖可行；字体和打包资源单独登记 | 实际 wheel、字体、样式和输出分发义务 |
+| DVC | `PERMISSIVE_REUSE_ALLOWED`（Apache-2.0） | Development-only/设计参考，不替代 DatasetVersion | 若真实安装，记录 CLI、远端和传递依赖 |
+| Great Expectations | `PERMISSIVE_REUSE_ALLOWED`（Apache-2.0） | Design/test reference；不成为第二套 P0 运行时 | 复制测试/文案时逐路径登记 |
+| python-docx | `PERMISSIVE_REUSE_ALLOWED`（MIT） | 直接依赖；受控 OOXML 增强；原 DOCX 不覆盖 | lxml 等依赖许可证和 OOXML fixture 权利 |
+| CSL Styles | `COPYLEFT_REVIEW_REQUIRED`（仓库 CC BY-SA 3.0；文件 `<rights>` 可能不同） | 只快照最小 GB/T/APA 集合 | 每个 style/locale 的 Commit、hash、作者、rights 和修改共享义务 |
+| citeproc-js | `CUSTOM_LICENSE_REVIEW`（CPAL/AGPL 元数据冲突未解决） | 默认延期；采用时必须隔离服务/worker或选择替代处理器 | 固定版本实际文本、网络/分发义务和替代 ADR |
+| TanStack Table | `PERMISSIVE_REUSE_ALLOWED`（MIT） | 已存在直接依赖；选择状态不是业务决定 | 包版本、归属和功能里程碑状态 |
+| xyflow / React Flow | `PERMISSIVE_REUSE_ALLOWED`（MIT） | 计划直接依赖；后端证据图是权威 | 包版本、归属和大型图性能 |
+| Zotero | `COPYLEFT_REVIEW_REQUIRED`（AGPL-3.0 及第三方 notices） | 默认 `DESIGN_REFERENCE`；不复制桌面源码 | 交换格式/数据权利与任何源码复制义务 |
+| Zotero Web Library | `COPYLEFT_REVIEW_REQUIRED`（AGPL-3.0） | 默认 `DESIGN_REFERENCE`；独立实现 UX | 不复制源码、样式或资产；如改变策略需单独审查 |
+| OpenAI Agents SDK | `PERMISSIVE_REUSE_ALLOWED`（MIT） | M8 直接依赖候选；Session/Trace 非业务权威 | 实际版本、托管/MCP 工具条款和 trace 数据范围 |
+| ARS-Codex | `NONCOMMERCIAL_RESTRICTION`（CC BY-NC 4.0） | 条件式选择性或完整 Vendor；当前未复制 | `NONCOMMERCIAL_INTENT_DECLARED`、逐路径归属/隔离及商业化复审 |
+
+任何项目固定版本出现 `NO_LICENSE_DO_NOT_COPY` 或来源无法验证时，以该分类覆盖本表中的研究结论并停止复制。研究记录可以继续用于比较，但 Notices 不得制造已集成状态。
 
 ## 5. 宽松许可证复用
 

@@ -24,6 +24,13 @@
 
 本里程碑允许选择成熟开源实现，不要求先自行重写或预建复杂 Adapter。依赖、服务、Fork、Vendor、Submodule 或选择性复制必须在同一 PR 完成许可证核验、上游 Commit/Tag、归属和修改记录；无许可证或来源不明内容不得复制。企业生产强化不阻塞 Competition Core，Competition Edition 最小护栏仍必须满足。实际复制 ARS-Codex 内容需要单独记录许可证、归属和架构决定，且不提前 M8 或改变单总控 Agent 边界。
 
+### M7 开源接入步骤
+
+- `Research`：读取 xyflow/React Flow、ReproPackage 实现元数据和相关 ADR-006/ADR-008。
+- `Spike`：验证授权图投影、较大图性能、失效/拒绝边显示和表格回退，并生成包含依赖、镜像、上游/Vendor Commit、Prompt、规则、统计引擎和 CSL 标识的 manifest。
+- `Decision`：后端 evidence graph/ClaimEvidenceLink 是权威；React Flow 仅可视化，ReproPackage manifest 承载实现可复现信息。
+- `Integration`：不得从客户端节点/边反写事实；导出同时验证第三方许可证、缺失项、降级和 Artifact 哈希。
+
 ## 里程碑契约覆盖索引
 
 | 必需内容 | 本文件权威位置 |

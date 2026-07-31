@@ -240,6 +240,17 @@ class LiteratureProvider(Protocol):
 
 成熟稳定、接口很小、没有替换需求且不污染领域模型的库可由 Service 直接集成；大型或特殊许可证组件可使用独立服务、Fork 或 Vendor。集成 PR 必须同步许可证、上游 Commit/Tag、归属和修改记录，不要求为了形式完整先实现 Adapter。
 
+第三方接入任务必须显式经过：
+
+```text
+Research record
+→ minimal effect/failure/fallback Spike
+→ boundary and license Decision
+→ Integration with adapted tests and attribution
+```
+
+研究、Spike 和决策可与业务 Service 契约准备并行；在结果边界、回退和许可证义务未确定前，不得把第三方对象写入领域模型或把计划项目加入正式运行时。
+
 ## 20.4 禁止并行的场景
 
 以下任务不应在上游未冻结时并行：

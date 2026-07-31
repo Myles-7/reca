@@ -111,6 +111,10 @@ clean-room 必须验证：
 
 ## 5. 测试选择
 
+开源集成任务必须执行并报告：读取研究记录、核验 pinned Commit/Tag、核验实际许可证、最小 Spike、与回退比较、边界决定、实现、上游改造测试、归属更新和限制记录。任何一步 `NOT RUN` 都要说明原因，不能用上游 CI 徽章或研究报告替代本仓库验证。
+
+实际引入项目的最低验收维度为：Pinned version、License and attribution、Compatibility、Main demo effect、Failure behavior、Resource usage、Offline/Recorded behavior、Output schema conversion、Project isolation 和 Reproducibility。
+
 - 文档改动：链接、路径、命令、稳定 ID、状态和 diff；
 - 纯函数：单元测试；
 - Service：权限、状态、幂等、事务和失败路径；

@@ -1,5 +1,9 @@
 # Golden test fixtures
 
+本目录还承载第三方科研能力的固定效果基准，包括 GROBID 版式/页码、PaperQA 候选证据、ASReview 排序建议、Pandera FailureCase、SciPy/statsmodels 数值、Matplotlib 输出、引用格式和 Agents SDK/ARS 契约材料。
+
+复用或改造上游 fixture、测试结构和预期结果时，必须保留项目、仓库、Commit、许可证、原路径和修改记录；许可证受限内容不得因“仅用于测试”而省略归属或复制审查。
+
 本目录保留经人工核验、版本固定的确定性与 Agent 合同测试材料；禁止把模型即时输出直接当作黄金答案。
 
 后续按里程碑创建下列子目录：
