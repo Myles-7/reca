@@ -214,6 +214,11 @@ ORIGINAL
 
 # 20. 模块八：数据质量与处理
 
+Pandera 是本模块计划采用的 P0 运行时验证引擎，RECA 负责规则集、版本和
+科研语义。Pandera `FailureCase` 必须转换为既有 DataQualityIssue/Run 结果，
+不得直接成为 API 或数据库权威对象。Great Expectations 只借鉴规则分类、
+报告结构、测试和文案，不运行第二套 P0 数据质量引擎。
+
 <a id="quality-p0-001"></a>
 ## 20.1 QUALITY-P0-001 数据质量概览
 
@@ -393,6 +398,12 @@ P0 可使用：
 ---
 
 # 21. 模块九：统计分析
+
+SciPy 实现受控的比较、Pearson、Spearman 和前提检查；statsmodels 实现简单
+线性回归与诊断。库返回对象、Warning 和 textual Summary 必须归一化为既有
+AnalysisResult，不能直接保存或展示为正式结果。DVC 只提供开发期数据来源、
+pipeline 和复现思想，不替代 DatasetVersion、DataTransformation 或
+ReproPackage。
 
 <a id="analysis-p0-001"></a>
 ## 21.1 ANALYSIS-P0-001 分析目标
@@ -603,6 +614,10 @@ AI 只读取结构化结果。
 ---
 
 # 22. 模块十：科研图表
+
+Matplotlib 是计划采用的确定性渲染器。RECA 五类模板负责参数白名单、字体、
+后端、代码 Artifact、环境版本和输出哈希；图表只从已确认数据版本和结构化
+AnalysisResult 生成，渲染器输出不独立证明统计结论。
 
 <a id="fig-p0-001"></a>
 ## 22.1 FIG-P0-001 表达目标

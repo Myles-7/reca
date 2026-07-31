@@ -25,7 +25,7 @@
 | 项目     | 内容                                                                                                             |
 | ------ | -------------------------------------------------------------------------------------------------------------- |
 | 文档名称   | `ARCHITECTURE.md`                                                                                              |
-| 文档版本   | 1.3.0                                                                                                          |
+| 文档版本   | 1.4.0                                                                                                          |
 | 适用项目版本 | RECA 0.1 Competition Edition                                                                                   |
 | 文档状态   | Conditional Approval                                                                                          |
 | 文档类型   | 技术架构基准                                                                                                         |
@@ -46,6 +46,7 @@
 | 1.1.0 | 2026-07-30 | Approved | 增加派生项目上下文、阶段解析、显式降级与论文修订漂移架构；保持单总控 Agent 与 M8 接入边界 | RECA Team |
 | 1.2.0 | 2026-07-30 | Conditional Approval | 写入 M0 As-Built、当前/目标目录分离、Prompt manifest 与数据访问三层语义 | RECA Team |
 | 1.3.0 | 2026-07-31 | Conditional Approval | 同步 effect-first 开源复用与按收益选择 Adapter；核心领域和单 Agent 边界不变 | RECA Team |
+| 1.4.0 | 2026-07-31 | Conditional Approval | 正式同步六个开源能力栈、四层架构和统一接入模式；不改变领域、契约或里程碑边界 | RECA Team |
 
 ---
 
@@ -56,7 +57,7 @@
 1. 系统由哪些组件构成；
 2. 前端、后端、Worker、数据库和外部服务如何协作；
 3. 各业务模块的边界；
-4. 外部开源能力如何通过适配器接入；
+4. 外部开源能力如何通过明确的直接、Provider/Adapter、服务、Vendor、资源或参考模式接入；
 5. 文献、数据、图表、论文和证据链如何流转；
 6. 智能体可以调用哪些能力；
 7. 长任务如何异步执行；
@@ -108,7 +109,7 @@ RECA 0.1 采用“成熟开源能力承担通用基础，自研科研项目状�
 * 消息队列和缓存使用 Valkey，不使用新版 Redis；
 * 采用单总控 Agent，不采用自由多智能体系统；
 * GROBID 是 PDF 主解析器，pypdf 是回退；
-* PaperQA 仅用于研究检索链路，不作为完整运行时产品依赖；
+* PaperQA 不整体接管文献域；允许选择性复用检索、Evidence Packing、Prompt 和测试，但输出必须经过 RECA EvidenceSpan 验证；
 * P0 统计范围仅包括描述统计、两组比较、相关和简单线性回归；
 * 采用模块化单体，不拆分大量微服务。
 
@@ -164,7 +165,7 @@ M0 已完成于 `79825914c7c975e8be256a5a89abe812f486769e`（`m0-complete`）。
 
 ## 3.4 可替换
 
-外部能力必须通过适配器接入，使以下组件可替换：
+外部能力必须具有明确且可测试的集成边界，使以下组件可替换或可移除：
 
 * 文献数据源；
 * PDF 解析器；
@@ -280,12 +281,16 @@ statsmodels Result
 
 ## 5.4 第三方接入按收益选择边界
 
-RECA 使用三类接入方式：
+RECA 使用以下正式接入方式：
 
 ```text
 DIRECT_LIBRARY_INTEGRATION
-ADAPTER_INTEGRATION
-ISOLATED_SERVICE_OR_VENDOR
+PROVIDER_OR_ADAPTER_INTEGRATION
+INDEPENDENT_SERVICE
+ISOLATED_SERVICE
+SELECTIVE_VENDOR
+RESOURCE_SNAPSHOT
+DESIGN_REFERENCE
 ```
 
 选择依据是能力是否可能更换、第三方对象是否污染领域模型、是否需要离线
@@ -293,8 +298,12 @@ Mock、是否存在许可证或安全边界、接口复杂度、直接集成能�
 以及后续维护成本。
 
 - 成熟稳定、接口很小、无替换需求且不污染领域模型的库可以直接集成；
-- 外部 API、多实现、离线替代、复杂降级或领域转换使用 Adapter；
-- 大型项目、特殊许可证、独立运行时或需要清晰升级边界的能力使用隔离服务、Fork 或 Vendor。
+- 外部 API、多实现、离线替代、复杂降级或领域转换使用 Provider 或 Adapter；
+- 独立运行、资源密集但边界稳定的能力使用独立服务；
+- 特殊许可证、安全边界或进程隔离要求使用隔离服务；
+- 只复用经过审查的 Prompt、工作流、脚本或测试时使用 Selective Vendor；
+- 固定 CSL 等非代码资源时使用 Resource Snapshot；
+- 只借鉴 UX、报告或复现思想时使用 Design Reference。
 
 直接集成不等于 Router 或 Agent 直接操作第三方 SDK。复杂业务仍由 Service
 负责权限、事务、状态、版本、审批和审计；第三方对象不得直接成为核心领域
@@ -339,6 +348,37 @@ PDF 解析、批量抽取、数据处理、统计分析、图表生成、DOCX �
 ## 5.10 先工具后 Agent
 
 确定性工具完成并通过测试后，才允许接入 Agent。
+
+## 5.11 四层开源能力架构
+
+```text
+RECA DOMAIN CORE
+├── ResearchProject / ApprovalRecord / AuditResult
+├── EvidenceSpan / ClaimEvidenceLink
+├── DatasetVersion / AnalysisResult / ReproPackage
+└── 跨文献—数据—分析—图表—论文证据链
+
+CAPABILITY INTEGRATION
+├── PyAlex Provider、pgvector Repository
+├── Pandera、SciPy、statsmodels、Matplotlib
+├── python-docx / controlled OOXML
+├── PDF.js、TanStack Table、React Flow
+└── OpenAI Agents SDK Function Tool wrappers
+
+VENDORED RESEARCH ASSETS
+├── selected PaperQA retrieval / Evidence Packing / Prompt / tests
+├── selected ARS Workflow / Prompt / Policy Marker / tests
+└── selected CSL resource snapshot
+
+EXTERNAL SERVICES
+├── GROBID
+├── Valkey / Celery Worker
+├── MinIO / S3-compatible storage
+└── external model and literature APIs
+```
+
+上层可以依赖下层提供能力，但下层不得反向拥有 RECA 领域状态。Vendor 资产
+必须保留来源和许可证，外部服务必须有超时、降级与离线边界。
 
 ---
 
@@ -474,8 +514,8 @@ flowchart TB
 | 层级        | 技术                      | 状态 | 选型理由                     |
 | --------- | ------------------------- | --- | ------------------------ |
 | 前端框架      | React + Vite + TypeScript | IMPLEMENTED_IN_M0 | 复用 FastAPI 全栈模板，开发稳定     |
-| 样式与组件     | Tailwind CSS、模板组件体系       | 快速统一 UI                  |
-| 表格        | TanStack Table v8         | Headless、适合文献矩阵          |
+| 样式与组件     | Tailwind CSS、模板组件体系       | IMPLEMENTED | 快速统一 UI                  |
+| 表格        | TanStack Table v8         | IMPLEMENTED | Headless、适合文献矩阵；业务决策仍在后端 |
 | PDF 阅读    | PDF.js                    | PLANNED_M2_M3 | 浏览器 PDF 渲染和页码跳转          |
 | 证据链画布     | React Flow                | PLANNED_M6_M8 | 节点关系可视化                  |
 | 后端        | FastAPI                   | IMPLEMENTED_IN_M0 | 与 Python 科研生态统一          |
@@ -490,13 +530,18 @@ flowchart TB
 | PDF 主解析   | GROBID                    | IMPLEMENTED_IN_M0_HEALTHCHECK | 学术论文结构化解析                |
 | PDF 回退    | pypdf                     | PLANNED_M2_M3 | 基础页级文本提取                 |
 | 文献检索      | PyAlex/OpenAlex           | PLANNED_M2_M3 | 真实开放文献元数据                |
-| 文献检索算法    | 自研混合检索链                   | 与 RECA EvidenceSpan 模型一致 |
+| 文献检索算法    | RECA 混合检索 + PaperQA 选择性资产 | EXPERIMENT_REQUIRED | 只产生候选证据，必须经 EvidenceSpan 验证 |
+| 文献筛选建议    | ASReview Provider          | EXPERIMENT_REQUIRED | 只生成阅读优先级，不写 LiteratureDecision |
 | 数据质量      | Pandera + 自研规则            | PLANNED_M4_M5 | 通用验证加科研场景规则              |
 | 数据处理      | pandas、NumPy              | PLANNED_M4_M5 | 成熟表格处理                   |
 | 统计        | SciPy、statsmodels         | PLANNED_M4_M5 | 确定性统计计算                  |
 | 图表        | Matplotlib                | PLANNED_M4_M5 | 静态科研图表和代码复现              |
 | DOCX      | python-docx + lxml        | PLANNED_M6_M8 | 基础结构与 OOXML 增强           |
+| 引用资源      | selected CSL Styles       | PLANNED_M6_M7 | 固定文件、rights、Locale 和哈希 |
+| 完整引用引擎    | 隔离 Citation Engine        | EXPERIMENT_REQUIRED | citeproc-js 或替代方案需许可证与隔离决策 |
+| 文献管理参考    | Zotero / Web Library       | RESEARCHED | 仅 UX 与交换格式参考，不复制完整产品 |
 | AI 编排     | OpenAI Agents SDK         | PLANNED_M8 | 工具调用、Guardrail、Tracing   |
+| 研究工作流资产   | selected ARS-Codex assets | EXPERIMENT_REQUIRED | 遵守 ADR-001，不改变单总控 Agent |
 | 后端测试      | pytest                    | IMPLEMENTED_IN_M0 | Python 测试生态              |
 | 前端 E2E    | Playwright                | IMPLEMENTED_IN_M0 | 模板复用、浏览器流程测试             |
 | 部署        | Docker Compose            | IMPLEMENTED_IN_M0 | 易复制、易离线                  |
@@ -549,8 +594,11 @@ RECA 继续采用单 FastAPI 应用的模块化单体。模块通过 Service 和
 
 外部文献 API、可替换 PDF 解析器、对象存储 Provider、模型服务和其他复杂
 边界通过 Adapter Protocol 转换为 RECA 内部 Schema。成熟小型库可以按
-`DIRECT_LIBRARY_INTEGRATION` 使用；大型或特殊许可证能力可以采用
-`ISOLATED_SERVICE_OR_VENDOR`。无论方式如何，外部响应不得直接成为领域
+`DIRECT_LIBRARY_INTEGRATION` 使用；外部 API 使用
+`PROVIDER_OR_ADAPTER_INTEGRATION`；独立运行时、特殊许可证和选择性资产分别
+使用 `INDEPENDENT_SERVICE`、`ISOLATED_SERVICE` 或 `SELECTIVE_VENDOR`。
+固定非代码资源使用 `RESOURCE_SNAPSHOT`，只借鉴设计使用 `DESIGN_REFERENCE`。
+无论方式如何，外部响应不得直接成为领域
 事实，第三方结构不得泄漏为持久化核心契约。
 
 通用能力尽量复用；RECA 自研重点集中在项目状态、EvidenceSpan、版本血缘、
@@ -569,6 +617,11 @@ RECA 只采用一个受控的 `ResearchOrchestrator`：
 数据库是业务状态的唯一事实来源。`ProjectContextSnapshot` 是从数据库重建的只读查询 DTO，不能反向覆盖领域对象；`AgentRun` 必须记录快照 Schema、修订号、哈希和来源版本。
 
 Prompt 治理在 M1 建立，清单位置为 `backend/app/agents/prompts/prompt-manifest.yaml`；M8 消费该治理并接入正式 Agent 运行时。M8 之前不得接入正式 Agent，不引入自由多 Agent。
+
+M8 计划使用 OpenAI Agents SDK 提供 Runner、Function Tool、HITL、结构化
+输出、usage 和受控 tracing。SDK Session 不是 ResearchProject，SDK Trace
+不是 AuditLog。经 ADR-001 审查的 ARS 资产只能通过 RECA Prompt manifest、
+StageResolver、Tool Policy、Approval 和 Evidence 规则接入。
 
 Agent 只提出结构化建议并调用白名单 Tool；Tool 必须通过 Service、权限、项目隔离、审批和审计。正式统计数字与图表只能由确定性程序产生，模型不得替代计算。
 
@@ -598,6 +651,13 @@ Compose、网络、配置、日志、缓存、健康检查、部署、备份、�
 | [DEC-010](architecture/OPERATIONS_DEPLOYMENT_AND_ADRS.md#dec-010) | 统计结果只来自确定性程序 |
 | [DEC-011](architecture/OPERATIONS_DEPLOYMENT_AND_ADRS.md#dec-011) | 图数据库不进入 P0 |
 | [DEC-012](architecture/OPERATIONS_DEPLOYMENT_AND_ADRS.md#dec-012) | 快速工具自动归属轻量项目 |
+| [ADR-002](decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md) | 开源接入模式与直接/Adapter 边界 |
+| [ADR-003](decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md) | 文献与候选证据能力栈 |
+| [ADR-004](decisions/ADR-004-DATA-STATISTICS-STACK.md) | 数据质量、统计与图表能力栈 |
+| [ADR-005](decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md) | DOCX 与引用能力栈 |
+| [ADR-006](decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) | 科研工作台 UX 能力栈 |
+| [ADR-007](decisions/ADR-007-AGENT-WORKFLOW-STACK.md) | Agent SDK 与 ARS 工作流能力栈 |
+| [ADR-008](decisions/ADR-008-IMPLEMENTATION-METADATA.md) | 第三方实施与来源元数据 |
 
 # 14. 子架构文档导航
 

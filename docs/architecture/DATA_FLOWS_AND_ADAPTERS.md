@@ -25,15 +25,25 @@ Adapter Protocol，以及文献、PDF、数据、分析、图表、DOCX、Eviden
 
 # 14. 适配器层
 
-第三方能力接入不再默认等同于 Adapter。实现应在以下三种模式中按收益选择：
+第三方能力接入不再默认等同于 Adapter。实现应在以下模式中按收益选择：
 
 ```text
 DIRECT_LIBRARY_INTEGRATION
-ADAPTER_INTEGRATION
-ISOLATED_SERVICE_OR_VENDOR
+PROVIDER_OR_ADAPTER_INTEGRATION
+INDEPENDENT_SERVICE
+ISOLATED_SERVICE
+SELECTIVE_VENDOR
+RESOURCE_SNAPSHOT
+DESIGN_REFERENCE
 ```
 
-外部 API 可能变化、需要多实现或离线 Mock、第三方对象可能污染领域层、存在许可证或安全边界时使用 Adapter；成熟稳定、接口很小、无替换需求且不会污染领域模型的库可以直接集成；大型运行组件或需要许可证隔离的来源可以采用独立服务、Fork 或 Vendor。无论采用哪种模式，第三方对象都必须在进入核心领域前转换，Service 仍控制项目、版本、审批、EvidenceSpan 和正式结果。
+外部 API 可能变化、需要多实现或离线 Mock、第三方对象可能污染领域层时
+使用 Provider/Adapter；成熟稳定、接口很小、无替换需求且不会污染领域模型
+的库可以直接集成；大型运行组件使用独立服务；许可证或安全边界使用隔离
+服务；精确复用研究资产使用 Selective Vendor；固定资源使用 Resource
+Snapshot；只借鉴结构使用 Design Reference。无论采用哪种模式，第三方对象
+都必须在进入核心领域前转换，Service 仍控制项目、版本、审批、EvidenceSpan
+和正式结果。
 
 ## 14.1 文献数据源接口
 
@@ -423,7 +433,10 @@ Embedding 保存：
 
 推荐使用简单、可测试的排名融合，例如 Reciprocal Rank Fusion。
 
-不直接复制 PaperQA 的完整运行时状态系统。
+不运行或复制 PaperQA 的完整文献域、项目状态、Agent 状态或向量存储系统。
+允许在效果 Spike 通过后选择性 Vendor 其检索、Evidence Packing、Prompt 和
+测试资产。所有输出先转换为 `CandidateEvidence`，再通过项目、文档版本、
+页码和原文验证形成 `EvidenceSpan`；验证失败时保持缺失，不创建伪对象。
 
 ## 16.8 Evidence Reranker
 
@@ -439,6 +452,12 @@ P0 可以采用：
 回答只能引用召回列表中的 EvidenceSpan。
 
 未召回内容不能成为正式依据。
+
+## 16.10 ASReview 阅读优先级
+
+ASReview 可通过 Provider 读取项目内已确认标签并返回候选排序、模型信息和
+停止建议。它不得写 `LiteratureDecision`、审批或项目状态；手工顺序始终是
+回退。主动学习模型、种子和训练标签版本必须可复现。
 
 ---
 
@@ -730,6 +749,17 @@ OOXML 辅助层负责：
 * 脚注只读；
 * 命名空间；
 * 部分复杂引用。
+
+## 20.2A 引用引擎与资源边界
+
+Competition Core 使用 RECA 确定性基础格式化和双向引用核对。选择的 CSL
+Styles/Locales 以 `RESOURCE_SNAPSHOT` 接入并记录 rights、Commit、哈希和
+修改。完整 Citation Engine 使用 `ISOLATED_SERVICE` 或其他经 ADR-005
+批准的隔离方式；citeproc 输出只负责格式化，不证明引用来源真实。
+
+Zotero 仅作为 RIS、BibTeX、CSL JSON 等交换格式与 UX 的
+`DESIGN_REFERENCE`，不把 Zotero Item、Collection 或 Related 状态直接变成
+RECA 领域对象。
 
 ## 20.3 检查器分离
 

@@ -29,6 +29,10 @@
 
 ## 15.1 模块目标
 
+PyAlex 作为 OpenAlex 的轻量 Provider 实现搜索、过滤和分页，但 PyAlex
+对象不得直接进入数据库或前端。原始响应、查询计划和归一化结果仍按现有
+`SEARCH-P0` 需求保存和展示；Provider 失败时使用录制数据或显式离线回退。
+
 根据研究问题生成可解释检索策略，并从真实来源获得文献元数据。
 
 <a id="search-p0-001"></a>
@@ -197,6 +201,11 @@ P1 扩展完整 CSL、多格式和 RIS。
 # 16. 模块四：PDF 文献与证据矩阵
 
 ## 16.1 模块目标
+
+GROBID 负责生成 TEI 中间结果，RECA Converter 负责形成页面、Chunk、参考
+文献和候选定位。PDF.js 只负责授权 PDF 的显示、原文跳转、TextLayer、
+AnnotationLayer 与高亮交互；它不是 EvidenceSpan 的事实来源。任何高亮必须
+绑定后端文档版本、页码和已验证范围，过期或无法验证时必须明确提示。
 
 将用户合法上传的学术 PDF 转换为可校正的结构化文献记录和原文证据。
 
@@ -470,6 +479,16 @@ P0 目标：
 ---
 
 # 17. 模块五：文献筛选与当前证据集合分析
+
+本模块允许将 PaperQA2 的检索、Evidence Packing、Prompt 和测试材料做深度
+选择性复用，但其输出统一视为 `CandidateEvidence`：必须解析到项目内真实
+文档、页码、原文和版本后，才可形成 `EvidenceSpan`；无法定位时返回“无已
+定位证据”，冲突证据必须并列保留。
+
+ASReview 主动学习只能在 `REVIEW-P0-004` 的 AI 推荐范围内提供阅读优先级和
+筛选建议。训练只使用已确认标签，排序不能写入 `LiteratureDecision`，停止
+建议不能替代用户决定。主动学习不新增 Requirement ID，可作为 P0-Full 或
+可选增强；手工筛选始终是回退路径。
 
 <a id="review-p0-001"></a>
 ## 17.1 REVIEW-P0-001 文献决策

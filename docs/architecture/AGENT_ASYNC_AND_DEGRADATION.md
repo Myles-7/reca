@@ -27,6 +27,12 @@ Job、ProcessingRun、Celery、SSE、单总控 Agent、StageResolver、ProjectCo
 
 ## 22.1 设计结论
 
+M8 计划使用 OpenAI Agents SDK 承担 Runner、Function Tool、结构化输出、
+HITL、usage 和错误传播等运行机制，但 RECA 只保留一个
+`ResearchOrchestrator`。经 ADR-001 审查的 ARS Workflow、Prompt、Policy
+Marker 和测试可作为 `SELECTIVE_VENDOR` 资产适配，不形成第二套 Agent 或
+工作流数据库。
+
 采用：
 
 ```text
@@ -148,6 +154,10 @@ Guardrail 检查：
 业务状态保存在 RECA 数据库。
 
 Agents SDK Session 不作为业务事实来源。
+
+SDK Trace 也不作为 `AuditLog`、`AgentRun`、`ToolCall` 或
+`ModelInvocation`。Trace 只用于受控遥测，并应最小化敏感输入、输出、工具
+参数和文档正文；正式审计仍由 RECA 记录追加写入。
 
 ## 22.7 ToolCall 审计
 

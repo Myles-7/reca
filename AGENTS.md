@@ -152,11 +152,50 @@ bun run --cwd frontend test:shell
 | Frontend / OpenAPI Client / Artifact UI | `AGENTS.md`、`docs/ARCHITECTURE.md`、`docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md`、`docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md`、相关资源 API 子契约 |
 | Security / Open Source | `AGENTS.md`、`docs/SECURITY_AND_OPEN_SOURCE.md`、与任务对应的一份 `docs/security/` 子文档、`docs/testing/CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md` |
 | Open-source Reuse / Vendor / Fork | `AGENTS.md`、`docs/security/OPEN_SOURCE_GOVERNANCE.md`、`THIRD_PARTY_NOTICES.md`、对应 `docs/source-research/` 记录和 ADR；ARS-Codex 另读 `docs/decisions/ADR-001-ARS-CODEX-USAGE.md` |
+| Open-source project implementation | `AGENTS.md`、`docs/source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md`、对应项目研究记录、对应栈 ADR、所属模块 README、对应里程碑文件 |
+| Third-party runtime upgrade | `AGENTS.md`、对应项目研究记录、`docs/decisions/ADR-008-IMPLEMENTATION-METADATA.md`、`THIRD_PARTY_NOTICES.md`、对应测试或里程碑文件 |
+| Vendored asset modification | `AGENTS.md`、对应项目研究记录、`docs/decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md`、`docs/decisions/ADR-008-IMPLEMENTATION-METADATA.md`、`THIRD_PARTY_NOTICES.md`、适用许可证文件 |
+| Citation stack | `AGENTS.md`、`docs/product/MANUSCRIPT_AGENT_AND_EXPORT_REQUIREMENTS.md`、`docs/architecture/DATA_FLOWS_AND_ADAPTERS.md`、`docs/decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md`、对应项目研究记录 |
+| Evidence retrieval stack | `AGENTS.md`、`docs/product/LITERATURE_AND_EVIDENCE_REQUIREMENTS.md`、`docs/architecture/DATA_FLOWS_AND_ADAPTERS.md`、`docs/decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md`、对应项目研究记录 |
 | Test / CI / Delivery | `AGENTS.md`、`docs/TEST_AND_ACCEPTANCE.md`、与任务对应的一份 `docs/testing/` 子文档、`docs/development/TEST_GIT_AND_DELIVERY_RULES.md`、对应里程碑文件 |
 | M0 Regression | `AGENTS.md`、`docs/testing/M0_REGRESSION_BASELINE.md`、`docs/reports/M0_DEVELOPMENT_SUMMARY.md`、相关 `docs/acceptance/` 证据文件 |
 | Codex Planning / Scope Control | `AGENTS.md`、`docs/development/CODEX_TASK_WORKFLOW.md`、`docs/IMPLEMENTATION_ROADMAP.md`、对应里程碑文件 |
 
 不能只阅读入口摘要后修改字段、状态、API、AI Schema、Tool、指标、安全控制或里程碑 Gate。`docs/archive/` 不得出现在权威阅读路径中。
+
+## 5.1 开源项目实施规则
+
+接入或升级任何研究项目之前，必须读取对应 source-research 记录、集成总计划
+和适用 ADR。研究 Commit 是证据，不自动等于要安装的版本；实际 PR 必须记录
+采用版本、许可证、模式、来源、修改、回退和验收证据。
+
+实施顺序：
+
+1. 先用真实目标样本做最小 Spike，验证效果、兼容性、资源消耗和失败模式；
+2. 再根据实际耦合决定直接库、Provider/Adapter、独立服务、隔离服务、
+   Selective Vendor 或资源快照；
+3. 最后冻结边界和升级策略，不因抽象形式整齐牺牲可测效果和交付速度。
+
+选择规则：
+
+- 稳定、接口小、无替换需求且不泄漏第三方对象时可直接库集成；
+- 外部 API、需要录制/离线替换或轻量归一化时使用 Provider；
+- 多实现、复杂转换、许可证/安全边界或显著测试收益时使用 Adapter；
+- 独立运行时或资源密集能力使用独立/隔离服务；
+- 需要精确复用 Prompt、工作流、脚本或测试时使用有来源记录的 Selective Vendor；
+- Vendor 相关代码或资源不得无来源、许可证和修改记录进入普通模块。
+
+项目级不可替代关系：
+
+- PaperQA 只能生成候选证据，必须经原文、页码、版本和 `EvidenceSpan` 验证；
+- ASReview 只能生成阅读优先级建议，不能写 `LiteratureDecision`；
+- Pandera 是 P0 运行时数据质量引擎，Great Expectations 不成为第二套 P0 引擎；
+- DVC 不替代 `DatasetVersion`、Artifact 血缘或 `ReproPackage`；
+- citeproc-js 或替代 Citation Engine 必须遵守隔离与许可证决策；
+- Zotero 只用于 UX 与交换格式参考，不复制其桌面或 Web 应用作为 RECA 产品；
+- Agents SDK Session/Trace 不替代 `ResearchProject`、`AgentRun`、`ToolCall` 或 `AuditLog`；
+- ARS-Codex 复用必须遵守 `ADR-001-ARS-CODEX-USAGE`，不自动改变 M8 和单总控 Agent；
+- 复用 Prompt、脚本、测试和黄金样例时必须保留来源、固定 Commit、许可证、复制路径和修改记录。
 
 ## 6. 已冻结技术决策
 

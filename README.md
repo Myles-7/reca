@@ -100,6 +100,47 @@ M0 交付的是可继续开发的工程底座，不是已经完成的科研产�
 
 M0 的 `health_ping`、MinIO smoke 和 GROBID healthcheck 不得描述为科研业务能力。
 
+## 成熟开源能力组合
+
+RECA 优先复用成熟通用能力完成工程、PDF、检索、筛选、数据验证、统计、
+图表、DOCX、引用、任务调度和前端组件。具体项目、固定研究 Commit、许可证、
+接入模式和回退方案见
+[开源集成总计划](./docs/source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md)。
+
+RECA 原创核心集中在以下领域对象和跨模块规则：
+
+```text
+ResearchProject
+EvidenceSpan
+DatasetVersion
+AnalysisResult
+ApprovalRecord
+ClaimEvidenceLink
+AuditResult
+ReproPackage
+跨文献—数据—分析—图表—论文证据链
+```
+
+成熟项目提供能力实现，不接管这些业务事实。PaperQA 输出仍是候选证据，
+ASReview 输出仍是阅读排序建议，Agent Session/Trace 仍不是项目状态或审计记录。
+
+### 里程碑集成状态
+
+| 里程碑或能力 | 状态 | 当前事实或计划 |
+| --- | --- | --- |
+| Full Stack FastAPI Template 工程底座 | `IMPLEMENTED` | 已完成受控内化并形成 RECA 专用 M0 基线 |
+| Celery、Valkey、pgvector、GROBID、TanStack Table 基础 | `IMPLEMENTED` | 已有依赖或服务证据；除现有 smoke/health 与组件基础外不代表科研业务完成 |
+| M1 Project、Artifact、Approval、Prompt manifest | `PLANNED` | 建立原创领域核心与模型治理基础 |
+| M2-M3 PyAlex、GROBID 业务转换、PDF.js、pgvector 检索 | `PLANNED` | 连接真实文献、PDF、Chunk 与 EvidenceSpan 验证 |
+| PaperQA2 选择性资产、ASReview 主动学习 | `EXPERIMENT_REQUIRED` | 先证明效果，再决定精确接入范围 |
+| M4-M5 Pandera、SciPy、statsmodels、Matplotlib | `PLANNED` | 数据质量、确定性统计和可复现图表 |
+| Great Expectations 与 DVC | `RESEARCHED` | 仅借鉴报告、测试和复现思想，不成为业务事实来源 |
+| M6-M7 python-docx、受控 OOXML、CSL 资源、React Flow | `PLANNED` | 原 DOCX 不覆盖，引用与图谱均由 RECA 数据验证 |
+| 完整 Citation Engine | `EXPERIMENT_REQUIRED` | citeproc-js 或替代方案需完成许可证与隔离决策 |
+| Zotero / Zotero Web Library | `RESEARCHED` | 只借鉴交换格式和 UX，不建设完整 Zotero 替代品 |
+| M8 OpenAI Agents SDK | `PLANNED` | 一个 RECA 总控 Agent，使用既有白名单 Tool |
+| ARS-Codex 选择性或整体复用 | `EXPERIMENT_REQUIRED` | 遵守 ADR-001；当前没有实际复制或运行时接入 |
+
 ## 核心闭环
 
 RECA 0.1 的目标闭环是：

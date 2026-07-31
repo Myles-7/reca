@@ -55,6 +55,12 @@
 * 右侧上下文或待确认面板；
 * 全局任务状态入口。
 
+成熟前端组件用于加快实现，但不持有业务事实：TanStack Table 承载文献、
+质量、分析、问题和审批列表；PDF.js 承载 PDF 显示与原文跳转；React Flow
+承载证据图可视化。服务端 API、EvidenceSpan、ClaimEvidenceLink、审批和
+版本对象始终权威。Zotero 与 Zotero Web Library 只作为文献工作台布局、
+交换格式和交互参考，不复制成完整产品。
+
 ## 27.2 首页
 
 包含：

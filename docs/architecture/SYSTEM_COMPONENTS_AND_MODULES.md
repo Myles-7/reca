@@ -25,6 +25,10 @@
 
 # 10. 前端架构
 
+前端属于 `CAPABILITY INTEGRATION` 层：PDF.js、TanStack Table 和 React Flow
+提供显示与交互能力，generated API client 和 RECA view model 决定数据边界。
+浏览器状态不得成为审批、EvidenceSpan、ClaimEvidenceLink 或版本事实。
+
 ## 10.1 前端目标
 
 前端不是聊天机器人界面，而是科研工作台。
@@ -234,6 +238,15 @@ Repository / Adapter
     ↓
 Database / External Service
 ```
+
+开源能力按以下四层归属：
+
+| 层 | 责任 | 典型内容 |
+| --- | --- | --- |
+| `RECA DOMAIN CORE` | 业务事实、版本、审批、证据与审计 | Domain、Service、Repository、数据库对象 |
+| `CAPABILITY INTEGRATION` | 把成熟库转换为 RECA 能力 | Provider/Adapter、确定性引擎、前端集成 |
+| `VENDORED RESEARCH ASSETS` | 隔离的 Prompt、工作流、脚本、测试或资源 | PaperQA/ARS 选择性资产、CSL snapshot |
+| `EXTERNAL SERVICES` | 独立进程或远端能力 | GROBID、MinIO、Valkey、外部模型/OpenAlex |
 
 ## 11.2 API 层
 
@@ -553,7 +566,24 @@ flowchart TD
 
 ## 13.4 第三方能力接入
 
-模块可采用 `DIRECT_LIBRARY_INTEGRATION`、`ADAPTER_INTEGRATION` 或 `ISOLATED_SERVICE_OR_VENDOR`。小而稳定、不会泄漏第三方对象的库允许由 Service 内部直接调用；需要替换、离线 Mock、许可证隔离、安全边界或复杂响应转换时使用 Adapter 或隔离服务。Router、Worker 和 Agent Tool 仍不得绕过 Service 直接操作第三方 SDK 或核心业务表。
+模块只使用以下接入模式：
+
+```text
+DIRECT_LIBRARY_INTEGRATION
+PROVIDER_OR_ADAPTER_INTEGRATION
+INDEPENDENT_SERVICE
+ISOLATED_SERVICE
+SELECTIVE_VENDOR
+RESOURCE_SNAPSHOT
+DESIGN_REFERENCE
+```
+
+小而稳定、不会泄漏第三方对象的库允许由 Service 内部直接调用；外部 API、
+多实现、离线 Mock 或复杂转换使用 Provider/Adapter；资源密集运行时使用
+独立服务；许可证或安全隔离使用隔离服务；选择性 Prompt/工作流/测试使用
+Vendor；CSL 等固定文件使用 Resource Snapshot；Zotero/GX/DVC 等只借鉴
+设计。Router、Worker 和 Agent Tool 仍不得绕过 Service 直接操作第三方 SDK
+或核心业务表。
 
 ---
 

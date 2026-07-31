@@ -5,7 +5,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 文档名称 | `PRODUCT_REQUIREMENTS.md` |
-| 文档版本 | 1.3.0 |
+| 文档版本 | 1.4.0 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
 | 文档状态 | Conditional Approval |
 | 文档角色 | 产品定位、范围、需求索引和变更规则入口 |
@@ -18,6 +18,7 @@
 | --- | --- | --- | --- |
 | 1.2.0 | 2026-07-30 | Conditional Approval | 拆分产品需求并建立唯一 Requirement ID 定义位置 |
 | 1.3.0 | 2026-07-31 | Conditional Approval | 同步 Competition Edition 场景、效果优先和高风险审批边界；需求 ID、P0 和成功指标不变 |
+| 1.4.0 | 2026-07-31 | Conditional Approval | 将已研究开源能力映射到既有需求；不新增 Requirement ID，不改变 P0 总范围 |
 
 ## 文档组成
 
@@ -113,6 +114,22 @@ RECA 0.1 当前面向个人使用和校级比赛，优先保证有效功能、�
 
 所有结构化页面和确定性能力必须可以脱离 Agent 直接使用。
 
+## 5.1 开源能力实现增强
+
+成熟开源项目是既有需求的实现策略，不是新的产品模块或 Requirement：
+
+| 既有产品能力 | 实现增强 | 不变的 RECA 权威 |
+| --- | --- | --- |
+| 研究问题收敛 | ARS Scoping、Checkpoint、Mode/Stage 辅助 | ResearchQuestionVersion 与用户确认 |
+| 文献检索与证据 | PyAlex/OpenAlex、GROBID、PDF.js、PaperQA 候选聚合、ASReview 排序 | LiteratureRecord、EvidenceSpan、LiteratureDecision |
+| 数据质量与分析 | Pandera、SciPy、statsmodels、Matplotlib | DatasetVersion、DataQualityRun、AnalysisPlan、AnalysisResult、Figure |
+| 论文与引用 | python-docx、受控 OOXML、CSL 资源、隔离 Citation Engine、Zotero 交换兼容 | ManuscriptVersion、引用核对、Claim 与证据链 |
+| Agent | OpenAI Agents SDK 运行机制、经审查的 ARS Workflow/Prompt/Policy Marker/测试 | 单总控 Agent、Prompt manifest、Tool 白名单、Approval 与 Audit |
+
+Great Expectations 和 DVC 只提供规则、报告、测试与复现思想；Zotero 只提供
+交换格式和 UX 参考。主动学习作为 `REVIEW-P0` 的实现策略或 P0-Full 增强，
+不创建新的 Requirement，也不允许模型排序代替用户文献决策。
+
 # 6. 范围分层
 
 ## 6.1 P0-Must
@@ -137,7 +154,7 @@ P0 稳定后再考虑：
 * 研究时间线；
 * 文献关系图；
 * 用户反馈重排序；
-* 主动学习文献筛选；
+* 完整主动学习实验管理、仿真、模型比较与独立筛选工作台；基础阅读优先级可作为现有 REVIEW-P0 的实现增强；
 * 多元线性回归；
 * 常用非参数方法；
 * 更多图表；

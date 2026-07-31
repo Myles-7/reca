@@ -268,6 +268,17 @@ P0 不支持实时协同编辑。
 
 将模糊研究兴趣转化为结构化、可编辑、可版本化、可确认的研究问题。
 
+### 开源实现增强
+
+可选择性改造 ARS-Codex 的 Scoping、Checkpoint、Mode/Stage 辅助、Prompt
+和黄金测试来实现本模块现有需求。Scoping 输出只是
+`ResearchQuestionSpec` 候选；Checkpoint 只是向用户展示缺失信息、证据和
+下一步；Mode/Stage 辅助只向既有 StageResolver 提供候选信号。
+
+正式 `ResearchQuestionVersion` 的创建、状态转换和最终确认仍由 RECA
+Service 与用户完成。ARS 工作流状态、模型对话或 Agent Session 均不得替代
+用户确认，也不得新增另一套研究问题状态机。本增强不新增 Requirement ID。
+
 <a id="rq-p0-001"></a>
 ## 14.2 RQ-P0-001 输入研究想法
 

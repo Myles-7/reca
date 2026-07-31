@@ -27,6 +27,16 @@
 
 # 23. 模块十一：DOCX 论文质控
 
+python-docx 负责常见段落、Run、表格、样式、关系和图片处理；lxml/受控
+OOXML 仅补充经过黄金样例验证的字段、批注、编号或关系读取能力。所有修改
+生成派生 ManuscriptVersion，原 DOCX 永不覆盖。
+
+Competition Core 使用简单确定性引用核对和格式化；选定 CSL Styles 以固定
+Commit、文件哈希、`<rights>` 和 Locale 的资源快照接入。完整 Citation
+Engine 必须隔离并通过许可证决策，citeproc-js 当前仍需实验和治理审查。
+Zotero 兼容只覆盖明确支持的 RIS、BibTeX、CSL JSON 等交换格式，不建设或
+复制完整 Zotero 桌面/Web 产品。
+
 <a id="manu-p0-001"></a>
 ## 23.1 MANU-P0-001 DOCX 上传
 
@@ -505,6 +515,15 @@ AuditResult 状态：
 ---
 
 # 26. 模块十四：科研总控智能体
+
+M8 计划使用 OpenAI Agents SDK 承担 Runner、Function Tool、结构化输出、
+HITL、usage 和受控 tracing 等运行机制。SDK Session 只用于对话连续性，
+SDK Trace 只用于遥测，均不得替代 ResearchProject、AgentRun、ToolCall、
+ModelInvocation 或 AuditLog。
+
+经 ADR-001 审查的 ARS Workflow、Prompt、Policy Marker、脚本和测试可选择性
+复用，但必须映射到 RECA Project、Approval、Evidence、Prompt manifest 和
+Tool 契约。单总控 Agent、M8 接入、白名单工具和确定性结果边界保持不变。
 
 <a id="agent-p0-001"></a>
 ## 26.1 AGENT-P0-001 产品定位
