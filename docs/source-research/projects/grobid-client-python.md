@@ -4,6 +4,8 @@ Document version: `1.0.0`
 
 Document status: `Conditional Approval`
 
+Research status: `EXPERIMENT_REQUIRED`
+
 Last researched: 2026-07-31
 
 Phase summary: [Literature and evidence research](../../reports/OPEN_SOURCE_RESEARCH_PHASE_2_LITERATURE.md)

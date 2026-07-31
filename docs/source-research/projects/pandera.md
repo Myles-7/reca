@@ -4,6 +4,8 @@ Document version: `1.0.0`
 
 Document status: `Conditional Approval`
 
+Research status: `PLANNED`
+
 Last researched: 2026-07-31
 
 Phase summary: [Data, statistics and reproducibility research](../../reports/OPEN_SOURCE_RESEARCH_PHASE_3_DATA.md)

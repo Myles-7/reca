@@ -182,22 +182,25 @@ Risk scale:
 | `docs/source-research/projects/zotero-web-library.md` | Keep as UX reference and record independently created patterns rather than copied source. | Research recommendation only. | Design reference; no AGPL source adoption implied. | No frontend contract change. | HIGH |
 | `docs/source-research/projects/openai-agents-sdk.md` | Add runtime adoption status, Tool mapping, trace policy, and pin when M8 begins. | Research recommendation only. | Direct dependency for one Orchestrator; Session/Trace remain non-authoritative. | No Tool/Schema/Agent state change. | HIGH |
 
-## 14. Planned ADR set
+## 14. ADR set
 
-The following ADRs are recommended but are not created by Phase 6:
+Phase 6 recommended the following independent decisions. Phase 7 subsequently
+created and accepted them without modifying formal product or contract text:
 
-| Proposed ADR | Decision scope | Primary files to align after acceptance |
+| ADR | Decision scope | Primary files to align after acceptance |
 | --- | --- | --- |
-| `ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md` | Normalized modes, metadata, upgrade, and attribution rules. | Architecture, security, development workflow, notices. |
-| `ADR-003-LITERATURE-EVIDENCE-STACK.md` | PyAlex, GROBID, PDF.js, pgvector, PaperQA2, ASReview chain and authority boundaries. | Literature requirements/models/API/tests/M2-M3. |
-| `ADR-004-DATA-STATISTICS-STACK.md` | Pandera, SciPy, statsmodels, Matplotlib, GX, and DVC roles. | Data requirements/models/API/tests/M4-M5. |
-| `ADR-005-MANUSCRIPT-CITATION-STACK.md` | DOCX, OOXML, CSL resources, processor/isolation decision. | Manuscript requirements/models/API/tests/M6-M7. |
-| `ADR-006-RESEARCH-WORKBENCH-UX.md` | PDF.js, TanStack Table, React Flow, and Zotero UX reference boundaries. | Frontend architecture, UX, tests/M2-M7. |
-| `ADR-007-AGENT-WORKFLOW-STACK.md` | Agents SDK runtime and ARS selective Vendor mapping under ADR-001. | Agent architecture, Schemas, Tools, tests/M8. |
-| `ADR-008-IMPLEMENTATION-METADATA.md` | Machine-readable pins, licenses, copied paths, modifications, fallbacks, and acceptance evidence. | Notices, source research, delivery workflow, release gates. |
+| [ADR-002](../decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md) | Normalized modes, metadata, upgrade, and attribution rules. | Architecture, security, development workflow, notices. |
+| [ADR-003](../decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md) | PyAlex, GROBID, PDF.js, pgvector, PaperQA2, ASReview chain and authority boundaries. | Literature requirements/models/API/tests/M2-M3. |
+| [ADR-004](../decisions/ADR-004-DATA-STATISTICS-STACK.md) | Pandera, SciPy, statsmodels, Matplotlib, GX, and DVC roles. | Data requirements/models/API/tests/M4-M5. |
+| [ADR-005](../decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md) | DOCX, OOXML, CSL resources, processor/isolation decision. | Manuscript requirements/models/API/tests/M6-M7. |
+| [ADR-006](../decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) | PDF.js, TanStack Table, React Flow, and Zotero UX reference boundaries. | Frontend architecture, UX, tests/M2-M7. |
+| [ADR-007](../decisions/ADR-007-AGENT-WORKFLOW-STACK.md) | Agents SDK runtime and ARS selective Vendor mapping under ADR-001. | Agent architecture, Schemas, Tools, tests/M8. |
+| [ADR-008](../decisions/ADR-008-IMPLEMENTATION-METADATA.md) | Machine-readable pins, licenses, copied paths, modifications, fallbacks, and acceptance evidence. | Notices, source research, delivery workflow, release gates. |
 
 ## 15. Coverage and execution boundary
 
 This map covers the repository entry files, all current formal child documents, development guidance, backend/frontend/test READMEs, ADR-001, and all current source-research project records. It intentionally does not prescribe edits to historical reports or baseline evidence: those files remain immutable evidence of the decision path.
 
-Phase 6 changes only this map and the master plan. Actual alignment, ADR creation, dependency adoption, Vendor snapshots, source copying, code changes, and notice entries are deferred to separately reviewed tasks.
+Phase 6 changed only this map and the master plan. Phase 7 formalized the ADRs
+and notice structure. Actual formal-spec alignment, dependency adoption, Vendor
+snapshots, source copying, and code changes remain separately reviewed tasks.

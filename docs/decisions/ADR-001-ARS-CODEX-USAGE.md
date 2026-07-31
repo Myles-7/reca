@@ -10,7 +10,7 @@ Accepted, amended 2026-07-31
 
 Documentation status: `Conditional Approval`
 
-Decision version: `1.1.0`
+Decision version: `1.2.0`
 
 ## Date
 
@@ -36,6 +36,7 @@ RECA 0.1 Competition Edition
 | --- | --- | --- | --- |
 | 1.0.0 | 2026-07-30 | Accepted | Limited ARS-Codex to non-runtime research reference and clean-room reimplementation |
 | 1.1.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Replaced blanket copy/runtime prohibitions with licensed effect-first reuse and explicit review gates |
+| 1.2.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Formalized selective/full Vendor choices, fixed source, zero-copy state, and the relationship to ADR-007 |
 
 ## Context
 
@@ -99,6 +100,13 @@ For ARS-Codex specifically, RECA may:
 commercialization or maintenance risk makes direct reuse unattractive. It is no
 longer mandatory.
 
+The formal project recommendation is conditional `SELECTIVE_VENDOR` for exact
+Prompt, workflow, script, policy-marker, test or golden-case paths that show a
+measurable RECA benefit. `FULL_VENDOR` is also permitted after a separate
+path-level license and packaging review demonstrates that a complete snapshot is
+more maintainable and does not introduce incompatible or unidentified content.
+Neither mode is authorized as an implementation merely by this ADR.
+
 ## Mandatory prerequisites
 
 Before direct copying, Fork, Vendor, Submodule or runtime incorporation:
@@ -161,6 +169,11 @@ use is permitted in principle only after a separate ADR defines:
 
 Permission to consider runtime use is not evidence that runtime integration has
 already occurred.
+
+The M8 runtime relationship is governed by
+[ADR-007](./ADR-007-AGENT-WORKFLOW-STACK.md). That ADR preserves one RECA
+Orchestrator and does not make ARS-Codex a runtime dependency or permit free
+multi-Agent operation.
 
 ## Adapter decision
 
@@ -241,6 +254,10 @@ third_party_notice_entry_for_ars: not_required_yet
 
 This task changes policy only. It does not copy ARS-Codex Prompt, code, workflow,
 script, schema, test or fixture content.
+
+The fixed Commit remains the research and reuse-review baseline. Any later
+adoption must record the exact copied paths and must not silently follow an
+upstream branch or tag.
 
 ## Revisit triggers
 

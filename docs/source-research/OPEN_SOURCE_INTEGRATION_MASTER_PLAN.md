@@ -1,6 +1,6 @@
 # Open-Source Integration Master Plan
 
-Document version: `1.0.0`
+Document version: `1.1.0`
 
 Document status: `Conditional Approval`
 
@@ -383,23 +383,23 @@ The research Commit is evidence, not automatically the version to install. The
 implementation PR must pin a compatible released package/image/resource and
 explain any difference from the research snapshot.
 
-## 14. Proposed ADR sequence
+## 14. Accepted ADR sequence
 
-These ADRs are proposed but are **not created or accepted by this phase**:
+Phase 7 formalized the independent decisions identified by this plan:
 
-| Proposed ADR | Purpose | Depends on |
+| ADR | Purpose | Depends on |
 | --- | --- | --- |
-| `ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md` | Normalize package/service/provider/Vendor/resource/reference modes and metadata requirements | Master plan |
-| `ADR-003-LITERATURE-EVIDENCE-STACK.md` | Select PyAlex, GROBID/client, PDF.js, pgvector, PaperQA asset and ASReview boundaries | M2/M3 spikes |
-| `ADR-004-DATA-STATISTICS-STACK.md` | Select Pandera as sole validator and pin deterministic numerical/rendering boundaries | M4/M5 compatibility spikes |
-| `ADR-005-MANUSCRIPT-CITATION-STACK.md` | Select python-docx/lxml, basic GB/T path, CSL resources and full processor decision | DOCX/citation goldens and license comparison |
-| `ADR-006-RESEARCH-WORKBENCH-UX.md` | Select TanStack/React Flow and independent Zotero-inspired UX boundaries | Frontend prototypes |
-| `ADR-007-AGENT-WORKFLOW-STACK.md` | Select OpenAI Agents SDK single-Orchestrator integration and exact ARS assets | M8 SDK and ARS quality spikes |
-| `ADR-008-IMPLEMENTATION-METADATA.md` | Define machine-readable source/version/license/modification/fallback/acceptance records | ADR-002 and adoption workflow |
+| [ADR-002](../decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md) | Normalize package/service/provider/Vendor/resource/reference modes and metadata requirements | Master plan |
+| [ADR-003](../decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md) | Select PyAlex, GROBID/client, PDF.js, pgvector, PaperQA asset and ASReview boundaries | M2/M3 spikes before experimental adoption |
+| [ADR-004](../decisions/ADR-004-DATA-STATISTICS-STACK.md) | Select Pandera as sole validator and deterministic numerical/rendering boundaries | M4/M5 compatibility spikes |
+| [ADR-005](../decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md) | Select python-docx/lxml, basic citation path, CSL resources and deferred full processor decision | DOCX/citation goldens and license comparison |
+| [ADR-006](../decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) | Select TanStack/React Flow and independent Zotero-inspired UX boundaries | Frontend prototypes |
+| [ADR-007](../decisions/ADR-007-AGENT-WORKFLOW-STACK.md) | Select OpenAI Agents SDK single-Orchestrator integration and conditional ARS asset reuse | M8 SDK and ARS quality spikes |
+| [ADR-008](../decisions/ADR-008-IMPLEMENTATION-METADATA.md) | Define source/version/license/modification/fallback/acceptance records | ADR-002 and adoption workflow |
 
-ADR numbering is a proposal. Before creation, verify no concurrent decision has
-claimed the next ID. ADRs must preserve history rather than silently rewrite
-ADR-001 or DEC-006.
+These ADRs accept the direction and boundaries; they do not assert that planned
+or experimental integrations are implemented. ADR-001 remains the special
+license and reuse decision for ARS-Codex.
 
 ## 15. Deferred decisions
 

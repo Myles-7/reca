@@ -4,6 +4,8 @@ Document version: `1.0.0`
 
 Document status: `Conditional Approval`
 
+Research status: `ALREADY_INTEGRATED`
+
 Last researched: 2026-07-31
 
 Phase summary: [Manuscript, citation and frontend research](../../reports/OPEN_SOURCE_RESEARCH_PHASE_4_MANUSCRIPT_FRONTEND.md)

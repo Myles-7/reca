@@ -4,6 +4,8 @@ Document version: `1.2.0`
 
 Document status: `Conditional Approval`
 
+Research status: `EXPERIMENT_REQUIRED`
+
 Last updated: 2026-07-31
 
 ## 1. Source metadata
