@@ -3,6 +3,7 @@
 - 所属入口文档：[API_AI_TOOL_CONTRACTS.md](../API_AI_TOOL_CONTRACTS.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
+- M1 Contract Amendment status: APPROVED
 
 ## 权威范围
 
@@ -199,6 +200,8 @@ RESOURCE_DELETED
 RESOURCE_ARCHIVED
 RESOURCE_INVALIDATED
 RESOURCE_VERSION_CONFLICT
+MEMBER_ALREADY_ACTIVE
+LAST_PROJECT_OWNER
 ```
 
 ### 请求
@@ -209,6 +212,8 @@ INVALID_ENUM
 INVALID_STATE_TRANSITION
 MISSING_IDEMPOTENCY_KEY
 IDEMPOTENCY_CONFLICT
+APPROVAL_EXPIRED
+APPROVAL_STALE
 ```
 
 ### 文件
@@ -307,6 +312,23 @@ JOB_TIMEOUT
 JOB_RETRY_EXHAUSTED
 ```
 
+## 7.5 M0 / M1 错误兼容
+
+M1 新增 API 使用本章正式错误 Envelope。已通过 M0 验收的 Auth/Health 端点可在
+M1 期间继续返回现有兼容 Envelope：顶层 `error` 包含 `code`、`message`，顶层
+`request_id` 保留请求追踪。M1 Contract Amendment 不要求为统一 casing 或字段位置
+重构 M0 端点。
+
+前端 adapter 必须同时归一化 M0 兼容 Envelope 与 M1 正式 Envelope，并优先保留：
+
+* HTTP status；
+* `error.code`；
+* `error.message`；
+* 位于任一兼容位置的 `request_id`；
+* M1 Envelope 中存在的 `field_errors`、`details`、`retryable`。
+
+不得通过 adapter 将 `403` 改写为 `404`；资源不披露语义由后端资源 Service 决定。
+
 ### 开源集成错误与降级映射
 
 | 场景 | 契约表达 |
@@ -393,6 +415,17 @@ q=<query>
 project.read
 project.update
 project.delete
+project.manage_members
+artifact.read
+artifact.upload
+artifact.download
+job.read
+job.cancel
+job.retry
+approval.read
+approval.decide
+approval.cancel
+audit.read
 literature.read
 literature.create
 literature.decide
@@ -436,6 +469,32 @@ export.create
 
 所有写操作必须后端校验。
 
+## 9.5 M1 角色动作矩阵
+
+| 动作 | OWNER | EDITOR | REVIEWER | VIEWER |
+| --- | --- | --- | --- | --- |
+| `project.read` | 允许 | 允许 | 允许 | 允许 |
+| `project.update` | 允许 | 允许 | 拒绝 | 拒绝 |
+| `project.delete` / archive / restore | 允许 | 拒绝 | 拒绝 | 拒绝 |
+| `project.manage_members` | 允许 | 拒绝 | 拒绝 | 拒绝 |
+| `artifact.read` / `artifact.download` | 允许 | 允许 | 允许 | 允许 |
+| `artifact.upload` | 允许 | 允许 | 拒绝 | 拒绝 |
+| `job.read` | 允许 | 允许 | 允许 | 允许 |
+| `job.cancel` / `job.retry` | 允许 | 允许 | 拒绝 | 拒绝 |
+| `approval.read` | 允许 | 允许 | 允许 | 允许 |
+| `approval.decide` | 允许 | 拒绝 | 允许 | 拒绝 |
+| `approval.cancel` | 允许；或由原 requester 执行 | 仅原 requester | 仅原 requester | 仅原 requester |
+| `audit.read` | 允许 | 允许 | 允许 | 允许 |
+
+`superuser` 不是 ProjectMember role。它只能通过后端 policy 的管理性 override 访问，
+不得创建伪造 membership；每次 override 必须写入 AuditLog。普通已认证非成员读取
+project-scoped 资源时返回 `404 RESOURCE_NOT_FOUND` 以避免枚举；已是成员但缺少具体
+动作时返回 `403 PERMISSION_DENIED`。
+
+每个项目始终恰好一个 active OWNER。`project.manage_members` 不允许通过普通 update/remove
+删除该 OWNER；ownership transfer 使用 ProjectMember PATCH 的显式原子语义，并记录
+`PROJECT_OWNERSHIP_TRANSFERRED`。
+
 ---
 
 # 10. 幂等规则
@@ -443,6 +502,13 @@ export.create
 ## 10.1 幂等对象
 
 以下接口必须接受 `Idempotency-Key`：
+
+* `POST /projects`；
+* ProjectMember add、update role、remove；
+* Artifact upload initiate 与 complete；
+* 所有产生 Job 的 domain command；
+* Approval approve、reject、cancel；
+* Job retry 与 cancel；
 
 * `POST /documents/{id}/parse`；
 * `POST /documents/{id}/extractions`；
@@ -456,7 +522,13 @@ export.create
 
 ## 10.2 幂等结果
 
-相同 Key、相同用户、相同接口和相同请求哈希：
+幂等键作用域固定为：
+
+```text
+(authenticated_user_id, project_id-or-null, HTTP method, canonical path template, Idempotency-Key)
+```
+
+授权必须先于 replay lookup。相同 Key、相同作用域和相同规范化请求哈希：
 
 * 返回首次结果；
 * `meta.idempotency_replayed=true`。
@@ -467,9 +539,35 @@ export.create
 409 IDEMPOTENCY_CONFLICT
 ```
 
-## 10.3 幂等保留期
+同一个字符串 Key 可在不同项目使用，因为 `project_id` 属于作用域；不得跨项目返回
+原响应。若用户在首次请求后失去权限，重放必须拒绝，不得因存在幂等记录泄露资源。
 
-P0 建议至少保留 24 小时。
+## 10.3 M1 操作矩阵
+
+| 操作 | 规则 | 并发/重放语义 |
+| --- | --- | --- |
+| Project create | REQUIRED | 相同 payload 返回原 `201` 响应；不同 payload 为 `409 IDEMPOTENCY_CONFLICT` |
+| Member add / update role / remove | REQUIRED | 相同 mutation 返回原业务结果；不同 payload 冲突 |
+| Artifact upload initiate | REQUIRED | replay 返回同一 `upload_id`，不得分配第二个对象键 |
+| Artifact content transfer | NOT APPLICABLE | upload session 的一次性 `PUT`；第二次传输拒绝，不使用幂等记录覆盖对象 |
+| Artifact complete | REQUIRED | replay 返回同一 Artifact 终态；不同 hash/size 声明冲突 |
+| Job-producing domain command | REQUIRED | replay 返回同一 Job reference，不创建第二个 Job |
+| Approval approve / reject / cancel | REQUIRED | replay 返回同一 decision；不同 decision/payload 冲突 |
+| Job retry | REQUIRED | replay 不重复增加 `retry_count`，也不重复调度 |
+| Job cancel | REQUIRED | replay 返回同一取消结果，不重复产生 side effect |
+| Project `PATCH` | NOT APPLICABLE | 使用 `If-Match` 和 `lock_version` 控制并发 |
+
+## 10.4 事务、失败与保留期
+
+M1 幂等记录至少保留 24 小时。业务结果与幂等记录必须在同一 PostgreSQL 事务中提交。
+
+* side effect / commit 前失败：不得留下成功记录，客户端可使用同一 Key 重试；
+* commit 后、外部 dispatch 前后失败：重放返回已持久化的业务事实；Job 可为
+  `DISPATCH_FAILED`，不得另建 Job；
+* 对象存储等不可与 PostgreSQL 原子提交的副作用必须使用显式中间状态和可恢复补偿，
+  不得把未确认对象返回为 `AVAILABLE`；
+* replay response 保留首次 HTTP status、`data` 和稳定错误结果，并设置
+  `meta.idempotency_replayed=true`。
 
 分析和数据转换的幂等记录可长期保存。
 
@@ -530,6 +628,19 @@ GET /api/v1/health/dependencies
 
 # 12. 异步 Job 协议
 
+## 12.0 创建责任与事实来源
+
+Generic public Job creation API：**NO**。客户端不得直接调用 `POST /jobs`。
+需要异步执行的 domain command 由其 owning Service 在同一业务边界内创建 Job，
+并按 6.4 返回 Job reference。M1 foundation 本身不为演示而制造无领域语义的 Job。
+
+PostgreSQL 中的 Job / ProcessingRun 是业务事实来源；Celery 只负责投递与执行，Valkey
+只负责 broker、cache 和短期事件。Celery result/backend 状态不得覆盖 PostgreSQL 状态。
+
+ProcessingRun 由 Worker 在实际领取并开始一次执行尝试时创建。入队失败或尚未被 Worker
+领取的 dispatch 不创建 ProcessingRun。每次真实 retry 仍使用同一个 Job，并创建新的
+ProcessingRun；`attempt_number` 单调递增。
+
 ## 12.1 Job 基本结构
 
 ```json id="8hpxep"
@@ -547,6 +658,7 @@ GET /api/v1/health/dependencies
   "retry_count": 0,
   "max_retries": 3,
   "retryable": true,
+  "current_processing_run_id": "uuid",
   "created_at": "2026-07-29T08:30:00Z",
   "started_at": "2026-07-29T08:30:02Z",
   "completed_at": null,
@@ -575,10 +687,25 @@ DISPATCH_FAILED
 GET /api/v1/jobs/{job_id}
 ```
 
+权限：`job.read`。普通非成员按 9.5 返回 `404 RESOURCE_NOT_FOUND`；成员缺少读取动作返回
+`403 PERMISSION_DENIED`。不存在或不可披露的 Job 不区分错误形状。
+
+## 12.3.1 项目 Job 列表
+
+```http
+GET /api/v1/projects/{project_id}/jobs
+```
+
+这是只读 projection，支持公共分页以及 `status`、`task_type`、`resource_type`、
+`resource_id` 过滤。权限为 `job.read`，跨项目遵循 9.5 的不披露规则。响应中的每个
+Job 可包含 `current_processing_run_id`、`retry_count` 和结果引用，但不得暴露 Celery
+task payload、broker metadata 或内部 traceback。
+
 ## 12.4 取消 Job
 
 ```http id="0h37qr"
 POST /api/v1/jobs/{job_id}/cancel
+Idempotency-Key: <required>
 ```
 
 请求：
@@ -589,10 +716,14 @@ POST /api/v1/jobs/{job_id}/cancel
 }
 ```
 
+权限：`job.cancel`。只有 `QUEUED` 或 `RUNNING` 可请求取消；其他状态返回
+`409 JOB_NOT_CANCELLABLE`，缺失幂等键返回 `400 MISSING_IDEMPOTENCY_KEY`。
+
 ## 12.5 重试 Job
 
 ```http id="izgza4"
 POST /api/v1/jobs/{job_id}/retry
+Idempotency-Key: <required>
 ```
 
 仅当：
@@ -601,6 +732,27 @@ POST /api/v1/jobs/{job_id}/retry
 * `retryable=true`；
 * 未超过最大次数；
 * 输入资源仍有效。
+
+权限：`job.retry`。不可重试状态返回 `409 INVALID_STATE_TRANSITION`；超过次数返回
+`409 JOB_RETRY_EXHAUSTED`；缺失幂等键返回 `400 MISSING_IDEMPOTENCY_KEY`。
+
+### Intentional M1 Contract Amendment: retry identity
+
+`docs-m1-approved` 已规定 retry 会创建新的 ProcessingRun，但未显式冻结 retry 后 Job ID
+是否保持不变。本 amendment 明确：Job 表示一次逻辑异步工作，ProcessingRun 表示一次
+实际执行 attempt；因此 retry 使用同一个 Job、递增 `retry_count`，并在 Worker 真正开始
+时创建新的 ProcessingRun。这不是把批准基线中的“新 Job”语义改掉，批准基线没有该规则；
+它是对原有空白的有意澄清。当前尚无正式 M1 Job/ProcessingRun 表或业务数据，因此没有
+migration 或 persisted-data compatibility 问题。
+
+重试不创建新 Job。Service 对 Job 行加锁、增加一次 `retry_count`、恢复为可调度状态并
+投递同一 Job ID；Worker 真正开始时创建下一条 ProcessingRun。幂等重放不得再次增加
+计数。重复 Celery delivery 必须读取并锁定 PostgreSQL 事实；已运行、终止或已被另一
+ProcessingRun claim 的 delivery 不得重复执行或覆盖结果。
+
+取消由 API Service 将业务状态推进到 `CANCEL_REQUESTED`；Worker 在安全点确认后写入
+`CANCELLED`。终止 Celery task 不能单独证明 Job 已取消。所有 retry、cancel、失败、
+重复 delivery 抑制与最终结果关联均写 AuditLog，并关联 Job/ProcessingRun/request_id。
 
 ## 12.6 Job 结果
 
@@ -647,6 +799,7 @@ job.completed
 job.failed
 job.cancel_requested
 job.cancelled
+job.resync_required
 job.heartbeat
 ```
 
@@ -680,6 +833,10 @@ Last-Event-ID: 19
 
 若无法恢复，前端重新调用 Job 详情。
 
+当 `Last-Event-ID` 已超出短期缓存时，服务端发送一次 `job.resync_required`，payload
+至少包含 `reason=EVENT_HISTORY_EXPIRED` 与 `status_url`，随后客户端通过
+`GET /api/v1/jobs/{job_id}` 恢复权威状态。SSE 是通知通道，不是状态事实来源。
+
 ## 13.6 心跳
 
 建议每 15—30 秒发送：
@@ -691,6 +848,9 @@ event: job.heartbeat
 ## 13.7 鉴权
 
 SSE 必须校验用户对 Job 所属项目的读取权限。
+
+首次连接与每次重连都重新执行授权；缓存事件不得绕过当前权限。SSE 不可用、断线或
+无法续传时，正式 polling fallback 为 `GET /api/v1/jobs/{job_id}`。
 
 ---
 
@@ -781,6 +941,10 @@ CI 应检查：
 * 审批决定；
 * 导出；
 * Agent ToolCall。
+
+AuditLog 只能由 Service/Worker 的业务 side effect 创建；不存在 public
+`POST /audit-logs`、`PATCH /audit-logs/{id}` 或删除入口。项目活动 UI 只能使用资源
+子契约定义的 project-scoped read projection。
 
 ## 75.2 审计字段
 
@@ -959,9 +1123,12 @@ class ModelGateway(Protocol):
 
 # 兼容性路径索引：Job
 
-以下字符串从原附录 A 原样迁入，仅保留旧 `{id}` 参数命名和总览兼容性。它们不是第二份完整端点定义；请求、响应、错误和前置条件以本文件对应资源章节为准。不得在本阶段擅自将 `{id}` 与更具体的参数名合并或重命名。
+以下索引保留原附录 A Job 基线，并加入本次 M1 additive amendment 的 project-scoped Job
+list。它不是第二份完整端点定义；请求、响应、错误和前置条件以本文件对应资源章节为准。
+既有 `{id}` 参数命名保持兼容；新增路径使用本次冻结的具体参数名。
 
 ```text
+GET    /api/v1/projects/{project_id}/jobs
 GET    /api/v1/jobs/{id}
 GET    /api/v1/jobs/{id}/events
 POST   /api/v1/jobs/{id}/cancel

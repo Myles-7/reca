@@ -5,6 +5,7 @@
 | 所属入口文档 | [PRODUCT_REQUIREMENTS.md](../PRODUCT_REQUIREMENTS.md) |
 | 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | Migration status | COMPLETE |
+| M1 Contract Amendment | APPROVED |
 
 ## 权威范围
 
@@ -181,6 +182,10 @@ Agent 不得在未满足前置条件时强制推进阶段。
 * 证据链完整度；
 * 最近操作。
 
+M1 只显示已实现的 foundation facts。尚未进入实现范围的 M2+ 模块必须明确标记
+`NOT_AVAILABLE`，对应问题、统计或完整度为 `null`；不得用 `0` 暗示模块已实现且查询
+结果为空。模块已实现并成功查询但没有记录时，才显示真实 `0` 或 empty state。
+
 <a id="proj-p0-005"></a>
 ## 13.6 PROJ-P0-005 项目待办
 
@@ -207,6 +212,12 @@ P0 支持：
 * 查看成员列表。
 
 P0 不支持实时协同编辑。
+
+M1 使用 `OWNER`、`EDITOR`、`REVIEWER`、`VIEWER` 的小型项目角色集。项目始终恰好有
+一个 active OWNER，并与 `ResearchProject.owner_id` 一致。当前 OWNER 不可直接移除、
+self-remove 或通过普通角色更新降级；必须通过显式、原子的 ownership transfer 将所有权
+移交给现有 active member。非 OWNER 可移除自己。superuser 管理覆盖不是 membership，
+也不得伪造成项目成员。
 
 <a id="proj-p0-007"></a>
 ## 13.8 PROJ-P0-007 项目归档

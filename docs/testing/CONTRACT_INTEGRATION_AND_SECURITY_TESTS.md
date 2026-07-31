@@ -4,6 +4,7 @@
 - 所属入口文档：[TEST_AND_ACCEPTANCE.md](../TEST_AND_ACCEPTANCE.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
+- M1 Contract Amendment status: APPROVED
 
 ## 权威范围
 
@@ -392,6 +393,31 @@ API 不得返回文档外临时字段。
 
 ## 25. 状态机测试
 
+### 25.0 M1 Contract Freeze 测试矩阵
+
+下列用例是 M1 实现的最低契约集合。每项都必须验证正式 response/error Envelope、
+`request_id`、project authorization 与无未授权 side effect；不以 UI 隐藏或 Mock 代替。
+
+| Concern | Success / validation | Authorization / isolation | State / concurrency / idempotency |
+| --- | --- | --- | --- |
+| Project | create/list/detail/update；无效字段 | nonmember detail `404`；成员缺 action `403` | create replay/conflict；PATCH 缺失/错误 `If-Match`；version conflict |
+| ProjectMember | list/add/update role/remove/transfer ownership | 仅 OWNER 管理；跨项目 member ID 不披露；superuser override 有 audit | 始终恰好一个 OWNER；add OWNER 拒绝；OWNER 普通降级/移除/self-remove 拒绝；显式 transfer 原子更新双方 role、owner_id 与 audit；失败全回滚；每个 mutation replay/conflict |
+| Artifact | initiate/transfer/complete/list/detail/download | 非成员与跨项目下载拒绝；upload ID 不授予权限 | hash/size/MIME mismatch；duplicate content 独立对象；第二次 PUT/原件覆盖拒绝；中断/存储失败不进入 AVAILABLE；initiate/complete replay/conflict |
+| Approval | list/detail；有效 approve/reject/cancel | wrong actor；跨项目不披露；Agent/Model 不可决定 | stale payload、expired、superseded、repeated/different decision、decision replay/conflict；失败路径不执行目标操作 |
+| Audit | project list、filter、pagination、redaction | nonmember 不披露；成员仅按 `audit.read` | append-only；无 public create/update/delete；actor/project/request/target/outcome 关联 |
+| Job / ProcessingRun | project list、detail、domain command Job reference | 跨项目 detail/list/SSE 拒绝；重连重新授权 | PostgreSQL authority；retry 使用同 Job、新 ProcessingRun；cancel；dispatch failure；worker crash；duplicate delivery；retry/cancel replay/conflict |
+| SSE | progress/terminal/heartbeat | connect/reconnect 均授权 | disconnect；有效 Last-Event-ID 续传；history miss 发 `job.resync_required`；detail polling fallback |
+| ModelInvocation | manifest lookup、Mock/Recorded deterministic fixture、hash persistence | cross-project source 拒绝；effective access 不越界 | terminal immutable；retry 新 record；Schema/Prompt hash mismatch 失败；Mock/Recorded 不伪装 live |
+| Project Overview | M1 foundation projection | project isolation | 未实现 M2+ module 为 `NOT_AVAILABLE` + `null`，已实现且为空才为 `AVAILABLE` + `0` |
+
+所有 `Idempotency-Key` 用例必须覆盖：同 scope + 同 hash replay、同 scope + 不同 hash
+`409 IDEMPOTENCY_CONFLICT`、跨项目相同字符串 Key 相互独立、权限撤销后 replay 被拒绝、
+commit 前失败可重试，以及 commit 后 dispatch 失败返回原持久化 Job。
+
+Job retry contract test 必须断言：Job ID 不变、`retry_count` 只增加一次、Worker 开始后
+出现新的 ProcessingRun/`attempt_number`、幂等 replay 不创建额外 ProcessingRun。当前无
+已发布 M1 Job 数据，migration compatibility 用例为 `NOT APPLICABLE`。
+
 ### 25.1 状态转换表驱动测试
 
 每个状态机使用参数化测试覆盖：
@@ -442,6 +468,12 @@ API 不得返回文档外临时字段。
 * APPROVED 不可再次批准；
 * 目标内容变化后 SUPERSEDED；
 * Agent 身份不能批准。
+* owning domain Service 才能创建 ApprovalRecord，不存在 generic create API；
+* M1 没有真实 FORMAL_APPROVAL consumer，基础设施用 Service/domain fixture 验证，不制造演示动作；
+* expired approval 不可决定；
+* payload hash 改变使原记录 SUPERSEDED；
+* 相同 decision 幂等重放，不同 decision 返回冲突；
+* 拒绝、过期、错误 actor 或 stale 时不产生目标业务 side effect。
 
 ---
 
@@ -462,8 +494,14 @@ API 不得返回文档外临时字段。
 * Approval；
 * AgentRun；
 * ReproPackage。
+* ProjectMember；
+* Artifact upload/detail/download；
+* Job list/detail/retry/cancel/SSE；
+* AuditLog list。
 
-预期全部拒绝。
+普通已认证非成员的 project-scoped 读取预期为 `404 RESOURCE_NOT_FOUND`；已是成员但
+缺少具体 action 的 mutation 为 `403 PERMISSION_DENIED`。两者都不得泄露对象存在性、
+storage key、Job payload、Approval payload 或审计敏感字段。
 
 ### 26.3 枚举 ID 攻击
 

@@ -5,6 +5,7 @@
 | 文档名称 | `FRONTEND_DESIGN_INTEGRATION_RULES.md` |
 | 文档角色 | Open Design、Codex 与开发者的前端协作主规则 |
 | 文档状态 | APPROVED FOR M1 DEVELOPMENT |
+| M1 Contract Amendment | APPROVED |
 | 基线兼容性 | 保留 `docs-m1-approved` 的产品、API、领域、测试与 M1 Entry 基线 |
 | 适用范围 | RECA 正式 `frontend/` 内的设计、UI、业务接线与集成 |
 | 最后更新 | 2026-07-31 |
@@ -143,6 +144,12 @@ Backend DTO → 大量直接散布到纯视觉组件
 
 TypeScript 是 UI Contract 的可执行事实来源；Markdown 只解释语义、owner、dependency、freeze 状态和 integration notes。
 
+在 production implementation 尚被 Contract Amendment approval 阻塞时，Markdown 可将
+Route、ViewModel、Props/Event 和 Mock semantics 标为 `FROZEN`，表示语义已足够
+审查和并行设计，但不表示文件存在或功能实现。批准后，Codex 必须将其落实为 TypeScript；
+一旦 TypeScript 存在，它重新成为唯一可执行事实来源。不得为了把 registry 填成
+`FROZEN` 而预建空文件。
+
 | Contract | 可执行事实来源 | Markdown 职责 |
 | --- | --- | --- |
 | Route | `frontend/src/routes/` 中真实 TanStack Router route 定义，以及必要的 feature integration documentation | 记录 owner、里程碑、freeze 状态；未冻结 route 写 `TBD` |
@@ -260,6 +267,32 @@ Production build/runtime 应有静态检查或测试，防止普通 design mock 
 - forbidden、not found、stale 等结果由正式 API 决定；
 - 未冻结路径只能标为示意，不得写成 Requirement 或 API 事实。
 
+### 8.1 M1 Route Contract
+
+本次 amendment 冻结 M1 浏览器 route（TanStack Router source 文件在后续实现创建）：
+
+| Browser URL | Route param | Responsibility |
+| --- | --- | --- |
+| `/projects` | none | project list 与 create entry |
+| `/projects/$projectId` | `projectId` UUID | project-scoped workspace；Member、Artifact、Job、Approval、Audit 使用内部 section/tab，不新增稳定 browser URL |
+
+刷新与 deep link 必须从 `projectId` 重新获取授权后的 Project Overview；未知或不可披露项目
+显示 not found，已知成员缺少某个 action 只禁用相应 command。section/tab 可以是本地 UI
+状态或兼容 query parameter，但本轮不把 query parameter 冻结为 stable route contract。
+
+### 8.2 M1 Component / Event Contract
+
+Project Workspace 的语义输入采用
+[Frontend, API, and Artifact Rules](./FRONTEND_API_AND_ARTIFACT_RULES.md#71-m1-frontend-facing-projection)
+定义的七类 projection。组件只发出 `createProject`、`updateProject`、`manageMember`、`transferOwnership`、
+`uploadArtifact`、`downloadArtifact`、`retryJob`、`cancelJob`、`decideApproval`、
+`cancelApproval`、`filterAudit` 和 `refresh` 用户意图；controller 执行正式 API、处理
+Idempotency-Key/If-Match 并重新映射服务端结果。
+
+Mock contract 必须覆盖 loading、empty、ready、error、forbidden、stale、pending、degraded，
+以及 Artifact mismatch/interruption、Job resync/failure、Approval expired/superseded。fixture
+明确标注 `M1_CONTRACT_MOCK`，Approval fixture 不代表真实 M1 consumer。
+
 ## 9. 页面状态
 
 重要页面至少评估：
@@ -347,7 +380,7 @@ Registry 记录协作准备度，不是领域状态机。`AVAILABLE`、`DRAFT`�
 | Public shell / home | M0 | `AVAILABLE` | local presentation only | `AVAILABLE` | `NOT_STARTED` | `AVAILABLE` | `INTEGRATED` |
 | Auth / account / admin | M0 | `AVAILABLE` | adapter DTO usage; no frozen feature VM | `AVAILABLE` | `NOT_STARTED` | `AVAILABLE` | `INTEGRATED` |
 | System Status | M0 | `/system-status` `AVAILABLE` | local TypeScript display model `AVAILABLE` | `AVAILABLE` | `NOT_STARTED` | `AVAILABLE` | `INTEGRATED` |
-| Project Workspace | M1 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
+| Project Workspace | M1 | `/projects`, `/projects/$projectId` `FROZEN` | semantic projection `FROZEN`; TypeScript `NOT_STARTED` | events/states `FROZEN` | fixture semantics `FROZEN`; files `NOT_STARTED` | `READY_FOR_DESIGN` after amendment approval | `NOT_STARTED` |
 | Research Question | M2 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
 | Literature / PDF Workspace | M2-M3 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
 | Data Quality Workspace | M4 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
@@ -357,6 +390,20 @@ Registry 记录协作准备度，不是领域状态机。`AVAILABLE`、`DRAFT`�
 | Agent Workspace | M8 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
 
 Open Design 只有在对应行的 Route、ViewModel、UI 与 Mock contract 达到任务要求的 `READY_FOR_DESIGN` 或 `FROZEN` 后，才可将该页面视为正式并行开发；`PLANNED` 只允许视觉探索，不表示 contract 已冻结。
+
+### 13.1 M1 Open Design readiness
+
+| Feature | API frozen | ViewModel frozen | Route frozen | Mock contract frozen | Open Design ready |
+| --- | --- | --- | --- | --- | --- |
+| Project | YES | YES | YES | YES | YES, after Project Owner approval |
+| Member | YES | YES | project workspace section | YES | YES, after Project Owner approval |
+| Artifact | YES | YES | project workspace section | YES | YES, after Project Owner approval |
+| Job | YES | YES | project workspace section | YES | YES, after Project Owner approval |
+| Approval | YES | YES | project workspace section | YES | YES, after Project Owner approval; projection only |
+| Audit | YES | YES | project workspace section | YES | YES, after Project Owner approval |
+
+`Open Design ready=YES` 只表示 contract 足以并行设计；typed fixtures、route source、real API
+mapping 和 production integration 均仍为 `NOT_STARTED`。
 
 Registry 更新必须引用真实 TypeScript/route/fixture 路径。不得为了填表创建空文件、发明 URL 或把设计稿状态写成业务完成状态。
 

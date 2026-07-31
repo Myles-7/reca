@@ -2,6 +2,7 @@
 
 - 所属入口文档：[DATA_MODEL_AND_WORKFLOW.md](../DATA_MODEL_AND_WORKFLOW.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED
 - Migration status: COMPLETE
 
 ## 权威范围
@@ -123,7 +124,20 @@ EXPORT
 UNIQUE(project_id, user_id)
 ```
 
-项目必须至少有一个 OWNER。
+项目始终恰好有一个 active OWNER。
+
+### 生命周期与 Owner 约束
+
+* `ResearchProject.owner_id` 必须指向同一项目唯一一个 `removed_at IS NULL` 且 `role=OWNER` 的 ProjectMember 对应用户；
+* Owner 不建立第二套所有权表；`owner_id` 与唯一 active OWNER membership 必须始终一致；
+* active membership 定义为 `removed_at IS NULL`；移除成员只设置 `removed_at`，不删除历史行；
+* `UNIQUE(project_id, user_id)` 覆盖成员关系全生命周期；重新加入时复用该关系、清空 `removed_at` 并通过 AuditLog 记录，不创建重复关系；
+* 当前 OWNER 不允许通过普通角色更新降级，也不允许直接移除或 self-remove；必须先执行显式 ownership transfer；
+* ownership transfer 使用 ProjectMember role update command 的显式 transfer 语义，在同一事务中将目标 active member 设为 OWNER、原 OWNER 设为指定非 OWNER role、更新 `owner_id` 并追加 AuditLog；事务完成前后都只能有一个 active OWNER；
+* 添加成员时不得直接创建第二个 OWNER；目标必须先以非 OWNER role 成为 active member，再由当前 OWNER 发起 transfer；
+* 非 OWNER 成员可以移除自己；
+* `ProjectMember` 不使用 `If-Match`。角色变更、ownership transfer、移除与重新加入由 Service 在事务中锁定项目及唯一 active OWNER 并再次校验；
+* `is_superuser` 的管理覆盖不创建伪造 ProjectMember。是否允许覆盖以及审计要求由安全与公共权限契约定义。
 
 ---
 
@@ -147,6 +161,8 @@ AuditLog 记录业务操作，不等同于系统日志。
 | reason          | Text        |  否 | 原因                       |
 | request_id      | UUID        |  否 | 请求 ID                    |
 | job_id          | UUID        |  否 | 任务 ID                    |
+| approval_id     | UUID        |  否 | 审批 ID                    |
+| outcome         | Enum        |  是 | SUCCEEDED、FAILED、DENIED   |
 | created_at      | DateTime    |  是 | 时间                       |
 
 ### 约束
@@ -155,6 +171,7 @@ AuditLog 记录业务操作，不等同于系统日志。
 * 不允许普通用户修改；
 * 不保存完整敏感文件内容；
 * 快照只保存必要字段。
+* `DENIED` 只记录安全且脱敏的目标摘要，不回显无权访问对象的私有内容。
 
 ---
 
@@ -214,6 +231,17 @@ OTHER
 * 已完成 Artifact 不允许修改存储内容；
 * 内容变化必须创建新 Artifact；
 * 同项目、同 SHA-256 可复用文件内容，但业务关系独立。
+
+### 上传生命周期语义
+
+* 上传初始化即创建 `status=UPLOADING` 的 Artifact；`upload_id` 等于该 Artifact `id`，不新增第二个公共业务对象；
+* `UPLOADING` 阶段的 `mime_type`、`size_bytes` 和 `sha256` 是客户端声明的预期值，不是已验证事实；
+* Service 生成 `storage_key`，客户端文件名不得参与路径决定；
+* 受控传输只允许写入一次。再次传输不能覆盖临时或已完成对象；
+* 完成确认由服务端读取对象、计算 SHA-256、大小并验证 MIME/文件头；全部匹配后才转为 `AVAILABLE`，此时上述字段成为服务端验证事实；
+* 哈希、大小或类型不匹配时转为 `QUARANTINED`，不得下载或作为下游输入；中断或过期上传转为 `FAILED`；
+* 同项目相同 SHA-256 的重复上传允许创建独立 Artifact 和独立 `storage_key`，响应可指出 `duplicate_of_artifact_id`；它不是幂等重放；
+* `AVAILABLE` 的原始 Artifact 文件内容和核心完整性字段不可修改。任何新内容必须创建新 Artifact。
 
 ---
 
@@ -285,6 +313,7 @@ ApprovalRecord 是高风险正式科研决策记录，不用于记录每次读�
 | decision_at             | DateTime    |  否 |
 | decision_reason         | Text        |  否 |
 | payload_snapshot        | JSONB       |  是 |
+| payload_hash            | String(64)  |  是 |
 | impact_summary          | JSONB       |  否 |
 | expires_at              | DateTime    |  否 |
 | supersedes_approval_id  | UUID        |  否 |
@@ -304,8 +333,13 @@ ApprovalRecord 是高风险正式科研决策记录，不用于记录每次读�
 * Agent 不能批准；
 * Worker 不能批准；
 * 审批内容必须保存快照；
-* 目标对象变化后旧审批应失效或 superseded；
+* `payload_hash` 是规范化 `payload_snapshot` 的 SHA-256；
+* 目标对象变化后，PENDING 旧审批转为 SUPERSEDED；已决定记录保持不可变，新审批通过 `supersedes_approval_id` 引用旧记录；
 * 审批通过不等于执行完成。
+* ApprovalRecord 只能由拥有目标领域操作的 Service 创建；不存在客户端 generic create；
+* `expires_at` 到期后，Service 在读取或决策时将仍为 PENDING 的记录转为 EXPIRED；
+* 批准或拒绝前必须重算目标快照哈希。与 `payload_hash` 不一致时转为 SUPERSEDED 并拒绝决定；
+* APPROVED、REJECTED、CANCELLED、EXPIRED 和 SUPERSEDED 的历史字段不可原地重写。
 
 ---
 
@@ -399,6 +433,7 @@ ProcessingRun 表示一次具体业务处理。
 | input_hash         | String   |  否 |
 | parameters         | JSONB    |  否 |
 | parameters_hash    | String   |  是 |
+| attempt_number     | Integer  |  是 |
 | engine             | String   |  是 |
 | engine_version     | String   |  否 |
 | implementation_metadata | JSONB | 否 |
@@ -414,6 +449,8 @@ ProcessingRun 表示一次具体业务处理。
 Job 关心队列和进度。
 
 ProcessingRun 关心业务输入、引擎和输出。
+
+Job 只能由产生异步工作的领域 Service 创建。Worker 在实际领取一次执行尝试时创建 ProcessingRun；同一 Job 重试仍使用原 Job，递增 `retry_count`，并为每次实际执行创建新的 `attempt_number`。`DISPATCH_FAILED` 在 Worker 尚未领取时重发不创建 ProcessingRun。这是 M1 对批准基线未明确 Job identity 部分的 intentional clarifying amendment；当前无已持久化 M1 Job 数据需要兼容迁移。
 
 ### implementation_metadata
 
@@ -469,6 +506,70 @@ P0 唯一方案是代码注册表/manifest：`backend/app/agents/prompts/prompt-
 
 `ModelInvocation` 必须保存 `prompt_id`、`prompt_version`、`prompt_content_hash`、输入/输出 Schema 版本与实际 `effective_data_access_level`。更新
 Prompt 必须创建新版本，不能静默覆盖。
+
+## 22.5 ModelInvocation
+
+ModelInvocation 是每次模型调用的不可变审计事实。M1 必须建立其持久化 Schema 和 Service DTO，但不调用模型 Provider，也不接入 Agents SDK 或 Agent runtime。
+
+### 字段
+
+| 字段 | 类型 | 必填 |
+| --- | --- | -: |
+| id | UUID | 是 |
+| project_id | UUID | 是 |
+| request_id | UUID | 否 |
+| actor_type | Enum | 是 |
+| actor_id | UUID/String | 否 |
+| task_type | String | 是 |
+| prompt_id | String | 是 |
+| prompt_version | String | 是 |
+| prompt_content_hash | String(64) | 是 |
+| input_schema_name | String | 是 |
+| input_schema_version | String | 是 |
+| output_schema_name | String | 是 |
+| output_schema_version | String | 是 |
+| provider | String | 否 |
+| model | String | 否 |
+| requested_data_access_level | Enum | 是 |
+| max_allowed_data_access_level | Enum | 是 |
+| effective_data_access_level | Enum | 是 |
+| source_ids | JSONB | 是 |
+| input_hash | String(64) | 是 |
+| output_hash | String(64) | 否 |
+| status | Enum | 是 |
+| error_code | String | 否 |
+| degradation | JSONB | 否 |
+| implementation_metadata | JSONB | 否 |
+| started_at | DateTime | 是 |
+| completed_at | DateTime | 否 |
+| created_at | DateTime | 是 |
+
+### 状态
+
+```text
+PENDING
+RUNNING
+SUCCEEDED
+FAILED
+```
+
+### 数据访问等级
+
+```text
+METADATA_ONLY
+REDACTED_CONTENT
+VERIFIED_EVIDENCE_ONLY
+APPROVED_FULL_CONTENT
+```
+
+### 规则
+
+* `effective_data_access_level` 不得高于 requested 与 max allowed 中更严格的边界；
+* `source_ids` 必须属于同一项目并通过调用任务的来源白名单；
+* 输入输出只保存规范化哈希和必要审计摘要，不默认保存完整敏感正文；
+* terminal ModelInvocation 不得普通更新；重试创建新的 ModelInvocation；
+* Mock/Recorded 调用也创建记录，并在 `provider`、`model` 或 `implementation_metadata` 中明确模式，不能伪装成实时 Provider；
+* `degradation` 必须符合 DegradationRecord DTO；无降级时为 `null`。
 
 ## 22.6 DegradationRecord DTO
 

@@ -2,6 +2,7 @@
 
 - 所属入口文档：[IMPLEMENTATION_ROADMAP.md](../../IMPLEMENTATION_ROADMAP.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED
 - Migration status: COMPLETE
 - Milestone ID: M1
 
@@ -83,6 +84,7 @@ ApprovalRecord
 AuditLog
 Job
 ProcessingRun
+ModelInvocation
 ```
 
 基础能力：
@@ -99,6 +101,86 @@ ProcessingRun
 * 幂等；
 * 乐观锁；
 * SSE 或基础轮询。
+
+## 9.3A M1 Contract Freeze Decision Matrix
+
+本节是批准基线后的增量契约修订，已由 Project Owner 于 2026-07-31 批准。批准允许在新的 Contract Freeze baseline 记录后开始 M1 production implementation；不表示 M1 已实现或已验收，且不得移动 `docs-m1-approved`、`open-design-integration-approved` 历史 tag。
+
+| Issue | Requirement | Domain need | Frontend need | Classification | Contract change | Reason |
+| --- | --- | --- | --- | --- | --- | --- |
+| ProjectMember public contract incomplete | `PROJ-P0-006` | active membership、role、exactly-one OWNER invariant、isolation | 列表与成员 mutation | TYPE A — PUBLIC API REQUIRED | 增加 list/add/update/remove；现有 member PATCH 提供显式原子 ownership transfer | 客户端必须主动管理正式成员且不能隐式选择继任者 |
+| Artifact API incomplete | M1 Artifact lifecycle、文件安全 | 不可变原件、hash、storage metadata、project ownership | 上传、状态、详情和授权下载 | TYPE A — PUBLIC API REQUIRED | 增加 list/initiate/transfer/complete/detail/download | MinIO smoke 不是 Artifact 业务合同 |
+| Approval creation/ownership undefined | 正式高风险审批 | owning domain command 产生 ApprovalRecord | 只读 projection 与用户决定 | TYPE B — DOMAIN COMMAND CREATES RESOURCE | 无 generic create；Service 创建，用户 approve/reject/cancel | 客户端不能制造审批事实 |
+| Audit query API undefined | `PROJ-P0-010`、M1 审计 UI | Service append-only side effect | 最近操作、筛选和分页 | TYPE D — READ PROJECTION ONLY | 增加 project-scoped AuditLog list；无客户端写入口 | UI 需要可追踪活动但不拥有审计 |
+| Job creation ownership undefined | M1 Job foundation | domain Service 创建 Job；Worker 创建 ProcessingRun | list/detail/status/retry/cancel/SSE | TYPE B + TYPE C + TYPE D | 无 generic create；增加 project Job list，冻结执行责任 | Job 是业务执行事实，不是独立用户意图 |
+| M1 idempotency binding incomplete | M1 写操作和异步边界 | Service/Repository 绑定 key、hash、事务与授权 | controller 生成/复用 key并处理 replay/conflict | TYPE C — INTERNAL SERVICE CONTRACT | 冻结逐操作矩阵、scope、重放、冲突、保留与失败边界 | 后续实现可直接写契约测试 |
+| No legitimate M1 Approval consumer | 风险分级与 M1 范围 | 基础设施存在，真实 consumer 在后续 milestone | projection fixture，不展示虚假业务审批 | TYPE E — NO CONTRACT CHANGE REQUIRED | 明确 M1 不制造 FORMAL_APPROVAL operation | M1 没有改变科研事实的真实高风险命令 |
+| ModelInvocation M1 scope inconsistent | `AGOV-P0-001`、`AGOV-P0-002` | Prompt governance 与 invocation audit persistence | 无 M1 用户操作；仅测试/状态边界 | TYPE C — INTERNAL SERVICE CONTRACT | 加入 M1 persistence deliverable；无 Provider/runtime | 首次 M2/M3 模型调用前必须可审计 |
+| Project Overview M2+ fields ambiguous | `PROJ-P0-004` | projection 区分模块 availability 与真实 count | 不把 unavailable 展示为 empty/zero | TYPE D — READ PROJECTION ONLY | 增加 availability；未实现值为 `null` | 保护 M1 UI 和演示真实性 |
+| M0 error envelope differs from formal contract | M0 regression + M1 API | 保留 M0 endpoint 行为；M1 使用正式 envelope | adapter 归一化两种 Envelope | TYPE E — NO M0 CONTRACT REWRITE | 文档化兼容策略，不改 M0 API | 避免扩大为 M0 重构 |
+
+Job retry 是 intentional clarifying amendment：批准基线已要求 retry 创建新的 ProcessingRun，
+但未明确 Job identity；M1 冻结为 same Job + `retry_count` increment + new ProcessingRun。
+当前没有正式 M1 Job 数据或迁移兼容负担。
+
+### M1 创建责任
+
+```text
+public user/domain command
+→ owning Service validates authorization, project, state and idempotency
+→ Service creates domain object and any AuditLog / ApprovalRecord / Job side effect
+→ Worker creates ProcessingRun when execution actually starts
+```
+
+禁止新增：
+
+```text
+POST <API_BASE>/jobs
+POST <API_BASE>/approvals
+POST <API_BASE>/audit-logs
+POST <API_BASE>/processing-runs
+```
+
+### M1 Contract Amendment stable identifier delta
+
+统计规则沿用 `docs-m1-approved`：扫描全部受版本控制且不在 `docs/archive/` 的 Markdown，
+提取以正式 API base prefix 开头的 path 字符串并按完整 path 唯一化；不合并参数名，也不把 HTTP method
+计入 identifier。以下 delta 已纳入 2026-07-31 Project Owner 批准的 M1 Contract Amendment。
+
+| Identifier | Before | After | Change |
+| --- | ---: | ---: | --- |
+| API path identifiers | 236 | 242 | +6 additive；removed 0；renamed 0 |
+| Public METHOD + path operations | baseline contract set | baseline + 12 | +12 additive；removed 0；renamed 0 |
+| Requirement IDs | 181 | 181 | added 0；removed 0；renamed 0 |
+| Acceptance IDs | 16 | 16 | 0 |
+| Existing schema names | baseline | baseline | renamed 0 |
+| Existing Tool names | baseline | baseline | changed 0 |
+| Milestone IDs | baseline | baseline | changed 0 |
+| ADR IDs | baseline | baseline | changed 0 |
+
+6 个新增 path identifiers 对应 Member collection/item、Artifact project collection、Artifact
+content transfer、project Job list 和 project Audit list。12 个 METHOD + path operations 全部
+属于 Member、Artifact、Job/Audit read projection 的预期 M1 amendment；历史 path 指标不区分
+GET/POST 或 PATCH/DELETE，因此两个数字不要求相等。
+
+新增公共错误码仅为 `MEMBER_ALREADY_ACTIVE`、`LAST_PROJECT_OWNER`、
+`APPROVAL_EXPIRED`、`APPROVAL_STALE`；既有错误码未删除、重命名或静默改义。
+
+### M1 Enum / projection delta
+
+| Name | Old values at `docs-m1-approved` | New values | Authority | Persistent domain enum | OpenAPI enum | Frontend projection only |
+| --- | --- | --- | --- | --- | --- | --- |
+| `PermissionAction` M1 additions | `project.read`, `project.update`, `project.delete`, `literature.read`, `literature.create`, `literature.decide`, `dataset.read`, `dataset.upload`, `dataset.approve_transform`, `analysis.create`, `analysis.approve`, `analysis.run`, `figure.create`, `figure.confirm`, `manuscript.upload`, `manuscript.review`, `evidence.read`, `claim.confirm`, `export.create` | old values + `project.manage_members`, `artifact.read`, `artifact.upload`, `artifact.download`, `job.read`, `job.cancel`, `job.retry`, `approval.read`, `approval.decide`, `approval.cancel`, `audit.read` | Common API Contract | NO; policy constants | YES | NO; API authorization projection consumed by frontend |
+| Public error code additions | existing approved error set | old values + `MEMBER_ALREADY_ACTIVE`, `LAST_PROJECT_OWNER`, `APPROVAL_EXPIRED`, `APPROVAL_STALE` | Common API Contract | NO | YES | NO |
+| `AuditLog.outcome` | not defined | `SUCCEEDED`, `FAILED`, `DENIED` | Foundation model + Project API | YES | YES | NO |
+| `ModelInvocation.status` | value set not defined | `PENDING`, `RUNNING`, `SUCCEEDED`, `FAILED` | Foundation model + AI Schema | YES | NO in M1 | NO |
+| `ModelInvocation.data_access_level` | fields named; value set not defined | `METADATA_ONLY`, `REDACTED_CONTENT`, `VERIFIED_EVIDENCE_ONLY`, `APPROVED_FULL_CONTENT` | Foundation model + AI Schema | YES | NO in M1 | NO |
+| `ProjectOverview.module_availability` | field absent | `NOT_AVAILABLE`, `AVAILABLE`, `DEGRADED` | Project API | NO | YES | NO; API read projection consumed by frontend |
+| `JobSseEventType` | existing Job events without resync marker | existing values + `job.resync_required` | Common Job/SSE Contract | NO | NO; SSE protocol contract | NO |
+| Model test execution mode | Mock/Recorded prose, no stable uppercase value set | `MOCK`, `RECORDED` | AI Schema | NO; stored in implementation metadata | NO | NO |
+
+Artifact、Approval、Job、ProjectMember role 和 frontend UI contract registry 复用批准基线的
+既有 value sets；本 amendment 不增加其他持久化 domain enum。
 
 ## 9.4 明确不做
 
@@ -139,7 +221,7 @@ ProcessingRun
 ### Approvals 模块
 
 * ApprovalRecord；
-* 创建审批请求；
+* 供领域 Service 调用的审批请求创建边界；
 * 批准；
 * 驳回；
 * 撤销或失效；
@@ -150,7 +232,7 @@ ProcessingRun
 
 * Job；
 * ProcessingRun；
-* 创建任务；
+* 供产生异步工作的领域 Service 调用的 Job 创建边界；
 * 状态查询；
 * 进度更新；
 * 取消请求；
@@ -168,6 +250,14 @@ ProcessingRun
 * Job ID；
 * 操作者类型；
 * 对象摘要。
+
+### Prompt / Model Governance 模块
+
+* Git 管理的 Prompt manifest；
+* ModelInvocation 持久化；
+* requested/max/effective 数据访问校验；
+* Mock/Recorded 测试模式；
+* 不接入模型 Provider、Agents SDK 或 Agent runtime。
 
 ## 9.6 前端交付物
 
@@ -198,6 +288,7 @@ audit_logs
 jobs
 processing_runs
 idempotency_records
+model_invocations
 ```
 
 必须建立：
@@ -223,20 +314,34 @@ GET    /api/v1/projects/{project_id}
 PATCH  /api/v1/projects/{project_id}
 POST   /api/v1/projects/{project_id}/archive
 
+GET    /api/v1/projects/{project_id}/members
+POST   /api/v1/projects/{project_id}/members
+PATCH  /api/v1/projects/{project_id}/members/{member_id}
+DELETE /api/v1/projects/{project_id}/members/{member_id}
+
+GET    /api/v1/projects/{project_id}/artifacts
 POST   /api/v1/projects/{project_id}/artifacts/uploads
+PUT    /api/v1/artifact-uploads/{upload_id}/content
 POST   /api/v1/projects/{project_id}/artifacts/uploads/{upload_id}/complete
 GET    /api/v1/artifacts/{artifact_id}
 GET    /api/v1/artifacts/{artifact_id}/download
 
+GET    /api/v1/projects/{project_id}/jobs
 GET    /api/v1/jobs/{job_id}
 POST   /api/v1/jobs/{job_id}/cancel
 POST   /api/v1/jobs/{job_id}/retry
 GET    /api/v1/jobs/{job_id}/events
 
-POST   /api/v1/projects/{project_id}/approvals
+GET    /api/v1/projects/{project_id}/approvals
+GET    /api/v1/approvals/{approval_id}
 POST   /api/v1/approvals/{approval_record_id}/approve
 POST   /api/v1/approvals/{approval_record_id}/reject
+POST   /api/v1/approvals/{approval_id}/cancel
+
+GET    /api/v1/projects/{project_id}/audit-logs
 ```
+
+不存在 generic Job、Approval、AuditLog 或 ProcessingRun 创建 API。它们的创建责任由本文件 9.3A 和对应 API/Service 契约定义。
 
 ## 9.9 确定性工具
 
@@ -284,20 +389,20 @@ POST   /api/v1/approvals/{approval_record_id}/reject
 ```text
 登录
 → 创建项目
+→ 管理项目成员
 → 上传文件
 → 文件生成 Artifact
-→ 创建 Job
-→ 查看任务进度
-→ 创建审批记录
 → 查看审计日志
 ```
+
+Job、ProcessingRun 和 ApprovalRecord 在 M1 通过 Service/domain tests、contract fixtures 和前端 projection fixtures 验证。M1 不为演示人造脱离真实领域风险的 Job 或 FORMAL_APPROVAL consumer。
 
 ## 9.13 完成条件
 
 1. 项目隔离测试全部通过；
 2. 原始 Artifact 哈希不可变；
-3. Job 可查询、取消和重试；
-4. ApprovalRecord 可创建、批准和驳回；
+3. 领域 Service 可创建 Job，Job 可查询、取消和按契约重试；
+4. 领域 Service 可创建 ApprovalRecord，审批决定 API 可批准、驳回和取消；
 5. 审计记录不可普通修改；
 6. 前端可展示项目、上传、Job 和审批；
 7. 所有写接口拥有权限检查。
@@ -325,11 +430,12 @@ POST   /api/v1/approvals/{approval_record_id}/reject
 2. 实现项目权限；
 3. 实现 Artifact；
 4. 实现上传和下载；
-5. 实现 Job；
-6. 实现 ProcessingRun；
-7. 实现 ApprovalRecord；
-8. 实现 AuditLog；
-9. 集成前端；
-10. 完成跨项目安全测试。
+5. 实现 AuditLog 追加写与查询投影；
+6. 实现 Job；
+7. 实现 ProcessingRun；
+8. 实现 ApprovalRecord 基础设施；
+9. 实现 Prompt manifest 与 ModelInvocation 治理底座；
+10. 集成前端；
+11. 完成跨项目安全测试。
 
 ---

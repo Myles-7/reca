@@ -2,6 +2,7 @@
 
 - 所属入口文档：[DATA_MODEL_AND_WORKFLOW.md](../DATA_MODEL_AND_WORKFLOW.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED
 - Migration status: COMPLETE
 
 ## 权威范围
@@ -42,6 +43,17 @@
 ### Prompt manifest 与模型数据访问
 
 Prompt 注册表固定为 `backend/app/agents/prompts/prompt-manifest.yaml`。`requested_data_access_level` 是 PromptContract 的最低必要等级，`max_allowed_data_access_level` 是 Tool/Policy 上限，`effective_data_access_level` 是实际发送等级；必须满足 effective 不高于 max_allowed，并遵循最小化原则。
+
+### M1 ProjectMember、Artifact 与创建责任
+
+* Project 创建在同一事务中创建唯一 OWNER membership 和 `PROJECT_CREATED` AuditLog；
+* 项目在所有已提交状态中必须恰好有一个 active OWNER，且与 `ResearchProject.owner_id` 一致；
+* 当前 OWNER 不可通过普通 role update 或 remove 降级/删除；添加成员也不得直接创建第二个 OWNER；
+* ownership transfer 是显式原子命令：锁定项目、当前 OWNER 和目标 active member，在同一事务中更新双方 role、`owner_id` 与 AuditLog；失败时全部回滚；
+* 非 OWNER 的 ProjectMember 使用 `removed_at` 表达移除，重新加入复用同一 `(project_id, user_id)` 关系；
+* Artifact 上传初始化创建 `UPLOADING` 记录；只有服务端完整性校验成功才能进入 `AVAILABLE`；
+* `AVAILABLE` 原始 Artifact 不得回到 `UPLOADING`，不得覆盖内容；
+* ApprovalRecord、AuditLog、Job 和 ProcessingRun 没有 generic public create command：它们分别由拥有业务操作的 Service 或 Worker side effect 创建。
 
 ### MANU-P0-018 AuditResult
 
@@ -766,15 +778,18 @@ stateDiagram-v2
     PENDING --> REJECTED
     PENDING --> CANCELLED
     PENDING --> EXPIRED
-    APPROVED --> SUPERSEDED
-    REJECTED --> SUPERSEDED
+    PENDING --> SUPERSEDED
 ```
 
 规则：
 
 * 决策后不可修改；
 * 修正通过新 Approval；
-* 目标内容改变后旧 Approval 不自动沿用。
+* 目标内容改变后，尚为 PENDING 的旧 Approval 转为 SUPERSEDED；已决定的历史记录保持原终态，新请求通过 `supersedes_approval_id` 引用旧记录；
+* 对 `PENDING` 记录作决定前必须按相同规范化算法重算目标 payload hash；不一致时转为 `SUPERSEDED`；
+* `expires_at <= now` 的 `PENDING` 记录在读取或决定边界转为 `EXPIRED`；
+* 同一幂等 Key 和同一决定请求返回首次结果；使用新 Key 重复决定属于非法状态转换；
+* CANCEL 只允许发起者或 OWNER，且只能从 PENDING 转换。
 
 ---
 
@@ -802,6 +817,56 @@ stateDiagram-v2
 * 未超过 `max_retries`；
 * 输入对象仍有效；
 * 不存在已完成幂等结果。
+
+重试语义：
+
+* retry 复用原 Job，`FAILED` 或 `DISPATCH_FAILED` 转回 `QUEUED` 并递增 `retry_count`；
+* 每次 Worker 实际开始执行时创建新的 ProcessingRun，并递增 `attempt_number`；
+* `DISPATCH_FAILED` 尚未被 Worker 领取时重新分发不创建 ProcessingRun；
+* 重复 Celery delivery 必须先锁定并读取 PostgreSQL Job；已有 active ProcessingRun、终态结果或不允许状态时不得再次执行；
+* Celery state 和 Valkey event/cache 不得直接决定 Job 或 ProcessingRun 终态。
+
+该 same-Job 规则是 intentional M1 clarifying amendment：批准基线只明确“retry 创建新的
+ProcessingRun”，未定义是否创建新 Job；当前没有 M1 Job 数据或 migration compatibility
+负担。
+
+---
+
+# 42A. Artifact 上传状态机
+
+```mermaid
+stateDiagram-v2
+    [*] --> UPLOADING
+    UPLOADING --> AVAILABLE
+    UPLOADING --> FAILED
+    UPLOADING --> QUARANTINED
+    AVAILABLE --> DELETED
+    FAILED --> DELETED
+    QUARANTINED --> DELETED
+```
+
+规则：
+
+* 受控传输只能成功写入一次；重复写入不得覆盖对象；
+* `complete` 只有在服务端 SHA-256、大小、MIME 和文件头检查全部通过时进入 AVAILABLE；
+* 哈希、大小或类型不匹配进入 QUARANTINED；中断或过期进入 FAILED；
+* AVAILABLE、QUARANTINED 和 DELETED 不允许重新 complete；
+* 重复内容允许产生独立 Artifact，但幂等重放必须返回首次创建的同一 Artifact。
+
+---
+
+# 42B. ModelInvocation 状态机
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING
+    PENDING --> RUNNING
+    RUNNING --> SUCCEEDED
+    RUNNING --> FAILED
+    PENDING --> FAILED
+```
+
+terminal ModelInvocation 不可修改；重试必须创建新记录。M1 只实现 Schema、持久化边界和 Mock/Recorded 契约，不发起 Provider 调用。
 
 ---
 
@@ -1062,6 +1127,7 @@ API 应返回：
 4. Artifact；
 5. Job；
 6. AuditLog。
+7. ModelInvocation。
 
 ## 第二批：研究问题与文献
 
@@ -1111,10 +1177,9 @@ API 应返回：
 
 1. AgentRun；
 2. ToolCall；
-3. ModelInvocation；
-4. Export；
-5. ReproPackage；
-6. ExportItem。
+3. Export；
+4. ReproPackage；
+5. ExportItem。
 
 ---
 

@@ -3,6 +3,7 @@
 - 所属入口文档：[API_AI_TOOL_CONTRACTS.md](../API_AI_TOOL_CONTRACTS.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
+- M1 Contract Amendment status: APPROVED
 
 ## 权威范围
 
@@ -845,6 +846,21 @@ ManuscriptVersion 或 ApprovalRecord。
 
 # 72. 模型调用契约
 
+## 72.0 M1 持久化与运行边界
+
+M1 必须交付 `ModelInvocation` 持久化 Schema、内部 Service DTO、Prompt manifest 校验和
+Mock/Recorded 契约测试模式。M1 不调用模型 Provider，不接入 Agents SDK、Agent runtime、
+ResearchOrchestrator 或 Tool Registry runtime。
+
+PromptContract 的权威是 Git 管理的
+`backend/app/agents/prompts/prompt-manifest.yaml`；ModelInvocation 是每次已计划或实际模型
+调用的不可变审计事实。二者不能互相替代，数据库不得提供用户可编辑 Prompt。
+
+ModelInvocation 由内部 model-invocation Service 在执行边界前创建；同一 Service 校验
+project/source/access policy，并通过受控方法推进 RUNNING/terminal 状态。Provider adapter、
+Agents SDK、Worker 或客户端都不能绕过 Service 直接写记录。M1 不提供 ModelInvocation
+public create/update/delete API；授权审计读取由后续真实 consumer 的资源 projection 决定。
+
 ## 72.1 模型调用输入
 
 必须包含：
@@ -868,6 +884,55 @@ structured output 只负责执行校验，不能放宽 RECA Schema 或把 SDK Se
 内容当作项目状态。
 
 P0 的 PromptContract 是 `backend/app/agents/prompts/prompt-manifest.yaml` 中受 Git 管理的代码注册表，不是数据库可编辑内容。`prompt_id + prompt_version + prompt_content_hash` 必须能定位已登记合同；其声明 input/output Schema、允许工具、允许来源类型、最大工具调用数、失败行为和 `requested_data_access_level`。Tool/Policy 另声明 `max_allowed_data_access_level`；调用审计记录实际 `effective_data_access_level`，且必须不高于上限并符合最小化原则。未登记、Schema 不匹配或试图扩大工具/数据权限的调用必须在 Service 层拒绝。
+
+## 72.1.1 ModelInvocation 最小持久化合同
+
+| Concern | M1 required fields / rule |
+| --- | --- |
+| identity | `id`, `project_id`, `request_id`, `actor_type`, `actor_id`, `task_type` |
+| Prompt identity | `prompt_id`, `prompt_version`, `prompt_content_hash`，必须匹配 manifest |
+| Schema identity | `input_schema_name`, `input_schema_version`, `output_schema_name`, `output_schema_version` |
+| runtime identity | `provider`, `model`；M1 未实际调用时可为 `null`，Mock/Recorded 必须显式标识模式 |
+| access policy | `requested_data_access_level`, `max_allowed_data_access_level`, `effective_data_access_level` |
+| provenance | project-scoped `source_ids`, `input_hash`, nullable `output_hash` |
+| outcome | `status`, nullable `error_code`, nullable `degradation` |
+| implementation | nullable `implementation_metadata`，可记录 mode、adapter/version、fixture/recording identity |
+| time | `started_at`, nullable `completed_at`, `created_at` |
+
+状态仅为：
+
+```text
+PENDING
+RUNNING
+SUCCEEDED
+FAILED
+```
+
+数据访问等级从低到高仅为：
+
+```text
+METADATA_ONLY
+REDACTED_CONTENT
+VERIFIED_EVIDENCE_ONLY
+APPROVED_FULL_CONTENT
+```
+
+`effective_data_access_level` 必须不高于 requested 与 policy max 中更严格的边界。
+`source_ids` 必须全部属于同一 `project_id` 且符合 PromptContract 的来源白名单。默认只保存
+规范化 input/output hash 和必要审计摘要，不保存完整敏感正文。terminal record 不得普通
+更新；一次 retry 创建新的 ModelInvocation 并通过 implementation metadata 或上层
+ProcessingRun 建立关联。
+
+## 72.1.2 Mock / Recorded 模式
+
+* `MOCK` 只验证 manifest、Schema、权限、哈希和持久化边界；输出必须来自明确标记的确定性
+  fixture，不得声称来自真实模型；
+* `RECORDED` 使用已审查、固定 hash/version 的录制响应，禁止联网，必须记录 recording
+  identity 与来源许可/脱敏状态；
+* 两种模式都创建 ModelInvocation，记录实际 mode，并执行与未来 live mode 相同的
+  project isolation、data access、Schema 和审计校验；
+* M1 不定义 `LIVE` Provider 执行实现。后续里程碑接入时仍必须使用本合同，不得把 SDK
+  trace 或 session 当作 ModelInvocation、ResearchProject 或 AuditLog。
 
 ## 72.2 敏感数据
 

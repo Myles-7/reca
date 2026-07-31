@@ -3,7 +3,7 @@
 - 文档名称：Frontend, API, and Artifact Rules
 - 所属入口文档：[AGENTS.md](../../AGENTS.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
-- 当前增量状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED
 - 基线兼容性：保留 `docs-m1-approved` 的历史批准范围
 - Migration status: COMPLETE
 
@@ -69,6 +69,11 @@ DTO 到 ViewModel 的映射可以格式化日期、组合多个响应、生成�
 
 错误统一映射为脱敏 `UiErrorViewModel` 或项目批准的等效展示结构，至少保留用户可理解消息、retryable、request ID 和必要的 field/detail 信息。Job/SSE 映射为可见进度和失败状态；断线可降级轮询，但 UI 状态不得覆盖 Job 事实。Approval 操作由 controller 发起并以服务端结果为准，按钮点击本身不等于审批成功。
 
+M1 adapter 必须兼容两种服务端错误事实：M0 Auth/Health 的兼容 Envelope 与 M1 正式
+Envelope。归一化保留 HTTP status、稳定 code/message、任一合法位置的 request ID，以及
+存在时的 details/field errors/retryable；不得仅按 status 丢弃正式错误码，也不得在前端
+自行改变 403/404 的资源不披露决定。
+
 API 契约变化后的固定流程：
 
 ```text
@@ -122,6 +127,30 @@ API 契约变化后的固定流程：
 - 版本关系、哈希、来源和处理状态可查看；
 - 下载、PDF 预览和派生文件访问使用后端授权 API 返回的地址，不直接拼接对象存储 URL，也不暴露对象存储密钥；
 - PDF、DOCX、数据和导出失败必须保留可重试或人工处理入口。
+
+M1 上传 controller 严格按正式 API 顺序执行：initiate → 单次受控 content transfer →
+complete。initiate replay 必须继续使用同一 upload ID；complete 前不把对象展示为可用
+Artifact；hash mismatch、quarantine、interrupted/failed 与 duplicate content 分别映射，
+不得自动覆盖或把相同 hash 合并成同一业务对象。
+
+## 7.1 M1 frontend-facing projection
+
+M1 只冻结下列展示语义，不在本任务创建 TypeScript、route 或 fixture：
+
+| Feature | API input | ViewModel minimum | User events | Required states |
+| --- | --- | --- | --- | --- |
+| Project list/create | project list/create | id、name、status、updatedAt、allowedActions；create form errors | create、open | loading、empty、ready、validation、error、forbidden |
+| Project overview | project detail/overview | project identity、stage、moduleAvailability、foundationCounts、permissions、recent job/approval/audit summaries | update、archive/restore、select workspace section | loading、ready、error、forbidden、stale、version conflict |
+| Member | member list/mutations | memberId、user display、role、isCurrentUser、isOwner、allowedActions | add、changeRole、transferOwnership、remove | loading、empty、ready、forbidden、duplicate、ownership-transfer-required/conflict |
+| Artifact | artifact list/upload/detail/download | artifactId、display filename、kind/origin、status、size/hash、createdAt、downloadAllowed、failure reason | select file、start upload、transfer、complete、download | idle、uploading、verifying、available、failed、quarantined、forbidden、duplicate-content |
+| Job | project list/detail/SSE | jobId、task label、status、progress、step、retryable、result link、failure summary | open、retry、cancel、resync | queued、running、retrying、completed、failed、cancel requested/cancelled、resyncing |
+| Approval | project list/detail/decision | approvalId、target summary、payload hash/status、requester、expiresAt、allowedActions | open、approve、reject、cancel | empty、pending、approved、rejected、expired、superseded/stale、forbidden |
+| Audit | project list | actor、action、target、occurredAt、requestId、outcome、redacted summary | filter、paginate、open target | loading、empty、ready、error、forbidden |
+
+Project Overview 对未实现的 M2+ 模块显示 `NOT_AVAILABLE`，其计数/内容保持 `null`；只有
+API 声明模块 `AVAILABLE` 且真实查询结果为空时才展示 `0` 或 empty state。Approval 组件在
+M1 可以用冻结 projection fixture 验证展示，但不得暗示 M1 存在真实 FORMAL_APPROVAL
+consumer。
 
 ## 8. PDF 与证据
 

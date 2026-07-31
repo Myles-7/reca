@@ -6,6 +6,7 @@
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - 最后更新时间：2026-07-31
 - Migration status: COMPLETE
+- M1 Contract Amendment status: APPROVED
 
 ## 变更记录
 
@@ -129,6 +130,15 @@ RECA 0.1 当前默认场景是 `DEMO_LOCAL`。安全控制必须与实际部署�
 
 UUID、对象键或前端路由不是秘密，不能作为授权依据。
 
+普通已认证用户若不是目标项目成员，读取 project-scoped 对象统一采用不披露语义，
+返回 `404 RESOURCE_NOT_FOUND`；已是成员但缺少具体 action 时返回
+`403 PERMISSION_DENIED`。该规则同样适用于 Artifact 下载、Job/SSE、Approval 和 Audit
+projection，不得通过响应差异枚举项目资源。
+
+`superuser` 不是 ProjectMember role，也不自动创建或恢复 membership。仅后端 policy 可
+为管理/恢复场景执行 override；override 必须关联 actor、project、target、request_id、
+reason 和 outcome 写入 AuditLog。前端管理员标记不能代替该 policy。
+
 ### 4.2 项目作用域
 
 启用多用户能力时，下列资源必须受 `project_id` 或等价所有权约束：
@@ -174,6 +184,10 @@ Competition Edition 允许小型角色集。角色能力应由 Service 显式定
 - 用户文件名只作为显示元数据；
 - 对象存储凭据仅在后端和 Worker 使用；
 - 下载前检查项目权限、Artifact 状态和许可证/敏感数据限制。
+- 上传初始化、内容传输和完成确认都必须重新校验 actor 与项目；upload ID 不能作为授权凭据；
+- 浏览器不得获得 Bucket、永久对象键或对象存储凭据；
+- 完成确认前的对象不是可下载的正式 Artifact；hash、size、MIME 或文件头不一致时不得进入 `AVAILABLE`；
+- 同一 upload session 不得覆盖已写对象，原始 Artifact 的任何更新路径都不得覆盖原始 bytes。
 
 签名 URL 是 `COMPETITION_RECOMMENDED`。Competition Edition 可以使用经过
 授权的后端流式下载，不要求为了形式引入签名 URL 基础设施。

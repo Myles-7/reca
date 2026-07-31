@@ -6,6 +6,7 @@
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - 最后更新时间：2026-07-31
 - Migration status: COMPLETE
+- M1 Contract Amendment status: APPROVED
 
 ## 变更记录
 
@@ -74,6 +75,25 @@ Competition Edition 默认支持 PDF、CSV、XLSX 和 DOCX。其他格式默认�
 - 派生对象记录源 Artifact/版本、操作、工具版本和结果哈希；
 - 解析失败不得修改、替换或删除原文件；
 - 正式结果继续绑定准确的输入版本。
+
+### 1.4.1 M1 Artifact 上传边界
+
+M1 Artifact 业务生命周期使用 API authority 定义的受控流程：upload initiate 分配
+Artifact/upload ID 与服务端对象键，backend-controlled content transfer 接收 bytes，
+complete 再由服务端计算并验证 SHA-256、size、MIME 和文件头。MinIO smoke 不产生正式
+Artifact 语义。
+
+安全规则：
+
+- 客户端文件名仅是经过净化的显示元数据，不参与 Bucket 或 storage key 计算；
+- `upload_id` 不授予任何权限，每一步都按 Artifact 所属 `project_id` 重新授权；
+- 客户端声明的 hash/size/MIME 在完成前均不可信，服务端计算值才是权威；
+- hash、size、MIME 或文件头不一致时 Artifact 进入 `QUARANTINED`，不得下载为正常原件；
+- 传输中断、上传会话过期或存储失败进入 `FAILED`，不得创建 `AVAILABLE` 假成功；
+- 相同内容可形成不同 Artifact ID 和不同 storage key；重复内容不是覆盖许可；
+- content transfer 只允许一次成功写入，重复 PUT 或对 terminal Artifact 的写入必须拒绝；
+- 原始 Artifact 永远不可覆盖；派生内容必须创建新 Artifact 并用 ArtifactRelation 记录来源；
+- 下载只通过后端授权 endpoint，响应不得暴露 Bucket、永久 storage key 或凭据。
 
 ### 1.5 不执行原则
 

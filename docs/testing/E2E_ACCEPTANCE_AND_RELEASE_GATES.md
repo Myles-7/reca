@@ -4,6 +4,7 @@
 - 所属入口文档：[TEST_AND_ACCEPTANCE.md](../TEST_AND_ACCEPTANCE.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
+- M1 Contract Amendment status: APPROVED
 
 ## 权威范围
 
@@ -71,7 +72,10 @@
 * 当前阶段为 INTENT；
 * 用户为 OWNER；
 * AuditLog 存在；
-* 页面显示下一步研究问题。
+* 页面显示 M1 foundation 可用状态；
+* Research Question、Literature、Dataset 和 Evidence 模块明确为 `NOT_AVAILABLE`，对应数量/内容为 `null`，不得显示伪造的 `0`；
+* 项目成员投影显示当前用户为 OWNER；
+* 项目创建使用幂等键重放时仍返回同一项目。
 
 ---
 
