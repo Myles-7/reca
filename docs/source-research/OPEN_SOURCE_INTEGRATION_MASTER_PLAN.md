@@ -6,7 +6,7 @@ Document status: `Conditional Approval`
 
 Last updated: 2026-07-31
 
-Document alignment: [Open-source document alignment map](../reports/OPEN_SOURCE_DOCUMENT_ALIGNMENT_MAP.md)
+Document alignment: [Open-source document alignment map](../archive/open-source-research/OPEN_SOURCE_DOCUMENT_ALIGNMENT_MAP.md)
 
 ## 1. Scope
 

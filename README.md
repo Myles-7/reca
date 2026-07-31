@@ -65,11 +65,13 @@ M0 已完成于提交 `79825914c7c975e8be256a5a89abe812f486769e`，标签 `m0-co
 
 正式证据：
 
+- [M1 Documentation Baseline Approval](./docs/reports/M1_DOCUMENTATION_BASELINE_APPROVAL.md)
+- [Final Open-Source Research and Document Alignment Review](./docs/reports/FINAL_OPEN_SOURCE_RESEARCH_AND_DOCUMENT_ALIGNMENT_REVIEW.md)
 - [M0 Development Summary](./docs/reports/M0_DEVELOPMENT_SUMMARY.md)
 - [M0 Acceptance Report](./docs/acceptance/M0_ACCEPTANCE_REPORT.md)
 - [M0 Final Review](./docs/acceptance/M0_FINAL_REVIEW.md)
 - [M0 Issue Register](./docs/acceptance/M0_ISSUE_REGISTER.md)
-- [M0 Continuous Execution](./docs/development/M0_CONTINUOUS_EXECUTION.md)
+- [M0 Continuous Execution（历史归档）](./docs/archive/m0/M0_CONTINUOUS_EXECUTION.md)
 
 ### 当前两个 LOW 风险
 
@@ -355,7 +357,10 @@ reca/
 | 前端 | [Frontend README](./frontend/README.md)，包含 API、App、Feature、Shared 与 Vendor integration 索引 |
 | 测试 | [Unit](./tests/unit/README.md)、[Integration](./tests/integration/README.md)、[E2E](./tests/e2e/README.md)、[Golden](./tests/golden/README.md) |
 | 开源研究 | [Open-Source Integration Master Plan](./docs/source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md)，包含全部 26 个项目研究记录索引 |
-| 一致性审查 | [Open-Source Integration Document Consistency Review](./docs/reports/OPEN_SOURCE_INTEGRATION_DOCUMENT_CONSISTENCY_REVIEW.md) |
+| 当前批准状态 | [M1 Documentation Baseline Approval](./docs/reports/M1_DOCUMENTATION_BASELINE_APPROVAL.md) |
+| 当前最终审计 | [Final Open-Source Research and Document Alignment Review](./docs/reports/FINAL_OPEN_SOURCE_RESEARCH_AND_DOCUMENT_ALIGNMENT_REVIEW.md) |
+| 报告索引 | [Reports](./docs/reports/README.md) |
+| 历史 Phase 11 审查 | [Open-Source Integration Document Consistency Review](./docs/archive/open-source-research/OPEN_SOURCE_INTEGRATION_DOCUMENT_CONSISTENCY_REVIEW.md) |
 
 ## M1 下一步
 
@@ -403,4 +408,4 @@ RECA 根目录当前没有项目 `LICENSE`，状态为 `PENDING_GOVERNANCE_DECIS
 
 阶段 2 前 README 中仅具历史价值、且不再适合作为入口的独特叙事已迁入 [README_PRE_M1_LONGFORM.md](./docs/archive/README_PRE_M1_LONGFORM.md)。与 PRD、Architecture、Test、Security 和 Roadmap 重复的规范性长段落未重复归档。
 
-旧长版曾建议创建 `docs/archive/README.md`；该建议未作为阶段 2 新文件执行，当前归档入口以上述 longform 文件为准。
+全部历史报告、阶段证据和执行记录由 [归档索引](./docs/archive/README.md) 统一导航；归档材料不定义当前政策。

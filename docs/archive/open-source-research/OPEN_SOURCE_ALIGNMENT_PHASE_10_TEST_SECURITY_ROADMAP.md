@@ -39,7 +39,7 @@ Project-specific acceptance now covers GROBID, PaperQA2, ASReview, Pandera, SciP
 
 ## 3. Security and license alignment
 
-[OPEN_SOURCE_GOVERNANCE.md](../security/OPEN_SOURCE_GOVERNANCE.md) now contains the complete researched-project classification matrix. Important decisions remain:
+[OPEN_SOURCE_GOVERNANCE.md](../../security/OPEN_SOURCE_GOVERNANCE.md) now contains the complete researched-project classification matrix. Important decisions remain:
 
 - PostgreSQL/pgvector uses the PostgreSQL License classification recorded for the pinned project/version.
 - Matplotlib requires review of its custom license and bundled libraries/fonts.
@@ -89,7 +89,7 @@ Existing Service, project isolation, approval, Artifact immutability, Bun, gener
 
 ## 6. Third-party notices
 
-[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) restricts record status to:
+[THIRD_PARTY_NOTICES.md](../../../THIRD_PARTY_NOTICES.md) restricts record status to:
 
 ```text
 ALREADY_INTEGRATED

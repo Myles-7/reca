@@ -97,7 +97,7 @@ bound retries/rate limits, and support Recorded/Offline tests. Default retry is
 zero, so RECA must configure explicit bounded handling for `429`, `500` and
 `503` rather than assume resilience.
 
-Detailed record: [pyalex.md](../source-research/projects/pyalex.md)
+Detailed record: [pyalex.md](../../source-research/projects/pyalex.md)
 
 ## 6. GROBID and client decision
 
@@ -121,8 +121,8 @@ should compare a package dependency with selectively copying the minimal
 Apache-licensed transport behavior. In both cases, the TEI converter remains
 RECA-owned.
 
-Detailed records: [grobid.md](../source-research/projects/grobid.md) and
-[grobid-client-python.md](../source-research/projects/grobid-client-python.md)
+Detailed records: [grobid.md](../../source-research/projects/grobid.md) and
+[grobid-client-python.md](../../source-research/projects/grobid-client-python.md)
 
 ## 7. PDF.js decision
 
@@ -141,7 +141,7 @@ PDF.js = display and interaction
 PDF.js != evidence truth source
 ```
 
-Detailed record: [pdfjs.md](../source-research/projects/pdfjs.md)
+Detailed record: [pdfjs.md](../../source-research/projects/pdfjs.md)
 
 ## 8. PaperQA2 decision
 
@@ -171,7 +171,7 @@ fact. In all cases:
 PaperQA result != EvidenceSpan
 ```
 
-Detailed record: [paperqa2.md](../source-research/projects/paperqa2.md)
+Detailed record: [paperqa2.md](../../source-research/projects/paperqa2.md)
 
 ## 9. ASReview decision
 
@@ -189,7 +189,7 @@ the effect behind the existing REVIEW-P0 screening workflow without adding a
 Requirement ID or making it Competition Core. Manual screening remains the
 fallback.
 
-Detailed record: [asreview.md](../source-research/projects/asreview.md)
+Detailed record: [asreview.md](../../source-research/projects/asreview.md)
 
 ## 10. Candidate versus business fact map
 

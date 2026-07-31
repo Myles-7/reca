@@ -10,7 +10,7 @@ M0 的目标是把 RECA 从批准的产品、架构和安全文档，落实为�
 
 M0 已完成。最终主分支提交为 `79825914c7c975e8be256a5a89abe812f486769e`（PR [#1](https://github.com/Myles-7/reca/pull/1) 的 squash merge commit），完成标签 `m0-complete` 已核验指向该提交。最新 required CI 全部 PASS，最新隔离 clean-room 验收 exit code 为 `0`。问题台账最终为 OPEN BLOCKER=0、OPEN CRITICAL=0、OPEN HIGH=0，因此结论为 `M1 Entry Decision: ALLOWED`。
 
-本报告的正式依据为 Git 历史与标签、PR #1、`docs/acceptance/` 下的验收材料、`docs/development/M0_CONTINUOUS_EXECUTION.md`、`THIRD_PARTY_NOTICES.md` 和实际工程文件；不以聊天记录作为证据。
+本报告的正式依据为 Git 历史与标签、PR #1、`docs/acceptance/` 下的验收材料、`docs/archive/m0/M0_CONTINUOUS_EXECUTION.md`、`THIRD_PARTY_NOTICES.md` 和实际工程文件；不以聊天记录作为证据。
 
 ## 2. M0 范围与非目标
 
@@ -173,4 +173,4 @@ M0 保留 `.env.example` 而不跟踪真实 `.env`；Secret 扫描对真实私�
 | PR | [#1](https://github.com/Myles-7/reca/pull/1)，MERGED |
 | Checkpoint tags | `m0-01-checkpoint`、`m0-02-checkpoint`、`m0-03-checkpoint`、`m0-04-checkpoint`、`m0-05-checkpoint`、`m0-06-checkpoint`、`m0-07-checkpoint`、`m0-08-checkpoint`、`m0-fix-checkpoint`、`m0-fix-2-checkpoint`、`m0-fix-3-checkpoint`、`m0-fix-6-checkpoint`、`m0-fix-7-final` |
 | Required CI | `backend-quality`、`frontend-quality`、`migration-test`、`compose-smoke`、`security-supply-chain`、`e2e-smoke` |
-| 主要正式证据 | `docs/acceptance/M0_ISSUE_REGISTER.md`、`M0_ACCEPTANCE_REPORT.md`、`M0_FINAL_REVIEW.md`、`docs/development/M0_CONTINUOUS_EXECUTION.md` |
+| 主要正式证据 | `docs/acceptance/M0_ISSUE_REGISTER.md`、`M0_ACCEPTANCE_REPORT.md`、`M0_FINAL_REVIEW.md`、`docs/archive/m0/M0_CONTINUOUS_EXECUTION.md` |

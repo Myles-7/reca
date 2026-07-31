@@ -8,7 +8,7 @@ Research status: `ALREADY_INTEGRATED`
 
 Last researched: 2026-07-31
 
-Phase summary: [Foundation runtime research](../../reports/OPEN_SOURCE_RESEARCH_PHASE_1_FOUNDATION.md)
+Phase summary: [Foundation runtime research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_1_FOUNDATION.md)
 
 ## Upstream
 

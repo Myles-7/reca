@@ -156,7 +156,7 @@ Necessary repetition is limited to README summaries, AGENTS redlines, entry-docu
 
 ## 9. Stable identifier verification
 
-The current formal-document authority scope was compared with the sorted Phase 0 files in [`document-split-baseline/`](./document-split-baseline/). The error-code and enum lists remain conservative candidate sets as documented in the baseline inventory.
+The current formal-document authority scope was compared with the sorted Phase 0 files in [`document-split-baseline/`](../evidence/document-split-baseline/). The error-code and enum lists remain conservative candidate sets as documented in the baseline inventory.
 
 | Type | Baseline | Current | Removed | Added | Renamed | Result |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |

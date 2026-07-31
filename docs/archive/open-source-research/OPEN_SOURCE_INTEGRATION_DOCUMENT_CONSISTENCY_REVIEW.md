@@ -71,7 +71,7 @@ The following matrix reconciles the master plan, individual research records,
 ADRs, roadmap, testing, security, Notices, README, and AGENTS guidance. Commit,
 tag, detailed fallback, and test cases remain authoritative in each linked
 research record and the
-[master plan](../source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md).
+[master plan](../../source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md).
 
 | Project | Research status | Recommended mode | Milestone / runtime | License and attribution | Authority, fallback, and test boundary |
 | --- | --- | --- | --- | --- | --- |
@@ -130,8 +130,8 @@ previous-decision section, with the current decision identified as superseding i
 ## 6. Stable identifiers
 
 The Phase 11 literal comparison used the ten lists under
-[`document-split-baseline/`](./document-split-baseline/) and the Phase 0 capture
-[`stable-identifiers-before.txt`](./open-source-research-evidence/stable-identifiers-before.txt).
+[`document-split-baseline/`](../evidence/document-split-baseline/) and the Phase 0 capture
+[`stable-identifiers-before.txt`](../evidence/open-source-research-evidence/stable-identifiers-before.txt).
 
 | Identifier type | Baseline | Present | Unexpected removed | Unexpected renamed | Intentional additive change |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -178,13 +178,13 @@ retained as evidence rather than rewritten as current navigation.
 Current and historical reports remain reachable here without changing their
 authority status:
 
-- [Document section migration map](./DOCUMENT_SECTION_MIGRATION_MAP.md)
-- [Document split and compression summary](./DOCUMENT_SPLIT_AND_COMPRESSION_SUMMARY.md)
-- [Document split baseline inventory](./DOCUMENT_SPLIT_BASELINE_INVENTORY.md)
-- [Documentation consistency repair summary](./DOCUMENTATION_CONSISTENCY_REPAIR_SUMMARY.md)
-- [M0 development summary](./M0_DEVELOPMENT_SUMMARY.md)
-- [Security and reuse optimization baseline](./SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md)
-- [Security and open-source optimization summary](./SECURITY_AND_OPEN_SOURCE_OPTIMIZATION_SUMMARY.md)
+- [Document section migration map](../document-restructure/DOCUMENT_SECTION_MIGRATION_MAP.md)
+- [Document split and compression summary](../document-restructure/DOCUMENT_SPLIT_AND_COMPRESSION_SUMMARY.md)
+- [Document split baseline inventory](../document-restructure/DOCUMENT_SPLIT_BASELINE_INVENTORY.md)
+- [Documentation consistency repair summary](../document-restructure/DOCUMENTATION_CONSISTENCY_REPAIR_SUMMARY.md)
+- [M0 development summary](../../reports/M0_DEVELOPMENT_SUMMARY.md)
+- [Security and reuse optimization baseline](../security-policy/SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md)
+- [Security and open-source optimization summary](../security-policy/SECURITY_AND_OPEN_SOURCE_OPTIMIZATION_SUMMARY.md)
 - [Open-source research baseline](./OPEN_SOURCE_RESEARCH_BASELINE.md)
 - [Open-source research Phase 1: foundation](./OPEN_SOURCE_RESEARCH_PHASE_1_FOUNDATION.md)
 - [Open-source research Phase 2: literature](./OPEN_SOURCE_RESEARCH_PHASE_2_LITERATURE.md)
@@ -196,7 +196,7 @@ authority status:
 - [Open-source alignment Phase 8: product and architecture](./OPEN_SOURCE_ALIGNMENT_PHASE_8_PRODUCT_ARCHITECTURE.md)
 - [Open-source alignment Phase 9: data and contracts](./OPEN_SOURCE_ALIGNMENT_PHASE_9_DATA_CONTRACTS.md)
 - [Open-source alignment Phase 10: test, security, and roadmap](./OPEN_SOURCE_ALIGNMENT_PHASE_10_TEST_SECURITY_ROADMAP.md)
-- [Final open-source research and document alignment review](./FINAL_OPEN_SOURCE_RESEARCH_AND_DOCUMENT_ALIGNMENT_REVIEW.md)
+- [Final open-source research and document alignment review](../../reports/FINAL_OPEN_SOURCE_RESEARCH_AND_DOCUMENT_ALIGNMENT_REVIEW.md)
 
 ## 9. Status and historical integrity
 

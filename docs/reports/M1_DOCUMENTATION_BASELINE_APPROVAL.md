@@ -25,6 +25,8 @@ The project owner reviewed and approved the current nine-entry documentation
 system and its formal subordinate specifications as the development baseline for
 M1. The approval basis is the
 [Final Open-Source Research and Document Alignment Review](./FINAL_OPEN_SOURCE_RESEARCH_AND_DOCUMENT_ALIGNMENT_REVIEW.md).
+Current reports and their authority are listed in the [reports index](./README.md);
+superseded phase material is retained through the [archive index](../archive/README.md).
 
 This approval authorizes the start of M1 development. It does not state that M1
 has been implemented, that any M1 acceptance criterion has passed, or that M2-M9

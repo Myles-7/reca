@@ -9,7 +9,7 @@
 
 ## 1. Scope and rules
 
-This map translates the decisions in [Open-Source Integration Master Plan](../source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md) into file-level follow-up work. A listed change is not evidence that an integration exists. Implementation status remains governed by the repository, milestone acceptance, and third-party records.
+This map translates the decisions in [Open-Source Integration Master Plan](../../source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md) into file-level follow-up work. A listed change is not evidence that an integration exists. Implementation status remains governed by the repository, milestone acceptance, and third-party records.
 
 Alignment must preserve all Requirement IDs, Acceptance IDs, API paths, error codes, Schema names, Agent Tool names, enum values, Milestone IDs, ADR IDs, and M0 Issue IDs. New prose may name an upstream project or integration mode, but must not create a new business contract implicitly.
 
@@ -189,13 +189,13 @@ created and accepted them without modifying formal product or contract text:
 
 | ADR | Decision scope | Primary files to align after acceptance |
 | --- | --- | --- |
-| [ADR-002](../decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md) | Normalized modes, metadata, upgrade, and attribution rules. | Architecture, security, development workflow, notices. |
-| [ADR-003](../decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md) | PyAlex, GROBID, PDF.js, pgvector, PaperQA2, ASReview chain and authority boundaries. | Literature requirements/models/API/tests/M2-M3. |
-| [ADR-004](../decisions/ADR-004-DATA-STATISTICS-STACK.md) | Pandera, SciPy, statsmodels, Matplotlib, GX, and DVC roles. | Data requirements/models/API/tests/M4-M5. |
-| [ADR-005](../decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md) | DOCX, OOXML, CSL resources, processor/isolation decision. | Manuscript requirements/models/API/tests/M6-M7. |
-| [ADR-006](../decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) | PDF.js, TanStack Table, React Flow, and Zotero UX reference boundaries. | Frontend architecture, UX, tests/M2-M7. |
-| [ADR-007](../decisions/ADR-007-AGENT-WORKFLOW-STACK.md) | Agents SDK runtime and ARS selective Vendor mapping under ADR-001. | Agent architecture, Schemas, Tools, tests/M8. |
-| [ADR-008](../decisions/ADR-008-IMPLEMENTATION-METADATA.md) | Machine-readable pins, licenses, copied paths, modifications, fallbacks, and acceptance evidence. | Notices, source research, delivery workflow, release gates. |
+| [ADR-002](../../decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md) | Normalized modes, metadata, upgrade, and attribution rules. | Architecture, security, development workflow, notices. |
+| [ADR-003](../../decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md) | PyAlex, GROBID, PDF.js, pgvector, PaperQA2, ASReview chain and authority boundaries. | Literature requirements/models/API/tests/M2-M3. |
+| [ADR-004](../../decisions/ADR-004-DATA-STATISTICS-STACK.md) | Pandera, SciPy, statsmodels, Matplotlib, GX, and DVC roles. | Data requirements/models/API/tests/M4-M5. |
+| [ADR-005](../../decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md) | DOCX, OOXML, CSL resources, processor/isolation decision. | Manuscript requirements/models/API/tests/M6-M7. |
+| [ADR-006](../../decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) | PDF.js, TanStack Table, React Flow, and Zotero UX reference boundaries. | Frontend architecture, UX, tests/M2-M7. |
+| [ADR-007](../../decisions/ADR-007-AGENT-WORKFLOW-STACK.md) | Agents SDK runtime and ARS selective Vendor mapping under ADR-001. | Agent architecture, Schemas, Tools, tests/M8. |
+| [ADR-008](../../decisions/ADR-008-IMPLEMENTATION-METADATA.md) | Machine-readable pins, licenses, copied paths, modifications, fallbacks, and acceptance evidence. | Notices, source research, delivery workflow, release gates. |
 
 ## 15. Coverage and execution boundary
 

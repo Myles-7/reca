@@ -8,7 +8,7 @@ Research status: `RECOMMENDED`
 
 Last researched: 2026-07-31
 
-Phase summary: [Manuscript, citation and frontend research](../../reports/OPEN_SOURCE_RESEARCH_PHASE_4_MANUSCRIPT_FRONTEND.md)
+Phase summary: [Manuscript, citation and frontend research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_4_MANUSCRIPT_FRONTEND.md)
 
 ## Upstream
 

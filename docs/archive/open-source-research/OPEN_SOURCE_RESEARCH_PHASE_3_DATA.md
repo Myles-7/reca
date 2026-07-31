@@ -96,12 +96,12 @@ copy these research-head minimums into dependencies.
 
 Detailed records:
 
-- [Pandera](../source-research/projects/pandera.md)
-- [SciPy](../source-research/projects/scipy.md)
-- [statsmodels](../source-research/projects/statsmodels.md)
-- [Matplotlib](../source-research/projects/matplotlib.md)
-- [DVC](../source-research/projects/dvc.md)
-- [Great Expectations](../source-research/projects/great-expectations.md)
+- [Pandera](../../source-research/projects/pandera.md)
+- [SciPy](../../source-research/projects/scipy.md)
+- [statsmodels](../../source-research/projects/statsmodels.md)
+- [Matplotlib](../../source-research/projects/matplotlib.md)
+- [DVC](../../source-research/projects/dvc.md)
+- [Great Expectations](../../source-research/projects/great-expectations.md)
 
 ## 5. Pandera decision
 

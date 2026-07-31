@@ -19,13 +19,13 @@ workflow, migration, lock file or third-party content.
 
 Evidence files:
 
-- [Repository catalog](open-source-research-evidence/repository-catalog.csv)
-- [Document impact map](open-source-research-evidence/document-impact-map.csv)
-- [Current integration status](open-source-research-evidence/current-integration-status.csv)
-- [Stable identifiers before research](open-source-research-evidence/stable-identifiers-before.txt)
-- [Current third-party records](open-source-research-evidence/current-third-party-records.txt)
-- [Current architecture decisions](open-source-research-evidence/current-architecture-decisions.txt)
-- [Current roadmap integrations](open-source-research-evidence/current-roadmap-integrations.txt)
+- [Repository catalog](../evidence/open-source-research-evidence/repository-catalog.csv)
+- [Document impact map](../evidence/open-source-research-evidence/document-impact-map.csv)
+- [Current integration status](../evidence/open-source-research-evidence/current-integration-status.csv)
+- [Stable identifiers before research](../evidence/open-source-research-evidence/stable-identifiers-before.txt)
+- [Current third-party records](../evidence/open-source-research-evidence/current-third-party-records.txt)
+- [Current architecture decisions](../evidence/open-source-research-evidence/current-architecture-decisions.txt)
+- [Current roadmap integrations](../evidence/open-source-research-evidence/current-roadmap-integrations.txt)
 
 ## 2. Git and governance baseline
 
@@ -117,7 +117,7 @@ implementation claim.
 ## 5. Document mention and impact summary
 
 The detailed per-project map is in
-[document-impact-map.csv](open-source-research-evidence/document-impact-map.csv).
+[document-impact-map.csv](../evidence/open-source-research-evidence/document-impact-map.csv).
 Current mentions cluster as follows:
 
 | Area | Principal documents | Main contract sensitivity |
@@ -219,7 +219,7 @@ python-docx and ARS-Codex.
 
 The current formal corpus was compared with the existing document-split
 baseline. Details are frozen in
-[stable-identifiers-before.txt](open-source-research-evidence/stable-identifiers-before.txt).
+[stable-identifiers-before.txt](../evidence/open-source-research-evidence/stable-identifiers-before.txt).
 
 | Type | Baseline | Present | Unexpected removed | Unexpected renamed | Result |
 | --- | ---: | ---: | ---: | ---: | --- |

@@ -25,8 +25,8 @@ migration or lock file was changed.
 
 Project records:
 
-- [OpenAI Agents SDK research](../source-research/projects/openai-agents-sdk.md)
-- [ARS-Codex source record](../source-research/academic-research-skills-codex.md)
+- [OpenAI Agents SDK research](../../source-research/projects/openai-agents-sdk.md)
+- [ARS-Codex source record](../../source-research/academic-research-skills-codex.md)
 
 ## 2. Executive decision
 

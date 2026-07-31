@@ -30,7 +30,7 @@
 | 主要读者 | 项目负责人、开发者、测试人员、演示人员和 Codex |
 | 最后更新时间 | 2026-07-31 |
 | 根许可证 | `PENDING_GOVERNANCE_DECISION` |
-| 阶段基线 | [SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md](./reports/SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md) |
+| 历史阶段基线 | [SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md](./archive/security-policy/SECURITY_AND_REUSE_OPTIMIZATION_BASELINE.md) |
 
 ## 变更记录
 

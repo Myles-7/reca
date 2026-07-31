@@ -8,7 +8,7 @@ Research status: `PLANNED`
 
 Last researched: 2026-07-31
 
-Phase summary: [Agent SDK and ARS workflow research](../../reports/OPEN_SOURCE_RESEARCH_PHASE_5_AGENT.md)
+Phase summary: [Agent SDK and ARS workflow research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_5_AGENT.md)
 
 ## Upstream
 

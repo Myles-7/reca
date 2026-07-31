@@ -64,7 +64,7 @@ frontend shell, generated/adapter boundary, Compose topology, CI and clean-room
 tests. The Item example was removed. The correct strategy is selective review of
 small upstream fixes. Regenerating or overlaying the full template is rejected.
 
-Detailed record: [full-stack-fastapi-template.md](../source-research/full-stack-fastapi-template.md)
+Detailed record: [full-stack-fastapi-template.md](../../source-research/full-stack-fastapi-template.md)
 
 ## 5. Celery decision
 
@@ -82,7 +82,7 @@ Multiple logical queues are deferred until resource contention is measured. A
 small `io`/`compute`/`model` split can be validated before heavy M4/M8 workloads,
 but Phase 1 creates no queues.
 
-Detailed record: [celery.md](../source-research/projects/celery.md)
+Detailed record: [celery.md](../../source-research/projects/celery.md)
 
 ## 6. Valkey decision
 
@@ -98,7 +98,7 @@ become requirements from this research.
 The upstream default branch is `unstable` and explicitly not a production
 release branch; RECA must never use its placeholder version as a runtime tag.
 
-Detailed record: [valkey.md](../source-research/projects/valkey.md)
+Detailed record: [valkey.md](../../source-research/projects/valkey.md)
 
 ## 7. pgvector decision
 
@@ -111,7 +111,7 @@ Every query requires `project_id`. Every stored embedding requires source
 version, model, model version, dimension and content hash/lineage. Similarity is
 ranking evidence, not an EvidenceSpan or Claim truth decision.
 
-Detailed record: [pgvector.md](../source-research/projects/pgvector.md)
+Detailed record: [pgvector.md](../../source-research/projects/pgvector.md)
 
 ## 8. pgvector-python decision
 
@@ -125,7 +125,7 @@ mandatory for `project_id`, embedding-version compatibility and deterministic
 query behavior. Adoption waits for a spike against RECA's exact pgvector
 `0.8.2-pg17`, SQLModel, Psycopg and Alembic versions.
 
-Detailed record: [pgvector-python.md](../source-research/projects/pgvector-python.md)
+Detailed record: [pgvector-python.md](../../source-research/projects/pgvector-python.md)
 
 ## 9. Cross-project boundaries
 

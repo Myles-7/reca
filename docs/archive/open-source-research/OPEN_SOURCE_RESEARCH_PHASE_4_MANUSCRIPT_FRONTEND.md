@@ -85,13 +85,13 @@ branch.
 
 Detailed records:
 
-- [python-docx](../source-research/projects/python-docx.md)
-- [CSL Styles](../source-research/projects/csl-styles.md)
-- [citeproc-js](../source-research/projects/citeproc-js.md)
-- [TanStack Table](../source-research/projects/tanstack-table.md)
-- [xyflow / React Flow](../source-research/projects/xyflow.md)
-- [Zotero](../source-research/projects/zotero.md)
-- [Zotero Web Library](../source-research/projects/zotero-web-library.md)
+- [python-docx](../../source-research/projects/python-docx.md)
+- [CSL Styles](../../source-research/projects/csl-styles.md)
+- [citeproc-js](../../source-research/projects/citeproc-js.md)
+- [TanStack Table](../../source-research/projects/tanstack-table.md)
+- [xyflow / React Flow](../../source-research/projects/xyflow.md)
+- [Zotero](../../source-research/projects/zotero.md)
+- [Zotero Web Library](../../source-research/projects/zotero-web-library.md)
 
 ## 5. DOCX stack
 

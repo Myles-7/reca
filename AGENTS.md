@@ -130,6 +130,7 @@ bun run --cwd frontend test:shell
 | 安全与开源 | [SECURITY_AND_OPEN_SOURCE.md](./docs/SECURITY_AND_OPEN_SOURCE.md) | Notices、来源记录 |
 | 里程碑和交付顺序 | [IMPLEMENTATION_ROADMAP.md](./docs/IMPLEMENTATION_ROADMAP.md) | milestone 子文档 |
 | M0 历史证据 | [M0_DEVELOPMENT_SUMMARY.md](./docs/reports/M0_DEVELOPMENT_SUMMARY.md) | `docs/acceptance/` |
+| M1 文档批准状态 | [M1_DOCUMENTATION_BASELINE_APPROVAL.md](./docs/reports/M1_DOCUMENTATION_BASELINE_APPROVAL.md) | 最终审计、Git tag `docs-m1-approved` |
 
 `docs/archive/` 全部为非权威历史材料。
 
@@ -453,7 +454,7 @@ Commit
 | [BACKEND_DATA_AND_ASYNC_RULES.md](./docs/development/BACKEND_DATA_AND_ASYNC_RULES.md) | 后端、Service、数据库、迁移、文件和异步任务 |
 | [FRONTEND_API_AND_ARTIFACT_RULES.md](./docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md) | 前端、OpenAPI Client、权限 UI 和 Artifact 交互 |
 | [TEST_GIT_AND_DELIVERY_RULES.md](./docs/development/TEST_GIT_AND_DELIVERY_RULES.md) | 测试命令、CI、clean-room、Git、PR 和报告 |
-| [M0_CONTINUOUS_EXECUTION.md](./docs/development/M0_CONTINUOUS_EXECUTION.md) | M0 历史执行记录，不是 M1 新需求来源 |
+| [M0_CONTINUOUS_EXECUTION.md](./docs/archive/m0/M0_CONTINUOUS_EXECUTION.md) | 已归档的 M0 历史执行记录，不是 M1 新需求来源 |
 
 所有子文档状态为 `APPROVED FOR M1 DEVELOPMENT`。入口和子文档冲突时必须作为文档缺陷处理。
 

@@ -26,21 +26,21 @@ resource is added.
 ## 2. Source-research structure
 
 The source-research index remains the
-[Open-Source Integration Master Plan](../source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md).
+[Open-Source Integration Master Plan](../../source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md).
 Project records use the existing `docs/source-research/projects/` directory.
 
 Two records retain their earlier authoritative paths to avoid duplicate synonyms
 and broken historical links:
 
-- [Full Stack FastAPI Template](../source-research/full-stack-fastapi-template.md);
-- [Academic Research Skills Codex](../source-research/academic-research-skills-codex.md).
+- [Full Stack FastAPI Template](../../source-research/full-stack-fastapi-template.md);
+- [Academic Research Skills Codex](../../source-research/academic-research-skills-codex.md).
 
 The repository contains 26 project records for 26 distinct primary upstream
 repositories. No repository has two project research records.
 
 ## 3. Research status model
 
-[ADR-008](../decisions/ADR-008-IMPLEMENTATION-METADATA.md) formalizes the only
+[ADR-008](../../decisions/ADR-008-IMPLEMENTATION-METADATA.md) formalizes the only
 allowed source-research statuses:
 
 ```text
@@ -83,17 +83,17 @@ source-of-truth consequences, so none was merged into a generic empty ADR.
 
 | ADR | Decision |
 | --- | --- |
-| [ADR-002](../decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md) | Normalized project integration modes and direct-versus-adapter boundary |
-| [ADR-003](../decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md) | Candidate-first PyAlex/GROBID/PDF.js/pgvector/PaperQA2/ASReview chain |
-| [ADR-004](../decisions/ADR-004-DATA-STATISTICS-STACK.md) | Pandera as the planned P0 validator; deterministic SciPy/statsmodels/Matplotlib; GX/DVC non-authority roles |
-| [ADR-005](../decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md) | Immutable DOCX processing, selected CSL resources, deferred full citation processor |
-| [ADR-006](../decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) | Headless table/graph/PDF components over authoritative RECA APIs; Zotero as reference |
-| [ADR-007](../decisions/ADR-007-AGENT-WORKFLOW-STACK.md) | One M8 RECA Orchestrator, SDK mechanics, conditional ARS assets, no upstream state authority |
-| [ADR-008](../decisions/ADR-008-IMPLEMENTATION-METADATA.md) | Required adoption, provenance, license, fallback, and acceptance metadata |
+| [ADR-002](../../decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md) | Normalized project integration modes and direct-versus-adapter boundary |
+| [ADR-003](../../decisions/ADR-003-LITERATURE-EVIDENCE-STACK.md) | Candidate-first PyAlex/GROBID/PDF.js/pgvector/PaperQA2/ASReview chain |
+| [ADR-004](../../decisions/ADR-004-DATA-STATISTICS-STACK.md) | Pandera as the planned P0 validator; deterministic SciPy/statsmodels/Matplotlib; GX/DVC non-authority roles |
+| [ADR-005](../../decisions/ADR-005-MANUSCRIPT-CITATION-STACK.md) | Immutable DOCX processing, selected CSL resources, deferred full citation processor |
+| [ADR-006](../../decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) | Headless table/graph/PDF components over authoritative RECA APIs; Zotero as reference |
+| [ADR-007](../../decisions/ADR-007-AGENT-WORKFLOW-STACK.md) | One M8 RECA Orchestrator, SDK mechanics, conditional ARS assets, no upstream state authority |
+| [ADR-008](../../decisions/ADR-008-IMPLEMENTATION-METADATA.md) | Required adoption, provenance, license, fallback, and acceptance metadata |
 
 ## 5. ADR-001 ARS-Codex formalization
 
-[ADR-001](../decisions/ADR-001-ARS-CODEX-USAGE.md) is amended to decision version
+[ADR-001](../../decisions/ADR-001-ARS-CODEX-USAGE.md) is amended to decision version
 `1.2.0` and retains this fixed research/reuse baseline:
 
 ```text
