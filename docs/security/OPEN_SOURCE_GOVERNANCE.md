@@ -1,7 +1,7 @@
 # Open Source Governance
 
 - 文档名称：Open Source Governance
-- 文档版本：1.2.1
+- 文档版本：1.3.0
 - 所属入口文档：[SECURITY_AND_OPEN_SOURCE.md](../SECURITY_AND_OPEN_SOURCE.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - 最后更新时间：2026-07-31
@@ -15,6 +15,7 @@
 | 1.1.0 | 2026-07-31 | Conditional Approval | 采用 effect-first 复用模式、保守许可证分类和条件式 Adapter 政策 |
 | 1.2.0 | 2026-07-31 | Conditional Approval | 增加全部研究项目的许可证分类矩阵、隔离条件和实际状态边界 |
 | 1.2.1 | 2026-07-31 | Conditional Approval | 明确阶段 11 审查时 ARS-Codex 尚未进入仓库的事实状态；政策不变 |
+| 1.3.0 | 2026-07-31 | Project Owner Decision | 采用最大合法复用边界：宽松许可证默认直接采用，特殊许可证在满足实际义务时允许最宽集成模式，不再以额外内部审批或净室重写作为默认门槛 |
 
 ## 权威范围
 
@@ -26,10 +27,32 @@ Vendor、Submodule、选择性复制、归属、Adapter、数据/PDF 权利、AR
 [安全与开源治理入口](../SECURITY_AND_OPEN_SOURCE.md)。根许可证选择仍由
 项目负责人单独决定。
 
-## 1. Effect-first 开源原则
+## 1. 最大合法复用原则
 
 在许可证允许、来源明确并能够维护的前提下，RECA 优先复用成熟开源项目，
 以提升作品效果、开发速度和演示稳定性。自行重新实现不再是默认要求。
+
+项目负责人的默认授权边界为 `MAXIMUM_LAWFUL_REUSE`：在固定版本的实际
+许可证和其他适用权利允许的最大范围内，可以直接使用包、服务、Fork、完整
+Vendor、Submodule、选择性复制、修改 Prompt/工作流/脚本/测试，或组合这些
+方式。工程实现应选择交付最快、效果最好且可验证的模式，不因“更保守”而
+默认改写已有成熟实现。
+
+具体执行规则：
+
+- MIT、BSD、Apache、PostgreSQL License 等经核验的宽松许可证内容，默认
+  允许直接依赖、Fork、完整 Vendor、Submodule、选择性复制和修改；无需为
+  “是否允许复用”再取得单独项目级批准，可在同一实现 PR 中完成来源登记；
+- Copyleft、文件级许可证、非商业或自定义许可证内容不因类别名称被一律
+  禁止；只要当前使用、修改、托管和分发方式能够满足实际条款，即可采用
+  许可证允许的最宽集成模式；
+- `RESEARCH_REFERENCE`、`DESIGN_REFERENCE` 和 `DEFERRED` 是当前工程建议，
+  不是永久禁用标签。实现 Spike 证明价值且许可证条件可满足时，可在同一
+  变更中更新研究记录、ADR、Notices 和集成状态；
+- 不强制为直接复用增加无收益的 Adapter、隔离服务或清洁室重实现；只有
+  领域泄漏、替换、离线测试、安全或实际许可证义务产生明确收益时才采用；
+- 署名、许可证文本、NOTICE、源码提供、相同许可证、非商业用途、商标、
+  数据和素材权利等上游义务不是 RECA 内部审批项，不能由本政策豁免。
 
 开源复用必须同时满足：
 
@@ -109,8 +132,8 @@ Submodule 不是许可证隔离的自动保证。
 
 ## 3. 最小准入记录
 
-复制、Fork、Vendor、Submodule 或修改第三方内容前，必须在 ADR、来源研究
-记录、依赖审查记录或等价台账中保存：
+复制、Fork、Vendor、Submodule 或修改第三方内容时，必须最迟在同一实现
+PR 合并前，于 ADR、来源研究记录、依赖审查记录或等价台账中保存：
 
 ```yaml
 project_name: ""
@@ -140,7 +163,8 @@ reviewed_at: ""
 
 ## 4. 许可证分类
 
-使用以下保守分类，不在未经核验时给出法律结论：
+使用以下义务分类，不在未经核验时给出法律结论。分类用于识别必须履行的
+条件，不作为比上游许可证更严格的内部禁用等级：
 
 ### 4.1 `PERMISSIVE_REUSE_ALLOWED`
 

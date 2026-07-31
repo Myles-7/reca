@@ -10,7 +10,7 @@ Accepted on 2026-07-31
 
 Documentation status: `APPROVED FOR M1 DEVELOPMENT`
 
-Decision version: `1.0.1`
+Decision version: `1.1.0`
 
 Current amendment: 2026-07-31
 
@@ -42,6 +42,19 @@ DO_NOT_USE
 
 The mode is a governance classification, not proof of implementation. Actual incorporation also requires an implementation status, pinned adopted version, license evidence, repository paths, attribution, fallback, and acceptance evidence as defined by [ADR-008](./ADR-008-IMPLEMENTATION-METADATA.md).
 
+The project default is `MAXIMUM_LAWFUL_REUSE`. Once the fixed upstream license
+has been verified, an implementation may use the broadest integration mode that
+the license and actual distribution model permit. Permissively licensed content
+does not require a separate reuse-approval task; provenance and attribution may
+be completed in the same implementation PR. Copyleft, noncommercial, and custom
+licenses are obligation categories rather than blanket prohibitions. Their
+mandatory terms still apply and cannot be waived by this ADR.
+
+`DESIGN_REFERENCE`, `RESEARCH_REFERENCE`, and `DEFERRED` recommendations may be
+changed by an implementation PR when a measured Spike supports adoption and the
+same PR updates the governing source record, license evidence, integration mode,
+fallback, acceptance evidence, and Notices where content is actually incorporated.
+
 Direct integration is allowed for stable, narrow libraries when an abstraction would cost more than it protects. An Adapter or provider is required when an external API is replaceable, third-party objects could leak into the domain, offline substitution is required, or a license/security boundary needs isolation.
 
 No integration mode may bypass RECA Services, project authorization, immutable originals, version lineage, deterministic formal results, approval rules, or audit records.
@@ -65,6 +78,7 @@ No integration mode may bypass RECA Services, project authorization, immutable o
 | --- | --- | --- | --- |
 | 1.0.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Recorded the original decision and its RECA authority boundaries |
 | 1.0.1 | 2026-07-31 | Accepted / APPROVED FOR M1 DEVELOPMENT documentation | Synchronized the documentation approval state; decision content and integration facts are unchanged |
+| 1.1.0 | 2026-07-31 | Accepted / Project Owner Decision | Adopted maximum lawful reuse as the default and removed separate internal reuse approval for verified permissive licenses |
 
 ## References
 
