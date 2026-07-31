@@ -1,12 +1,14 @@
 # Final Open-Source Research and Document Alignment Review
 
-Document version: `1.0.0`
+Document version: `1.0.1`
 
 Audit date: 2026-07-31
 
 Audit baseline: `8b748e1d47084b47cb1a493142f9ee373f21c7fb`
 
-Documentation status: `Conditional Approval`
+Documentation status: `APPROVED FOR M1 DEVELOPMENT`
+
+Approval synchronization date: 2026-07-31
 
 Root license: `PENDING_GOVERNANCE_DECISION`
 
@@ -485,3 +487,10 @@ Project owner approval may accept the documentation package while retaining the
 listed implementation and license gates. It must be a separate explicit action.
 This report does not modify formal document status, create `docs-m1-approved`,
 create an M1 branch, install a dependency, or copy third-party content.
+
+## 18. Change Record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the final audit and project-owner approval recommendation |
+| 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized the report metadata after project-owner approval; audit findings and implementation gates are unchanged |
