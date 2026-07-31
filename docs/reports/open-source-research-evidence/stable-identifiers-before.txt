@@ -1,0 +1,72 @@
+RECA OPEN-SOURCE INTEGRATION RESEARCH - STABLE IDENTIFIER BASELINE
+Captured: 2026-07-31
+Starting HEAD: 849a6972d16ba076becfd8a306717cf222969c4c
+Comparison baseline: docs/reports/document-split-baseline/
+
+Method
+------
+The existing Phase 0 identifier lists were compared literally against tracked
+Markdown at the starting HEAD, excluding the baseline directory itself. This
+file records counts and differences; the authoritative literal identifier lists
+remain the ten named files in docs/reports/document-split-baseline/.
+
+Type                         Baseline  Present  Missing  Added/Renamed
+Requirement IDs                   181      181        0  0
+Acceptance IDs                     16       16        0  0
+API paths                         236      236        0  0
+Error-code candidates              87       87        0  0
+Schema names                       16       16        0  0
+Agent Tool names                   51       51        0  0
+Enum/value candidates             401      378       23  unresolved baseline candidates
+Milestone IDs/tokens               20       20        0  0
+ADR IDs                             1        1        0  0
+M0 Issue IDs                        4        4        0  0
+
+Unexpected removed stable contracts: 0
+Unexpected renamed stable contracts: 0
+Identifiers modified by this phase: 0
+
+Pre-existing enum/value candidate mismatch
+------------------------------------------
+The following entries from the conservative old enum_values.txt were not found
+literally in current tracked Markdown before Phase 0 work began. They are mainly
+configuration, governance or environment tokens rather than domain enum values.
+They are recorded as unresolved extraction-scope differences, not removals made
+by this phase:
+
+ACCESS_TOKEN_EXPIRE_MINUTES
+ALLOW_PUBLIC_SIGNUP
+AUDIT_LOG_ENABLED
+CODE_OF_CONDUCT
+DATASET_LICENSES
+DEPENDENCY_REVIEW
+MAX_DATASET_COLUMNS
+MAX_DATASET_ROWS
+MAX_DATASET_SIZE_MB
+MAX_DOCX_SIZE_MB
+MAX_PDF_SIZE_MB
+MINIO_BUCKET
+MINIO_ENDPOINT
+MINIO_ROOT_PASSWORD
+MINIO_ROOT_USER
+MODEL_ALLOW_SENSITIVE_DATA
+MODEL_STORE_FULL_INPUT
+POSTGRES_DB
+POSTGRES_PASSWORD
+POSTGRES_PORT
+POSTGRES_SERVER
+POSTGRES_USER
+VALKEY_URL
+
+Baseline source files
+---------------------
+acceptance_ids.txt        16
+adr_ids.txt                1
+agent_tool_names.txt      51
+api_paths.txt            236
+enum_values.txt          401
+error_codes.txt           87
+m0_issue_ids.txt           4
+milestone_ids.txt         20
+requirement_ids.txt      181
+schema_names.txt          16

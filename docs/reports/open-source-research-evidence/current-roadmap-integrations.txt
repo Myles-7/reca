@@ -1,0 +1,59 @@
+RECA CURRENT ROADMAP INTEGRATION BASELINE
+Captured: 2026-07-31
+
+M0 COMPLETED
+- full-stack-fastapi-template: selected engineering foundation copied with provenance
+- PostgreSQL/pgvector: infrastructure and vector smoke
+- Valkey: broker/cache service
+- Celery: sole worker runtime; reca.health_ping only
+- GROBID: internal service healthcheck only
+- TanStack Table: package present; target feature not yet delivered
+
+M1 ALLOWED
+- Project foundation, prompt governance and shared contracts
+- No formal Agent runtime
+- Open-source license/provenance review travels with any future integration PR
+
+M2 RESEARCH AND LITERATURE
+- OpenAlex/PyAlex planned
+- GROBID parsing workflow planned; pypdf fallback remains controlled
+- PDF.js work begins across M2-M3
+- PaperQA remains a design/retrieval-chain research reference under DEC-006
+
+M3 LITERATURE MATRIX AND EVIDENCE
+- TanStack Table planned for matrix UI
+- PDF.js planned for page rendering/highlighting
+- EvidenceSpan remains backend/domain truth
+
+M4 DATA QUALITY AND CLEANING
+- Pandera plus RECA-specific deterministic rules planned
+- Great Expectations and DVC have no current roadmap decision
+
+M5 ANALYSIS AND FIGURES
+- SciPy and statsmodels planned for deterministic statistics
+- Matplotlib planned for deterministic figures
+- No model-generated formal statistics
+
+M6 MANUSCRIPT AND EXPORT
+- python-docx plus controlled OOXML processing planned
+- MANU-P0-018 boundary remains unchanged
+
+M7 EVIDENCE GRAPH
+- React Flow/xyflow planned for visualization
+- No graph database in P0
+
+M8 CONTROLLED AGENT
+- One ResearchOrchestrator planned
+- OpenAI Agents SDK has only a brief PLANNED_M8 architecture mention
+- ARS-Codex reuse is allowed after license/attribution review but no content is incorporated
+- Reuse does not advance Agent runtime before M8 or permit free multi-Agent behavior
+
+M9 RELEASE AND REPRODUCIBILITY
+- ReproPackage and release hardening
+- DVC must not be assumed to replace RECA DatasetVersion or Artifact lineage
+
+P1 ONLY OR UNASSIGNED
+- Active-learning literature screening remains P1; ASReview is not named
+- Complete CSL/multiple citation styles remain P1
+- citation-style-language/styles has conceptual relevance; citeproc-js has no decision
+- Zotero and Zotero Web Library have no current roadmap integration

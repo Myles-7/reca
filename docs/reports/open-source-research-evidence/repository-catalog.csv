@@ -1,0 +1,27 @@
+project,repository,research_group,current_reca_status,current_document_mentions,planned_milestone,current_integration_mode,research_priority
+full-stack-fastapi-template,https://github.com/fastapi/full-stack-fastapi-template,ENGINEERING_FOUNDATION,IMPLEMENTED_M0,"THIRD_PARTY_NOTICES.md; docs/source-research/full-stack-fastapi-template.md; docs/ARCHITECTURE.md",M0,SELECTIVE_COPY,LOW
+openai-agents-python,https://github.com/openai/openai-agents-python,AGENT_AND_WORKFLOW,PLANNED,"docs/ARCHITECTURE.md",M8,DEFERRED,HIGH
+grobid,https://github.com/grobidOrg/grobid,LITERATURE_AND_PDF,PRESENT_INFRA_ONLY,"README.md; AGENTS.md; THIRD_PARTY_NOTICES.md; docs/ARCHITECTURE.md; docs/architecture/; docs/roadmap/; docs/testing/",M2,INDEPENDENT_SERVICE,HIGH
+grobid-client-python,https://github.com/grobidOrg/grobid-client-python,LITERATURE_AND_PDF,NOT_MENTIONED,"none",M2,DEFERRED,HIGH
+pyalex,https://github.com/J535D165/pyalex,LITERATURE_AND_PDF,PLANNED,"AGENTS.md; docs/ARCHITECTURE.md; docs/roadmap/milestones/M2_RESEARCH_AND_LITERATURE.md",M2,ADAPTER_INTEGRATION,HIGH
+pdf.js,https://github.com/mozilla/pdf.js,LITERATURE_AND_PDF,PLANNED,"docs/ARCHITECTURE.md; docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md; docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md; docs/roadmap/",M2_M3,DIRECT_DEPENDENCY,HIGH
+paper-qa,https://github.com/Future-House/paper-qa,LITERATURE_AND_PDF,DESIGN_REFERENCE_ONLY,"docs/ARCHITECTURE.md; docs/architecture/OPERATIONS_DEPLOYMENT_AND_ADRS.md",M2_M3,DESIGN_REFERENCE,HIGH
+asreview,https://github.com/asreview/asreview,LITERATURE_AND_PDF,P1_ONLY,"generic active-learning requirement only; repository not named",P1,DEFERRED,MEDIUM
+pandera,https://github.com/unionai-oss/pandera,DATA_AND_STATISTICS,PLANNED,"AGENTS.md; docs/ARCHITECTURE.md; docs/roadmap/milestones/M4_DATA_QUALITY_AND_CLEANING.md",M4,DIRECT_DEPENDENCY,HIGH
+scipy,https://github.com/scipy/scipy,DATA_AND_STATISTICS,PLANNED,"AGENTS.md; docs/ARCHITECTURE.md; docs/roadmap/milestones/M5_ANALYSIS_AND_FIGURES.md",M5,DIRECT_DEPENDENCY,HIGH
+statsmodels,https://github.com/statsmodels/statsmodels,DATA_AND_STATISTICS,PLANNED,"AGENTS.md; docs/ARCHITECTURE.md; docs/architecture/DATA_FLOWS_AND_ADAPTERS.md; docs/roadmap/milestones/M5_ANALYSIS_AND_FIGURES.md",M5,DIRECT_DEPENDENCY,HIGH
+matplotlib,https://github.com/matplotlib/matplotlib,DATA_AND_STATISTICS,PLANNED,"AGENTS.md; docs/ARCHITECTURE.md; docs/roadmap/milestones/M5_ANALYSIS_AND_FIGURES.md",M5,ADAPTER_INTEGRATION,HIGH
+python-docx,https://github.com/python-openxml/python-docx,MANUSCRIPT_AND_CITATION,PLANNED,"AGENTS.md; docs/ARCHITECTURE.md; docs/roadmap/milestones/M6_MANUSCRIPT_AND_EXPORT.md",M6,DIRECT_DEPENDENCY,HIGH
+citation-style-language/styles,https://github.com/citation-style-language/styles,MANUSCRIPT_AND_CITATION,P1_ONLY,"docs/PRODUCT_REQUIREMENTS.md; docs/product/; docs/roadmap/",P1,DEFERRED,MEDIUM
+citeproc-js,https://github.com/Juris-M/citeproc-js,MANUSCRIPT_AND_CITATION,NOT_MENTIONED,"none",P1,DEFERRED,MEDIUM
+TanStack/table,https://github.com/TanStack/table,FRONTEND_AND_UX,DEPENDENCY_PRESENT_FEATURE_PLANNED,"frontend/package.json; bun.lock; docs/ARCHITECTURE.md; docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md",M3,DIRECT_DEPENDENCY,LOW
+xyflow,https://github.com/xyflow/xyflow,FRONTEND_AND_UX,PLANNED,"docs/ARCHITECTURE.md; docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md; docs/roadmap/",M7,DIRECT_DEPENDENCY,MEDIUM
+pgvector,https://github.com/pgvector/pgvector,ENGINEERING_FOUNDATION,IMPLEMENTED_M0,"README.md; AGENTS.md; THIRD_PARTY_NOTICES.md; docker-compose.yml; docs/ARCHITECTURE.md; docs/testing/",M0,INDEPENDENT_SERVICE,LOW
+pgvector-python,https://github.com/pgvector/pgvector-python,ENGINEERING_FOUNDATION,NOT_MENTIONED,"none",M1_M5,DEFERRED,MEDIUM
+celery,https://github.com/celery/celery,ENGINEERING_FOUNDATION,IMPLEMENTED_M0,"README.md; AGENTS.md; THIRD_PARTY_NOTICES.md; backend/pyproject.toml; docs/ARCHITECTURE.md; docs/development/; docs/testing/",M0,DIRECT_DEPENDENCY,LOW
+valkey,https://github.com/valkey-io/valkey,ENGINEERING_FOUNDATION,IMPLEMENTED_M0,"README.md; AGENTS.md; THIRD_PARTY_NOTICES.md; docker-compose.yml; docs/ARCHITECTURE.md",M0,INDEPENDENT_SERVICE,LOW
+dvc,https://github.com/iterative/dvc,DATA_AND_STATISTICS,NOT_MENTIONED,"none",M4_M9,DEFERRED,MEDIUM
+great-expectations,https://github.com/great-expectations/great_expectations,DATA_AND_STATISTICS,NOT_MENTIONED,"none",M4,DEFERRED,MEDIUM
+zotero,https://github.com/zotero/zotero,MANUSCRIPT_AND_CITATION,NOT_MENTIONED,"none",P1,DEFERRED,MEDIUM
+zotero-web-library,https://github.com/zotero/web-library,FRONTEND_AND_UX,NOT_MENTIONED,"none",P1,DEFERRED,MEDIUM
+academic-research-skills-codex,https://github.com/Imbad0202/academic-research-skills-codex,AGENT_AND_WORKFLOW,RESEARCH_REFERENCE_ONLY,"README.md; AGENTS.md; docs/decisions/ADR-001-ARS-CODEX-USAGE.md; docs/source-research/academic-research-skills-codex.md; docs/IMPLEMENTATION_ROADMAP.md",M8,DESIGN_REFERENCE,HIGH
