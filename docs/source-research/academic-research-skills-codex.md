@@ -1,6 +1,6 @@
 # Academic Research Skills Codex source record
 
-Document version: `1.1.0`
+Document version: `1.2.0`
 
 Document status: `Conditional Approval`
 
@@ -50,6 +50,7 @@ Fixed source:
 | --- | --- | --- | --- |
 | 1.0.0 | 2026-07-30 | Reviewed | Recorded fixed source and research-only clean-room decision |
 | 1.1.0 | 2026-07-31 | Conditional Approval | Recorded effect-first permitted modes, noncommercial intent and incorporation prerequisites; no content copied |
+| 1.2.0 | 2026-07-31 | Conditional Approval | Added Phase 5 repository-depth evidence, asset-by-asset RECA mapping and Vendor option comparison; ADR conclusion unchanged and no content copied |
 
 ## 3. Current decision
 
@@ -216,7 +217,234 @@ THIRD_PARTY_NOTICES entry required by actual incorporation: no
 The temporary external research clone was not added to RECA's source tree,
 build context, dependency graph, container images or runtime.
 
-## 12. Sources
+## 12. Phase 5 repository-depth inspection
+
+The Phase 5 review inspected the fixed snapshot rather than relying only on the
+root README. The snapshot is a Codex-native distribution that vendors two fixed
+upstreams and adapts them through one root router Skill.
+
+### Repository and runtime facts
+
+| Field | Verified value |
+| --- | --- |
+| Default branch | `main` |
+| Research commit | `f8d6b061efe98564a3f554c917fce66dcef6ca54` |
+| Latest repository tag | `v0.1.22` |
+| Package version | `0.1.22` |
+| Root license | CC BY-NC 4.0 |
+| Main language | Python plus Markdown/JSON/Shell assets |
+| Primary install mode | Codex plugin or direct installation of the root Skill |
+| Main entrypoint | `skills/academic-research-suite/SKILL.md` |
+| Vendored ARS root | `skills/academic-research-suite/ars/` |
+| Codex adapter root | `skills/academic-research-suite/codex/` |
+| Tracked ARS | `Imbad0202/academic-research-skills@828ef3b6...`, suite `3.19.0` |
+| Tracked experiment-agent | `Imbad0202/experiment-agent@9b063fa8...` |
+| Automatic subagents | No; role prompts run inline by default |
+| Full-runtime profile | Optional and disabled by default |
+| Hooks | Preserved for traceability; disabled/not installed by default |
+| Cross-model calls | Disabled by default; require provider configuration and content consent |
+| Test/evaluation surface | Python validators, fixtures, gold/held-out sets and nested upstream CI metadata |
+| Maintenance status | Active at the fixed snapshot; repository not archived |
+
+The root manifest records exactly which upstream paths were included and which
+Claude/plugin loader paths were excluded. Nested upstream workflows and CI are
+traceability/self-test material; they are not automatically RECA runtime or CI.
+
+### Inspected asset families
+
+The fixed snapshot contains:
+
+- a root Codex routing Skill and command-alias recipes;
+- deep-research, academic-paper, paper-reviewer and academic-pipeline workflows;
+- an experiment-agent compatibility subtree;
+- role/phase prompts under workflow-specific `agents/` directories;
+- Material Passport, review, writer, patch, evaluator and audit Schemas;
+- PRISMA, compliance, claim verification and revision protocols;
+- deterministic validators and transport adapters;
+- examples, fixtures, tests, gold sets and held-out evaluation sets;
+- optional Codex planner, Agent-team templates, hooks and quality-gate runner;
+- upstream design/migration documentation retained as historical evidence.
+
+## 13. Asset inventory and disposition
+
+The classifications below are candidate integration decisions for later
+implementation. They do not copy or approve any specific path.
+
+| Asset | Upstream evidence surface | Classification | RECA use and reason |
+| --- | --- | --- | --- |
+| `SCOPING` | root router topic override; deep-research Socratic mode; research-question prompt | `ADAPT_AND_VENDOR` | Strong candidate-question workflow, but must emit RECA Scoping Schema and preserve separate AI Scoping/ResearchQuestionVersion states |
+| `DEEP_RESEARCH` | deep-research workflow, bibliography/source-verification/synthesis prompts | `ADAPT_AND_VENDOR` | Reuse search planning and evidence-synthesis patterns while RECA owns QueryPlan, LiteratureRecord and EvidenceSpan |
+| `PRISMA` | systematic-review mode, protocol/report templates, PRISMA-trAIce and compliance gates | `DESIGN_REFERENCE` | P0 should not import the entire 13-role pipeline; reuse checklist/reporting structure only when matched to existing review scope |
+| `MATERIAL_PASSPORT` | academic-pipeline state, reset-boundary protocol, passport Schemas | `REWRITE_FOR_RECA` | Useful provenance pattern, but RECA database/Artifact lineage and ProjectContextSnapshot already define authority |
+| `CLAIM_VERIFICATION` | claim verification protocol, claim/ref audit prompt, claim Schemas and validators | `ADAPT_AND_VENDOR` | High-value patterns for Claim, EvidenceSpan, ClaimEvidenceLink and AuditResult; must not certify unsupported evidence |
+| `MODE_ROUTING` | root Skill router, mode registry, mode advisors | `REWRITE_FOR_RECA` | Translate intent cues into deterministic StageResolver inputs; do not import free workflow state or multi-Agent ownership |
+| `CHECKPOINT` | workflow FULL/SLIM/MANDATORY checkpoints and reset ledger | `REWRITE_FOR_RECA` | Map only meaningful decisions to NONE/LIGHT_CONFIRMATION/FORMAL_APPROVAL and persisted project state |
+| `REVIEW_REVISION` | revision coach, revision patch protocol, R&R traceability and claim-drift guards | `ADAPT_AND_VENDOR` | Strong M6-M7 candidate for ManuscriptIssue, versioned patches and re-review; deterministic patching must remain controlled |
+| `PAPER_REVIEW` | reviewer workflow, independent reviewer prompts, rubrics and editorial synthesis | `DESIGN_REFERENCE` | Use rubric and dissent-preservation ideas without importing a free multi-reviewer runtime into Competition Core |
+| `PROMPTS` | workflow/agent Markdown prompts and command recipes | `ADAPT_AND_VENDOR` | Select high-value prompts, split into RECA Prompt manifests and strict Schemas, preserve attribution and hashes |
+| `POLICY_MARKERS` | IRON RULE, mandatory/advisory markers, degradation and compliance protocols | `REWRITE_FOR_RECA` | Convert useful markers into RECA ToolPolicy, ApprovalPolicy, evidence and degradation rules; never treat prose markers as enforcement alone |
+| `TESTS` | validator tests, mutation tests, fixtures and adapter tests | `ADAPT_AND_VENDOR` | Reuse test structures selectively after fixture rights and RECA contract mapping are reviewed |
+| `GOLDEN_CASES` | `evals/gold`, held-out sets, calibration and robustness fixtures | `ADAPT_AND_VENDOR` | Useful for Prompt/Schema regressions, but imported cases need license, provenance, sensitive-data and domain-fit review |
+| `SCRIPTS` | deterministic checkers, audit wrappers, patch and verification scripts | `ADAPT_AND_VENDOR` | Candidate development/test tooling; each script needs dependency, path, side-effect and platform review |
+| `HOOKS` | upstream and Codex hook metadata | `DO_NOT_USE` | Hooks are runtime-specific, disabled by default upstream and can create invisible behavior; RECA should implement explicit Services/jobs/tests instead |
+
+No category is classified `DIRECT_REUSE` without adaptation. Even high-value
+assets encode ARS file-state, role, checkpoint and runtime assumptions that do
+not match RECA's database-owned architecture.
+
+## 14. Precise ARS-to-RECA mapping
+
+| ARS asset | RECA object or module | Milestone | Integration method |
+| --- | --- | --- | --- |
+| Scoping / Socratic research-question flow | `ResearchQuestionVersion`, AI Scoping output Schema and existing confirmation flow | M2 | `ADAPT_AND_VENDOR` selected prompt/rubric; strict RECA Schema; no direct state import |
+| Deep Research search planning | `QueryPlan`, literature provider/search run and `LiteratureRecord` candidate flow | M2-M3 | Adapt workflow/prompt patterns; execute through existing literature Services and Tools |
+| Source verification and evidence packing | `DocumentChunk`, candidate evidence, `EvidenceSpan` validation | M3 | Adapt verification rubrics; require page/text/source checks before EvidenceSpan creation |
+| PRISMA systematic-review assets | Existing literature review requirements and reporting/export surface | M3/P1 enhancement | Design reference first; selective templates only after scope and license review |
+| Material Passport | `Artifact`, `ArtifactRelation`, version lineage, `ProjectContextSnapshot` | M1-M7 | Rewrite as database queries and derived snapshot metadata; never a second source of truth |
+| Claim verification | `Claim`, `ClaimEvidenceLink`, `EvidenceSpan`, `AuditResult` | M6-M7 | Selectively adapt prompts, Schemas and deterministic consistency tests |
+| Review/revision workflow | `ManuscriptIssue`, `ManuscriptVersion`, manuscript checks and approvals | M6-M7 | Adapt revision planning and claim-drift tests; RECA owns version and approval transitions |
+| Mode router | `StageResolver` | M8 | Rewrite deterministic rules and bounded intent classification; one Orchestrator only |
+| Checkpoint | Approval policy and persisted project state | M1-M8 | Map to NONE/LIGHT_CONFIRMATION/FORMAL_APPROVAL; do not require formal approval at every ARS checkpoint |
+| Agent role prompts | Prompt modes inside `ResearchOrchestrator` | M8 | Selective Prompt Vendor with manifests; no independently stateful free Agent team |
+| Prompt assets | Git-managed `PromptContract` manifest and AI Schemas | M1+ | Selective adaptation begins only with a licensed incorporation PR; runtime consumption follows feature milestones |
+| Commands/workflow templates | RECA tasks, Services and Agent routes | M1-M8 | Treat as design recipes; do not register upstream slash commands as business APIs |
+| Policy markers | ToolPolicy, ApprovalPolicy, ModelDataPolicy, evidence/audit policies | M1-M8 | Translate into executable checks and tests, preserving RECA terminology |
+| Tests and golden cases | Prompt, Schema, Tool, evidence and milestone golden tests | M1-M9 | Selectively Vendor compatible cases and record fixture rights/source |
+| Scripts | Development/test validators or narrow deterministic workers | M1-M9 | Per-script review; no arbitrary Shell/Python Tool exposure to the Agent |
+| Hooks | No direct RECA runtime object | None | Do not install; convert desired checks into explicit CI, jobs or Services if separately approved |
+
+### Mapping rules
+
+- ARS candidate references never become `EvidenceSpan` without RECA source and
+  location validation.
+- Material Passport content cannot overwrite ResearchProject, Artifact,
+  ApprovalRecord or versioned domain objects.
+- ARS checkpoints are not copied mechanically; read-only/candidate work remains
+  automatic and only high-risk facts/versions require formal approval.
+- Role prompts remain Prompt assets. They do not create a new stable Tool, API,
+  Schema, Enum or milestone.
+- ARS multi-role language can be executed as modes inside the single
+  `ResearchOrchestrator`; it does not imply autonomous peer Agents.
+- Deterministic ARS scripts may support tests or narrow Services, but they are
+  never exposed as a generic Python/Shell execution capability.
+
+## 15. Selective Vendor versus full snapshot
+
+### Option A: selective Vendor
+
+Candidate structure, not created by this phase:
+
+```text
+vendor/ars-adapted/
+├── LICENSE
+├── ATTRIBUTION.md
+├── UPSTREAM_COMMIT
+├── MODIFICATIONS.md
+├── selected-prompts/
+├── selected-workflows/
+└── selected-tests/
+```
+
+### Option B: full snapshot Vendor
+
+Candidate structure, not created by this phase:
+
+```text
+vendor/academic-research-skills-codex/
+├── LICENSE
+├── UPSTREAM.md
+├── ORIGINAL_COMMIT
+├── MODIFICATIONS.md
+└── ...
+```
+
+### Comparison
+
+| Dimension | Selective Vendor | Full snapshot Vendor |
+| --- | --- | --- |
+| Demonstration effect | Focuses effort on scoping, claim verification, revision and golden cases that visibly improve RECA | Preserves the broad suite, including many capabilities RECA may never expose |
+| Development speed | Faster after an initial asset-selection pass; less runtime adaptation | Fastest archival import, but slower before usable integration because many paths assume ARS runtime/state |
+| License isolation | Clear copied-path ledger and compact attribution boundary | Strong physical snapshot boundary, but all distributed content remains under special-license review |
+| Maintenance | Smaller diff and test surface; manual upstream cherry-pick decisions | Easier whole-snapshot comparison, much larger update and regression surface |
+| Context pollution | Low if assets are grouped by RECA feature and manifests | High: hundreds of prompts/docs/fixtures can confuse Codex and duplicate authority |
+| RECA architecture adaptation | Explicit conversion to Project/Approval/Evidence/Tool contracts | High risk of importing Material Passport, checkpoint and multi-role assumptions unchanged |
+| Test reuse | Can select contract-relevant fixtures and validators | Includes broad upstream tests, some requiring excluded Claude/plugin inputs |
+| Removal cost | Per-feature removal is straightforward | Snapshot removal is simple physically, but downstream coupling may be broad |
+| Commercialization re-review | Narrow path list can be assessed/replaced | Entire snapshot and all derived use must be re-reviewed |
+
+### Recommendation
+
+Prefer **Option A, selective Vendor**, beginning with scoping, claim verification,
+revision safeguards, selected policy markers and compatible golden tests. Keep
+the fixed upstream repository/Commit in the evidence record so omitted assets
+remain discoverable.
+
+Use a full snapshot only if a later spike proves that maintaining the coherent
+suite produces substantially better results than selective adaptation and a
+separate architecture/license decision accepts the context and maintenance
+cost. This recommendation does not amend ADR-001's permission or runtime gate.
+
+## 16. Runtime assumptions and incompatibilities
+
+ARS-Codex assumes a conversational Codex Skill environment, Markdown role
+prompts, file-based workflow artifacts and optional runtime features controlled
+by environment flags. The optional full-runtime profile can plan Agent teams and
+hooks, but is disabled by default. Cross-model transport and some source checks
+assume explicit credentials, network access and consent.
+
+RECA differs in material ways:
+
+- project and workflow state are durable database facts;
+- Tools are stable allowlisted contracts calling application Services;
+- Agent runtime is M8 and uses one Orchestrator;
+- Approval is risk-based and version-bound, not a generic checkpoint prompt;
+- evidence must join verified source text and location semantics;
+- deterministic programs own formal statistics and transformations;
+- Prompt manifests are Git-managed from M1;
+- ToolCall, ModelInvocation and AgentRun are persisted audit records;
+- arbitrary hooks and generic code execution are prohibited.
+
+Therefore ARS-Codex is best treated as a high-value asset library and workflow
+research source, not as an application framework that owns RECA state.
+
+## 17. Phase 5 validation spikes
+
+Before copying any ARS path:
+
+1. choose one asset family and list exact files;
+2. re-read the fixed root license and inspect file-level/upstream notices;
+3. add the required attribution/source/modification record;
+4. translate its inputs/outputs to existing RECA Schemas without new IDs;
+5. run it against recorded/golden RECA cases;
+6. test missing, conflicting and fabricated evidence;
+7. verify it cannot write project state or self-approve;
+8. measure context/token cost against a RECA-native prompt baseline;
+9. confirm no free multi-Agent runtime or early M8 dependency is introduced;
+10. retain a clean removal path.
+
+The first recommended spike is the M2 Scoping prompt/rubric plus golden cases,
+implemented as a PromptContract candidate rather than a runtime Agent. A second
+spike should test claim-verification assets against M6-M7 EvidenceSpan and
+AuditResult fixtures.
+
+## 18. Phase 5 decision boundaries
+
+```text
+usage_intent: NONCOMMERCIAL_INTENT_DECLARED
+recommended_reuse: selective Vendor after path-level license and attribution review
+runtime_component: not approved by this research phase
+single_orchestrator: preserved
+M8_boundary: preserved
+actual_content_copied: none
+ADR-001_formal_decision_changed: no
+commercialization_re_review_required: true
+```
+
+This research does not state that school competition use is legally confirmed
+NonCommercial. It records the project owner's intent and preserves the review
+gate for changed use, sponsorship, public distribution or commercialization.
+
+## 19. Sources
 
 - [ARS-Codex repository at fixed Commit](https://github.com/Imbad0202/academic-research-skills-codex/tree/f8d6b061efe98564a3f554c917fce66dcef6ca54)
 - [ARS-Codex LICENSE](https://github.com/Imbad0202/academic-research-skills-codex/blob/f8d6b061efe98564a3f554c917fce66dcef6ca54/LICENSE)
