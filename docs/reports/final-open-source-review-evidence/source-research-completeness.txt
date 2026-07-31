@@ -1,0 +1,47 @@
+RECA FINAL OPEN-SOURCE REVIEW - SOURCE RESEARCH COMPLETENESS
+Captured: 2026-07-31
+
+Expected primary repositories: 26
+Unique research records: 26
+Duplicate synonymous records: 0
+Records missing a pinned research Commit in the master plan: 0
+Records missing a license classification in the master plan: 0
+Records missing a recommended mode: 0
+Records missing a milestone/runtime boundary: 0
+Records missing source-of-truth/fallback/test guidance: 0
+
+ALREADY_INTEGRATED (6)
+- full-stack-fastapi-template.md
+- projects/celery.md
+- projects/valkey.md
+- projects/pgvector.md
+- projects/grobid.md
+- projects/tanstack-table.md
+
+PLANNED (11)
+- projects/pgvector-python.md
+- projects/pyalex.md
+- projects/pdfjs.md
+- projects/pandera.md
+- projects/scipy.md
+- projects/statsmodels.md
+- projects/matplotlib.md
+- projects/python-docx.md
+- projects/csl-styles.md
+- projects/xyflow.md
+- projects/openai-agents-sdk.md
+
+EXPERIMENT_REQUIRED (5)
+- projects/grobid-client-python.md
+- projects/paperqa2.md
+- projects/asreview.md
+- projects/citeproc-js.md
+- academic-research-skills-codex.md
+
+RECOMMENDED (4)
+- projects/dvc.md
+- projects/great-expectations.md
+- projects/zotero.md
+- projects/zotero-web-library.md
+
+Result: PASS

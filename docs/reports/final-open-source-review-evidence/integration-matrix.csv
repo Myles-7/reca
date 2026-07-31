@@ -1,0 +1,27 @@
+project,recommended_mode,milestone,research_status,runtime_status,source_of_truth,fallback,test_requirement
+Full Stack FastAPI Template,ALREADY_INTERNALIZED_BASELINE,M0 maintenance,ALREADY_INTEGRATED,selectively internalized,RECA repository and accepted M0 behavior,retain specialized tree,six required CI and provenance
+Celery,DIRECT_DEPENDENCY,M0 foundation and M1-M8,ALREADY_INTEGRATED,installed 5.5.3,Job and ProcessingRun,synchronous bounded flow and database redispatch,idempotency retry cancel and crash
+Valkey,INDEPENDENT_SERVICE,M0 foundation and M1+,ALREADY_INTEGRATED,Compose service,PostgreSQL and immutable Artifacts,recompute and database recovery,restart TTL namespace and pressure
+pgvector,INDEPENDENT_SERVICE,M0 and M2-M3,ALREADY_INTEGRATED,PostgreSQL extension,PostgreSQL objects and embedding lineage,exact SQL and text filter,migration ranking lineage and project isolation
+pgvector-python,DIRECT_DEPENDENCY,M2-M3,PLANNED,absent,RECA repository and PostgreSQL,reviewed SQL or driver registration,ORM server and Alembic compatibility
+PyAlex,DIRECT_DEPENDENCY_WITH_PROVIDER,M2,PLANNED,absent,RECA QueryPlan search run and LiteratureRecord,recorded HTTP provider,offline retry pagination and normalization
+GROBID,INDEPENDENT_SERVICE,M2-M3,ALREADY_INTEGRATED,health-only service,immutable PDF TEI and RECA converter,pypdf degraded parser,resource corpus page validation and visible degradation
+grobid-client-python,SELECTIVE_VENDOR,M2,EXPERIMENT_REQUIRED,absent,RECA Job Artifact and client interface,small RECA HTTP client,transport spike and filesystem boundary
+PDF.js,DIRECT_DEPENDENCY,M2-M3,PLANNED,absent,backend evidence APIs and immutable PDF,reduced page viewer,authorization coordinate and version tests
+PaperQA2,SELECTIVE_VENDOR,M3 and M8,EXPERIMENT_REQUIRED,no full runtime,RECA chunks pgvector validator and workflow,native retrieval and deterministic packing,recall citation no-evidence conflict and EvidenceSpan validation
+ASReview,DIRECT_DEPENDENCY_WITH_PROVIDER,M3 optional,EXPERIMENT_REQUIRED,absent,user LiteratureDecision,manual deterministic order,seed feedback reproducibility and zero decision writes
+Pandera,DIRECT_DEPENDENCY,M4,PLANNED,absent,RECA rules DatasetVersion and DataQualityRun,explicit preflight degradation,FailureCase conversion performance and immutability
+SciPy,DIRECT_DEPENDENCY,M5,PLANNED,absent,approved AnalysisPlan and AnalysisResult,explicit unsupported-method failure,golden values warnings NaN and effective N
+statsmodels,DIRECT_DEPENDENCY,M5 P0-Full,PLANNED,absent,approved AnalysisPlan and AnalysisResult,defer regression,golden coefficient CI row and missing-data tests
+Matplotlib,DIRECT_DEPENDENCY,M5,PLANNED,absent,AnalysisResult Figure manifest and Artifacts,table-only output,five templates headless CJK metadata and value equality
+DVC,DEVELOPMENT_ONLY,M4-M7 optional,RECOMMENDED,no application runtime,DatasetVersion Artifact lineage and ReproPackage,Git and object-storage fixtures,removal cannot affect business lineage
+Great Expectations,DESIGN_REFERENCE,M4,RECOMMENDED,no runtime,Pandera-backed DataQualityRun,RECA report design,no second validator authority
+python-docx,DIRECT_DEPENDENCY,M6-M7,PLANNED,absent,immutable DOCX and ManuscriptVersion,read-only inspection or export,OOXML corpus hash lineage and office round-trip
+CSL Styles,RESOURCE_SNAPSHOT,M3-M6 and P1,PLANNED,no files copied,RECA normalized reference and citation manifest,simple deterministic formatter,file rights hash locale and golden render
+citeproc-js,DEFERRED,P1 decision,EXPERIMENT_REQUIRED,absent,RECA references and citation manifest,simple deterministic formatter,license decision and citation goldens before adoption
+TanStack Table,DIRECT_DEPENDENCY,M2-M7,ALREADY_INTEGRATED,dependency present and features planned,backend APIs and durable domain objects,simple paginated list,row identity server state accessibility and no decision authority
+xyflow / React Flow,DIRECT_DEPENDENCY,M7,PLANNED,absent,backend evidence graph and ClaimEvidenceLink,table or tree graph,authorization stale edge scale and no client authority
+Zotero,DESIGN_REFERENCE,M2-M3 optional,RECOMMENDED,no runtime or copy,RECA LiteratureRecord Artifact and workflow,RIS BibTeX and CSL JSON exchange,licensed fixture round-trip and independent normalization
+Zotero Web Library,DESIGN_REFERENCE,M2-M3,RECOMMENDED,no source or asset copy,RECA frontend and backend APIs,RECA-native table and detail layout,independent desktop mobile and accessibility tests
+OpenAI Agents SDK,DIRECT_DEPENDENCY,M8,PLANNED,absent,RECA Project Prompt Tool and audit records,direct provider tasks and manual workflow,approval redaction usage and one-Orchestrator audit
+ARS-Codex,SELECTIVE_VENDOR,M1+ mapping and M2-M8 assets,EXPERIMENT_REQUIRED,no copied or runtime content,RECA project evidence approval and Tool state,RECA-native workflows and optional clean-room,path-level license attribution quality Schema and single-Orchestrator tests

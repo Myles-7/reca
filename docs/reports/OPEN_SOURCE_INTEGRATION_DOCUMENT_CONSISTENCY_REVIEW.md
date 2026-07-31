@@ -196,6 +196,7 @@ authority status:
 - [Open-source alignment Phase 8: product and architecture](./OPEN_SOURCE_ALIGNMENT_PHASE_8_PRODUCT_ARCHITECTURE.md)
 - [Open-source alignment Phase 9: data and contracts](./OPEN_SOURCE_ALIGNMENT_PHASE_9_DATA_CONTRACTS.md)
 - [Open-source alignment Phase 10: test, security, and roadmap](./OPEN_SOURCE_ALIGNMENT_PHASE_10_TEST_SECURITY_ROADMAP.md)
+- [Final open-source research and document alignment review](./FINAL_OPEN_SOURCE_RESEARCH_AND_DOCUMENT_ALIGNMENT_REVIEW.md)
 
 ## 9. Status and historical integrity
 

@@ -1,0 +1,21 @@
+RECA FINAL OPEN-SOURCE REVIEW - ADR COMPLETENESS
+Captured: 2026-07-31
+
+ADR count: 8
+Missing IDs in ADR-001 through ADR-008: 0
+Duplicate IDs: 0
+Documentation status mismatch: 0
+
+ADR-001: Accepted and amended; conditional ARS-Codex reuse with zero-copy state
+ADR-002: Accepted; integration modes and direct-versus-adapter boundary
+ADR-003: Accepted; literature and candidate-evidence stack
+ADR-004: Accepted; data quality statistics and rendering stack
+ADR-005: Accepted; manuscript and citation stack
+ADR-006: Accepted; research workbench UX boundary
+ADR-007: Accepted; single-Orchestrator Agent and workflow stack
+ADR-008: Accepted; implementation and provenance metadata
+
+All ADRs retain documentation status Conditional Approval. Historical decisions
+remain preserved; superseded ARS clean-room-only wording is not current policy.
+
+Result: PASS
