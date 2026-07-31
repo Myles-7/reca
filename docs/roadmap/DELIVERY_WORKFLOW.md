@@ -2,6 +2,8 @@
 
 - 所属入口文档：[IMPLEMENTATION_ROADMAP.md](../IMPLEMENTATION_ROADMAP.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED FOR M1 DEVELOPMENT
+- 基线兼容性：保留 `docs-m1-approved` 的历史批准范围
 - Migration status: COMPLETE
 
 ## 权威范围
@@ -19,7 +21,7 @@
 - [RISK_SCOPE_AND_RELEASE.md](RISK_SCOPE_AND_RELEASE.md)
 - [M0 Regression Baseline](../testing/M0_REGRESSION_BASELINE.md)
 
-以下正文由原路线图对应章节机械迁入，原有语义和边界不变。
+本文档最初由路线图对应章节迁移形成，后续已按正式变更流程增量维护。当前详细交付规则以本文档现版本为准，入口文档负责摘要和导航。
 
 # 18. Codex 任务拆分规则
 
@@ -223,6 +225,42 @@ API 契约冻结
 → 前后端并行开发
 → 契约测试
 ```
+
+### 20.2.1 Open Design × Codex 并行流程
+
+只有 UI Integration Contract 足够冻结后才进入设计与业务并行：
+
+```text
+Requirement Ready
+→ Domain / API Contract Ready
+→ Route + ViewModel + Component Props/Events + Mock Contract Ready
+→ Parallel:
+   - Codex: backend / API / adapter / controller / mapper
+   - Open Design: design system / UI / Mock ViewModel
+→ Incremental Integration
+→ Component / Contract Test
+→ E2E
+→ Visual + Functional Review
+→ Milestone Gate
+```
+
+两条分支基于同一冻结 contract，不得分别生成完整前端后在项目结束时一次性合并。Router、generated/adapter、feature UI、shared components 和 Design Token source 应按 [Frontend Design Integration Rules](../development/FRONTEND_DESIGN_INTEGRATION_RULES.md) 指定主责；共享高冲突文件同一时段只指定一个主修改人。
+
+设计稿或 Mock 页面提前完成：
+
+```text
+≠ API 已实现
+≠ 业务功能已完成
+≠ milestone passed
+```
+
+设计变更按影响处理：
+
+- 纯视觉变化：Design 层修改与视觉审查；
+- Props / Events 变化：UI contract review；
+- ViewModel 变化：Codex + Open Design review，并同步 mapper 与 Mock；
+- API / Schema 变化：正式 API Contract 流程并重新生成 client；
+- Requirement 变化：正式产品变更流程。
 
 ## 20.3 第三方集成与业务服务并行
 

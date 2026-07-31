@@ -4,6 +4,8 @@
 | --- | --- |
 | 所属入口文档 | [PRODUCT_REQUIREMENTS.md](../PRODUCT_REQUIREMENTS.md) |
 | 文档状态 | APPROVED FOR M1 DEVELOPMENT |
+| 当前增量状态 | APPROVED FOR M1 DEVELOPMENT |
+| 基线兼容性 | 保留 `docs-m1-approved` 的历史批准范围 |
 | Migration status | COMPLETE |
 
 ## 权威范围
@@ -60,6 +62,22 @@
 承载证据图可视化。服务端 API、EvidenceSpan、ClaimEvidenceLink、审批和
 版本对象始终权威。Zotero 与 Zotero Web Library 只作为文献工作台布局、
 交换格式和交互参考，不复制成完整产品。
+
+### 27.1.1 全局信息架构与状态可见性
+
+- `Project Workspace` 是科研业务页面的主要上下文；导航、标题、任务和资源必须保持项目作用域清晰；
+- 同类页面使用一致的 stage navigation、breadcrumb、主操作位置和 detail pattern；
+- deep link 与刷新后应恢复正式 route param 和可重建上下文，不依赖仅存于浏览器的业务状态；
+- AI suggestion、verified fact、Evidence、AnalysisResult、Approval 和用户草稿必须有可识别的来源与视觉层级；
+- 候选、推荐、预览、table selection 或 graph selection 不得通过视觉反馈让用户误认为已成为正式科研事实；
+- destructive 或高风险操作必须显示目标、影响、版本、审批要求和取消路径；
+- loading、empty、error、forbidden、degraded、partial 和 stale 应在适用页面明确呈现；
+- 长任务展示阶段、进度、失败、重试、取消和降级信息，不以无限 loading 隐藏状态；
+- Evidence trace 应从结论或问题直接到达来源、原文位置、数据版本或运行记录；
+- 产品采用 desktop-first competition workbench；Tablet 保留核心操作，小屏可降低 PDF/table/graph 同屏密度，但不得隐藏风险和来源；
+- accessibility baseline 包括 keyboard、focus-visible、label、对比度、非颜色状态表达、table/dialog 语义和 reduced motion。
+
+本节定义产品体验要求，不定义组件实现、Design Token 或 API。视觉系统见 [frontend/DESIGN.md](../../frontend/DESIGN.md)，协作和工程边界见 [Frontend Design Integration Rules](../development/FRONTEND_DESIGN_INTEGRATION_RULES.md)。本次增强不新增 Requirement ID 或 P0 范围。
 
 ## 27.2 首页
 

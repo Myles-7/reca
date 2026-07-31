@@ -3,11 +3,13 @@
 - 文档名称：Frontend, API, and Artifact Rules
 - 所属入口文档：[AGENTS.md](../../AGENTS.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED FOR M1 DEVELOPMENT
+- 基线兼容性：保留 `docs-m1-approved` 的历史批准范围
 - Migration status: COMPLETE
 
 ## 权威范围
 
-本文件详细规定前端工程、OpenAPI Client、服务端状态、权限 UI、异步状态和 Artifact 交互规则。
+本文件唯一完整定义 API、generated client、adapter、error、Job、Artifact、DTO 与 ViewModel integration 的前端工程链，并详细规定服务端状态、权限 UI、异步状态和 Artifact 交互规则。Open Design 与 Codex 如何围绕该链路协作，由 [Frontend Design Integration Rules](./FRONTEND_DESIGN_INTEGRATION_RULES.md) 定义。
 
 ## 不负责的内容
 
@@ -51,6 +53,33 @@ Windows 的默认 Playwright 入口存在 `M0-ISSUE-0009` LOW 风险；当前使
 - API 变化后必须重新生成并检查 diff；
 - 生成失败不能通过跳过一致性检查处理。
 
+正式前端集成链为：
+
+```text
+OpenAPI generated
+→ adapter
+→ feature API / query / controller
+→ ViewModel mapper
+→ UI
+```
+
+Feature UI 和共享视觉组件禁止直接 `fetch()` 正式 API，也不得依赖 Provider-specific DTO 或生成器内部的 transport/result 类型。复杂页面应将 DTO 映射为稳定 ViewModel；简单 primitive 不要求形式化 mapper。
+
+DTO 到 ViewModel 的映射可以格式化日期、组合多个响应、生成用户可读 label，并将服务端已决定的权限和状态映射为 `canXXX`、disabled reason 或 semantic tone；不得发明权限、科研事实、正式状态或客户端状态转换。
+
+错误统一映射为脱敏 `UiErrorViewModel` 或项目批准的等效展示结构，至少保留用户可理解消息、retryable、request ID 和必要的 field/detail 信息。Job/SSE 映射为可见进度和失败状态；断线可降级轮询，但 UI 状态不得覆盖 Job 事实。Approval 操作由 controller 发起并以服务端结果为准，按钮点击本身不等于审批成功。
+
+API 契约变化后的固定流程：
+
+```text
+更新正式 API / OpenAPI
+→ bun run --cwd frontend generate-client
+→ 审查 generated diff
+→ 更新 adapter 与 feature mapping
+→ 更新 ViewModel / Mock（如受影响）
+→ contract / build / integration verification
+```
+
 ## 4. 服务端状态
 
 前端不是业务状态或权限事实来源。
@@ -91,7 +120,7 @@ Windows 的默认 Playwright 入口存在 `M0-ISSUE-0009` LOW 风险；当前使
 - 原文件和派生文件在 UI 中明确区分；
 - 不提供覆盖原文件的交互；
 - 版本关系、哈希、来源和处理状态可查看；
-- 下载使用后端授权地址，不暴露对象存储密钥；
+- 下载、PDF 预览和派生文件访问使用后端授权 API 返回的地址，不直接拼接对象存储 URL，也不暴露对象存储密钥；
 - PDF、DOCX、数据和导出失败必须保留可重试或人工处理入口。
 
 ## 8. PDF 与证据
@@ -112,6 +141,16 @@ Windows 的默认 Playwright 入口存在 `M0-ISSUE-0009` LOW 风险；当前使
 - 模型解释与正式数值视觉上区分；
 - Figure 显示数据版本、分析运行和生成参数；
 - 旧版本、失效结果和重新运行关系可追溯。
+- table selection、graph selection、当前 tab、展开面板和其他 `selected` 状态只属于页面交互，不得写成正式 LiteratureDecision、ClaimEvidenceLink、Approval 或领域状态。
+
+## 9.1 Mock API 与 Mock ViewModel
+
+- Mock API 用于 transport、契约或集成测试，必须遵守正式 API Schema；
+- Mock ViewModel 用于纯 UI 和 Open Design 开发，必须遵守冻结的展示契约；
+- Mock ViewModel 不进入正式 adapter，不伪装为 backend success，也不创建第二套 API DTO；
+- fixture 必须显式标注来源和 mock/demo 状态，正式验收不得使用 Mock 冒充业务能力。
+
+普通 Open Design Mock ViewModel / fixture 只允许用于 tests、component/design preview、development fixture，以及由现有 `VITE_DEMO_MODE` 边界显式启用并明确标识的 Demo Mode；本文件不重新定义 Demo Mode 的产品语义。production build/runtime 不得意外引用普通 design mock，不得以 fixture 静态替代正式 API integration。后续前端实现必须提供适用的静态检查或测试作为 Production Mock Guard。
 
 ## 10. Agent UI
 
@@ -150,6 +189,8 @@ PDF.js、TanStack Table、React Flow、引用处理器或其他前端包接入�
 - Bun 命令通过；
 - generated client 与 OpenAPI 一致；
 - adapter 没有隐藏错误；
+- feature UI 没有直接 `fetch()`，Provider-specific DTO 未泄漏到共享视觉组件；
+- DTO、error、Job/SSE 和 Approval 已通过 adapter/controller/ViewModel 边界映射；
 - 权限和状态来自服务端；
 - Artifact 不可变交互得到保持；
 - 加载、空、错误、降级和审批状态可见；

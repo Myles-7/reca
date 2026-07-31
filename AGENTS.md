@@ -10,6 +10,8 @@
 | 文档名称 | `AGENTS.md` |
 | 文档角色 | 仓库级强制开发规则入口 |
 | 文档状态 | APPROVED FOR M1 DEVELOPMENT |
+| 当前增量状态 | APPROVED FOR M1 DEVELOPMENT |
+| 基线兼容性 | 保留 `docs-m1-approved` 的历史批准范围；本次增量由 Project Owner 单独批准并记录 |
 | 适用对象 | Codex、代码智能体、开发者、测试者和审查者 |
 | 当前阶段 | M0 COMPLETED；M1 Entry `ALLOWED` |
 | 最后更新 | 2026-07-31 |
@@ -151,6 +153,7 @@ bun run --cwd frontend test:shell
 | Agent / Prompt / Tool | `AGENTS.md`、`docs/architecture/AGENT_ASYNC_AND_DEGRADATION.md`、`docs/data-model/STATE_MACHINES_AND_INVARIANTS.md`、`docs/contracts/AI_SCHEMA_CONTRACTS.md`、`docs/contracts/AGENT_TOOL_CONTRACTS.md`、`docs/roadmap/milestones/M8_AGENT.md` |
 | Backend / Service / Async | `AGENTS.md`、`docs/ARCHITECTURE.md`、`docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md`、`docs/architecture/AGENT_ASYNC_AND_DEGRADATION.md`、`docs/development/BACKEND_DATA_AND_ASYNC_RULES.md` |
 | Frontend / OpenAPI Client / Artifact UI | `AGENTS.md`、`docs/ARCHITECTURE.md`、`docs/architecture/SYSTEM_COMPONENTS_AND_MODULES.md`、`docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md`、相关资源 API 子契约 |
+| Frontend / Open Design / UI implementation | `AGENTS.md`、`docs/development/FRONTEND_DESIGN_INTEGRATION_RULES.md`、`frontend/DESIGN.md`、`docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md`、相关 Product / API 子契约 |
 | Security / Open Source | `AGENTS.md`、`docs/SECURITY_AND_OPEN_SOURCE.md`、与任务对应的一份 `docs/security/` 子文档、`docs/testing/CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md` |
 | Open-source Reuse / Vendor / Fork | `AGENTS.md`、`docs/security/OPEN_SOURCE_GOVERNANCE.md`、`THIRD_PARTY_NOTICES.md`、对应 `docs/source-research/` 记录和 ADR；ARS-Codex 另读 `docs/decisions/ADR-001-ARS-CODEX-USAGE.md` |
 | Open-source project implementation | `AGENTS.md`、`docs/source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md`、对应项目研究记录、对应栈 ADR、所属模块 README、对应里程碑文件 |
@@ -163,6 +166,29 @@ bun run --cwd frontend test:shell
 | Codex Planning / Scope Control | `AGENTS.md`、`docs/development/CODEX_TASK_WORKFLOW.md`、`docs/IMPLEMENTATION_ROADMAP.md`、对应里程碑文件 |
 
 不能只阅读入口摘要后修改字段、状态、API、AI Schema、Tool、指标、安全控制或里程碑 Gate。`docs/archive/` 不得出现在权威阅读路径中。
+
+### Frontend / Open Design 任务阅读路径
+
+Open Design、视觉系统或 UI implementation 任务必须先读取：
+
+```text
+AGENTS.md
+docs/development/FRONTEND_DESIGN_INTEGRATION_RULES.md
+frontend/DESIGN.md
+docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md
+相关 Product / API Contract
+```
+
+并遵守以下强制边界：
+
+- Codex 不得擅自覆盖已经冻结且通过审查的 Design System；
+- Open Design 输出必须基于真实 `frontend/` 技术栈，不得建立独立 Vite/React 产品替代正式前端；
+- UI 不得直接访问正式 API，业务连接必须通过 ViewModel、Props、Events 或项目批准的等效边界；
+- Mock 必须明确为 fixture，不得冒充真实科研数据或正式后端成功；
+- 后端 DTO、权限、Approval、状态机、Evidence 和版本关系继续由正式契约与 Service 权威决定；
+- Open Design 设计或 Mock 页面完成不构成“业务功能已实现”或里程碑通过的证据。
+
+详细 ownership、Mock、Route、并行开发和 UI Integration Gate 只在 [Frontend Design Integration Rules](./docs/development/FRONTEND_DESIGN_INTEGRATION_RULES.md) 完整定义。
 
 ## 5.1 开源项目实施规则
 
@@ -296,6 +322,9 @@ Agent 或系统建议
 - 不执行任意外部 URL；
 - RECA 根许可证为 `PENDING_GOVERNANCE_DECISION`；
 - 不得凭记忆填写许可证或自行替项目负责人决定；
+- 项目负责人已决定采用 `MAXIMUM_LAWFUL_REUSE`：在固定版本实际许可证与当前用途、托管和分发方式允许的最大范围内复用，不默认选择净室重写、额外 Adapter 或更窄的集成模式；
+- 经核验的 MIT、BSD、Apache、PostgreSQL License 等宽松许可证内容可直接依赖、Fork、完整 Vendor、Submodule、选择性复制和修改，并在同一实现 PR 中完成来源与归属登记，无需另行申请复用许可；
+- Copyleft、非商业和自定义许可证不作类别性禁止；满足实际条款时可采用其允许的最宽模式，但本项目不能豁免署名、NOTICE、源码提供、相同许可证、非商业用途或其他上游义务；
 - 允许 Fork 成熟项目、Vendor 完整模块、使用 Git Submodule、选择性复制代码、复制和修改 Prompt、复制脚本和测试、直接使用稳定库，以及经评估后不建立无收益的 Adapter；
 - ARS-Codex 可以在许可证与归属审查后复用，但不自动改变 M8、单总控 Agent 或 Tool 边界；
 - 复用后的 Tool 仍必须遵守 Schema、项目权限、Service、版本、审批和审计；
@@ -453,10 +482,11 @@ Commit
 | [CODEX_TASK_WORKFLOW.md](./docs/development/CODEX_TASK_WORKFLOW.md) | 工作计划、范围控制、不确定性、任务拆分和交付 |
 | [BACKEND_DATA_AND_ASYNC_RULES.md](./docs/development/BACKEND_DATA_AND_ASYNC_RULES.md) | 后端、Service、数据库、迁移、文件和异步任务 |
 | [FRONTEND_API_AND_ARTIFACT_RULES.md](./docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md) | 前端、OpenAPI Client、权限 UI 和 Artifact 交互 |
+| [FRONTEND_DESIGN_INTEGRATION_RULES.md](./docs/development/FRONTEND_DESIGN_INTEGRATION_RULES.md) | Open Design、Codex、ViewModel、Mock、目录所有权与 UI Integration Gate |
 | [TEST_GIT_AND_DELIVERY_RULES.md](./docs/development/TEST_GIT_AND_DELIVERY_RULES.md) | 测试命令、CI、clean-room、Git、PR 和报告 |
 | [M0_CONTINUOUS_EXECUTION.md](./docs/archive/m0/M0_CONTINUOUS_EXECUTION.md) | 已归档的 M0 历史执行记录，不是 M1 新需求来源 |
 
-所有子文档状态为 `APPROVED FOR M1 DEVELOPMENT`。入口和子文档冲突时必须作为文档缺陷处理。
+既有子文档保留其历史批准状态；新增文档和批准基线后的实质增量必须单独标注 review 状态，不自动继承 `docs-m1-approved` 的批准。入口和子文档冲突时必须作为文档缺陷处理。
 
 ## 14. 最终仓库原则
 

@@ -2,6 +2,8 @@
 
 - 所属入口文档：[ARCHITECTURE.md](../ARCHITECTURE.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED FOR M1 DEVELOPMENT
+- 基线兼容性：保留 `docs-m1-approved` 的历史批准范围
 - Migration status: COMPLETE
 
 ## 权威范围
@@ -20,7 +22,7 @@
 - [AGENT_ASYNC_AND_DEGRADATION.md](AGENT_ASYNC_AND_DEGRADATION.md)
 - [OPERATIONS_DEPLOYMENT_AND_ADRS.md](OPERATIONS_DEPLOYMENT_AND_ADRS.md)
 
-以下正文由原入口文档对应章节机械迁入，原有语义、状态和边界不变。
+本文档最初由入口文档对应章节迁移形成，后续已按正式变更流程增量维护。当前详细架构规则以本文档现版本为准，入口文档负责摘要和导航。
 
 
 # 10. 前端架构
@@ -220,6 +222,53 @@ React Flow 只负责：
 * 可重试状态；
 * 请求 ID 展示；
 * 不破坏当前页面数据。
+
+## 10.9 前端分层与依赖方向
+
+前端概念分层为：
+
+```text
+App Shell
+↓
+Route / Providers
+↓
+Feature Controller
+↓
+ViewModel
+↓
+Feature UI / Shared UI
+↓
+Design System
+```
+
+API 侧横向链路为：
+
+```text
+OpenAPI generated
+↓
+adapter
+↓
+feature integration
+```
+
+允许的主要依赖方向：
+
+```text
+UI → ViewModel types
+Controller → UI
+Controller → feature API
+feature API → adapter / generated
+```
+
+禁止：
+
+```text
+shared visual component → feature API
+design system → backend DTO
+UI component → direct fetch
+```
+
+当前仓库已经存在 TanStack Router routes、`main.tsx` providers、`components/ui/`、`features/system-status/`、`api/generated/` 和 `api/adapter/`。上述分层是后续 feature 的依赖目标，不要求为匹配示意结构立即迁移现有文件。具体 Open Design/Codex ownership、ViewModel 和集成门禁见 [Frontend Design Integration Rules](../development/FRONTEND_DESIGN_INTEGRATION_RULES.md)。
 
 ---
 

@@ -3,6 +3,8 @@
 - 文档名称：Test Strategy and Environments
 - 所属入口文档：[TEST_AND_ACCEPTANCE.md](../TEST_AND_ACCEPTANCE.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 当前增量状态：APPROVED FOR M1 DEVELOPMENT
+- 基线兼容性：保留 `docs-m1-approved` 的历史批准范围
 - Migration status: COMPLETE
 
 ## 权威范围
@@ -579,6 +581,19 @@ tests/fixtures/MANIFEST.md
 * 对比度；
 * 状态不只依赖颜色；
 * 错误可被屏幕阅读器识别。
+
+### 23.8 Frontend Design Integration Testing
+
+复杂业务 UI 按适用范围纳入以下正式测试责任：
+
+* **ViewModel mapper test**：验证 DTO → ViewModel、status、degraded/stale、permission、error，以及缺失字段和边界情况的映射；
+* **Mock contract test**：fixture 必须导入并满足正式 ViewModel TypeScript 类型，Mock ViewModel 不得与真实 API DTO 混用，并覆盖页面所需主要视觉状态；
+* **UI state test**：按页面能力覆盖 loading、empty、ready、error、forbidden、degraded、partial、stale、job running/failed 和 approval required；
+* **Production Mock Guard**：以静态检查、构建检查或测试验证 production code path 不意外依赖普通 design mock；显式 Demo Mode 仍必须遵守现有产品边界和可见标识；
+* **Integration / E2E**：关键页面验证 real API 或审核后的 recorded contract → mapper → UI，不得只验证 Mock 页面；
+* **Accessibility**：关键流程至少验证 keyboard、focus、labels、non-color status、dialog、table 和 reduced motion 的基本边界。
+
+本节定义测试归属，不重新定义 Design System、API 或领域状态。
 
 ---
 
