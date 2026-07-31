@@ -1,12 +1,14 @@
 # DVC source research
 
-Document version: `1.0.0`
+Document version: `1.0.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `RECOMMENDED`
 
 Last researched: 2026-07-31
+
+Last updated: 2026-07-31
 
 Phase summary: [Data, statistics and reproducibility research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_3_DATA.md)
 
@@ -177,3 +179,10 @@ stored in a remote; each dataset requires separate provenance and license review
 Do not add DVC until a bounded developer workflow justifies it. If adopted,
 pin the CLI, keep metadata outside product authority, document remote ownership
 and revalidate imports after upgrades. Removing DVC must not break RECA lineage.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |

@@ -8,9 +8,9 @@ ADR ID: `ADR-001-ARS-CODEX-USAGE`
 
 Accepted, amended 2026-07-31
 
-Documentation status: `Conditional Approval`
+Documentation status: `APPROVED FOR M1 DEVELOPMENT`
 
-Decision version: `1.2.0`
+Decision version: `1.2.1`
 
 ## Date
 
@@ -37,6 +37,7 @@ RECA 0.1 Competition Edition
 | 1.0.0 | 2026-07-30 | Accepted | Limited ARS-Codex to non-runtime research reference and clean-room reimplementation |
 | 1.1.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Replaced blanket copy/runtime prohibitions with licensed effect-first reuse and explicit review gates |
 | 1.2.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Formalized selective/full Vendor choices, fixed source, zero-copy state, and the relationship to ADR-007 |
+| 1.2.1 | 2026-07-31 | Accepted / APPROVED FOR M1 DEVELOPMENT documentation | Synchronized the documentation approval state; decision content and zero-copy integration facts are unchanged |
 
 ## Context
 

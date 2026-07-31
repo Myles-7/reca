@@ -1,12 +1,14 @@
 # OpenAI Agents SDK source research
 
-Document version: `1.0.0`
+Document version: `1.0.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `PLANNED`
 
 Last researched: 2026-07-31
+
+Last updated: 2026-07-31
 
 Phase summary: [Agent SDK and ARS workflow research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_5_AGENT.md)
 
@@ -419,3 +421,10 @@ dependency adoption still requires the normal dependency/source record.
 - [Tracing guide](https://github.com/openai/openai-agents-python/blob/0ffa36840cb812488738f6fc5be3d3a1f51397b7/docs/tracing.md)
 - [MCP guide](https://github.com/openai/openai-agents-python/blob/0ffa36840cb812488738f6fc5be3d3a1f51397b7/docs/mcp.md)
 - [MIT license](https://github.com/openai/openai-agents-python/blob/0ffa36840cb812488738f6fc5be3d3a1f51397b7/LICENSE)
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |

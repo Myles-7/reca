@@ -1,12 +1,14 @@
 # pgvector source research
 
-Document version: `1.0.0`
+Document version: `1.0.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `ALREADY_INTEGRATED`
 
 Last researched: 2026-07-31
+
+Last updated: 2026-07-31
 
 Phase summary: [Foundation runtime research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_1_FOUNDATION.md)
 
@@ -192,3 +194,10 @@ No table or index was created in this documentation-only phase.
 Follow stable tags and the matching PostgreSQL image. Upgrade only with migration,
 query correctness, restore and clean-room tests. Keep exact search until a
 documented benchmark demonstrates the need for an approximate index.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |

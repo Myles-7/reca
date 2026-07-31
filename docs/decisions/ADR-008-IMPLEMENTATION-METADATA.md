@@ -8,7 +8,11 @@ ADR ID: `ADR-008-IMPLEMENTATION-METADATA`
 
 Accepted on 2026-07-31
 
-Documentation status: `Conditional Approval`
+Documentation status: `APPROVED FOR M1 DEVELOPMENT`
+
+Decision version: `1.0.1`
+
+Current amendment: 2026-07-31
 
 ## Context
 
@@ -66,6 +70,13 @@ REJECTED
 - Adoption PRs can be audited without inferring facts from prose.
 - License and attribution records remain proportional to actual repository content.
 - The root license remains `PENDING_GOVERNANCE_DECISION` and cannot cover special-license files by implication.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Recorded the original decision and its RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | Accepted / APPROVED FOR M1 DEVELOPMENT documentation | Synchronized the documentation approval state; decision content and integration facts are unchanged |
 
 ## References
 

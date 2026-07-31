@@ -1,12 +1,14 @@
 # statsmodels source research
 
-Document version: `1.0.0`
+Document version: `1.0.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `PLANNED`
 
 Last researched: 2026-07-31
+
+Last updated: 2026-07-31
 
 Phase summary: [Data, statistics and reproducibility research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_3_DATA.md)
 
@@ -187,3 +189,10 @@ Pin statsmodels with its tested numerical stack. Upgrades must replay golden
 regression fixtures and compare structured attributes, row inclusion, warnings
 and formula expansion. Summary formatting changes alone do not require a domain
 migration because Summary is non-authoritative.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |

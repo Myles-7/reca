@@ -1,8 +1,8 @@
 # Academic Research Skills Codex source record
 
-Document version: `1.2.0`
+Document version: `1.2.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `EXPERIMENT_REQUIRED`
 
@@ -53,6 +53,7 @@ Fixed source:
 | 1.0.0 | 2026-07-30 | Reviewed | Recorded fixed source and research-only clean-room decision |
 | 1.1.0 | 2026-07-31 | Conditional Approval | Recorded effect-first permitted modes, noncommercial intent and incorporation prerequisites; no content copied |
 | 1.2.0 | 2026-07-31 | Conditional Approval | Added Phase 5 repository-depth evidence, asset-by-asset RECA mapping and Vendor option comparison; ADR conclusion unchanged and no content copied |
+| 1.2.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research conclusions, license gates and no-copy state are unchanged |
 
 ## 3. Current decision
 

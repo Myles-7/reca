@@ -1,12 +1,14 @@
 # Full Stack FastAPI Template source research
 
-Document version: `2.0.0`
+Document version: `2.0.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `ALREADY_INTEGRATED`
 
 Last researched: 2026-07-31
+
+Last updated: 2026-07-31
 
 Phase summary: [Foundation runtime research](../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_1_FOUNDATION.md)
 
@@ -199,3 +201,10 @@ No validation spike was executed in this documentation-only phase.
 Track upstream releases and security fixes, but synchronize by reviewed patch or
 small selected path. Never use whole-tree overwrite, automatic Copier update or
 lock-file replacement against the specialized RECA repository.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 2.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 2.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |

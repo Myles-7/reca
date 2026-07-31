@@ -1,12 +1,14 @@
 # PaperQA2 source research
 
-Document version: `1.0.0`
+Document version: `1.0.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `EXPERIMENT_REQUIRED`
 
 Last researched: 2026-07-31
+
+Last updated: 2026-07-31
 
 Phase summary: [Literature and evidence research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_2_LITERATURE.md)
 
@@ -266,3 +268,10 @@ separate from the software license.
 Track selected upstream assets by exact source path and Commit, not the entire
 runtime. Re-evaluate only when a targeted upstream change improves a measured
 RECA evidence problem. Any full-runtime proposal requires a new ADR.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |

@@ -8,7 +8,11 @@ ADR ID: `ADR-006-RESEARCH-WORKBENCH-UX`
 
 Accepted on 2026-07-31
 
-Documentation status: `Conditional Approval`
+Documentation status: `APPROVED FOR M1 DEVELOPMENT`
+
+Decision version: `1.0.1`
+
+Current amendment: 2026-07-31
 
 ## Context
 
@@ -35,6 +39,13 @@ Frontend libraries consume generated RECA API clients and view models. Third-par
 - Accessibility, large-data behavior, stale-state handling, and authorization tests are required.
 - UX references must be independently implemented unless a later license review approves source reuse.
 - Existing APIs, Schemas, Requirements, and Acceptance IDs remain unchanged.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Recorded the original decision and its RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | Accepted / APPROVED FOR M1 DEVELOPMENT documentation | Synchronized the documentation approval state; decision content and integration facts are unchanged |
 
 ## References
 

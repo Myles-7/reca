@@ -1,8 +1,8 @@
 # Open-Source Integration Master Plan
 
-Document version: `1.2.0`
+Document version: `1.2.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Last updated: 2026-07-31
 
@@ -451,3 +451,10 @@ adopted when they duplicate Project, database, Agent, validation or UI state.
 The next documentation-alignment phase may update formal documents according to
 the linked map. Until that work occurs, this master plan is a research decision
 record and must not be cited as proof of implementation.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.2.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 1.2.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |

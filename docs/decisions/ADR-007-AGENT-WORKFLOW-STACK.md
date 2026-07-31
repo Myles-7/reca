@@ -8,7 +8,11 @@ ADR ID: `ADR-007-AGENT-WORKFLOW-STACK`
 
 Accepted on 2026-07-31
 
-Documentation status: `Conditional Approval`
+Documentation status: `APPROVED FOR M1 DEVELOPMENT`
+
+Decision version: `1.0.1`
+
+Current amendment: 2026-07-31
 
 ## Context
 
@@ -44,6 +48,13 @@ Tracing must minimize or disable sensitive model inputs, outputs, Tool arguments
 - M8 requires approval-resume, trace-minimization, usage-accounting, and audit reconciliation tests.
 - ARS-Codex remains not copied and not a runtime dependency at this decision date.
 - Single-Orchestrator and M8 boundaries remain unchanged.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Recorded the original decision and its RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | Accepted / APPROVED FOR M1 DEVELOPMENT documentation | Synchronized the documentation approval state; decision content and integration facts are unchanged |
 
 ## References
 

@@ -8,7 +8,11 @@ ADR ID: `ADR-002-OPEN-SOURCE-INTEGRATION-MODES`
 
 Accepted on 2026-07-31
 
-Documentation status: `Conditional Approval`
+Documentation status: `APPROVED FOR M1 DEVELOPMENT`
+
+Decision version: `1.0.1`
+
+Current amendment: 2026-07-31
 
 ## Context
 
@@ -54,6 +58,13 @@ No integration mode may bypass RECA Services, project authorization, immutable o
 - Research records remain distinct from third-party incorporation records.
 - Vendor, Fork, Submodule, and resource snapshots require path-level provenance.
 - The root license remains `PENDING_GOVERNANCE_DECISION`; it does not override third-party licenses.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Accepted / Conditional Approval documentation | Recorded the original decision and its RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | Accepted / APPROVED FOR M1 DEVELOPMENT documentation | Synchronized the documentation approval state; decision content and integration facts are unchanged |
 
 ## References
 

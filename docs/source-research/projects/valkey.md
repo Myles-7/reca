@@ -1,12 +1,14 @@
 # Valkey source research
 
-Document version: `1.0.0`
+Document version: `1.0.1`
 
-Document status: `Conditional Approval`
+Document status: `APPROVED FOR M1 DEVELOPMENT`
 
 Research status: `ALREADY_INTEGRATED`
 
 Last researched: 2026-07-31
+
+Last updated: 2026-07-31
 
 Phase summary: [Foundation runtime research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_1_FOUNDATION.md)
 
@@ -184,3 +186,10 @@ No Valkey configuration or image was changed in this documentation-only phase.
 Follow stable release tags only. Upgrade the container together with Celery
 transport compatibility and restart/recovery tests. Do not track the `unstable`
 branch, and do not adopt Cluster/Sentinel merely because upstream supports them.
+
+## Change record
+
+| Version | Date | Status | Change |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
+| 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |
