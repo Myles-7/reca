@@ -1,7 +1,7 @@
 ﻿# OPERATIONS_DEPLOYMENT_AND_ADRS
 
 - 所属入口文档：[ARCHITECTURE.md](../ARCHITECTURE.md)
-- 文档状态：Conditional Approval
+- 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
 
 ## 权威范围

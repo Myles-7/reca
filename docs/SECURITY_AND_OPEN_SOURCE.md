@@ -25,7 +25,7 @@
 | --- | --- |
 | 文档版本 | 1.5.1 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
-| 文档状态 | Conditional Approval |
+| 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | 默认部署场景 | `DEMO_LOCAL` |
 | 主要读者 | 项目负责人、开发者、测试人员、演示人员和 Codex |
 | 最后更新时间 | 2026-07-31 |

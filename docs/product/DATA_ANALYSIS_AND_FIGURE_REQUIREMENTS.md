@@ -3,7 +3,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 所属入口文档 | [PRODUCT_REQUIREMENTS.md](../PRODUCT_REQUIREMENTS.md) |
-| 文档状态 | Conditional Approval |
+| 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | Migration status | COMPLETE |
 
 ## 权威范围

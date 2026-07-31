@@ -27,7 +27,7 @@
 | 文档名称   | `ARCHITECTURE.md`                                                                                              |
 | 文档版本   | 1.4.0                                                                                                          |
 | 适用项目版本 | RECA 0.1 Competition Edition                                                                                   |
-| 文档状态   | Conditional Approval                                                                                          |
+| 文档状态   | APPROVED FOR M1 DEVELOPMENT                                                                                   |
 | 文档类型   | 技术架构基准                                                                                                         |
 | 主要读者   | 架构负责人、后端开发、前端开发、AI 开发、测试人员、运维人员、Codex                                                                          |
 | 负责人    | RECA Team                                                                                                      |

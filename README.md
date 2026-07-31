@@ -15,7 +15,7 @@ RECA 0.1 当前面向个人使用和校级比赛。项目优先复用成熟开�
 | --- | --- |
 | 文档名称 | `README.md` |
 | 文档角色 | 项目总入口 |
-| 文档状态 | Conditional Approval |
+| 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | 当前产品版本 | RECA 0.1 Competition Edition |
 | 当前工程阶段 | M0 COMPLETED；M1 Entry `ALLOWED` |
 | 最后更新 | 2026-07-31 |

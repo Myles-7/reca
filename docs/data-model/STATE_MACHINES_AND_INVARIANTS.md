@@ -1,7 +1,7 @@
 ﻿# STATE_MACHINES_AND_INVARIANTS
 
 - 所属入口文档：[DATA_MODEL_AND_WORKFLOW.md](../DATA_MODEL_AND_WORKFLOW.md)
-- 文档状态：Conditional Approval
+- 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
 
 ## 权威范围

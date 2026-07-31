@@ -3,7 +3,7 @@
 - 文档名称：Security Controls
 - 文档版本：1.1.0
 - 所属入口文档：[SECURITY_AND_OPEN_SOURCE.md](../SECURITY_AND_OPEN_SOURCE.md)
-- 文档状态：Conditional Approval
+- 文档状态：APPROVED FOR M1 DEVELOPMENT
 - 最后更新时间：2026-07-31
 - Migration status: COMPLETE
 

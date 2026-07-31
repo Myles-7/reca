@@ -7,7 +7,7 @@
 | 文档名称 | `PRODUCT_REQUIREMENTS.md` |
 | 文档版本 | 1.4.0 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
-| 文档状态 | Conditional Approval |
+| 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | 文档角色 | 产品定位、范围、需求索引和变更规则入口 |
 | 负责人 | RECA Team |
 | 最后更新 | 2026-07-31 |

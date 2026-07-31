@@ -9,7 +9,7 @@
 | --- | --- |
 | 文档名称 | `API_AI_TOOL_CONTRACTS.md` |
 | 文档版本 | 1.4.0 |
-| 文档状态 | Conditional Approval |
+| 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | 文档类型 | API、AI Schema 与 Agent Tool 契约入口 |
 | 最后更新时间 | 2026-07-31 |
 

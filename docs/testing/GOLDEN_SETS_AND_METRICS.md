@@ -2,7 +2,7 @@
 
 - 文档名称：Golden Sets and Metrics
 - 所属入口文档：[TEST_AND_ACCEPTANCE.md](../TEST_AND_ACCEPTANCE.md)
-- 文档状态：Conditional Approval
+- 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
 
 ## 权威范围

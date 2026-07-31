@@ -9,7 +9,7 @@
 | --- | --- |
 | 文档名称 | `AGENTS.md` |
 | 文档角色 | 仓库级强制开发规则入口 |
-| 文档状态 | Conditional Approval |
+| 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | 适用对象 | Codex、代码智能体、开发者、测试者和审查者 |
 | 当前阶段 | M0 COMPLETED；M1 Entry `ALLOWED` |
 | 最后更新 | 2026-07-31 |
@@ -455,7 +455,7 @@ Commit
 | [TEST_GIT_AND_DELIVERY_RULES.md](./docs/development/TEST_GIT_AND_DELIVERY_RULES.md) | 测试命令、CI、clean-room、Git、PR 和报告 |
 | [M0_CONTINUOUS_EXECUTION.md](./docs/development/M0_CONTINUOUS_EXECUTION.md) | M0 历史执行记录，不是 M1 新需求来源 |
 
-所有子文档状态为 `Conditional Approval`。入口和子文档冲突时必须作为文档缺陷处理。
+所有子文档状态为 `APPROVED FOR M1 DEVELOPMENT`。入口和子文档冲突时必须作为文档缺陷处理。
 
 ## 14. 最终仓库原则
 

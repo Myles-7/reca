@@ -1,7 +1,7 @@
 ﻿# MANUSCRIPT_EVIDENCE_AND_EXPORT_API
 
 - 所属入口文档：[API_AI_TOOL_CONTRACTS.md](../API_AI_TOOL_CONTRACTS.md)
-- 文档状态：Conditional Approval
+- 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
 
 ## 权威范围

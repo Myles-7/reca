@@ -35,7 +35,7 @@
 | 文档名称 | `TEST_AND_ACCEPTANCE.md` |
 | 文档版本 | 1.5.1 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
-| 文档状态 | Conditional Approval |
+| 文档状态 | APPROVED FOR M1 DEVELOPMENT |
 | 文档类型 | 测试权威入口、核心原则、缺陷等级、完成定义与门禁索引 |
 | 主要读者 | 测试人员、前端开发、后端开发、AI 开发、产品负责人、运维人员、Codex |
 | 负责人 | RECA Team |
