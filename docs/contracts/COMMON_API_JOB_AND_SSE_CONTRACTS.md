@@ -285,6 +285,17 @@ MODEL_OUTPUT_SOURCE_MISSING
 MODEL_OUTPUT_UNSAFE
 ```
 
+### 外部能力
+
+```text
+EXTERNAL_CAPABILITY_UNAVAILABLE
+EXTERNAL_OUTPUT_INVALID
+```
+
+这两个错误码是阶段 9 的 intentional additive change，统一覆盖非模型、非特定
+文献 Provider 的第三方执行边界。不得增加 `PAPERQA_*`、`ASREVIEW_*`、
+`CITEPROC_*` 或其他项目专属错误码。
+
 ### Job
 
 ```text id="xms9bh"
@@ -295,6 +306,22 @@ JOB_DISPATCH_FAILED
 JOB_TIMEOUT
 JOB_RETRY_EXHAUSTED
 ```
+
+### 开源集成错误与降级映射
+
+| 场景 | 契约表达 |
+| --- | --- |
+| 文献或模型 Provider 不可用 | 既有 `LITERATURE_PROVIDER_UNAVAILABLE` 或 `MODEL_PROVIDER_UNAVAILABLE` |
+| 其他外部能力、隔离服务或许可证限制导致不可用 | `EXTERNAL_CAPABILITY_UNAVAILABLE` + DegradationRecord |
+| 解析回退或低可信 | 既有 `DOCUMENT_LOW_CONFIDENCE` + DegradationRecord；完全失败才使用 `DOCUMENT_PARSE_FAILED` |
+| 当前检索证据不足 | 成功响应中的空候选、`limitations`、`requires_human_review`；不是错误 |
+| Evidence 原文定位失败 | 既有 `EVIDENCE_LOCATION_FAILED` |
+| 筛选引擎不可用但可人工继续 | DegradationRecord `UNAVAILABLE`；不改变 LiteratureDecision |
+| 引用渲染器不可用 | `EXTERNAL_CAPABILITY_UNAVAILABLE`；允许回退简单确定性格式器 |
+| 第三方输出不能转换为严格 DTO | `EXTERNAL_OUTPUT_INVALID`，不得部分写入 |
+
+许可证限制是能力可用性与治理事实，不泄露法律分析或内部许可证路径到普通
+错误消息；`details` 只返回可公开的 capability、fallback 和 review_required。
 
 ---
 

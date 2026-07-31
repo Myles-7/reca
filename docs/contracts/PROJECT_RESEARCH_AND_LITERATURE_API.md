@@ -376,11 +376,15 @@ Idempotency-Key: <key>
 
 ```json id="6p2knc"
 {
-  "provider": "OPENALEX",
   "page_size": 25,
   "use_cache": true
 }
 ```
+
+Service 根据 QueryPlan、可用性、许可证与策略选择实际 Provider。既有
+`provider` 字段仅保留为向后兼容的可选管理员/测试提示；普通客户端应省略，
+模型不得指定 PyAlex、OpenAlex 或其他实现。实际引擎记录在 SearchRun 与
+ProcessingRun，不进入公共资源命名。
 
 响应：
 
@@ -419,11 +423,15 @@ POST /api/v1/projects/{project_id}/literature/import
 {
   "search_run_id": "uuid",
   "result_ids": [
-    "provider-result-id-1",
-    "provider-result-id-2"
+    "uuid",
+    "uuid"
   ]
 }
 ```
+
+`result_ids` 是检索运行内的 RECA 候选结果 ID，不是上游对象 ID。OpenAlex Work
+ID、DOI 和原始响应只保存在候选元数据与来源记录中；导入后创建或匹配
+`LiteratureRecord`。
 
 ---
 
@@ -505,6 +513,11 @@ POST /api/v1/literature/{literature_id}/decisions
 GET /api/v1/literature/{literature_id}/decisions
 ```
 
+ASReview 或其他排序引擎不调用决策写接口。其输出通过既有 ProcessingRun、
+ToolCall 候选输出或 LiteratureRecord 展示投影提供 `rank`、`priority_score`、
+`rationale` 和限制；用户提交上述决策请求后才创建 LiteratureDecision。筛选
+能力不可用时回退人工排序，不改变当前决定。
+
 ---
 
 # 17. Documents API
@@ -545,13 +558,16 @@ Idempotency-Key: <key>
 
 ```json id="t533fw"
 {
-  "preferred_parser": "GROBID",
   "allow_fallback": true,
   "extract_coordinates": true
 }
 ```
 
 返回 Job。
+
+既有 `preferred_parser` 字段仅保留为管理员/测试兼容提示。普通客户端不选择
+GROBID 或 pypdf；Service 选择实际解析器并记录 ProcessingRun。GROBID TEI 是
+不可变中间产物，必须经 RECA Converter 后才能形成页面、Chunk 或引用候选。
 
 ---
 
@@ -725,21 +741,31 @@ POST /api/v1/projects/{project_id}/evidence-search
     "query": "这些研究主要采用了哪些研究设计？",
     "candidates": [
       {
-        "evidence_span_id": "uuid",
+        "candidate_id": "uuid",
+        "evidence_span_id": null,
         "literature_record_id": "uuid",
         "document_id": "uuid",
+        "chunk_id": "uuid",
         "page_number": 6,
         "source_text": "……",
+        "source_text_hash": "sha256",
+        "retrieval_run_id": "uuid",
         "keyword_score": 0.74,
         "vector_score": 0.81,
         "fused_rank": 1,
-        "rerank_score": 0.88
+        "rerank_score": 0.88,
+        "limitations": []
       }
     ],
     "limitations": []
   }
 }
 ```
+
+这是向后兼容的候选响应扩展。`evidence_span_id` 保留原字段名，但在候选尚未
+完成原文、页码、文档版本和哈希校验时必须为 `null`；不得为了满足旧响应示例
+而伪造 EvidenceSpan。PaperQA 或其他实现只能影响召回、排序和 packing。当前
+集合证据不足时返回空 `candidates` 与明确 `limitations`，不是 Provider 错误。
 
 ---
 

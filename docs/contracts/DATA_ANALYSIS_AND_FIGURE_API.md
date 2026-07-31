@@ -631,6 +631,23 @@ GET /api/v1/figures/{figure_id}/artifacts/{format}
 
 ---
 
+## 22.8 引擎中立与运行元数据
+
+本文件所有路径保持领域命名，不新增 Pandera、SciPy、statsmodels 或 Matplotlib
+专属端点：
+
+* 质量检查把 Pandera FailureCase 归一化为 DataQualityIssue；
+* 分析执行把 SciPy/statsmodels 数值结果归一化为 AnalysisResult，不返回库对象或文本 Summary；
+* 图表渲染把 Matplotlib 产物归一化为 Figure 与 Artifact；
+* 实际引擎、版本、配置哈希、规则集版本、Python/依赖和字体信息记录在 AnalysisRun、ProcessingRun、CodeArtifact 或 Artifact metadata；
+* 公共响应只返回 RECA 对象、运行状态和可公开复现摘要，不允许客户端选择任意 Python 引擎或代码。
+
+第三方输出无法通过领域校验时使用 `EXTERNAL_OUTPUT_INVALID`；引擎不可用且无
+可接受回退时使用 `EXTERNAL_CAPABILITY_UNAVAILABLE`。低风险质量扫描为
+`AUTO_ALLOWED`，正式 AnalysisPlan 执行继续要求既有 `FORMAL_APPROVAL`。
+
+---
+
 # 兼容性路径索引：数据、分析与图表
 
 以下字符串从原附录 A 原样迁入，仅保留旧 `{id}` 参数命名和总览兼容性。它们不是第二份完整端点定义；请求、响应、错误和前置条件以本文件对应资源章节为准。不得在本阶段擅自将 `{id}` 与更具体的参数名合并或重命名。

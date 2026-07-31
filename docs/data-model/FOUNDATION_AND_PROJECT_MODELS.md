@@ -6,7 +6,7 @@
 
 ## 权威范围
 
-User、ResearchProject、ProjectMember、Artifact、ArtifactRelation、ApprovalRecord、AuditLog、Job、ProcessingRun、PromptContract/PromptVersion 元数据和 DegradationRecord DTO 的完整模型定义。
+User、ResearchProject、ProjectMember、Artifact、ArtifactRelation、ApprovalRecord、AuditLog、Job、ProcessingRun、实现来源元数据、PromptContract/PromptVersion 元数据和 DegradationRecord DTO 的完整模型定义。
 
 ## 不负责的内容
 
@@ -401,6 +401,7 @@ ProcessingRun 表示一次具体业务处理。
 | parameters_hash    | String   |  是 |
 | engine             | String   |  是 |
 | engine_version     | String   |  否 |
+| implementation_metadata | JSONB | 否 |
 | status             | Enum     |  是 |
 | output_object_type | String   |  否 |
 | output_object_id   | UUID     |  否 |
@@ -413,6 +414,34 @@ ProcessingRun 表示一次具体业务处理。
 Job 关心队列和进度。
 
 ProcessingRun 关心业务输入、引擎和输出。
+
+### implementation_metadata
+
+这是阶段 9 唯一建议增加的持久化兼容字段，用于保存与业务参数不同的执行来源
+信息。它是严格、可版本化的 JSONB，不是自由字典：
+
+```text
+metadata_schema_version
+engine_name
+engine_version
+upstream_project
+upstream_commit
+adopted_release_or_digest
+configuration_hash
+ruleset_version
+prompt_version
+schema_version
+integration_mode
+```
+
+规则：
+
+* `engine_name` 必须与 `ProcessingRun.engine` 一致；
+* `engine_version` 不得与物理字段冲突；
+* `configuration_hash` 通常等于或可由 `parameters_hash`、规则配置与资源哈希重建；
+* 未使用 Vendor、Prompt 或规则集时，对应字段为 `null`，不得伪造 Commit；
+* ToolCall 和 AgentRun 通过关联 ProcessingRun、ModelInvocation 或输出 Artifact 获取该信息，不重复建立第三方运行表；
+* 对外 DTO 默认不暴露许可证路径、内部镜像地址或敏感配置。
 
 ---
 

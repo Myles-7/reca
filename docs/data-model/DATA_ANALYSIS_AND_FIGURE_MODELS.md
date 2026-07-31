@@ -191,6 +191,11 @@ UNIQUE(dataset_id, version_number)
 | processing_run_id  | UUID     |  否 |
 | created_at         | DateTime |  是 |
 
+Pandera 是计划中的 P0 运行时校验引擎，但 Pandera 对象不得进入数据库或 API。
+`rule_set_version` 是规范性 `ruleset_version` 的现有物理字段；具体 Pandera、
+Python 与依赖版本记录在关联 `ProcessingRun.implementation_metadata`。每个
+FailureCase 按列、行范围和规则代码归一化为一个或多个 `DataQualityIssue`。
+
 ---
 
 ## 14.2 DataQualityIssue
@@ -495,6 +500,9 @@ P0 中 `CREATE_DERIVED_COLUMN` 应受严格限制。
 * 完成后不可修改结果；
 * 重新运行创建新 AnalysisRun；
 * 失效不删除。
+* SciPy/statsmodels 返回对象只提供数值输入，不能直接序列化为领域结果；
+* `statistical_engine`、`engine_version` 与 `environment_snapshot` 必须足以重建实际执行栈；
+* statsmodels 文本 Summary 不得解析或保存为正式 `AnalysisResult`。
 
 ---
 
@@ -585,6 +593,10 @@ CodeArtifact 可直接复用 Artifact，并增加业务关系。
 P0 推荐将 Figure 记录视为不可变产物。
 
 参数修改后创建新 Figure。
+
+Matplotlib 只负责确定性渲染。其版本、backend、字体名称与哈希、style、
+配置哈希和输出格式记录在关联 ProcessingRun、CodeArtifact 或 Artifact
+`metadata` 中；Figure 的数据与统计权威仍来自 DatasetVersion 和 AnalysisRun。
 
 ### 字段
 

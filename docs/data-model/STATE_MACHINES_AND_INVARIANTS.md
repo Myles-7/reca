@@ -158,6 +158,15 @@ AnalysisRun 至少保存：
 * NumPy 版本；
 * 代码模板版本。
 
+## 25.8 第三方实现元数据不变量
+
+* 业务状态只能由 RECA Service 和数据库对象决定，第三方运行状态不得直接映射为终态；
+* 每次正式运行必须能定位引擎版本、配置哈希、输入版本与输出 Artifact；
+* Vendor 或资源快照参与执行时必须记录上游项目、Commit、文件哈希和修改记录；
+* Prompt、规则集、Schema、统计引擎和引用样式使用独立版本，不能以单一应用版本替代；
+* 候选证据、筛选排序和引用渲染失败不得改变 EvidenceSpan、LiteratureDecision 或来源真实性；
+* 缓存、Recorded 响应和降级结果必须保留来源与降级标记，不能伪装为主 Provider 正常完成。
+
 ---
 
 # 26. 失效传播规则
@@ -1132,6 +1141,7 @@ API 应返回：
 * input object；
 * parameters；
 * engine version；
+* implementation metadata 或可定位到等效版本化 manifest 的关联；
 * status；
 * started_at；
 * completed_at；

@@ -116,6 +116,20 @@ EXPORT_DATA
 }
 ```
 
+## 41.6 第三方实现边界
+
+Tool 名称、输入和输出按 RECA 领域能力定义，不按第三方项目命名：
+
+* PaperQA 或其他 retrieval/packing 实现只能填充 `retrieve_evidence` 的候选输出，候选必须经 EvidenceSpan 校验；
+* ASReview 或其他排序实现只能填充 `suggest_literature_decision` 的建议输出，用户决定仍由 LiteratureDecision 工作流创建；
+* 引用渲染器没有来源真实性权威，且当前不新增 Citation Agent Tool；
+* OpenAI Agents SDK Function Tool 必须调用既有 Tool wrapper，并继续经过 RECA Service、权限、项目隔离、审批与审计；
+* ARS Workflow 不能直接创建或修改业务状态，只能提供受 Prompt manifest 和既有 Schema 约束的输入；
+* Provider 原始对象和自由 JSON 不得出现在 Tool 公共输出。
+
+审批语义保持 `AUTO_ALLOWED`、`LIGHT_CONFIRMATION`、`FORMAL_APPROVAL`、
+`PROHIBITED` 四层规范；它们不新增 Tool 参数或稳定 Enum。
+
 ---
 
 <a id="tool-approve-on-behalf-of-user"></a>
@@ -359,7 +373,6 @@ CREATE_DRAFT
 ```json id="9vyusu"
 {
   "query_plan_id": "uuid",
-  "provider": "OPENALEX",
   "page_size": 25,
   "use_cache": true
 }
@@ -386,6 +399,10 @@ CREATE_DRAFT
 | 权限  | literature.create                 |
 | 禁止  | 模型生成论文列表                          |
 | 错误  | PROVIDER_UNAVAILABLE、RATE_LIMITED |
+
+现有 `provider` 输入仅保留为兼容性执行提示，普通模型调用必须省略。Service 按
+QueryPlan、可用性、许可证与策略选择实际 Provider，并在 LiteratureSearchRun
+和 ProcessingRun 中记录，不允许模型锁定 PyAlex/OpenAlex 实现。
 
 ---
 
@@ -420,6 +437,27 @@ CREATE_DRAFT
 
 只允许使用真实 Provider 或缓存。
 
+## 47.1 suggest_literature_decision 边界
+
+既有 `suggest_literature_decision` Tool 可使用规则、模型或 ASReview 等排序实现，
+但输出只能是严格筛选建议：
+
+```json
+{
+  "literature_record_id": "uuid",
+  "rank": 1,
+  "priority_score": 0.87,
+  "rationale": "基于已确认标签与当前纳入标准的阅读优先级。",
+  "source_confirmed_decision_ids": ["uuid"],
+  "processing_run_id": "uuid",
+  "limitations": []
+}
+```
+
+该 Tool 为候选生成，`approval_required = false`；用户采用建议时使用
+`LIGHT_CONFIRMATION`。Tool 不得创建 LiteratureDecision、填写用户 ID 或把排序
+阈值解释为最终纳入/排除结论。
+
 ---
 
 <a id="tool-parse-document"></a>
@@ -431,12 +469,15 @@ CREATE_DRAFT
 ```json id="er67xr"
 {
   "document_id": "uuid",
-  "preferred_parser": "GROBID",
   "allow_fallback": true
 }
 ```
 
 输出 Job。
+
+现有 `preferred_parser` 输入仅保留为管理员/测试兼容提示，模型调用必须省略。
+Service 默认选择已批准解析能力，记录实际 parser 与版本；GROBID TEI 必须经
+RECA Converter，不能直接成为 DocumentPage、DocumentChunk 或 EvidenceSpan。
 
 副作用：
 
@@ -497,7 +538,27 @@ CREATE_VERSION
 }
 ```
 
-输出 EvidenceCandidate 列表。
+输出既有 EvidenceCandidate 列表，并继续使用稳定 `EvidenceCandidateDTO`。
+该传输名称承载数据模型中的候选证据语义，不是 EvidenceSpan；每项必须经过
+严格输出 Schema，至少包含：
+
+```json
+{
+  "candidate_id": "uuid",
+  "document_id": "uuid",
+  "chunk_id": "uuid",
+  "page_number": 12,
+  "quoted_text": "原文片段",
+  "source_text_hash": "sha256",
+  "retrieval_score": 0.82,
+  "retrieval_run_id": "uuid",
+  "limitations": [],
+  "validated_evidence_span_id": null
+}
+```
+
+PaperQA、pgvector 或模型只可影响候选排序与 packing。只有 RECA Service 完成
+文档版本、页码、原文与哈希校验后，才可创建真实 EvidenceSpan 并返回其 ID。
 
 副作用：
 

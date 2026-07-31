@@ -8,7 +8,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 文档名称 | `API_AI_TOOL_CONTRACTS.md` |
-| 文档版本 | 1.3.0 |
+| 文档版本 | 1.4.0 |
 | 文档状态 | Conditional Approval |
 | 文档类型 | API、AI Schema 与 Agent Tool 契约入口 |
 | 最后更新时间 | 2026-07-31 |
@@ -174,6 +174,25 @@ API 和工具调用必须关联：
 ## 3.10 Schema 可版本化
 
 AI Schema、API DTO、SSE Event 和 ReproPackage Manifest 必须拥有版本。
+
+## 3.11 公共契约保持 Provider-neutral
+
+公共资源、API 路径、AI Schema 和 Tool 名称按领域能力命名，不按当前实现项目
+命名。允许的语义是检索证据、排序筛选候选、解析文档、渲染引用、运行质量
+检查和执行分析；禁止新增 `/run-paperqa`、`/run-asreview`、
+`/run-grobid-client`、`/run-citeproc` 等路径。
+
+旧请求中的 `provider`、`preferred_parser` 等字段仅作为向后兼容的可选执行
+提示，由 Service 和 Policy 校验；普通客户端和模型应省略，不能依赖某个上游
+项目名称。实际引擎只记录在 ProcessingRun、ModelInvocation、Artifact 元数据
+和 ReproPackage manifest。
+
+## 3.12 严格归一化第三方输出
+
+第三方响应不得以自由 JSON 直接返回前端、写入业务表或交给 Agent。Provider、
+Adapter 或隔离服务必须先转换为既有严格 DTO/Schema；候选证据、筛选建议和
+引用渲染结果仍是候选或派生产物，不拥有 EvidenceSpan、LiteratureDecision、
+来源真实性或统计事实的权威。
 
 ---
 
@@ -413,6 +432,7 @@ API Path 只能在对应资源子契约完整定义。公共错误码清单只�
 * 幂等冲突返回原结果或明确冲突，不重复执行；
 * 需要正式审批的副作用在审批不足时进入等待或拒绝；只读、候选生成和预览不得被无差别升级为正式审批；
 * 外部 Provider 失败必须映射为内部错误或显式降级；
+* 通用外部能力不可用使用 `EXTERNAL_CAPABILITY_UNAVAILABLE`，输出无法通过严格转换使用 `EXTERNAL_OUTPUT_INVALID`；不得按项目创建错误码；
 * AI 输出 Schema 失败不得部分写入；
 * Tool 输出失败必须记录 ToolCall 状态；
 * SSE 失败可以降级轮询，但不能丢失 Job 事实状态；

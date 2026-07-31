@@ -63,6 +63,10 @@ AI 公共 Envelope、校验流程、PromptContract manifest、ModelInvocation、
 * `generated_at`；
 * `model_metadata.model_invocation_id`。
 
+`model_metadata` 只提供本次调用的可追溯摘要。上游项目、Commit、Vendor 路径、
+规则集与完整配置记录在 ModelInvocation、Prompt manifest、ProcessingRun 或
+ReproPackage manifest，不得把第三方自由 JSON 塞入公共 Envelope。
+
 ## 28.2 confidence
 
 范围：
@@ -277,6 +281,12 @@ OUT_OF_SCOPE
 
 当状态为 `CANDIDATES_READY` 时，最多返回 3 个候选问题；每个候选问题必须分别列出当前项目的支持证据、可得数据、证据缺口和可行性风险。它只能陈述“当前项目集合中的证据空白”，不得断言学术界不存在研究。
 
+ARS Scoping 资产可以实现该既有 Schema，但不得增加未登记字段。ARS
+Checkpoint 不建立新 AI Schema：它映射到 ProjectContextSnapshot 的当前阶段、
+`pending_approval_ids`、`blocking_issue_ids`、`allowed_next_actions` 以及 Envelope
+的 `requires_human_review`。Workflow mode 由现有项目阶段、`task_type` 和
+PromptContract 决定，不允许第三方 Router 自由创建状态或枚举。
+
 ---
 
 <a id="schema-query-plan"></a>
@@ -454,6 +464,20 @@ EVIDENCE_SET_SUMMARY
 * 隐藏反例；
 * 将单篇文献作为共识；
 * 引用未纳入文献。
+
+## 33.4 候选、证据不足与冲突语义
+
+PaperQA 或其他检索/packing 实现只能向既有严格输出提供候选项。候选项必须
+包含 RECA 文档或 Chunk ID、原文片段、哈希、页码（若可用）、检索运行 ID、
+分数和限制；未通过原文定位校验时不得产生 `evidence_span_ids`。
+
+* evidence candidate 通过 `retrieve_evidence` Tool 的既有 EvidenceCandidate 输出表达；
+* evidence insufficiency 通过空候选、`evidence_gap_items`、`missing_information`、`limitations` 和 `requires_human_review=true` 表达；
+* conflicting evidence 通过 `controversy_items`、`contradicting_literature_ids` 和 counterexamples 表达；
+* 当前集合无证据不是错误，也不得改写为“学术界不存在证据”。
+
+第三方输出必须先通过注册的 output Schema；即使上游返回更多字段，也不得以
+自由 JSON 绕过枚举、来源 ID、项目隔离和 EvidenceSpan 校验。
 
 ---
 
@@ -810,6 +834,10 @@ TRUST_AUDIT
 * 无法验证时应返回 `INSUFFICIENT_EVIDENCE`；
 * 不得使用“已验证”掩盖来源缺失。
 
+ARS Claim Verification 可以提供 Prompt、检查顺序和测试资产，但结果仍使用
+既有 `AuditResult` Schema。它不能直接更新 Claim、ClaimEvidenceLink、
+ManuscriptVersion 或 ApprovalRecord。
+
 ---
 
 <a id="contract-prompt-manifest"></a>
@@ -833,6 +861,11 @@ TRUST_AUDIT
 * requested_data_access_level；
 * max_allowed_data_access_level；
 * effective_data_access_level；
+
+使用第三方 Prompt/Workflow 资产时，还必须由 Prompt manifest 固定来源记录、
+内容哈希和适用 Schema；这些治理元数据不进入模型可修改输入。Agents SDK
+structured output 只负责执行校验，不能放宽 RECA Schema 或把 SDK Session
+内容当作项目状态。
 
 P0 的 PromptContract 是 `backend/app/agents/prompts/prompt-manifest.yaml` 中受 Git 管理的代码注册表，不是数据库可编辑内容。`prompt_id + prompt_version + prompt_content_hash` 必须能定位已登记合同；其声明 input/output Schema、允许工具、允许来源类型、最大工具调用数、失败行为和 `requested_data_access_level`。Tool/Policy 另声明 `max_allowed_data_access_level`；调用审计记录实际 `effective_data_access_level`，且必须不高于上限并符合最小化原则。未登记、Schema 不匹配或试图扩大工具/数据权限的调用必须在 Service 层拒绝。
 
@@ -904,5 +937,10 @@ P0 的 PromptContract 是 `backend/app/agents/prompts/prompt-manifest.yaml` 中�
 ```
 
 `result_status` 只能为 `DEGRADED`、`UNAVAILABLE` 或 `FALLBACK_COMPLETED`。返回该对象时必须创建对应审计记录；回退不得改变授权、扩大模型输入或把不确定定位升级为已验证。
+
+筛选、引用渲染、Vendor 资产或许可证限制导致能力不可用时也使用同一结构。
+许可证相关 `reason_code` 只表达“能力不可用/需要治理复核”，不得给出未经核验
+的法律结论；若第三方输出无法转换为严格 Schema，使用
+`EXTERNAL_OUTPUT_INVALID` 并禁止部分写入。
 
 ---

@@ -279,6 +279,10 @@ UNIQUE(document_id, page_number)
 | error_code     | String   |  否 |
 | job_id         | UUID     |  否 |
 
+OpenAlex/PyAlex 等 Provider 的原始对象不得直接持久化为公共 DTO。Provider 响应
+先保存在 `raw_source_data`、Artifact 或运行日志中，经 DOI、作者与标题归一化后
+创建 `LiteratureRecord` 候选；公共对象 ID 始终是 RECA ID。
+
 ---
 
 ## 11.5 LiteratureExtraction
@@ -447,6 +451,52 @@ LIMITATION
 * 历史决策不覆盖；
 * AI 不得创建最终 LiteratureDecision；
 * 撤销通过创建新决策。
+
+## 11.9 候选证据与筛选建议载荷
+
+`CandidateEvidence` 和 `ScreeningRecommendation` 是领域语义标签，不注册为
+新的持久化模型或独立 AI Schema。它们必须以严格载荷存在于 `ProcessingRun`、
+`ToolCall.output_summary` 或版本化 JSON Artifact 中；候选证据的现有传输
+Schema 继续使用 `EvidenceCandidateDTO`，不重命名稳定 Schema。
+
+候选证据载荷至少包含：
+
+```text
+candidate_id
+project_id
+document_id
+chunk_id
+page_number
+quoted_text
+source_text_hash
+retrieval_score
+retrieval_run_id
+limitations
+validated_evidence_span_id
+```
+
+`validated_evidence_span_id` 初始为空。只有 RECA Service 完成原文、页码、文档
+版本和哈希校验后，才可创建并回填真实 `EvidenceSpan`；PaperQA、向量相似度或
+模型引用本身均不能完成该转换。
+
+筛选建议载荷至少包含：
+
+```text
+literature_record_id
+rank
+priority_score
+rationale
+source_confirmed_decision_ids
+processing_run_id
+limitations
+```
+
+ASReview 等排序结果只能写入该载荷或既有 `ai_recommendation`/`ai_score` 候选
+字段。它不得填写 `decided_by_user_id`，不得创建或更新 `LiteratureDecision`。
+
+GROBID TEI 使用 `application/tei+xml` Artifact 或等效不可变中间产物保存，并
+关联 `ProcessingRun`。TEI 经过 RECA Converter 后才生成 `DocumentPage`、
+`DocumentChunk` 与文献引用候选；TEI 节点不是正式 EvidenceSpan。
 
 ---
 

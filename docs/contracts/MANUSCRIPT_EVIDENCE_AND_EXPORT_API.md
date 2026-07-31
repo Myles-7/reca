@@ -301,6 +301,17 @@ include_invalidated
 
 通过 Approval API，不允许直接设置 `CONFIRMED`。
 
+## 24.7 引用渲染边界
+
+当前不新增 citation processor 专属公共路径或 Agent Tool。论文检查、引用导出
+或复现包流程需要格式化时，由领域 Service 调用隔离 Citation Engine 或简单
+确定性格式器，并把结果保存为绑定 ProcessingRun/Artifact 的严格
+`CitationRenderResult` 载荷。
+
+渲染结果只证明“按给定元数据和样式生成了文本”，不证明 DOI、作者、来源、
+引用适切性或 EvidenceSpan 有效。引擎不可用时使用
+`EXTERNAL_CAPABILITY_UNAVAILABLE` 和显式降级，不得把未渲染内容标为成功。
+
 ---
 
 # 26. Exports API
@@ -326,6 +337,11 @@ Idempotency-Key: <key>
 ```
 
 系统先执行导出就绪审核。
+
+生成的 ReproPackage Manifest 必须记录实际 runtime dependency 版本、service
+image digest、upstream 项目、Vendor Commit、Prompt/规则集/统计引擎版本、
+citation style 标识与哈希、配置哈希和来源对象版本。研究过但未实际采用的项目
+不得进入 runtime 或 vendored asset 清单。
 
 可能返回：
 

@@ -8,7 +8,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 文档名称 | `DATA_MODEL_AND_WORKFLOW.md` |
-| 文档版本 | 1.3.0 |
+| 文档版本 | 1.4.0 |
 | 文档状态 | Conditional Approval |
 | 文档类型 | 领域模型与状态机基准入口 |
 | 最后更新时间 | 2026-07-31 |
@@ -239,6 +239,49 @@ JSONB 适合：
 * 扩展元数据。
 
 核心查询字段必须建正式列。
+
+## 3.11 第三方执行结果不成为业务事实
+
+第三方库、服务、Vendor 资产和 Agent 运行时只提供执行能力。其输出必须先由
+RECA Service 归一化、校验并绑定项目、来源与版本，之后才能进入正式对象。
+
+| 第三方结果 | RECA 表达 |
+| --- | --- |
+| OpenAlex Work | `LiteratureRecord` 候选或导入结果 |
+| GROBID TEI | 绑定 Artifact 与 `ProcessingRun` 的 Parsed Document 中间结果 |
+| PaperQA Evidence | 候选证据载荷，不是 `EvidenceSpan` |
+| ASReview Rank | 筛选建议载荷，不是 `LiteratureDecision` |
+| Pandera Failure | `DataQualityIssue` |
+| SciPy/statsmodels output | 经验证的 `AnalysisResult` |
+| Matplotlib output | `Figure` 与关联 Artifact |
+| citation processor output | 引用渲染载荷，不证明来源有效性 |
+| Agents SDK run | `AgentRun` 的执行实现 |
+| ARS workflow state | Prompt/Workflow 输入，不是业务状态 |
+
+候选证据、筛选建议和引用渲染载荷可以存在于 `ProcessingRun`、`ToolCall` 输出
+或版本化 JSON Artifact 中；P0 不为每个上游项目建立独立表。
+
+## 3.12 实现元数据复用原则
+
+可复现实现信息优先落在现有 `ProcessingRun`、`ToolCall`、`ModelInvocation`、
+`AuditLog`、Artifact `metadata`、AnalysisRun `environment_snapshot` 与
+ReproPackage manifest。统一语义至少覆盖：
+
+```text
+engine_name
+engine_version
+upstream_project
+upstream_commit
+configuration_hash
+ruleset_version
+prompt_version
+schema_version
+```
+
+`engine_name` 对应现有 `ProcessingRun.engine`；`configuration_hash` 对应确定性
+参数或配置的内容哈希，不得用包版本代替。只有 `ProcessingRun` 缺少独立的
+实现来源容器，因此增加可选 `implementation_metadata` JSONB；不新增项目专属
+字段或业务表。
 
 ---
 

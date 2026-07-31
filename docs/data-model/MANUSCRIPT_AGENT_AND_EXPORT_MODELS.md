@@ -196,6 +196,28 @@ P0 仅用于低风险格式修复。
 * log；
 * created_at。
 
+## 18.7 引用渲染载荷
+
+`CitationRenderResult` 是绑定 `ProcessingRun` 或 JSON Artifact 的严格非持久化
+载荷，不新增 citation processor 专属表。它至少记录：
+
+```text
+source_literature_record_ids
+rendered_citation
+bibliography_entry
+style_identifier
+style_version_or_hash
+locale
+engine_name
+engine_version
+warnings
+limitations
+```
+
+渲染器只格式化已提供的规范化元数据，不验证 DOI、作者、文献真实性或
+EvidenceSpan。完整 Citation Engine 未通过隔离与许可证决策前，不新增公共
+API 或 Agent Tool。
+
 ---
 
 # 19. Claim 与证据链模型
@@ -441,6 +463,15 @@ TRUST_AUDITOR
 
 可信审核可以实现为总控 Agent 的审核步骤，也可记录独立类型。
 
+OpenAI Agents SDK 的 Runner、Session、Trace 与 usage 只实现一次 AgentRun 的
+运行机制。SDK Session 不是 ResearchProject，SDK Trace 不是 AuditLog；实际
+SDK 版本和 tracing 配置通过关联 ToolCall、ModelInvocation、ProcessingRun 或
+审计摘要记录，不创建 SDK 专属业务状态。
+
+ARS Workflow、Checkpoint 和 Mode Router 只能作为 Prompt/Workflow 输入。
+Checkpoint 必须映射到现有项目状态、`pending_approval_ids`、`allowed_next_actions`
+或 ApprovalRecord；不得直接写 ResearchProject、AgentRun 状态或正式科研对象。
+
 ---
 
 ## 22.2 ToolCall
@@ -608,6 +639,28 @@ export_type：
 | total_size_bytes         | BigInteger |  是 |
 | sha256                   | String     |  是 |
 | created_at               | DateTime   |  是 |
+
+`manifest_artifact_id` 指向的版本化 Manifest 必须至少包含下列区段；这是现有
+Manifest 的兼容性扩展，不新增 ReproPackage 表字段：
+
+```text
+manifest_schema_version
+runtime_dependencies
+service_images
+upstream_projects
+vendored_assets
+prompt_versions
+ruleset_versions
+statistical_engines
+citation_styles
+configuration_hashes
+source_object_versions
+artifact_hashes
+```
+
+其中 package 依赖记录名称、版本与锁定来源；service image 记录镜像与 digest；
+upstream/Vendor 记录项目、Commit、复制路径和修改摘要；citation style 记录标识、
+Locale、文件哈希与 rights。未实际采用的研究项目不得进入已使用依赖清单。
 
 ---
 
