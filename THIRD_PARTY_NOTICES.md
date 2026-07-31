@@ -20,7 +20,7 @@ Special restrictions:
 Commercialization review:
 ```
 
-ARS-Codex is not listed as incorporated content because this documentation task copied no ARS-Codex Prompt, code, script, test or other asset. Its research and reuse decision remains recorded in the corresponding source-research document and ADR.
+ARS-Codex is not listed as incorporated content because repository inspection at the Phase 11 review baseline found no ARS-Codex Prompt, code, script, test or other asset. This review adds no such content. Its research and reuse decision remains recorded in the corresponding source-research document and ADR.
 
 `Status` is restricted to the following vocabulary:
 

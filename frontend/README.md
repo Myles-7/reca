@@ -38,3 +38,11 @@ Read [the architecture](../docs/ARCHITECTURE.md),
 [workbench ADR](../docs/decisions/ADR-006-RESEARCH-WORKBENCH-UX.md) and the
 relevant [source record](../docs/source-research/) before adding or upgrading a
 third-party frontend capability.
+
+## Module guides
+
+- [API integration](./src/api/README.md)
+- [Application composition](./src/app/README.md)
+- [Feature ownership](./src/features/README.md)
+- [Shared primitives](./src/shared/README.md)
+- [Vendor integrations](./src/vendor-integrations/README.md)

@@ -53,3 +53,15 @@ Read [the architecture](../docs/ARCHITECTURE.md),
 [integration modes](../docs/decisions/ADR-002-OPEN-SOURCE-INTEGRATION-MODES.md)
 and the relevant [source record](../docs/source-research/) before adding or
 upgrading a third-party capability.
+
+## Module guides
+
+- [Adapters](./app/adapters/README.md)
+- [Agents](./app/agents/README.md)
+- [Domain](./app/domain/README.md)
+- [Modules](./app/modules/README.md)
+- [Repositories](./app/repositories/README.md)
+- [Services](./app/services/README.md)
+- [Shared](./app/shared/README.md)
+- [Tools](./app/tools/README.md)
+- [Workers](./app/workers/README.md)

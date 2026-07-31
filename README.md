@@ -347,6 +347,16 @@ reca/
 
 目标目录只在对应里程碑实际需要时创建。README 或路线图中的计划结构不是机械创建空目录的命令。
 
+### 模块说明
+
+| 区域 | 导航 |
+| --- | --- |
+| 后端 | [Backend README](./backend/README.md)，包含各 `backend/app/` 模块说明索引 |
+| 前端 | [Frontend README](./frontend/README.md)，包含 API、App、Feature、Shared 与 Vendor integration 索引 |
+| 测试 | [Unit](./tests/unit/README.md)、[Integration](./tests/integration/README.md)、[E2E](./tests/e2e/README.md)、[Golden](./tests/golden/README.md) |
+| 开源研究 | [Open-Source Integration Master Plan](./docs/source-research/OPEN_SOURCE_INTEGRATION_MASTER_PLAN.md)，包含全部 26 个项目研究记录索引 |
+| 一致性审查 | [Open-Source Integration Document Consistency Review](./docs/reports/OPEN_SOURCE_INTEGRATION_DOCUMENT_CONSISTENCY_REVIEW.md) |
+
 ## M1 下一步
 
 M1 已允许进入，但必须继续通过 M0 regression baseline。

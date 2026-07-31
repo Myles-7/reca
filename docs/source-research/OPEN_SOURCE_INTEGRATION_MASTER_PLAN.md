@@ -1,6 +1,6 @@
 # Open-Source Integration Master Plan
 
-Document version: `1.1.0`
+Document version: `1.2.0`
 
 Document status: `Conditional Approval`
 
@@ -61,6 +61,32 @@ upstream paths may be copied only after license, attribution, modification and
 golden-test review. `RESOURCE_SNAPSHOT` is for pinned non-code resources such as
 selected CSL files. These labels are research governance terms, not new domain
 Enums or API values.
+
+Status labels in other documents describe different axes and must not be compared
+as if they were one state machine:
+
+| Axis | Vocabulary and meaning |
+| --- | --- |
+| Research record status | `RESEARCHED`, `RECOMMENDED`, `EXPERIMENT_REQUIRED`, `PLANNED`, `ALREADY_INTEGRATED`, `REJECTED`; maturity of the research recommendation |
+| Delivery status | `IMPLEMENTED`, `PLANNED`, `RESEARCHED`, `EXPERIMENT_REQUIRED`; current product/architecture delivery state |
+| Runtime column | Actual installed, service, health-only, planned, development-only or absent state at the reviewed repository HEAD |
+| Notices status | Evidence-backed incorporation status; `RESEARCHED`/`PLANNED` never claims a dependency or copied asset |
+
+For example, a source record may be `RECOMMENDED` while README and Notices say
+`RESEARCHED`: the recommendation is mature, but the capability is still absent
+from runtime. The Runtime column and repository evidence decide whether something
+is integrated.
+
+## 2.1 Research record index
+
+| Stack | Project records |
+| --- | --- |
+| Engineering foundation | [Full Stack FastAPI Template](./full-stack-fastapi-template.md), [Celery](./projects/celery.md), [Valkey](./projects/valkey.md), [pgvector](./projects/pgvector.md), [pgvector-python](./projects/pgvector-python.md) |
+| Literature and evidence | [PyAlex](./projects/pyalex.md), [GROBID](./projects/grobid.md), [grobid-client-python](./projects/grobid-client-python.md), [PDF.js](./projects/pdfjs.md), [PaperQA2](./projects/paperqa2.md), [ASReview](./projects/asreview.md) |
+| Data and statistics | [Pandera](./projects/pandera.md), [SciPy](./projects/scipy.md), [statsmodels](./projects/statsmodels.md), [Matplotlib](./projects/matplotlib.md), [DVC](./projects/dvc.md), [Great Expectations](./projects/great-expectations.md) |
+| Manuscript and citation | [python-docx](./projects/python-docx.md), [CSL Styles](./projects/csl-styles.md), [citeproc-js](./projects/citeproc-js.md) |
+| Research workbench | [TanStack Table](./projects/tanstack-table.md), [xyflow / React Flow](./projects/xyflow.md), [Zotero](./projects/zotero.md), [Zotero Web Library](./projects/zotero-web-library.md) |
+| Agent and workflow | [OpenAI Agents SDK](./projects/openai-agents-sdk.md), [ARS-Codex](./academic-research-skills-codex.md) |
 
 ## 3. Project decision matrix
 

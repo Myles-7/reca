@@ -1,7 +1,7 @@
 # Open Source Governance
 
 - 文档名称：Open Source Governance
-- 文档版本：1.2.0
+- 文档版本：1.2.1
 - 所属入口文档：[SECURITY_AND_OPEN_SOURCE.md](../SECURITY_AND_OPEN_SOURCE.md)
 - 文档状态：Conditional Approval
 - 最后更新时间：2026-07-31
@@ -14,6 +14,7 @@
 | 1.0.0 | 2026-07-31 | Conditional Approval | 文档拆分后的依赖、许可证、Vendor、来源和发布治理基线 |
 | 1.1.0 | 2026-07-31 | Conditional Approval | 采用 effect-first 复用模式、保守许可证分类和条件式 Adapter 政策 |
 | 1.2.0 | 2026-07-31 | Conditional Approval | 增加全部研究项目的许可证分类矩阵、隔离条件和实际状态边界 |
+| 1.2.1 | 2026-07-31 | Conditional Approval | 明确阶段 11 审查时 ARS-Codex 尚未进入仓库的事实状态；政策不变 |
 
 ## 权威范围
 
@@ -412,7 +413,9 @@ NONCOMMERCIAL_INTENT_DECLARED
 - 商业化、用途变化或公开产品部署前重新审查；
 - 不自动改变单总控 Agent、M8 时序、Service、Approval、Evidence 和 Tool Contract。
 
-本次政策更新没有复制、Vendor、Fork 或运行时引入任何 ARS-Codex 内容。
+截至阶段 11 审查基线，仓库没有复制、Vendor、Fork 或运行时引入任何
+ARS-Codex 内容。后续只有在实际纳入 PR 完成路径级许可证、归属、修改和
+Notices 记录后，才能改变该事实状态。
 
 ## 12. 根许可证
 

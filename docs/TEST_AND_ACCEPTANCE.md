@@ -20,6 +20,11 @@
 | [CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md](./testing/CONTRACT_INTEGRATION_AND_SECURITY_TESTS.md) | API、Schema、Tool、Adapter、数据库、外部组件、状态机、安全、数据访问与降级测试 |
 | [E2E_ACCEPTANCE_AND_RELEASE_GATES.md](./testing/E2E_ACCEPTANCE_AND_RELEASE_GATES.md) | 全部 AC/E2E、MANU-P0-018、性能、离线演示、发布门禁、比赛验收和报告模板 |
 
+仓库测试目录说明：[Unit](../tests/unit/README.md)、
+[Integration](../tests/integration/README.md)、[E2E](../tests/e2e/README.md)、
+[Golden](../tests/golden/README.md)。这些 README 说明测试归属和 fixture 来源，
+不替代上表的正式测试规范。
+
 `archive/` 为非权威历史材料。
 <!-- DOCUMENT_COMPOSITION_END -->
 
@@ -28,7 +33,7 @@
 | 项目 | 内容 |
 | --- | --- |
 | 文档名称 | `TEST_AND_ACCEPTANCE.md` |
-| 文档版本 | 1.5.0 |
+| 文档版本 | 1.5.1 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
 | 文档状态 | Conditional Approval |
 | 文档类型 | 测试权威入口、核心原则、缺陷等级、完成定义与门禁索引 |
@@ -49,6 +54,7 @@
 | 1.3.0 | 2026-07-31 | Conditional Approval | 拆分测试策略、黄金指标、契约安全测试和 E2E 验收；入口保留核心决策与索引 | RECA Team |
 | 1.4.0 | 2026-07-31 | Conditional Approval | 同步校赛最小安全护栏、开源来源验收和按风险分层的审批测试 | RECA Team |
 | 1.5.0 | 2026-07-31 | Conditional Approval | 建立第三方科研能力验收矩阵并同步运行效果、失败、离线、隔离和复现要求 | RECA Team |
+| 1.5.1 | 2026-07-31 | Conditional Approval | 补齐仓库测试目录导航；测试规范、门禁和稳定标识不变 | RECA Team |
 
 ---
 

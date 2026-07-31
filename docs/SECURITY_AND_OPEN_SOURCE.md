@@ -23,7 +23,7 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 文档版本 | 1.5.0 |
+| 文档版本 | 1.5.1 |
 | 适用项目版本 | RECA 0.1 Competition Edition |
 | 文档状态 | Conditional Approval |
 | 默认部署场景 | `DEMO_LOCAL` |
@@ -40,6 +40,7 @@
 | 1.3.0 | 2026-07-31 | Conditional Approval | 拆分控制、文件/模型/Agent、运维和开源治理规范 |
 | 1.4.0 | 2026-07-31 | Conditional Approval | 建立 competition-first 安全分级和 effect-first 开源复用政策 |
 | 1.5.0 | 2026-07-31 | Conditional Approval | 增加研究项目许可证分类索引、实际引入验收和 Notices 状态准确性要求 |
+| 1.5.1 | 2026-07-31 | Conditional Approval | 将 ARS-Codex 未引入说明更新为阶段 11 仓库审查事实；政策不变 |
 
 ## 1. 适用场景与非目标
 
@@ -224,7 +225,8 @@ ARS-Codex 当前用途状态为 `NONCOMMERCIAL_INTENT_DECLARED`。该状态只�
 
 在核验许可证、保留归属并记录复制和修改后，可以选择性复制 Prompt、
 工作流、脚本和测试材料，也可以 Fork、Vendor，或经单独架构决策后作为
-运行组件。本次政策更新没有实际复制或引入 ARS-Codex 内容。
+运行组件。截至阶段 11 审查基线，仓库没有实际复制、Vendor、Fork 或运行时
+引入 ARS-Codex 内容。
 
 必须区分：
 
