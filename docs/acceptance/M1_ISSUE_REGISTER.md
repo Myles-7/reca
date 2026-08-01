@@ -50,7 +50,7 @@ M1-ISSUE-0002
 | BLOCKER | 0 | 0 |
 | CRITICAL | 0 | 0 |
 | HIGH | 2 | 1 |
-| MEDIUM | 2 | 3 |
+| MEDIUM | 2 | 4 |
 | LOW | 0 | 0 |
 
 Exit Gate classification after M1-7 repair:
@@ -73,6 +73,7 @@ Exit Gate classification after M1-7 repair:
 | M1-ISSUE-0006 | M1-2 | MEDIUM | RESOLVED | Backend database regression suite | Legacy tests and isolated test mounts now match approved M0 behavior. | NO | NO |
 | M1-ISSUE-0007 | M1-3 | MEDIUM | OPEN | Job event retention | SSE requires short-term replay and heartbeat but does not freeze cache TTL, history length, or one heartbeat interval. | NO | NO |
 | M1-ISSUE-0008 | M1-5 | MEDIUM | RESOLVED | Backend strict typing | Repo-wide strict Mypy now passes without broad ignores. | NO | NO |
+| M1-ISSUE-0009 | M1-8 | MEDIUM | RESOLVED | Ruff import classification | Linux CI inferred a different first-party import boundary for one Artifact API test. | NO | NO |
 
 The open M0 LOW disclosures remain in
 [M0_ISSUE_REGISTER.md](./M0_ISSUE_REGISTER.md). They may be referenced by M1
@@ -339,3 +340,30 @@ entry below.
   registration were repaired without broad ignores. `python -m mypy app` reports
   `Success: no issues found in 56 source files`; Ruff and the complete clean-room
   also pass.
+
+### M1-ISSUE-0009
+
+- ID: M1-ISSUE-0009
+- Stage: M1-8
+- Severity: MEDIUM
+- Status: RESOLVED
+- Area: Ruff import classification
+- Summary: Remote `backend-quality` reported `I001` for the Artifact API test
+  import block while Ruff 0.15.20 passed the same commit on Windows and in a
+  Linux container.
+- Evidence: GitHub Actions run `30678477391`, jobs `91310476956` and
+  `91311764292`, consistently reported the same import-classification failure at
+  `backend/tests/api/routes/test_artifacts.py:1`; local Ruff 0.15.20 and a Linux
+  Ruff 0.15.20 container did not reproduce it.
+- Affected requirement/contract: M1 remote backend quality gate; no public or
+  domain contract is affected.
+- Impact: Resolved; first-party import classification no longer depends on
+  runner path or environment inference.
+- Safe workaround / deferred behavior: No workaround remains.
+- Blocks current subtask: NO.
+- Blocks M1 Exit Gate: NO.
+- Suggested repair: Explicitly configure the existing `app` and `tests`
+  first-party packages for Ruff isort without changing enabled rules or ignores.
+- Resolution evidence: `backend/pyproject.toml` now declares both packages in
+  `known-first-party`; Ruff 0.15.20 passes the full backend tree and the Artifact
+  API test in the repository's supported local and Linux environments.
