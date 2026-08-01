@@ -23,7 +23,7 @@ test-results/
 
 # Runtime data and generated artifacts
 uploads/
-artifacts/
+/artifacts/
 storage/
 *.log
 m0-acceptance-*/

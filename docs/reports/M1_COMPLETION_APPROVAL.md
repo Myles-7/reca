@@ -37,6 +37,7 @@ Exit code: 0
 Evidence: D:\Temp\User\reca-m0-acceptance-20260801-033854
 Final pre-commit rerun: D:\Temp\User\reca-m0-acceptance-20260801-093426
 Final standard M0 entry rerun: D:\Temp\User\reca-m0-acceptance-20260801-093849
+Post-CI repair rerun: D:\Temp\User\reca-m0-acceptance-20260801-m1-final-fix-v2
 Requirement IDs: 181 -> 181
 Open M1 Exit-Gate blockers: 0
 ```
