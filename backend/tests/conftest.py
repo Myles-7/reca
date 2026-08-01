@@ -27,6 +27,7 @@ for _name, _value in _TEST_ENVIRONMENT.items():
 # These imports must follow the test-only environment defaults above.
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
+from sqlalchemy import text  # noqa: E402
 from sqlmodel import Session, delete  # noqa: E402
 
 from app.core.config import settings  # noqa: E402
@@ -49,6 +50,15 @@ def db() -> Generator[Session]:
     with Session(engine) as session:
         init_db(session)
         yield session
+        session.rollback()
+        session.execute(
+            text(
+                "TRUNCATE TABLE model_invocations, approval_items, approval_records, "
+                "processing_runs, jobs, audit_logs, "
+                "idempotency_records, artifact_relations, artifacts, "
+                "project_members, research_projects CASCADE"
+            )
+        )
         statement = delete(User)
         session.execute(statement)
         session.commit()

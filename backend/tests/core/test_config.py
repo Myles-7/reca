@@ -64,6 +64,17 @@ def test_invalid_environment_and_urls_fail_safely() -> None:
         build_settings(VALKEY_URL="http://valkey:6379")
     with pytest.raises(ValidationError):
         build_settings(MINIO_ENDPOINT="not-a-url")
+    with pytest.raises(ValidationError):
+        build_settings(MINIO_PUBLIC_ENDPOINT="not-a-url")
+
+
+def test_minio_public_endpoint_is_optional_and_browser_facing() -> None:
+    configured = build_settings(MINIO_PUBLIC_ENDPOINT="http://127.0.0.1:19000")
+
+    assert str(configured.MINIO_ENDPOINT).rstrip("/") == "http://minio:9000"
+    assert str(configured.MINIO_PUBLIC_ENDPOINT).rstrip("/") == (
+        "http://127.0.0.1:19000"
+    )
 
 
 def test_production_rejects_wildcard_cors_and_minio_requires_all_fields() -> None:

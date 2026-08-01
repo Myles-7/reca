@@ -1,0 +1,54 @@
+RECA FINAL OPEN-SOURCE REVIEW - STABLE IDENTIFIER COMPARISON
+Captured: 2026-07-31
+Baseline: docs/reports/document-split-baseline/
+Phase 0 starting HEAD: 849a6972d16ba076becfd8a306717cf222969c4c
+Phase 11 HEAD: 8b748e1d47084b47cb1a493142f9ee373f21c7fb
+
+Type                         Baseline  Present  Missing  Unexpected removed  Unexpected renamed
+Requirement IDs                   181      181        0                   0                   0
+Acceptance IDs                     16       16        0                   0                   0
+API paths                         236      236        0                   0                   0
+Error codes                        87       87        0                   0                   0
+Schema names                       16       16        0                   0                   0
+Agent Tool names                   51       51        0                   0                   0
+Enum/value candidates             401      378       23                   0                   0
+Milestone IDs/tokens               20       20        0                   0                   0
+ADR IDs                             1        1        0                   0                   0
+M0 Issue IDs                        4        4        0                   0                   0
+
+Intentional additive identifiers:
+- Error codes: EXTERNAL_CAPABILITY_UNAVAILABLE
+- Error codes: EXTERNAL_OUTPUT_INVALID
+- ADR IDs: ADR-002 through ADR-008
+
+The 23 enum/value candidates below were already absent at the Phase 0 starting
+HEAD. They are configuration or governance extraction candidates, not removals
+made by Phases 0-12:
+
+ACCESS_TOKEN_EXPIRE_MINUTES
+ALLOW_PUBLIC_SIGNUP
+AUDIT_LOG_ENABLED
+CODE_OF_CONDUCT
+DATASET_LICENSES
+DEPENDENCY_REVIEW
+MAX_DATASET_COLUMNS
+MAX_DATASET_ROWS
+MAX_DATASET_SIZE_MB
+MAX_DOCX_SIZE_MB
+MAX_PDF_SIZE_MB
+MINIO_BUCKET
+MINIO_ENDPOINT
+MINIO_ROOT_PASSWORD
+MINIO_ROOT_USER
+MODEL_ALLOW_SENSITIVE_DATA
+MODEL_STORE_FULL_INPUT
+POSTGRES_DB
+POSTGRES_PASSWORD
+POSTGRES_PORT
+POSTGRES_SERVER
+POSTGRES_USER
+VALKEY_URL
+
+Result: PASS
+Unexpected removed: 0
+Unexpected renamed: 0

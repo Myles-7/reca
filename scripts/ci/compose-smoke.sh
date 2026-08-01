@@ -7,7 +7,15 @@ export FIRST_SUPERUSER=m0-compose@example.com FIRST_SUPERUSER_PASSWORD="${FIRST_
 export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-reca_ci_password}" MINIO_ROOT_PASSWORD="${MINIO_ROOT_PASSWORD:-ci-minio-password}"
 export MODEL_API_KEY= OPENALEX_API_KEY=
 
-cleanup() { docker compose down -v --remove-orphans; }
+cleanup() {
+  status=$?
+  if (( status != 0 )); then
+    docker compose ps -a || true
+    docker compose logs --no-color api worker || true
+  fi
+  docker compose down -v --remove-orphans
+  return "$status"
+}
 trap cleanup EXIT
 
 docker compose config -q

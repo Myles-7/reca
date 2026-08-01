@@ -1,1 +1,5 @@
-Reserved for repository-level unit tests.
+# Repository Unit Tests
+
+本目录承载不依赖真实外部服务的领域规则、转换器、Provider/Adapter 边界和确定性函数测试。第三方集成至少在此覆盖输出 Schema 转换、无效输出、错误映射、配置固定、业务事实不被第三方状态接管，以及项目隔离所需的纯逻辑。
+
+改造上游测试时必须在测试文件或相邻来源清单记录项目、仓库、固定 Commit、许可证、原路径和修改；不得把上游通过结果等同于 RECA 集成验收。

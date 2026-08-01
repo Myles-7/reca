@@ -66,6 +66,7 @@ class Settings(BaseSettings):
     # Core infrastructure
     VALKEY_URL: str
     MINIO_ENDPOINT: AnyHttpUrl
+    MINIO_PUBLIC_ENDPOINT: AnyHttpUrl | None = None
     MINIO_ROOT_USER: str = Field(min_length=3)
     MINIO_ROOT_PASSWORD: SecretStr
     MINIO_BUCKET: str = Field(default="reca", min_length=3)
@@ -109,7 +110,9 @@ class Settings(BaseSettings):
             "BACKEND_CORS_ORIGINS must be a comma-separated string or list"
         )
 
-    @field_validator("SENTRY_DSN", "MODEL_BASE_URL", mode="before")
+    @field_validator(
+        "SENTRY_DSN", "MODEL_BASE_URL", "MINIO_PUBLIC_ENDPOINT", mode="before"
+    )
     @classmethod
     def empty_optional_urls_are_none(cls, value: Any) -> Any:
         return None if value == "" else value

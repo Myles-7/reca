@@ -1,121 +1,121 @@
-# FastAPI Project - Frontend
+# RECA Frontend
 
-The frontend is built with [Vite](https://vitejs.dev/), [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), [TanStack Query](https://tanstack.com/query), [TanStack Router](https://tanstack.com/router) and [Tailwind CSS](https://tailwindcss.com/).
+RECA 前端是基于 React、Vite 与 strict TypeScript 的科研工作台。Bun 是仓库正式包管理器和脚本运行器。
 
-## Requirements
+## 技术基线
 
-- [Bun](https://bun.sh/) (recommended) or [Node.js](https://nodejs.org/)
+当前真实技术栈：
 
-## Quick Start
+- React 19 + Vite；
+- strict TypeScript；
+- Bun；
+- TanStack Router file-based routes；
+- TanStack Query；
+- Tailwind CSS + Radix UI primitives；
+- Lucide icons；
+- OpenAPI generated client；
+- 手工 `api/adapter` 边界；
+- Playwright shell/E2E。
 
-```bash
-bun install
-bun run dev
-```
+视觉系统入口为 [DESIGN.md](./DESIGN.md)，Open Design 与 Codex 协作规则为 [FRONTEND_DESIGN_INTEGRATION_RULES.md](../docs/development/FRONTEND_DESIGN_INTEGRATION_RULES.md)。
 
-* Then open your browser at http://localhost:5173/.
+## 开发命令
 
-Notice that this live server is not running inside Docker, it's for local development, and that is the recommended workflow. Once you are happy with your frontend, you can build the frontend Docker image and start it, to test it in a production-like environment. But building the image at every change will not be as productive as running the local development server with live reload.
-
-Check the file `package.json` to see other available options.
-
-### Removing the frontend
-
-If you are developing an API-only app and want to remove the frontend, you can do it easily:
-
-* Remove the `./frontend` directory.
-
-* In the `compose.yml` file, remove the whole service / section `frontend`.
-
-* In the `compose.override.yml` file, remove the whole service / section `frontend` and `playwright`.
-
-Done, you have a frontend-less (api-only) app. 🤓
-
----
-
-If you want, you can also remove the `FRONTEND` environment variables from:
-
-* `.env`
-* `./scripts/*.sh`
-
-But it would be only to clean them up, leaving them won't really have any effect either way.
-
-## Generate Client
-
-### Automatically
-
-* Activate the backend virtual environment.
-* From the top level project directory, run the script:
+从仓库根目录执行：
 
 ```bash
-bash ./scripts/generate-client.sh
+bun install --frozen-lockfile
+bun run --cwd frontend dev
+bun run --cwd frontend format:check
+bun run --cwd frontend lint
+bun run --cwd frontend build
+bun run --cwd frontend generate-client
+bun run --cwd frontend check-generated-client
+bun run --cwd frontend test:shell
 ```
 
-* Commit the changes.
+以上命令与 `frontend/package.json` 当前 scripts 一致。Windows 默认 Playwright 入口存在已登记 LOW 风险，当前正式回归入口为 `test:shell`。
 
-### Manually
+## 当前目录
 
-* Start the Docker Compose stack.
+`CURRENT`：
 
-* Download the OpenAPI JSON file from `http://localhost/api/v1/openapi.json` and copy it to a new file `openapi.json` at the root of the `frontend` directory.
-
-* To generate the frontend client, run:
-
-```bash
-bun run generate-client
+```text
+frontend/src/
+├── api/
+│   ├── generated/          # 当前 OpenAPI generator output
+│   └── adapter/            # 认证、错误和兼容边界
+├── client/                 # 现存上游模板生成 surface；新业务不得绕过 api/adapter 使用
+├── components/
+│   ├── ui/                 # 共享视觉 primitives
+│   ├── Common/
+│   ├── Sidebar/
+│   └── ...
+├── features/
+│   └── system-status/      # 当前 M0 feature
+├── hooks/
+├── routes/                 # TanStack Router file routes
+├── shared/
+├── main.tsx                # Provider 与 Router 装配
+└── index.css               # 当前 token / theme source
 ```
 
-* Commit the changes.
+`TARGET`：后续业务 feature 可按实际复杂度逐步形成 `api/`、`model/`、`hooks/`、`containers/`、`ui/` 等内部边界，并在真实需要时建立 mocks 或 design-system 目录。本 README 不要求移动现有文件，也不允许把 planned 目录描述为已存在。
 
-Notice that everytime the backend changes (changing the OpenAPI schema), you should follow these steps again to update the frontend client.
+## API 使用
 
-## Using a Remote API
+正式链路：
 
-If you want to use a remote API, you can set the environment variable `VITE_API_URL` to the URL of the remote API. For example, you can set it in the `frontend/.env` file:
-
-```env
-VITE_API_URL=https://api.my-domain.example.com
+```text
+OpenAPI
+→ src/api/generated
+→ src/api/adapter
+→ feature query / controller
+→ ViewModel
+→ UI
 ```
 
-Then, when you run the frontend, it will use that URL as the base URL for the API.
+强制规则：
 
-## Code Structure
+- Do not manually edit `src/api/generated/`；
+- Do not fetch directly from feature UI；
+- Use adapter / feature integration boundary；
+- UI 不依赖 generated transport/result 细节或 Provider-specific DTO；
+- Artifact/PDF URL 必须来自后端授权 API；
+- API 契约变化后运行 `generate-client`，审查 diff，再同步 adapter、ViewModel 和测试。
 
-The frontend code is structured as follows:
+详细规则见 [Frontend, API, and Artifact Rules](../docs/development/FRONTEND_API_AND_ARTIFACT_RULES.md)。
 
-* `frontend/src` - The main frontend code.
-* `frontend/src/assets` - Static assets.
-* `frontend/src/client` - The generated OpenAPI client.
-* `frontend/src/components` -  The different components of the frontend.
-* `frontend/src/hooks` - Custom hooks.
-* `frontend/src/routes` - The different routes of the frontend which include the pages.
+## Open Design 工作方式
 
-## End-to-End Testing with Playwright
+Open Design 必须：
 
-The frontend includes initial end-to-end tests using Playwright. To run the tests, you need to have the Docker Compose stack running. Start the stack with the following command:
+- 在真实 RECA `frontend/` 和当前技术栈内工作；
+- 不建立第二套独立 Vite/React 产品；
+- 使用 [DESIGN.md](./DESIGN.md) 和统一 Design Tokens；
+- 以纯 UI、Props in / Events out 为优先；
+- 使用冻结 ViewModel 的显式 Mock fixture；
+- 不修改 backend、generated client、adapter、权限、Approval 或状态机所有权区域；
+- 不把设计、Mock 或 planned component 写成已实现业务能力。
 
-```bash
-docker compose up -d --wait backend
-```
+可执行 UI Contract 的事实来源：
 
-Then, you can run the tests with the following command:
+- Route：`src/routes/` 中真实 TanStack Router route 定义；
+- ViewModel：feature TypeScript `interface` / `type` 与 mapper 输出；
+- Component Props / Events：对应 React component props 或复杂页面共享 contract 文件；
+- Mock：导入正式 ViewModel 类型的 typed fixture；
+- Markdown Registry：只记录 owner、milestone、freeze 状态、dependency 和 integration notes，不长期复制完整 TypeScript 类型。
 
-```bash
-bunx playwright test
-```
+普通 Open Design Mock 只用于 tests、preview、development fixture，或由现有 `VITE_DEMO_MODE` 边界显式启用并清楚标识的 Demo Mode。production data path 不得引用普通 design mock，不得用 fixture 静态替代正式 API integration，也不得把 Mock 当作 backend success 或正式验收证据。
 
-You can also run your tests in UI mode to see the browser and interact with it running:
+Router、ViewModel、Mock、目录主责、并行分支和 UI Integration Gate 见 [Frontend Design Integration Rules](../docs/development/FRONTEND_DESIGN_INTEGRATION_RULES.md)。
 
-```bash
-bunx playwright test --ui
-```
+## 当前模块导航
 
-To stop and remove the Docker Compose stack and clean the data created in tests, use the following command:
+- [API integration](./src/api/README.md)
+- [Feature ownership](./src/features/README.md)
+- [Shared primitives](./src/shared/README.md)
+- [Architecture](../docs/ARCHITECTURE.md)
+- [Workbench ADR](../docs/decisions/ADR-006-RESEARCH-WORKBENCH-UX.md)
 
-```bash
-docker compose down -v
-```
-
-To update the tests, navigate to the tests directory and modify the existing test files or add new ones as needed.
-
-For more information on writing and running Playwright tests, refer to the official [Playwright documentation](https://playwright.dev/docs/intro).
+TanStack Table 已作为基础依赖存在；PDF.js 与 React Flow 仍是后续计划能力。Table selection 不是 Approval 或 LiteratureDecision，PDF viewer 坐标不是 EvidenceSpan 事实，React Flow edge 不是 ClaimEvidenceLink 权威。

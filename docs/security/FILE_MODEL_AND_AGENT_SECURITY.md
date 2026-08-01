@@ -1,0 +1,354 @@
+# File, Model, and Agent Security
+
+- 文档名称：File, Model, and Agent Security
+- 文档版本：1.1.0
+- 所属入口文档：[SECURITY_AND_OPEN_SOURCE.md](../SECURITY_AND_OPEN_SOURCE.md)
+- 文档状态：APPROVED FOR M1 DEVELOPMENT
+- 最后更新时间：2026-07-31
+- Migration status: COMPLETE
+- M1 Contract Amendment status: APPROVED
+
+## 变更记录
+
+| 版本 | 日期 | 状态 | 变更说明 |
+| --- | --- | --- | --- |
+| 1.0.0 | 2026-07-31 | Conditional Approval | 文档拆分后的文件、模型、Agent 和导出安全基线 |
+| 1.1.0 | 2026-07-31 | Conditional Approval | 建立文件最小护栏、简化模型数据边界和四级操作确认策略 |
+
+## 权威范围
+
+本文件是文件上传下载、PDF、DOCX/ZIP、CSV/XLSX、Artifact 完整性、模型
+数据访问、Prompt injection、Agent、操作确认、任意代码执行和导出安全的
+唯一完整定义。
+
+不负责通用身份授权、运维事件、根许可证选择或依赖治理。返回
+[安全与开源治理入口](../SECURITY_AND_OPEN_SOURCE.md)。
+
+## 1. 文件安全最小要求
+
+### 1.1 支持格式与大小
+
+Competition Edition 默认支持 PDF、CSV、XLSX 和 DOCX。其他格式默认拒绝，
+除非新增解析器、测试和明确用途。
+
+| 类型 | 建议默认上限 |
+| --- | ---: |
+| PDF | 50 MB |
+| CSV | 100 MB |
+| XLSX | 100 MB |
+| DOCX | 30 MB |
+| 导出 ZIP | 由部署配置限制 |
+
+上限可通过服务端配置调整。解析还必须有时间、内存、页数、行数、单元格数
+或解压规模限制，避免单个文件拖垮演示环境。
+
+### 1.2 多层验证
+
+接收文件时至少检查：
+
+1. 扩展名是否在白名单；
+2. MIME 是否与目标格式合理一致；
+3. 文件头或容器签名；
+4. 实际解析是否成功；
+5. 解析后结构是否符合目标格式。
+
+仅凭扩展名、浏览器 MIME 或用户声明不能接受文件。失败时保留原始上传或
+明确标记失败，不创建伪造的正式解析结果。
+
+### 1.3 文件名、存储键和路径
+
+- 原始文件名只用于展示；
+- 服务端生成 Artifact ID 和对象存储键；
+- 移除路径分隔符、控制字符和危险相对路径；
+- 最终解析和临时路径必须解析到允许的工作目录内；
+- 不允许文件名决定宿主机任意路径；
+- ZIP/DOCX 每个成员解包前检查规范化路径、绝对路径和 `..`；
+- 解包总大小、文件数和压缩比必须有上限。
+
+路径穿越或 ZIP Slip 属于 `RELEASE_BLOCKER`。
+
+### 1.4 哈希与原始对象
+
+- 上传后计算 SHA-256；
+- 原始 Artifact、原始 DatasetVersion 和原始稿件版本不得覆盖；
+- 解析、清洗、修复和格式转换创建派生对象或新版本；
+- 派生对象记录源 Artifact/版本、操作、工具版本和结果哈希；
+- 解析失败不得修改、替换或删除原文件；
+- 正式结果继续绑定准确的输入版本。
+
+### 1.4.1 M1 Artifact 上传边界
+
+M1 Artifact 业务生命周期使用 API authority 定义的受控流程：upload initiate 分配
+Artifact/upload ID 与服务端对象键，backend-controlled content transfer 接收 bytes，
+complete 再由服务端计算并验证 SHA-256、size、MIME 和文件头。MinIO smoke 不产生正式
+Artifact 语义。
+
+安全规则：
+
+- 客户端文件名仅是经过净化的显示元数据，不参与 Bucket 或 storage key 计算；
+- `upload_id` 不授予任何权限，每一步都按 Artifact 所属 `project_id` 重新授权；
+- 客户端声明的 hash/size/MIME 在完成前均不可信，服务端计算值才是权威；
+- hash、size、MIME 或文件头不一致时 Artifact 进入 `QUARANTINED`，不得下载为正常原件；
+- 传输中断、上传会话过期或存储失败进入 `FAILED`，不得创建 `AVAILABLE` 假成功；
+- 相同内容可形成不同 Artifact ID 和不同 storage key；重复内容不是覆盖许可；
+- content transfer 只允许一次成功写入，重复 PUT 或对 terminal Artifact 的写入必须拒绝；
+- 原始 Artifact 永远不可覆盖；派生内容必须创建新 Artifact 并用 ArtifactRelation 记录来源；
+- 下载只通过后端授权 endpoint，响应不得暴露 Bucket、永久 storage key 或凭据。
+
+### 1.5 不执行原则
+
+上传文件始终作为数据处理：
+
+- 不执行 PDF JavaScript；
+- 不执行 DOCM/VBA 宏、嵌入附件或外部关系；
+- 不执行 CSV/XLSX 公式、外部链接或查询；
+- 不加载不受控远程资源；
+- 不把文档内指令当作系统或 Tool 指令；
+- 不运行文件携带的脚本、二进制或安装程序。
+
+上传文件可执行属于 `RELEASE_BLOCKER`。
+
+### 1.6 解析资源边界
+
+解析器和 Worker 必须有超时、可取消状态、有限重试和资源边界。异常退出
+不得留下可被误认为成功的正式对象。Worker 重试必须幂等或使用唯一键，
+避免重复创建正式版本。
+
+### 1.7 推荐强化
+
+以下是 `COMPETITION_RECOMMENDED`，不阻断校赛开发：
+
+- 杀毒引擎；
+- 高级内容消毒；
+- 完整文件隔离区平台；
+- 企业文件审计和取证系统；
+- 独立沙箱集群；
+- 全面内容风险评分。
+
+无上述平台时，仍必须满足格式验证、路径控制、资源限制和不执行原则。
+
+## 2. 格式专项要求
+
+### 2.1 PDF
+
+- PDF 和提取文本均视为不可信输入；
+- GROBID/pypdf 失败时显示降级、局部读取或定位不确定；
+- 不因解析失败生成 EvidenceSpan；
+- PDF.js 或其他预览器使用受维护版本；
+- 加密 PDF 返回明确状态，允许用户提供合法解密版本；
+- 嵌入 Prompt injection 只作为文档内容处理。
+
+### 2.2 DOCX/ZIP
+
+- DOCX 按 ZIP 容器处理；
+- 检查 ZIP Slip、压缩炸弹、外部关系和宏内容；
+- 自动格式修复输出新 ManuscriptVersion；
+- 修复失败不产生正式版本；
+- 公式、批注、修订、文本框等无法可靠解析时披露范围限制。
+
+### 2.3 CSV/XLSX
+
+- 使用确定性解析器和明确编码/分隔符策略；
+- 公式只读取缓存值或显示公式文本，不执行；
+- 导出 CSV 时防止公式注入；
+- 外部工作簿链接不自动访问；
+- 隐藏工作表、推断类型和截断行为对用户可见；
+- 超大表格使用分块、采样预览或资源限制。
+
+## 3. 模型数据访问
+
+### 3.1 三层语义
+
+每次模型调用继续保留：
+
+```text
+requested_data_access_level
+max_allowed_data_access_level
+effective_data_access_level
+```
+
+- `requested`：任务请求的范围；
+- `max_allowed`：项目、用户、Provider 和政策允许的最大范围；
+- `effective`：实际发送范围，不能高于前两者。
+
+三个字段及输入来源/哈希进入 `ModelInvocation` 或等价审计记录。模型、
+Prompt 或第三方库不能自行提高 `effective_data_access_level`。
+
+### 3.2 Competition Edition 最低要求
+
+- 默认只发送完成任务所需的最小内容；
+- 不发送 Token、API Key、密码、数据库连接串或对象存储 Secret；
+- 不默认发送完整且明显敏感的数据集；
+- 优先发送字段摘要、统计摘要、选定片段或去标识化样本；
+- UI、运行详情或日志能说明使用了哪些数据范围和 Provider；
+- 模型调用失败、缓存、降级或局部上下文必须显示；
+- 外部交叉模型验证默认关闭，启用时单独确认内容外发。
+
+完整自动数据分类、DLP、企业脱敏平台和法规策略属于
+`FUTURE_PRODUCTION`。Competition Edition 仍不得把明显敏感真实数据用于
+未经授权的演示或外部模型调用。
+
+### 3.3 最小上下文快照
+
+`ProjectContextSnapshot` 只能是从数据库生成的最小只读快照：
+
+- 包含当前阶段、可用 Artifact 引用、审批和阻塞问题；
+- 使用 ID、版本和摘要，避免无差别发送完整对象；
+- 记录快照版本、内容哈希和生成时间；
+- 不成为第二套可写业务事实；
+- Agent Session 不拥有项目正式状态。
+
+## 4. Prompt injection 与模型输出
+
+### 4.1 内容与指令分离
+
+PDF、DOCX、数据单元格、网页、模型回复和第三方 API 响应都是不可信内容。
+其中“忽略规则”“调用工具”“导出全部数据”等文本不得改变：
+
+- Tool 白名单；
+- 项目权限；
+- 数据访问上限；
+- 审批级别；
+- 系统 Prompt；
+- 业务状态机。
+
+### 4.2 Tool 参数与输出 Schema
+
+- Tool 名称由后端白名单决定；
+- Tool 参数通过 Pydantic/JSON Schema 校验；
+- 资源 ID 必须属于当前项目和允许输入集合；
+- 模型输出 Schema 错误时不得写业务表；
+- 可做有限重试，失败后返回可见错误或人工处理；
+- 引用、EvidenceSpan 和数字必须由确定性校验器核对。
+
+## 5. Agent 安全边界
+
+### 5.1 允许能力
+
+Agent 可以在已授权项目内连续执行：
+
+- 查询和检索；
+- PDF/DOCX/数据解析；
+- 候选字段和 EvidenceSpan 候选抽取；
+- 数据质量扫描；
+- 研究或分析规划；
+- 结果预览、建议和只读审核；
+- 已批准计划对应的白名单确定性工具。
+
+这些能力应减少不必要的确认弹窗，但仍记录 AgentRun、ToolCall、输入版本、
+结果状态和降级信息。
+
+### 5.2 继续禁止
+
+Agent 不得：
+
+- 任意执行 Shell、Python、SQL、Notebook 或用户代码；
+- 绕过 Service 直接写数据库或对象存储；
+- 自我审批或伪造 ApprovalRecord；
+- 把聊天中的“同意”当作正式审批；
+- 删除或覆盖原始文件和原始版本；
+- 直接生成正式统计数字或正式图表数据；
+- 伪造文献、EvidenceSpan、Claim 支持关系或业务状态；
+- 为获得显著性修改数据；
+- 扩大项目权限或模型数据访问；
+- 把失败、缓存或降级伪装成成功。
+
+任意代码执行、自我审批、覆盖原始对象和模型正式数字均属于
+`RELEASE_BLOCKER`。
+
+### 5.3 单总控 Agent 与时序
+
+RECA 保持单 `ResearchOrchestrator` 和白名单 Tool 架构。复用第三方 Prompt、
+工作流或脚本不自动允许自由多 Agent，也不把正式 Agent 接入提前到 M8。
+
+## 6. 操作确认与审批
+
+### 6.1 `AUTO_ALLOWED`
+
+无需 ApprovalRecord，可在授权和 Schema 检查后自动执行：
+
+- 查询、检索和元数据验证；
+- 文件解析和候选抽取；
+- 只读证据查询；
+- 数据画像和质量扫描；
+- 清洗预览和假设检查；
+- 研究、分析、图表或稿件建议；
+- Claim 审核和证据图只读查询。
+
+### 6.2 `LIGHT_CONFIRMATION`
+
+需要清晰的一步确认和可追溯决定，但不要求企业式正式审批流程：
+
+- 采用候选研究问题；
+- 修正文献候选字段；
+- 选择文献纳入/排除；
+- 采用 TopicCandidate；
+- 确认变量角色或配对；
+- 选择图表类型；
+- 接受低风险格式修复；
+- 接受不改变正式事实的 Claim 措辞建议。
+
+阶段 3 决定它复用 `ApprovalRecord` 的级别字段还是独立轻量记录。本阶段
+不修改现有 Schema 或 API。
+
+### 6.3 `FORMAL_APPROVAL`
+
+必须使用版本绑定的 `ApprovalRecord`、影响预览、用户身份、Service 前置
+条件和过期版本拒绝：
+
+- 缺失值插补；
+- 异常值删除；
+- 变量重编码；
+- 生成正式清洗后 DatasetVersion；
+- 执行正式 AnalysisPlan；
+- 失效正式结果；
+- 高风险论文内容修改；
+- 导出原始或敏感数据；
+- 其他不可逆或改变正式科研事实的操作。
+
+### 6.4 `PROHIBITED`
+
+以下操作不能通过任何确认或审批变为允许：
+
+- 模型写正式统计结果；
+- Agent 自我审批；
+- 任意 Shell、Python 或 SQL；
+- 绕过 Service 的直接业务写入；
+- 覆盖原始文件、数据或正式历史；
+- 修改数据以获得预期显著性；
+- 伪造来源、证据或运行状态。
+
+## 7. 导出安全
+
+导出前至少检查：
+
+- 当前用户和项目权限；
+- Artifact、DatasetVersion 和结果状态；
+- 原始或敏感数据是否需要 `FORMAL_APPROVAL`；
+- PDF、数据集、字体、模板和第三方内容是否允许再分发；
+- 导出不含 Secret、内部路径、调试日志或其他项目数据；
+- ZIP 成员路径安全且有大小限制；
+- ReproPackage 明确列出版本、许可证、缺失项和降级记录。
+
+不允许再分发的 PDF 或数据可以只导出引用、元数据、哈希和获取说明。
+
+## 8. 学术责任边界
+
+系统负责来源核验、版本、审计、确定性计算和风险提示；用户负责研究设计、
+伦理、解释、最终论述和提交责任。RECA 不替代导师、伦理委员会、统计专家
+或法律意见，也不得通过自动生成掩盖证据不足。
+
+## 9. 验证要求
+
+阶段 3 应将下列政策对齐到合同和测试：
+
+- 文件类型、大小、路径、ZIP Slip、哈希和解析失败；
+- 原始对象不可覆盖；
+- requested/max/effective 三层数据访问；
+- Prompt injection 不扩大 Tool 和权限；
+- 四级操作确认矩阵；
+- Agent 无 Shell/Python/SQL、自我审批和正式数字生成；
+- 失败与降级可见；
+- 敏感导出和许可证检查。
+
+本阶段不修改代码、测试实现或现有数据/API Schema。

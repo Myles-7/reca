@@ -1,4 +1,4 @@
-﻿{
+{
   "openapi": "3.1.0",
   "info": { "title": "RECA", "version": "0.1.0" },
   "paths": {
@@ -602,6 +602,3172 @@
         }
       }
     },
+    "/api/v1/projects": {
+      "post": {
+        "tags": ["projects"],
+        "summary": "Create Project",
+        "operationId": "projects_create_project_post_api_v1_projects",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProjectCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      },
+      "get": {
+        "tags": ["projects"],
+        "summary": "List Projects",
+        "operationId": "projects_list_projects_get_api_v1_projects",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ProjectStatus" },
+                { "type": "null" }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "current_stage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ProjectStage" },
+                { "type": "null" }
+              ],
+              "title": "Current Stage"
+            }
+          },
+          {
+            "name": "project_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ProjectType" },
+                { "type": "null" }
+              ],
+              "title": "Project Type"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 200 },
+                { "type": "null" }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "created_at",
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "desc", "title": "Order" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectListEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}": {
+      "get": {
+        "tags": ["projects"],
+        "summary": "Get Project",
+        "operationId": "projects_get_project_get_api_v1_projects_project_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["projects"],
+        "summary": "Update Project",
+        "operationId": "projects_update_project_patch_api_v1_projects_project_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProjectUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/overview": {
+      "get": {
+        "tags": ["projects"],
+        "summary": "Get Project Overview",
+        "operationId": "projects_get_project_overview_get_api_v1_projects_project_id_overview",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectOverviewEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/archive": {
+      "post": {
+        "tags": ["projects"],
+        "summary": "Archive Project",
+        "operationId": "projects_archive_project_post_api_v1_projects_project_id_archive",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/restore": {
+      "post": {
+        "tags": ["projects"],
+        "summary": "Restore Project",
+        "operationId": "projects_restore_project_post_api_v1_projects_project_id_restore",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProjectEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/members": {
+      "get": {
+        "tags": ["projects"],
+        "summary": "List Project Members",
+        "operationId": "projects_list_project_members_get_api_v1_projects_project_id_members",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ProjectMemberRole" },
+                { "type": "null" }
+              ],
+              "title": "Role"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 255 },
+                { "type": "null" }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "include_removed",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Removed"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MemberListEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      },
+      "post": {
+        "tags": ["projects"],
+        "summary": "Add Project Member",
+        "operationId": "projects_add_project_member_post_api_v1_projects_project_id_members",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MemberAdd" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MemberEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MemberEnvelope" }
+              }
+            },
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/members/{member_id}": {
+      "patch": {
+        "tags": ["projects"],
+        "summary": "Update Project Member",
+        "operationId": "projects_update_project_member_patch_api_v1_projects_project_id_members_member_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Member Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MemberUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    { "$ref": "#/components/schemas/MemberEnvelope" },
+                    { "$ref": "#/components/schemas/MemberTransferEnvelope" }
+                  ],
+                  "title": "Response Projects Update Project Member Patch Api V1 Projects Project Id Members Member Id"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["projects"],
+        "summary": "Remove Project Member",
+        "operationId": "projects_remove_project_member_delete_api_v1_projects_project_id_members_member_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Member Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Successful Response" },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/audit-logs": {
+      "get": {
+        "tags": ["projects"],
+        "summary": "List Project Audit Logs",
+        "operationId": "projects_list_project_audit_logs_get_api_v1_projects_project_id_audit-logs",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "actor_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/AuditActorType" },
+                { "type": "null" }
+              ],
+              "title": "Actor Type"
+            }
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 100 },
+                { "type": "null" }
+              ],
+              "title": "Action"
+            }
+          },
+          {
+            "name": "object_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 100 },
+                { "type": "null" }
+              ],
+              "title": "Object Type"
+            }
+          },
+          {
+            "name": "object_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "title": "Object Id"
+            }
+          },
+          {
+            "name": "outcome",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/AuditOutcome" },
+                { "type": "null" }
+              ],
+              "title": "Outcome"
+            }
+          },
+          {
+            "name": "request_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 64 },
+                { "type": "null" }
+              ],
+              "title": "Request Id"
+            }
+          },
+          {
+            "name": "job_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "title": "Job Id"
+            }
+          },
+          {
+            "name": "approval_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "title": "Approval Id"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "date-time" },
+                { "type": "null" }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "date-time" },
+                { "type": "null" }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuditListEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/artifacts": {
+      "get": {
+        "tags": ["artifacts"],
+        "summary": "List Project Artifacts",
+        "operationId": "artifacts_list_project_artifacts_get_api_v1_projects_project_id_artifacts",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "artifact_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ArtifactType" },
+                { "type": "null" }
+              ],
+              "title": "Artifact Type"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ArtifactStatus" },
+                { "type": "null" }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "is_original",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+              "title": "Is Original"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 255 },
+                { "type": "null" }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtifactListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/artifacts/uploads": {
+      "post": {
+        "tags": ["artifacts"],
+        "summary": "Initiate Artifact Upload",
+        "operationId": "artifacts_initiate_artifact_upload_post_api_v1_projects_project_id_artifacts_uploads",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArtifactUploadInitiate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtifactUploadEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/artifact-uploads/{upload_id}/content": {
+      "put": {
+        "tags": ["artifacts"],
+        "summary": "Transfer Artifact Content",
+        "operationId": "artifacts_transfer_artifact_content_put_api_v1_artifact-uploads_upload_id_content",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Upload Id"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Content-Type"
+            }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Successful Response" },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/artifacts/uploads/{upload_id}/complete": {
+      "post": {
+        "tags": ["artifacts"],
+        "summary": "Complete Artifact Upload",
+        "operationId": "artifacts_complete_artifact_upload_post_api_v1_projects_project_id_artifacts_uploads_upload_id_complete",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Upload Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArtifactUploadComplete"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ArtifactEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/artifacts/{artifact_id}": {
+      "get": {
+        "tags": ["artifacts"],
+        "summary": "Get Artifact",
+        "operationId": "artifacts_get_artifact_get_api_v1_artifacts_artifact_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ArtifactEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/artifacts/{artifact_id}/download": {
+      "get": {
+        "tags": ["artifacts"],
+        "summary": "Authorize Artifact Download",
+        "operationId": "artifacts_authorize_artifact_download_get_api_v1_artifacts_artifact_id_download",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtifactDownloadEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/jobs": {
+      "get": {
+        "tags": ["jobs"],
+        "summary": "List Project Jobs",
+        "operationId": "jobs_list_project_jobs_get_api_v1_projects_project_id_jobs",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/JobStatus" },
+                { "type": "null" }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "task_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/JobTaskType" },
+                { "type": "null" }
+              ],
+              "title": "Task Type"
+            }
+          },
+          {
+            "name": "resource_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 100 },
+                { "type": "null" }
+              ],
+              "title": "Resource Type"
+            }
+          },
+          {
+            "name": "resource_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "title": "Resource Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JobListEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{job_id}": {
+      "get": {
+        "tags": ["jobs"],
+        "summary": "Get Job",
+        "operationId": "jobs_get_job_get_api_v1_jobs_job_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Job Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JobEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{job_id}/cancel": {
+      "post": {
+        "tags": ["jobs"],
+        "summary": "Cancel Job",
+        "operationId": "jobs_cancel_job_post_api_v1_jobs_job_id_cancel",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Job Id" }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/JobCancel" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JobEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{job_id}/retry": {
+      "post": {
+        "tags": ["jobs"],
+        "summary": "Retry Job",
+        "operationId": "jobs_retry_job_post_api_v1_jobs_job_id_retry",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Job Id" }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JobEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{job_id}/events": {
+      "get": {
+        "tags": ["jobs"],
+        "summary": "Stream Job Events",
+        "operationId": "jobs_stream_job_events_get_api_v1_jobs_job_id_events",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Job Id" }
+          },
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "integer", "minimum": 0 },
+                { "type": "null" }
+              ],
+              "title": "Last-Event-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/approvals": {
+      "get": {
+        "tags": ["approvals"],
+        "summary": "List Project Approvals",
+        "operationId": "approvals_list_project_approvals_get_api_v1_projects_project_id_approvals",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ApprovalStatus" },
+                { "type": "null" }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "approval_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/ApprovalType" },
+                { "type": "null" }
+              ],
+              "title": "Approval Type"
+            }
+          },
+          {
+            "name": "target_object_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 100 },
+                { "type": "null" }
+              ],
+              "title": "Target Object Type"
+            }
+          },
+          {
+            "name": "requested_by_actor_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/AuditActorType" },
+                { "type": "null" }
+              ],
+              "title": "Requested By Actor Type"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{approval_id}": {
+      "get": {
+        "tags": ["approvals"],
+        "summary": "Get Approval",
+        "operationId": "approvals_get_approval_get_api_v1_approvals_approval_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "approval_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Approval Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApprovalEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{approval_id}/approve": {
+      "post": {
+        "tags": ["approvals"],
+        "summary": "Approve",
+        "operationId": "approvals_approve_post_api_v1_approvals_approval_id_approve",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "approval_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Approval Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovalDecisionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApprovalEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{approval_id}/reject": {
+      "post": {
+        "tags": ["approvals"],
+        "summary": "Reject",
+        "operationId": "approvals_reject_post_api_v1_approvals_approval_id_reject",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "approval_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Approval Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ApprovalRejectRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApprovalEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/approvals/{approval_id}/cancel": {
+      "post": {
+        "tags": ["approvals"],
+        "summary": "Cancel",
+        "operationId": "approvals_cancel_post_api_v1_approvals_approval_id_cancel",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "approval_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Approval Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApprovalEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
     "/api/v1/private/users/": {
       "post": {
         "tags": ["private"],
@@ -639,6 +3805,700 @@
   },
   "components": {
     "schemas": {
+      "ApprovalDecisionPublic": {
+        "properties": {
+          "status": { "$ref": "#/components/schemas/ApprovalStatus" },
+          "user_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "User Id"
+          },
+          "decided_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Decided At"
+          },
+          "reason": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": ["status", "user_id", "decided_at", "reason"],
+        "title": "ApprovalDecisionPublic"
+      },
+      "ApprovalDecisionRequest": {
+        "properties": {
+          "decision_reason": {
+            "anyOf": [
+              { "type": "string", "maxLength": 2000 },
+              { "type": "null" }
+            ],
+            "title": "Decision Reason"
+          },
+          "item_decisions": {
+            "items": { "$ref": "#/components/schemas/ApprovalItemDecision" },
+            "type": "array",
+            "title": "Item Decisions"
+          }
+        },
+        "type": "object",
+        "title": "ApprovalDecisionRequest"
+      },
+      "ApprovalEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ApprovalPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ApprovalEnvelope"
+      },
+      "ApprovalItemDecision": {
+        "properties": {
+          "item_type": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Item Type"
+          },
+          "item_id": { "type": "string", "format": "uuid", "title": "Item Id" },
+          "decision": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Decision"
+          },
+          "reason": {
+            "anyOf": [
+              { "type": "string", "maxLength": 2000 },
+              { "type": "null" }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": ["item_type", "item_id", "decision"],
+        "title": "ApprovalItemDecision"
+      },
+      "ApprovalItemPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "item_type": { "type": "string", "title": "Item Type" },
+          "item_id": { "type": "string", "format": "uuid", "title": "Item Id" },
+          "decision": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Decision"
+          },
+          "reason": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": ["id", "item_type", "item_id", "decision", "reason"],
+        "title": "ApprovalItemPublic"
+      },
+      "ApprovalListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/ApprovalPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "ApprovalListEnvelope"
+      },
+      "ApprovalPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "approval_type": { "$ref": "#/components/schemas/ApprovalType" },
+          "target_object_type": {
+            "type": "string",
+            "title": "Target Object Type"
+          },
+          "target_object_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Object Id"
+          },
+          "requester": {
+            "$ref": "#/components/schemas/ApprovalRequesterPublic"
+          },
+          "requested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Requested At"
+          },
+          "status": { "$ref": "#/components/schemas/ApprovalStatus" },
+          "decision": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ApprovalDecisionPublic" },
+              { "type": "null" }
+            ]
+          },
+          "payload_hash": { "type": "string", "title": "Payload Hash" },
+          "payload_snapshot": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Payload Snapshot"
+          },
+          "impact_summary": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Impact Summary"
+          },
+          "expires_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Expires At"
+          },
+          "supersedes_approval_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Supersedes Approval Id"
+          },
+          "items": {
+            "items": { "$ref": "#/components/schemas/ApprovalItemPublic" },
+            "type": "array",
+            "title": "Items"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "approval_type",
+          "target_object_type",
+          "target_object_id",
+          "requester",
+          "requested_at",
+          "status",
+          "decision",
+          "payload_hash",
+          "impact_summary",
+          "expires_at",
+          "supersedes_approval_id",
+          "items",
+          "allowed_actions",
+          "created_at"
+        ],
+        "title": "ApprovalPublic"
+      },
+      "ApprovalRejectRequest": {
+        "properties": {
+          "decision_reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Decision Reason"
+          },
+          "item_decisions": {
+            "items": { "$ref": "#/components/schemas/ApprovalItemDecision" },
+            "type": "array",
+            "title": "Item Decisions"
+          }
+        },
+        "type": "object",
+        "required": ["decision_reason"],
+        "title": "ApprovalRejectRequest"
+      },
+      "ApprovalRequesterPublic": {
+        "properties": {
+          "type": { "$ref": "#/components/schemas/AuditActorType" },
+          "id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": ["type", "id"],
+        "title": "ApprovalRequesterPublic"
+      },
+      "ApprovalStatus": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "APPROVED",
+          "REJECTED",
+          "CANCELLED",
+          "EXPIRED",
+          "SUPERSEDED"
+        ],
+        "title": "ApprovalStatus"
+      },
+      "ApprovalType": {
+        "type": "string",
+        "enum": [
+          "RESEARCH_QUESTION_CONFIRMATION",
+          "LITERATURE_DECISION_CONFIRMATION",
+          "LITERATURE_EXTRACTION_CONFIRMATION",
+          "CLEANING_PLAN_APPROVAL",
+          "VARIABLE_ROLE_CONFIRMATION",
+          "ANALYSIS_PLAN_APPROVAL",
+          "FIGURE_CONFIRMATION",
+          "MANUSCRIPT_FIX_APPROVAL",
+          "CLAIM_CONFIRMATION",
+          "EXPORT_CONFIRMATION"
+        ],
+        "title": "ApprovalType"
+      },
+      "ArtifactDownload": {
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "download_url": { "type": "string", "title": "Download Url" },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "disposition_filename": {
+            "type": "string",
+            "title": "Disposition Filename"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artifact_id",
+          "download_url",
+          "expires_at",
+          "disposition_filename"
+        ],
+        "title": "ArtifactDownload"
+      },
+      "ArtifactDownloadEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ArtifactDownload" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ArtifactDownloadEnvelope"
+      },
+      "ArtifactEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ArtifactPublic" },
+          "meta": { "$ref": "#/components/schemas/ArtifactResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ArtifactEnvelope"
+      },
+      "ArtifactListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/ArtifactPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "ArtifactListEnvelope"
+      },
+      "ArtifactPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "artifact_type": { "$ref": "#/components/schemas/ArtifactType" },
+          "filename": { "type": "string", "title": "Filename" },
+          "original_filename": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Original Filename"
+          },
+          "mime_type": { "type": "string", "title": "Mime Type" },
+          "size_bytes": { "type": "integer", "title": "Size Bytes" },
+          "sha256": { "type": "string", "title": "Sha256" },
+          "source_artifact_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Source Artifact Id"
+          },
+          "is_original": { "type": "boolean", "title": "Is Original" },
+          "is_immutable": { "type": "boolean", "title": "Is Immutable" },
+          "status": { "$ref": "#/components/schemas/ArtifactStatus" },
+          "created_by": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "deleted_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Deleted At"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "artifact_type",
+          "filename",
+          "original_filename",
+          "mime_type",
+          "size_bytes",
+          "sha256",
+          "source_artifact_id",
+          "is_original",
+          "is_immutable",
+          "status",
+          "created_by",
+          "created_at",
+          "deleted_at",
+          "allowed_actions"
+        ],
+        "title": "ArtifactPublic"
+      },
+      "ArtifactResponseMeta": {
+        "properties": {
+          "request_id": { "type": "string", "title": "Request Id" },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          },
+          "idempotency_replayed": {
+            "type": "boolean",
+            "title": "Idempotency Replayed",
+            "default": false
+          },
+          "duplicate_of_artifact_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Duplicate Of Artifact Id"
+          }
+        },
+        "type": "object",
+        "required": ["request_id"],
+        "title": "ArtifactResponseMeta"
+      },
+      "ArtifactStatus": {
+        "type": "string",
+        "enum": ["UPLOADING", "AVAILABLE", "FAILED", "DELETED", "QUARANTINED"],
+        "title": "ArtifactStatus"
+      },
+      "ArtifactType": {
+        "type": "string",
+        "enum": [
+          "PDF_DOCUMENT",
+          "DATASET_FILE",
+          "MANUSCRIPT_DOCX",
+          "FIGURE_PNG",
+          "FIGURE_SVG",
+          "FIGURE_PDF",
+          "ANALYSIS_CODE",
+          "ANALYSIS_LOG",
+          "JSON_RESULT",
+          "CSV_EXPORT",
+          "XLSX_EXPORT",
+          "REPRO_PACKAGE",
+          "MANIFEST",
+          "MODEL_OUTPUT",
+          "OTHER"
+        ],
+        "title": "ArtifactType"
+      },
+      "ArtifactUploadComplete": {
+        "properties": {
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Size Bytes"
+          }
+        },
+        "type": "object",
+        "required": ["sha256", "size_bytes"],
+        "title": "ArtifactUploadComplete"
+      },
+      "ArtifactUploadEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ArtifactUploadSession" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ArtifactUploadEnvelope"
+      },
+      "ArtifactUploadInitiate": {
+        "properties": {
+          "artifact_type": { "$ref": "#/components/schemas/ArtifactType" },
+          "filename": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Filename"
+          },
+          "mime_type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Mime Type"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Size Bytes"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256"
+          },
+          "is_original": { "type": "boolean", "title": "Is Original" },
+          "source_artifact_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Source Artifact Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "artifact_type",
+          "filename",
+          "mime_type",
+          "size_bytes",
+          "sha256",
+          "is_original"
+        ],
+        "title": "ArtifactUploadInitiate"
+      },
+      "ArtifactUploadSession": {
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Upload Id"
+          },
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "status": { "$ref": "#/components/schemas/ArtifactStatus" },
+          "upload_method": { "type": "string", "title": "Upload Method" },
+          "upload_url": { "type": "string", "title": "Upload Url" },
+          "required_headers": {
+            "additionalProperties": { "type": "string" },
+            "type": "object",
+            "title": "Required Headers"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "upload_id",
+          "artifact_id",
+          "status",
+          "upload_method",
+          "upload_url",
+          "required_headers",
+          "expires_at"
+        ],
+        "title": "ArtifactUploadSession"
+      },
+      "AuditActorPublic": {
+        "properties": {
+          "type": { "type": "string", "title": "Type" },
+          "id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Id"
+          },
+          "display_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Display Name"
+          }
+        },
+        "type": "object",
+        "required": ["type", "id", "display_name"],
+        "title": "AuditActorPublic"
+      },
+      "AuditActorType": {
+        "type": "string",
+        "enum": ["USER", "AGENT", "SYSTEM", "WORKER"],
+        "title": "AuditActorType"
+      },
+      "AuditListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/AuditLogPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "AuditListEnvelope"
+      },
+      "AuditLogPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Project Id"
+          },
+          "actor": { "$ref": "#/components/schemas/AuditActorPublic" },
+          "action": { "type": "string", "title": "Action" },
+          "target": { "$ref": "#/components/schemas/AuditTargetPublic" },
+          "before": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Before"
+          },
+          "after": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "After"
+          },
+          "reason": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reason"
+          },
+          "outcome": { "type": "string", "title": "Outcome" },
+          "request_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Request Id"
+          },
+          "job_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Job Id"
+          },
+          "approval_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Approval Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "actor",
+          "action",
+          "target",
+          "before",
+          "after",
+          "reason",
+          "outcome",
+          "request_id",
+          "job_id",
+          "approval_id",
+          "created_at"
+        ],
+        "title": "AuditLogPublic"
+      },
+      "AuditOutcome": {
+        "type": "string",
+        "enum": ["SUCCEEDED", "FAILED", "DENIED"],
+        "title": "AuditOutcome"
+      },
+      "AuditTargetPublic": {
+        "properties": {
+          "type": { "type": "string", "title": "Type" },
+          "id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Id"
+          },
+          "label": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": ["type", "id", "label"],
+        "title": "AuditTargetPublic"
+      },
       "Body_login_login_access_token_post_api_v1_login_access-token": {
         "properties": {
           "grant_type": {
@@ -668,6 +4528,43 @@
         "type": "object",
         "required": ["username", "password"],
         "title": "Body_login_login_access_token_post_api_v1_login_access-token"
+      },
+      "ContractErrorDetail": {
+        "properties": {
+          "code": { "type": "string", "title": "Code" },
+          "message": { "type": "string", "title": "Message" },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          },
+          "field_errors": {
+            "items": { "additionalProperties": true, "type": "object" },
+            "type": "array",
+            "title": "Field Errors"
+          },
+          "request_id": { "type": "string", "title": "Request Id" },
+          "retryable": {
+            "type": "boolean",
+            "title": "Retryable",
+            "default": false
+          },
+          "suggested_action": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Suggested Action"
+          }
+        },
+        "type": "object",
+        "required": ["code", "message", "request_id"],
+        "title": "ContractErrorDetail"
+      },
+      "ContractErrorResponse": {
+        "properties": {
+          "error": { "$ref": "#/components/schemas/ContractErrorDetail" }
+        },
+        "type": "object",
+        "required": ["error"],
+        "title": "ContractErrorResponse"
       },
       "DependenciesHealthResponse": {
         "properties": {
@@ -724,6 +4621,27 @@
         "required": ["error", "request_id"],
         "title": "ErrorResponse"
       },
+      "FoundationCounts": {
+        "properties": {
+          "members": { "type": "integer", "title": "Members" },
+          "artifacts": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Artifacts"
+          },
+          "jobs_active": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Jobs Active"
+          },
+          "approvals_pending": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Approvals Pending"
+          },
+          "audit_events": { "type": "integer", "title": "Audit Events" }
+        },
+        "type": "object",
+        "required": ["members", "audit_events"],
+        "title": "FoundationCounts"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -735,6 +4653,199 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "JobCancel": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": ["reason"],
+        "title": "JobCancel"
+      },
+      "JobEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/JobPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "JobEnvelope"
+      },
+      "JobErrorPublic": {
+        "properties": {
+          "code": { "type": "string", "title": "Code" },
+          "message": { "type": "string", "title": "Message" },
+          "retryable": { "type": "boolean", "title": "Retryable" }
+        },
+        "type": "object",
+        "required": ["code", "message", "retryable"],
+        "title": "JobErrorPublic"
+      },
+      "JobListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/JobPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "JobListEnvelope"
+      },
+      "JobPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "task_type": { "$ref": "#/components/schemas/JobTaskType" },
+          "resource_type": { "type": "string", "title": "Resource Type" },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Resource Id"
+          },
+          "status": { "$ref": "#/components/schemas/JobStatus" },
+          "progress_percent": {
+            "type": "integer",
+            "title": "Progress Percent"
+          },
+          "current_step": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Current Step"
+          },
+          "total_steps": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Total Steps"
+          },
+          "completed_steps": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Completed Steps"
+          },
+          "retry_count": { "type": "integer", "title": "Retry Count" },
+          "max_retries": { "type": "integer", "title": "Max Retries" },
+          "retryable": { "type": "boolean", "title": "Retryable" },
+          "current_processing_run_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Current Processing Run Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "started_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Completed At"
+          },
+          "error": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/JobErrorPublic" },
+              { "type": "null" }
+            ]
+          },
+          "result": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/JobResultPublic" },
+              { "type": "null" }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "task_type",
+          "resource_type",
+          "resource_id",
+          "status",
+          "progress_percent",
+          "current_step",
+          "total_steps",
+          "completed_steps",
+          "retry_count",
+          "max_retries",
+          "retryable",
+          "current_processing_run_id",
+          "created_at",
+          "started_at",
+          "completed_at",
+          "error",
+          "result"
+        ],
+        "title": "JobPublic"
+      },
+      "JobResultPublic": {
+        "properties": {
+          "object_type": { "type": "string", "title": "Object Type" },
+          "object_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Object Id"
+          },
+          "url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": ["object_type", "object_id"],
+        "title": "JobResultPublic"
+      },
+      "JobStatus": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "QUEUED",
+          "RUNNING",
+          "NEEDS_REVIEW",
+          "COMPLETED",
+          "FAILED",
+          "CANCEL_REQUESTED",
+          "CANCELLED",
+          "DISPATCH_FAILED"
+        ],
+        "title": "JobStatus"
+      },
+      "JobTaskType": {
+        "type": "string",
+        "enum": [
+          "DOCUMENT_PARSE",
+          "LITERATURE_EXTRACT",
+          "DOCUMENT_EMBED",
+          "LITERATURE_SUMMARIZE",
+          "DATASET_PROFILE",
+          "DATASET_TRANSFORM",
+          "ANALYSIS_RUN",
+          "FIGURE_RENDER",
+          "MANUSCRIPT_CHECK",
+          "EVIDENCE_AUDIT",
+          "REPRO_PACKAGE_EXPORT"
+        ],
+        "title": "JobTaskType"
+      },
       "LiveHealthResponse": {
         "properties": {
           "status": {
@@ -745,6 +4856,104 @@
         },
         "type": "object",
         "title": "LiveHealthResponse"
+      },
+      "MemberAdd": {
+        "properties": {
+          "user_id": { "type": "string", "format": "uuid", "title": "User Id" },
+          "role": { "$ref": "#/components/schemas/ProjectMemberRole" }
+        },
+        "type": "object",
+        "required": ["user_id", "role"],
+        "title": "MemberAdd"
+      },
+      "MemberEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ProjectMemberPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "MemberEnvelope"
+      },
+      "MemberListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/ProjectMemberPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "MemberListEnvelope"
+      },
+      "MemberTransferData": {
+        "properties": {
+          "member": { "$ref": "#/components/schemas/ProjectMemberPublic" },
+          "project_owner_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Owner Id"
+          },
+          "previous_owner": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Previous Owner"
+          }
+        },
+        "type": "object",
+        "required": ["member", "project_owner_id", "previous_owner"],
+        "title": "MemberTransferData"
+      },
+      "MemberTransferEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/MemberTransferData" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "MemberTransferEnvelope"
+      },
+      "MemberUpdate": {
+        "properties": {
+          "role": { "$ref": "#/components/schemas/ProjectMemberRole" },
+          "transfer_ownership": {
+            "type": "boolean",
+            "title": "Transfer Ownership",
+            "default": false
+          },
+          "previous_owner_role": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ProjectMemberRole" },
+              { "type": "null" }
+            ]
+          },
+          "reason": {
+            "anyOf": [
+              { "type": "string", "maxLength": 2000 },
+              { "type": "null" }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": ["role"],
+        "title": "MemberUpdate"
+      },
+      "MemberUserPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "email": { "type": "string", "title": "Email" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          }
+        },
+        "type": "object",
+        "required": ["id", "email", "full_name"],
+        "title": "MemberUserPublic"
       },
       "Message": {
         "properties": { "message": { "type": "string", "title": "Message" } },
@@ -766,6 +4975,26 @@
         "required": ["token", "new_password"],
         "title": "NewPassword"
       },
+      "PaginationMeta": {
+        "properties": {
+          "page": { "type": "integer", "title": "Page" },
+          "page_size": { "type": "integer", "title": "Page Size" },
+          "total": { "type": "integer", "title": "Total" },
+          "total_pages": { "type": "integer", "title": "Total Pages" },
+          "has_next": { "type": "boolean", "title": "Has Next" },
+          "has_previous": { "type": "boolean", "title": "Has Previous" }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "page_size",
+          "total",
+          "total_pages",
+          "has_next",
+          "has_previous"
+        ],
+        "title": "PaginationMeta"
+      },
       "PrivateUserCreate": {
         "properties": {
           "email": { "type": "string", "title": "Email" },
@@ -781,6 +5010,372 @@
         "required": ["email", "password", "full_name"],
         "title": "PrivateUserCreate"
       },
+      "ProjectCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "discipline": {
+            "anyOf": [
+              { "type": "string", "maxLength": 100 },
+              { "type": "null" }
+            ],
+            "title": "Discipline"
+          },
+          "research_direction": {
+            "anyOf": [
+              { "type": "string", "maxLength": 200 },
+              { "type": "null" }
+            ],
+            "title": "Research Direction"
+          },
+          "project_type": { "$ref": "#/components/schemas/ProjectType" },
+          "current_stage": {
+            "$ref": "#/components/schemas/ProjectStage",
+            "default": "INTENT"
+          },
+          "expected_completion_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Expected Completion Date"
+          },
+          "resource_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Resource Constraints"
+          },
+          "ethical_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Ethical Constraints"
+          }
+        },
+        "type": "object",
+        "required": ["name", "project_type"],
+        "title": "ProjectCreate"
+      },
+      "ProjectEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ProjectPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ProjectEnvelope"
+      },
+      "ProjectListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/ProjectPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "ProjectListEnvelope"
+      },
+      "ProjectMemberPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "user": { "$ref": "#/components/schemas/MemberUserPublic" },
+          "role": { "$ref": "#/components/schemas/ProjectMemberRole" },
+          "joined_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Joined At"
+          },
+          "removed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Removed At"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "user",
+          "role",
+          "joined_at",
+          "removed_at",
+          "allowed_actions"
+        ],
+        "title": "ProjectMemberPublic"
+      },
+      "ProjectMemberRole": {
+        "type": "string",
+        "enum": ["OWNER", "EDITOR", "REVIEWER", "VIEWER"],
+        "title": "ProjectMemberRole"
+      },
+      "ProjectOverviewEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ProjectOverviewPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ProjectOverviewEnvelope"
+      },
+      "ProjectOverviewPublic": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "current_stage": { "$ref": "#/components/schemas/ProjectStage" },
+          "module_availability": {
+            "additionalProperties": { "type": "string" },
+            "type": "object",
+            "title": "Module Availability"
+          },
+          "current_research_question": {
+            "type": "null",
+            "title": "Current Research Question"
+          },
+          "foundation_counts": {
+            "$ref": "#/components/schemas/FoundationCounts"
+          },
+          "counts": {
+            "additionalProperties": {
+              "anyOf": [{ "type": "integer" }, { "type": "null" }]
+            },
+            "type": "object",
+            "title": "Counts"
+          },
+          "pending_actions": {
+            "items": { "additionalProperties": true, "type": "object" },
+            "type": "array",
+            "title": "Pending Actions"
+          },
+          "evidence_completeness": {
+            "type": "null",
+            "title": "Evidence Completeness"
+          },
+          "recent_activity": {
+            "items": { "$ref": "#/components/schemas/AuditLogPublic" },
+            "type": "array",
+            "title": "Recent Activity"
+          }
+        },
+        "type": "object",
+        "required": [
+          "project_id",
+          "current_stage",
+          "module_availability",
+          "foundation_counts",
+          "counts",
+          "pending_actions",
+          "recent_activity"
+        ],
+        "title": "ProjectOverviewPublic"
+      },
+      "ProjectPermissions": {
+        "properties": {
+          "can_update": { "type": "boolean", "title": "Can Update" },
+          "can_delete": { "type": "boolean", "title": "Can Delete" }
+        },
+        "type": "object",
+        "required": ["can_update", "can_delete"],
+        "title": "ProjectPermissions"
+      },
+      "ProjectPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "owner_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Owner Id"
+          },
+          "name": { "type": "string", "title": "Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "discipline": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Discipline"
+          },
+          "research_direction": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Research Direction"
+          },
+          "project_type": { "$ref": "#/components/schemas/ProjectType" },
+          "current_stage": { "$ref": "#/components/schemas/ProjectStage" },
+          "status": { "$ref": "#/components/schemas/ProjectStatus" },
+          "expected_completion_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Expected Completion Date"
+          },
+          "resource_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Resource Constraints"
+          },
+          "ethical_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Ethical Constraints"
+          },
+          "lock_version": { "type": "integer", "title": "Lock Version" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "permissions": { "$ref": "#/components/schemas/ProjectPermissions" }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "owner_id",
+          "name",
+          "description",
+          "discipline",
+          "research_direction",
+          "project_type",
+          "current_stage",
+          "status",
+          "expected_completion_date",
+          "resource_constraints",
+          "ethical_constraints",
+          "lock_version",
+          "created_at",
+          "updated_at",
+          "permissions"
+        ],
+        "title": "ProjectPublic"
+      },
+      "ProjectStage": {
+        "type": "string",
+        "enum": [
+          "INTENT",
+          "LITERATURE",
+          "REVIEW",
+          "TOPIC",
+          "DATA",
+          "ANALYSIS",
+          "FIGURE",
+          "MANUSCRIPT",
+          "EVIDENCE",
+          "EXPORT"
+        ],
+        "title": "ProjectStage"
+      },
+      "ProjectStatus": {
+        "type": "string",
+        "enum": ["ACTIVE", "ARCHIVED", "DELETED"],
+        "title": "ProjectStatus"
+      },
+      "ProjectType": {
+        "type": "string",
+        "enum": ["THESIS", "COURSE", "INNOVATION", "RESEARCH", "DEMO"],
+        "title": "ProjectType"
+      },
+      "ProjectUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              { "type": "string", "maxLength": 200, "minLength": 1 },
+              { "type": "null" }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "discipline": {
+            "anyOf": [
+              { "type": "string", "maxLength": 100 },
+              { "type": "null" }
+            ],
+            "title": "Discipline"
+          },
+          "research_direction": {
+            "anyOf": [
+              { "type": "string", "maxLength": 200 },
+              { "type": "null" }
+            ],
+            "title": "Research Direction"
+          },
+          "project_type": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ProjectType" },
+              { "type": "null" }
+            ]
+          },
+          "current_stage": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ProjectStage" },
+              { "type": "null" }
+            ]
+          },
+          "expected_completion_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Expected Completion Date"
+          },
+          "resource_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Resource Constraints"
+          },
+          "ethical_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Ethical Constraints"
+          }
+        },
+        "type": "object",
+        "title": "ProjectUpdate"
+      },
       "ReadyHealthResponse": {
         "properties": {
           "status": { "$ref": "#/components/schemas/DependencyStatus" },
@@ -793,6 +5388,24 @@
         "type": "object",
         "required": ["status", "dependencies"],
         "title": "ReadyHealthResponse"
+      },
+      "ResponseMeta": {
+        "properties": {
+          "request_id": { "type": "string", "title": "Request Id" },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          },
+          "idempotency_replayed": {
+            "type": "boolean",
+            "title": "Idempotency Replayed",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": ["request_id"],
+        "title": "ResponseMeta"
       },
       "Token": {
         "properties": {

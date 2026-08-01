@@ -1,0 +1,56 @@
+RECA CURRENT THIRD-PARTY RECORDS
+Captured: 2026-07-31
+Source of truth inspected: THIRD_PARTY_NOTICES.md and docs/source-research/
+
+ACTUALLY INCORPORATED OR RUNTIME-PRESENT
+
+1. fastapi/full-stack-fastapi-template
+   Mode: SELECTIVE_COPY
+   Fixed upstream commit: c9e70d65c74f7adda417fc8de0757207ff77514c
+   License record: MIT license preserved at
+   vendor/licenses/full-stack-fastapi-template-LICENSE.txt
+   Source record: docs/source-research/full-stack-fastapi-template.md
+
+2. pgvector/pgvector
+   Runtime evidence: pgvector/pgvector:0.8.2-pg17
+   Current scope: PostgreSQL vector extension initialization and M0 smoke only
+   License record: THIRD_PARTY_NOTICES.md
+
+3. valkey-io/valkey
+   Runtime evidence: valkey/valkey:8.1.7-alpine
+   Current scope: broker/cache foundation
+   License record: THIRD_PARTY_NOTICES.md
+
+4. grobidOrg/grobid
+   Runtime evidence: lfoppiano/grobid:0.8.2
+   Current scope: internal service healthcheck only; no M0 parsing workflow
+   License record: THIRD_PARTY_NOTICES.md
+
+5. celery/celery
+   Runtime evidence: celery[redis] 5.5.3
+   Current scope: sole worker runtime; only reca.health_ping in M0
+   License record: THIRD_PARTY_NOTICES.md
+
+6. TanStack/table
+   Dependency evidence: @tanstack/react-table 8.21.3
+   Current scope: dependency present; M3 literature-matrix use remains planned
+
+RESEARCH RECORD WITHOUT INCORPORATION
+
+7. Imbad0202/academic-research-skills-codex
+   Fixed upstream commit: f8d6b061efe98564a3f554c917fce66dcef6ca54
+   License recorded: CC-BY-NC-4.0
+   Purpose: NONCOMMERCIAL_INTENT_DECLARED
+   Current mode: RESEARCH_REFERENCE
+   Runtime dependency: false
+   Copied content: none
+   Vendor/Fork/Submodule: none
+   Source record: docs/source-research/academic-research-skills-codex.md
+   Decision: docs/decisions/ADR-001-ARS-CODEX-USAGE.md
+
+ROOT LICENSE
+
+PENDING_GOVERNANCE_DECISION
+
+No candidate repository from the Phase 0 research list was copied, vendored,
+forked, submoduled or added as a dependency by this documentation task.

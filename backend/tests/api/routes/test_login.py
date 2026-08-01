@@ -50,8 +50,7 @@ def test_recovery_password(
     client: TestClient, normal_user_token_headers: dict[str, str]
 ) -> None:
     with (
-        patch("app.core.config.settings.SMTP_HOST", "smtp.example.com"),
-        patch("app.core.config.settings.SMTP_USER", "admin@example.com"),
+        patch("app.api.routes.login.send_email", return_value=None) as send_email,
     ):
         email = "test@example.com"
         r = client.post(
@@ -62,6 +61,7 @@ def test_recovery_password(
         assert r.json() == {
             "message": "If that email is registered, we sent a password recovery link"
         }
+        send_email.assert_called_once()
 
 
 def test_recovery_password_user_not_exits(
@@ -121,9 +121,12 @@ def test_reset_password_invalid_token(
     )
     response = r.json()
 
-    assert "detail" in response
     assert r.status_code == 400
-    assert response["detail"] == "Invalid token"
+    assert response["error"] == {
+        "code": "http_error",
+        "message": "Request failed",
+    }
+    assert response["request_id"]
 
 
 def test_login_with_bcrypt_password_upgrades_to_argon2(

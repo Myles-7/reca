@@ -9,6 +9,7 @@ import hmac
 import sys
 import urllib.error
 import urllib.request
+from typing import cast
 
 from app.core.config import settings
 
@@ -52,14 +53,14 @@ def signed_request(method: str, path: str, body: bytes = b"") -> bytes:
         endpoint + path, data=body or None, method=method, headers=headers
     )
     with urllib.request.urlopen(request, timeout=10) as response:
-        return response.read()
+        return cast(bytes, response.read())
 
 
 def anonymous_denied(path: str) -> bool:
     endpoint = str(settings.MINIO_ENDPOINT).rstrip("/")
     try:
         with urllib.request.urlopen(endpoint + path, timeout=10) as response:
-            return response.read() != PAYLOAD
+            return cast(bytes, response.read()) != PAYLOAD
     except urllib.error.HTTPError as error:
         return error.code in {401, 403, 404}
     except urllib.error.URLError:

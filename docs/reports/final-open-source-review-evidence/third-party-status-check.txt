@@ -1,0 +1,40 @@
+RECA FINAL OPEN-SOURCE REVIEW - THIRD-PARTY STATUS CHECK
+Captured: 2026-07-31
+Authority: THIRD_PARTY_NOTICES.md plus repository evidence
+
+ALREADY_INTEGRATED (6)
+- Full Stack FastAPI Template: selectively internalized baseline; not an upstream overwrite
+- Celery: direct dependency 5.5.3; only bounded M0 Worker behavior currently exists
+- Valkey: independent Compose service; never business truth
+- pgvector: PostgreSQL extension foundation; later retrieval behavior remains planned
+- GROBID: health-only service foundation; formal parsing remains planned
+- TanStack Table: dependency present; milestone feature adoption remains planned
+
+PLANNED in Notices (11)
+- pgvector-python
+- PyAlex
+- PDF.js
+- Pandera
+- SciPy
+- statsmodels
+- Matplotlib
+- python-docx
+- CSL Styles; no style resource copied
+- xyflow / React Flow
+- OpenAI Agents SDK; M8 only
+
+RESEARCHED in Notices (9)
+- grobid-client-python; experiment required
+- PaperQA2; experiment required and no full runtime
+- ASReview; experiment required
+- DVC; development-only recommendation
+- Great Expectations; design reference only
+- citeproc-js; deferred license/isolation decision
+- Zotero; design reference and no source/assets copied
+- Zotero Web Library; design reference and no source/assets copied
+- ARS-Codex; no copied or runtime content
+
+No researched project is falsely represented as installed, Vendored, Forked,
+Submodule-added, selectively copied, or runtime-enabled.
+
+Result: PASS

@@ -10,6 +10,39 @@ import {
 } from "./client"
 import { client } from "./client.gen"
 import type {
+  ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveData,
+  ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveErrors,
+  ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponses,
+  ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelData,
+  ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelErrors,
+  ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses,
+  ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdData,
+  ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdErrors,
+  ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdResponses,
+  ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsData,
+  ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsErrors,
+  ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsResponses,
+  ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectData,
+  ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectErrors,
+  ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectResponses,
+  ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadData,
+  ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadErrors,
+  ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses,
+  ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteData,
+  ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteErrors,
+  ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteResponses,
+  ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdData,
+  ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdErrors,
+  ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdResponses,
+  ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsData,
+  ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsErrors,
+  ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsResponses,
+  ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsData,
+  ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsErrors,
+  ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsResponses,
+  ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentData,
+  ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors,
+  ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses,
   HealthDependenciesHealthGetApiV1HealthDependenciesData,
   HealthDependenciesHealthGetApiV1HealthDependenciesErrors,
   HealthDependenciesHealthGetApiV1HealthDependenciesResponses,
@@ -19,6 +52,21 @@ import type {
   HealthReadyHealthGetApiV1HealthReadyData,
   HealthReadyHealthGetApiV1HealthReadyErrors,
   HealthReadyHealthGetApiV1HealthReadyResponses,
+  JobsCancelJobPostApiV1JobsJobIdCancelData,
+  JobsCancelJobPostApiV1JobsJobIdCancelErrors,
+  JobsCancelJobPostApiV1JobsJobIdCancelResponses,
+  JobsGetJobGetApiV1JobsJobIdData,
+  JobsGetJobGetApiV1JobsJobIdErrors,
+  JobsGetJobGetApiV1JobsJobIdResponses,
+  JobsListProjectJobsGetApiV1ProjectsProjectIdJobsData,
+  JobsListProjectJobsGetApiV1ProjectsProjectIdJobsErrors,
+  JobsListProjectJobsGetApiV1ProjectsProjectIdJobsResponses,
+  JobsRetryJobPostApiV1JobsJobIdRetryData,
+  JobsRetryJobPostApiV1JobsJobIdRetryErrors,
+  JobsRetryJobPostApiV1JobsJobIdRetryResponses,
+  JobsStreamJobEventsGetApiV1JobsJobIdEventsData,
+  JobsStreamJobEventsGetApiV1JobsJobIdEventsErrors,
+  JobsStreamJobEventsGetApiV1JobsJobIdEventsResponses,
   LoginLoginAccessTokenPostApiV1LoginAccessTokenData,
   LoginLoginAccessTokenPostApiV1LoginAccessTokenErrors,
   LoginLoginAccessTokenPostApiV1LoginAccessTokenResponses,
@@ -36,6 +84,42 @@ import type {
   PrivateCreateUserPostApiV1PrivateUsersData,
   PrivateCreateUserPostApiV1PrivateUsersErrors,
   PrivateCreateUserPostApiV1PrivateUsersResponses,
+  ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersData,
+  ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors,
+  ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses,
+  ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveData,
+  ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveErrors,
+  ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveResponses,
+  ProjectsCreateProjectPostApiV1ProjectsData,
+  ProjectsCreateProjectPostApiV1ProjectsErrors,
+  ProjectsCreateProjectPostApiV1ProjectsResponses,
+  ProjectsGetProjectGetApiV1ProjectsProjectIdData,
+  ProjectsGetProjectGetApiV1ProjectsProjectIdErrors,
+  ProjectsGetProjectGetApiV1ProjectsProjectIdResponses,
+  ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewData,
+  ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewErrors,
+  ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewResponses,
+  ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsData,
+  ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsErrors,
+  ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses,
+  ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersData,
+  ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersErrors,
+  ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersResponses,
+  ProjectsListProjectsGetApiV1ProjectsData,
+  ProjectsListProjectsGetApiV1ProjectsErrors,
+  ProjectsListProjectsGetApiV1ProjectsResponses,
+  ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdData,
+  ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdErrors,
+  ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdResponses,
+  ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreData,
+  ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreErrors,
+  ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreResponses,
+  ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdData,
+  ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdErrors,
+  ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdResponses,
+  ProjectsUpdateProjectPatchApiV1ProjectsProjectIdData,
+  ProjectsUpdateProjectPatchApiV1ProjectsProjectIdErrors,
+  ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponses,
   UsersCreateUserPostApiV1UsersData,
   UsersCreateUserPostApiV1UsersErrors,
   UsersCreateUserPostApiV1UsersResponses,
@@ -560,6 +644,721 @@ export const utilsTestEmailPostApiV1UtilsTestEmail = <
   >({
     security: [{ scheme: "bearer", type: "http" }],
     url: "/api/v1/utils/test-email/",
+    ...options,
+  })
+
+/**
+ * List Projects
+ */
+export const projectsListProjectsGetApiV1Projects = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<ProjectsListProjectsGetApiV1ProjectsData, ThrowOnError>,
+): RequestResult<
+  ProjectsListProjectsGetApiV1ProjectsResponses,
+  ProjectsListProjectsGetApiV1ProjectsErrors,
+  ThrowOnError
+> =>
+  (options?.client ?? client).get<
+    ProjectsListProjectsGetApiV1ProjectsResponses,
+    ProjectsListProjectsGetApiV1ProjectsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects",
+    ...options,
+  })
+
+/**
+ * Create Project
+ */
+export const projectsCreateProjectPostApiV1Projects = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<ProjectsCreateProjectPostApiV1ProjectsData, ThrowOnError>,
+): RequestResult<
+  ProjectsCreateProjectPostApiV1ProjectsResponses,
+  ProjectsCreateProjectPostApiV1ProjectsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ProjectsCreateProjectPostApiV1ProjectsResponses,
+    ProjectsCreateProjectPostApiV1ProjectsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Project
+ */
+export const projectsGetProjectGetApiV1ProjectsProjectId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsGetProjectGetApiV1ProjectsProjectIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsGetProjectGetApiV1ProjectsProjectIdResponses,
+  ProjectsGetProjectGetApiV1ProjectsProjectIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ProjectsGetProjectGetApiV1ProjectsProjectIdResponses,
+    ProjectsGetProjectGetApiV1ProjectsProjectIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}",
+    ...options,
+  })
+
+/**
+ * Update Project
+ */
+export const projectsUpdateProjectPatchApiV1ProjectsProjectId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsUpdateProjectPatchApiV1ProjectsProjectIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponses,
+  ProjectsUpdateProjectPatchApiV1ProjectsProjectIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).patch<
+    ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponses,
+    ProjectsUpdateProjectPatchApiV1ProjectsProjectIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Project Overview
+ */
+export const projectsGetProjectOverviewGetApiV1ProjectsProjectIdOverview = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewResponses,
+  ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewResponses,
+    ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/overview",
+    ...options,
+  })
+
+/**
+ * Archive Project
+ */
+export const projectsArchiveProjectPostApiV1ProjectsProjectIdArchive = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveResponses,
+  ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveResponses,
+    ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/archive",
+    ...options,
+  })
+
+/**
+ * Restore Project
+ */
+export const projectsRestoreProjectPostApiV1ProjectsProjectIdRestore = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreResponses,
+  ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreResponses,
+    ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/restore",
+    ...options,
+  })
+
+/**
+ * List Project Members
+ */
+export const projectsListProjectMembersGetApiV1ProjectsProjectIdMembers = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersResponses,
+  ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersResponses,
+    ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/members",
+    ...options,
+  })
+
+/**
+ * Add Project Member
+ */
+export const projectsAddProjectMemberPostApiV1ProjectsProjectIdMembers = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses,
+  ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses,
+    ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/members",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Remove Project Member
+ */
+export const projectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdResponses,
+    ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).delete<
+      ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdResponses,
+      ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/members/{member_id}",
+      ...options,
+    })
+
+/**
+ * Update Project Member
+ */
+export const projectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdResponses,
+    ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).patch<
+      ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdResponses,
+      ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/members/{member_id}",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * List Project Audit Logs
+ */
+export const projectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogs = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses,
+  ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses,
+    ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/audit-logs",
+    ...options,
+  })
+
+/**
+ * List Project Artifacts
+ */
+export const artifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifacts = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsResponses,
+  ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsResponses,
+    ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/artifacts",
+    ...options,
+  })
+
+/**
+ * Initiate Artifact Upload
+ */
+export const artifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploads =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsResponses,
+    ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsResponses,
+      ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/artifacts/uploads",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Transfer Artifact Content
+ */
+export const artifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContent =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses,
+    ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).put<
+      ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses,
+      ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/artifact-uploads/{upload_id}/content",
+      ...options,
+    })
+
+/**
+ * Complete Artifact Upload
+ */
+export const artifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdComplete =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteResponses,
+    ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteResponses,
+      ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/artifacts/uploads/{upload_id}/complete",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Artifact
+ */
+export const artifactsGetArtifactGetApiV1ArtifactsArtifactId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdResponses,
+  ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdResponses,
+    ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/artifacts/{artifact_id}",
+    ...options,
+  })
+
+/**
+ * Authorize Artifact Download
+ */
+export const artifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownload =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses,
+    ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses,
+      ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/artifacts/{artifact_id}/download",
+      ...options,
+    })
+
+/**
+ * List Project Jobs
+ */
+export const jobsListProjectJobsGetApiV1ProjectsProjectIdJobs = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    JobsListProjectJobsGetApiV1ProjectsProjectIdJobsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  JobsListProjectJobsGetApiV1ProjectsProjectIdJobsResponses,
+  JobsListProjectJobsGetApiV1ProjectsProjectIdJobsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    JobsListProjectJobsGetApiV1ProjectsProjectIdJobsResponses,
+    JobsListProjectJobsGetApiV1ProjectsProjectIdJobsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/jobs",
+    ...options,
+  })
+
+/**
+ * Get Job
+ */
+export const jobsGetJobGetApiV1JobsJobId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<JobsGetJobGetApiV1JobsJobIdData, ThrowOnError>,
+): RequestResult<
+  JobsGetJobGetApiV1JobsJobIdResponses,
+  JobsGetJobGetApiV1JobsJobIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    JobsGetJobGetApiV1JobsJobIdResponses,
+    JobsGetJobGetApiV1JobsJobIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/jobs/{job_id}",
+    ...options,
+  })
+
+/**
+ * Cancel Job
+ */
+export const jobsCancelJobPostApiV1JobsJobIdCancel = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<JobsCancelJobPostApiV1JobsJobIdCancelData, ThrowOnError>,
+): RequestResult<
+  JobsCancelJobPostApiV1JobsJobIdCancelResponses,
+  JobsCancelJobPostApiV1JobsJobIdCancelErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    JobsCancelJobPostApiV1JobsJobIdCancelResponses,
+    JobsCancelJobPostApiV1JobsJobIdCancelErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/jobs/{job_id}/cancel",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Retry Job
+ */
+export const jobsRetryJobPostApiV1JobsJobIdRetry = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<JobsRetryJobPostApiV1JobsJobIdRetryData, ThrowOnError>,
+): RequestResult<
+  JobsRetryJobPostApiV1JobsJobIdRetryResponses,
+  JobsRetryJobPostApiV1JobsJobIdRetryErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    JobsRetryJobPostApiV1JobsJobIdRetryResponses,
+    JobsRetryJobPostApiV1JobsJobIdRetryErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/jobs/{job_id}/retry",
+    ...options,
+  })
+
+/**
+ * Stream Job Events
+ */
+export const jobsStreamJobEventsGetApiV1JobsJobIdEvents = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    JobsStreamJobEventsGetApiV1JobsJobIdEventsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  JobsStreamJobEventsGetApiV1JobsJobIdEventsResponses,
+  JobsStreamJobEventsGetApiV1JobsJobIdEventsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    JobsStreamJobEventsGetApiV1JobsJobIdEventsResponses,
+    JobsStreamJobEventsGetApiV1JobsJobIdEventsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/jobs/{job_id}/events",
+    ...options,
+  })
+
+/**
+ * List Project Approvals
+ */
+export const approvalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovals = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsResponses,
+  ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsResponses,
+    ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/approvals",
+    ...options,
+  })
+
+/**
+ * Get Approval
+ */
+export const approvalsGetApprovalGetApiV1ApprovalsApprovalId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdResponses,
+  ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdResponses,
+    ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/approvals/{approval_id}",
+    ...options,
+  })
+
+/**
+ * Approve
+ */
+export const approvalsApprovePostApiV1ApprovalsApprovalIdApprove = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponses,
+  ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponses,
+    ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/approvals/{approval_id}/approve",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Reject
+ */
+export const approvalsRejectPostApiV1ApprovalsApprovalIdReject = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectResponses,
+  ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectResponses,
+    ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/approvals/{approval_id}/reject",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Cancel
+ */
+export const approvalsCancelPostApiV1ApprovalsApprovalIdCancel = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses,
+  ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses,
+    ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/approvals/{approval_id}/cancel",
     ...options,
   })
 

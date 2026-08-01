@@ -1,1 +1,5 @@
-Reserved for repository-level end-to-end tests.
+# Repository End-to-End Tests
+
+本目录承载 Competition Core 主流程、主演示效果、外部能力降级和发布前浏览器验收。E2E 必须从用户可见状态证明第三方失败不被标记为成功，候选证据/筛选建议不越权成为正式对象，原始文件不被覆盖，审批和项目隔离保持有效。
+
+测试报告需标注 LIVE、RECORDED、OFFLINE 或缓存模式，并记录实际第三方版本；研究或计划状态不得生成虚假通过记录。

@@ -1,0 +1,37 @@
+RECA CURRENT ARCHITECTURE DECISIONS RELEVANT TO OPEN-SOURCE RESEARCH
+Captured: 2026-07-31
+
+DEC-001  React/Vite rather than Next.js
+DEC-002  Modular monolith
+DEC-003  Valkey for broker/cache
+DEC-004  One controlled orchestrator Agent
+DEC-005  GROBID as primary PDF parser
+DEC-006  PaperQA is not integrated wholesale; retrieval-chain research only
+DEC-007  PostgreSQL plus pgvector
+DEC-008  Original files are immutable
+DEC-009  Structured AI output
+DEC-010  Formal statistics come only from deterministic programs
+DEC-011  No graph database in P0
+DEC-012  Lightweight project path for quick tools
+ADR-001  Licensed effect-first ARS-Codex reuse is permitted under prerequisites
+
+Protected architecture facts
+----------------------------
+- M0 remains As-Built and separate from planned target architecture.
+- RECA remains a modular monolith, not a microservice system.
+- The sole Celery App is app.core.celery:celery_app.
+- GROBID and MinIO are health/smoke foundations, not completed business flows.
+- Third-party objects must not become RECA core domain objects.
+- Direct integration may be used when it is cheaper and preserves boundaries.
+- Adapter use is required when replacement, offline mocking, object isolation,
+  licensing, security or testability justifies it; it is not globally mandatory.
+- Business writes remain behind Service, authorization, version and approval rules.
+- One orchestrator Agent remains scheduled for M8; no free multi-Agent system.
+- EvidenceSpan, deterministic results and version lineage remain RECA-owned truth.
+
+Sources
+-------
+docs/ARCHITECTURE.md
+docs/architecture/OPERATIONS_DEPLOYMENT_AND_ADRS.md
+docs/architecture/DATA_FLOWS_AND_ADAPTERS.md
+docs/decisions/ADR-001-ARS-CODEX-USAGE.md

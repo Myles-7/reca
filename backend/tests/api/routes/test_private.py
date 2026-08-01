@@ -1,11 +1,9 @@
 from fastapi.testclient import TestClient
-from sqlmodel import Session, select
 
 from app.core.config import settings
-from app.models import User
 
 
-def test_create_user(client: TestClient, db: Session) -> None:
+def test_private_user_creation_is_not_exposed_outside_local(client: TestClient) -> None:
     r = client.post(
         f"{settings.API_V1_STR}/private/users/",
         json={
@@ -15,12 +13,9 @@ def test_create_user(client: TestClient, db: Session) -> None:
         },
     )
 
-    assert r.status_code == 200
-
-    data = r.json()
-
-    user = db.exec(select(User).where(User.id == data["id"])).first()
-
-    assert user
-    assert user.email == "pollo@listo.com"
-    assert user.full_name == "Pollo Listo"
+    assert settings.ENVIRONMENT == "test"
+    assert r.status_code == 404
+    assert r.json()["error"] == {
+        "code": "not_found",
+        "message": "Resource not found",
+    }

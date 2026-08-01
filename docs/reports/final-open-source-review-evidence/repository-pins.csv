@@ -1,0 +1,27 @@
+project,repository,research_commit,license,research_date
+Full Stack FastAPI Template,https://github.com/fastapi/full-stack-fastapi-template,546f18469c30fb1748da21f044189f2f83639ea6,MIT,2026-07-31
+Celery,https://github.com/celery/celery,7c5d9a62d90c685bd0e1ae002d66ae40980b2847,BSD-3-Clause code; CC BY-SA 4.0 docs,2026-07-31
+Valkey,https://github.com/valkey-io/valkey,0bf28b2dab6d21ea278fbaf1517b45e55d9b9c6f,BSD-3-Clause root plus file-level licenses,2026-07-31
+pgvector,https://github.com/pgvector/pgvector,4f3d17f6f74fe98adf54df4d016de241eeaae9af,PostgreSQL License,2026-07-31
+pgvector-python,https://github.com/pgvector/pgvector-python,60739dfd6cb9d674f32afa4184d43e6aff9dfbcf,MIT,2026-07-31
+PyAlex,https://github.com/J535D165/pyalex,875c708cbb6e449feebc46d2a7a26af8ed8b2fdd,MIT,2026-07-31
+GROBID,https://github.com/grobidOrg/grobid,c3229a4b9ba1e9eb8ec8327c2ec9eed1581d410c,Apache-2.0,2026-07-31
+grobid-client-python,https://github.com/grobidOrg/grobid-client-python,161e0f45189c8592b2e2c58e9638cc6218bc75fb,Apache-2.0,2026-07-31
+PDF.js,https://github.com/mozilla/pdf.js,a80897dc9a2eb80c474717b683a4153f5b628ac7,Apache-2.0,2026-07-31
+PaperQA2,https://github.com/Future-House/paper-qa,d7675d7b7eddeb3535e8c260399c5bbeeb818c50,Apache-2.0,2026-07-31
+ASReview,https://github.com/asreview/asreview,d3e863c94e1945ace7848b6ca5bcf2fb1eecbdb5,Apache-2.0,2026-07-31
+Pandera,https://github.com/unionai-oss/pandera,85cc2a16b2110d4c4b8cc7f956aab94bc53716f6,MIT,2026-07-31
+SciPy,https://github.com/scipy/scipy,420a778219f6db170f0fda8dcda4add8a32fd1d6,BSD-3-Clause plus bundled licenses,2026-07-31
+statsmodels,https://github.com/statsmodels/statsmodels,d3187f844d196de1760829820a7c872a6d6ebb1d,BSD-3-Clause,2026-07-31
+Matplotlib,https://github.com/matplotlib/matplotlib,faf5d100aed23d3271245c2e800ea47f86dd858b,Matplotlib license plus bundled licenses/fonts,2026-07-31
+DVC,https://github.com/iterative/dvc,f74c1c0e709de61f571905802bc0c75035dc6ef2,Apache-2.0,2026-07-31
+Great Expectations,https://github.com/great-expectations/great_expectations,33614cd70a407f8b9589fa2cf5f1cb1d7d0723aa,Apache-2.0,2026-07-31
+python-docx,https://github.com/python-openxml/python-docx,e45454602b53e8e572b179ccf1c91093ec9f4ed7,MIT,2026-07-31
+CSL Styles,https://github.com/citation-style-language/styles,1de508b010b2643c8b13b082947f1054bc33357f,CC BY-SA 3.0 plus selected file rights,2026-07-31
+citeproc-js,https://github.com/Juris-M/citeproc-js,cc9153c45293af878de08cafddbefe6ea150c380,CPAL-1.0 or AGPL-3.0-or-later metadata conflict,2026-07-31
+TanStack Table,https://github.com/TanStack/table,d66b39f01e23eeb4e2befc7777194104967212d3,MIT,2026-07-31
+xyflow / React Flow,https://github.com/xyflow/xyflow,360f5b13e2bc6899ea06b4be1a49b068d86926cf,MIT,2026-07-31
+Zotero,https://github.com/zotero/zotero,4ec5ba9c279841b09231db82a61e30bd9e7dc6ef,AGPL-3.0 plus third-party notices,2026-07-31
+Zotero Web Library,https://github.com/zotero/web-library,556d0bf6b1b48fa8402a91afa62b15533b713013,AGPL-3.0,2026-07-31
+OpenAI Agents SDK,https://github.com/openai/openai-agents-python,0ffa36840cb812488738f6fc5be3d3a1f51397b7,MIT,2026-07-31
+ARS-Codex,https://github.com/Imbad0202/academic-research-skills-codex,f8d6b061efe98564a3f554c917fce66dcef6ca54,CC BY-NC 4.0 plus file-level review,2026-07-31

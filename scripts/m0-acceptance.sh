@@ -39,6 +39,8 @@ POSTGRES_PASSWORD=acceptance-pg-$(openssl rand -hex 16)
 MINIO_ROOT_USER=reca-acceptance
 MINIO_ROOT_PASSWORD=acceptance-minio-$(openssl rand -hex 16)
 MINIO_BUCKET=reca-acceptance
+MINIO_PORT=19000
+MINIO_PUBLIC_ENDPOINT=http://127.0.0.1:19000
 MODEL_API_KEY=
 OPENALEX_API_KEY=
 API_PORT=18000
@@ -72,6 +74,13 @@ if [ "$failures" -eq 0 ]; then
   step minio-private-write-read docker compose --project-name "$project" --env-file "$env_file" exec -T api python -m app.cli.minio_smoke --bucket "$minio_bucket" --verify-anonymous-denial
   step restart-services docker compose --project-name "$project" --env-file "$env_file" restart
   step minio-persistence-cleanup docker compose --project-name "$project" --env-file "$env_file" exec -T api python -m app.cli.minio_smoke --bucket "$minio_bucket" --verify-persistence --verify-anonymous-denial --cleanup
+  if [ "${RECA_FULL_BACKEND_TESTS:-false}" = "true" ]; then
+    step backend-database-tests docker compose --project-name "$project" --env-file "$env_file" run --rm \
+      --volume "$root/backend/tests:/app/backend/tests:ro" \
+      --volume "$root/frontend/src/shared/environment.ts:/app/frontend/src/shared/environment.ts:ro" \
+      --volume "$root/.env.example:/app/.env.example:ro" \
+      api pytest -q
+  fi
 else
   not_run start-services "Blocked by isolated build failure."
   not_run runtime-acceptance "Blocked by isolated build failure."

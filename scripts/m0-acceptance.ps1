@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$EvidenceDirectory
+    [string]$EvidenceDirectory,
+    [switch]$FullBackendTests
 )
 
 $ErrorActionPreference = "Continue"
@@ -16,6 +17,7 @@ $envFile = Join-Path $evidenceRoot "acceptance.env"
 $results = [System.Collections.Generic.List[object]]::new()
 $apiPort = 18000
 $frontendPort = 15173
+$minioPort = 19000
 
 New-Item -ItemType Directory -Path $evidenceRoot -Force | Out-Null
 
@@ -76,6 +78,8 @@ $configLines = @(
 "MINIO_ROOT_USER=reca-acceptance"
 "MINIO_ROOT_PASSWORD=$minioPassword"
 "MINIO_BUCKET=reca-acceptance"
+"MINIO_PORT=$minioPort"
+"MINIO_PUBLIC_ENDPOINT=http://127.0.0.1:$minioPort"
 "MODEL_API_KEY="
 "OPENALEX_API_KEY="
 "API_PORT=$apiPort"
@@ -135,9 +139,19 @@ try {
         Invoke-Step "api-restart-recovery-2" { docker @compose restart api; python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/live" --timeout 90; python scripts/wait_for_http.py "http://127.0.0.1:$apiPort/api/v1/health/ready" --timeout 90 }
         Invoke-Step "persistence" { docker @compose exec -T api alembic current; docker @compose exec -T api python -c "from sqlalchemy import text; from app.core.db import engine; assert engine.connect().execute(text('SELECT 1')).scalar_one() == 1"; docker @compose exec -T api python -m app.cli.minio_smoke --bucket $minioBucket --verify-persistence --verify-anonymous-denial --cleanup }
         Invoke-Step "container-log-secret-scan" { $matches = docker @compose logs --no-color | Select-String -Pattern "(postgresql\+psycopg://[^\s]+:|Authorization: Bearer|BEGIN PRIVATE KEY)"; if ($matches) { throw "Sensitive log pattern detected" } }
+        if ($FullBackendTests) {
+            Invoke-Step "backend-database-tests" {
+                docker @compose run --rm `
+                    --volume "${root}/backend/tests:/app/backend/tests:ro" `
+                    --volume "${root}/frontend/src/shared/environment.ts:/app/frontend/src/shared/environment.ts:ro" `
+                    --volume "${root}/.env.example:/app/.env.example:ro" `
+                    api pytest -q
+            }
+        }
     }
     else {
         foreach ($name in @("start-services", "container-status", "migrate-empty-database", "migrate-idempotently", "pgvector", "health-live", "health-ready", "health-dependencies", "request-id", "worker-ping", "worker-health-ping", "minio-private-write-read", "frontend-home", "frontend-system-status", "restart-services", "persistence", "container-log-secret-scan")) { Add-NotRun $name "Blocked because isolated image build failed; see build-images.log." }
+        if ($FullBackendTests) { Add-NotRun "backend-database-tests" "Blocked because isolated image build failed; see build-images.log." }
     }
     Invoke-Step "backend-tests" { python -m uv run pytest backend/tests -m no_database }
     Invoke-Step "frontend-tests" { bun run --cwd frontend format:check; bun run --cwd frontend lint; bun run --cwd frontend build }

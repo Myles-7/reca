@@ -1,0 +1,17 @@
+RECA FINAL OPEN-SOURCE REVIEW - MARKDOWN LINK VALIDATION
+Captured: 2026-07-31
+Scope: repository Markdown excluding dependency caches and generated build trees
+Encoding: explicit UTF-8
+
+Markdown files scanned after final report creation: 134
+Broken relative links: 0
+Case-mismatched targets: 0
+Invalid explicit or generated anchors: 0
+Active formal/source/ADR/module README orphans: 0
+Report orphans: 0
+Active absolute local paths: 0
+
+The final report is linked from the Phase 11 report index. All final evidence
+targets resolve with exact path casing.
+
+Result: PASS

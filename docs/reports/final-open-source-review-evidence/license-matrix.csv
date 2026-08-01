@@ -1,0 +1,27 @@
+project,classification,license,special_requirement,incorporation_status
+Full Stack FastAPI Template,PERMISSIVE_REUSE_ALLOWED,MIT,Preserve imported-baseline attribution and license snapshot,ALREADY_INTEGRATED
+Celery,PERMISSIVE_REUSE_ALLOWED,BSD-3-Clause code; CC BY-SA 4.0 docs,Keep code and documentation obligations distinct,ALREADY_INTEGRATED
+Valkey,PERMISSIVE_REUSE_ALLOWED,BSD-3-Clause root plus file-level licenses,Review bundled and file-level notices for distribution,ALREADY_INTEGRATED
+pgvector,PERMISSIVE_REUSE_ALLOWED,PostgreSQL License,Preserve PostgreSQL License attribution,ALREADY_INTEGRATED
+pgvector-python,PERMISSIVE_REUSE_ALLOWED,MIT,Record package version and license on adoption,PLANNED
+PyAlex,PERMISSIVE_REUSE_ALLOWED,MIT,Record package and upstream Commit in provider metadata,PLANNED
+GROBID,PERMISSIVE_REUSE_ALLOWED,Apache-2.0,Record image version and NOTICE obligations,ALREADY_INTEGRATED
+grobid-client-python,PERMISSIVE_REUSE_ALLOWED,Apache-2.0,Record exact copied paths and modifications before Vendor use,RESEARCHED
+PDF.js,PERMISSIVE_REUSE_ALLOWED,Apache-2.0,Retain package attribution and worker version pairing,PLANNED
+PaperQA2,PERMISSIVE_REUSE_ALLOWED,Apache-2.0,Path-level attribution for selected code Prompt and tests,RESEARCHED
+ASReview,PERMISSIVE_REUSE_ALLOWED,Apache-2.0,Record exact provider package and model provenance,RESEARCHED
+Pandera,PERMISSIVE_REUSE_ALLOWED,MIT,Record runtime and ruleset version,PLANNED
+SciPy,PERMISSIVE_REUSE_ALLOWED,BSD-3-Clause plus bundled licenses,Review bundled licenses in distributed environment,PLANNED
+statsmodels,PERMISSIVE_REUSE_ALLOWED,BSD-3-Clause,Record runtime version,PLANNED
+Matplotlib,CUSTOM_LICENSE_REVIEW,Matplotlib license plus bundled licenses/fonts,Review bundled fonts and libraries before distribution,PLANNED
+DVC,PERMISSIVE_REUSE_ALLOWED,Apache-2.0,Development-only adoption must not imply business authority,RESEARCHED
+Great Expectations,PERMISSIVE_REUSE_ALLOWED,Apache-2.0,Reference or adapted asset attribution only; no second P0 runtime,RESEARCHED
+python-docx,PERMISSIVE_REUSE_ALLOWED,MIT,Record package and transitive OOXML dependency versions,PLANNED
+CSL Styles,COPYLEFT_REVIEW_REQUIRED,CC BY-SA 3.0 plus selected file rights,Review each selected style rights author locale hash and modifications,PLANNED
+citeproc-js,CUSTOM_LICENSE_REVIEW,CPAL-1.0 or AGPL-3.0-or-later metadata conflict,Do not adopt until license and isolation or alternative decision is resolved,RESEARCHED
+TanStack Table,PERMISSIVE_REUSE_ALLOWED,MIT,Retain package attribution and locked version,ALREADY_INTEGRATED
+xyflow / React Flow,PERMISSIVE_REUSE_ALLOWED,MIT,Record package version and attribution,PLANNED
+Zotero,COPYLEFT_REVIEW_REQUIRED,AGPL-3.0 plus third-party notices,Design and exchange reference only; no source or asset copy,RESEARCHED
+Zotero Web Library,COPYLEFT_REVIEW_REQUIRED,AGPL-3.0,Design reference only; independently implement UX,RESEARCHED
+OpenAI Agents SDK,PERMISSIVE_REUSE_ALLOWED,MIT,Record runtime version and tracing/data configuration,PLANNED
+ARS-Codex,NONCOMMERCIAL_RESTRICTION,CC BY-NC 4.0 plus file-level review,Attribution isolation copied-path ledger and commercialization re-review required,RESEARCHED

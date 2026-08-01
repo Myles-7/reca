@@ -5,6 +5,590 @@ export type ClientOptions = {
 }
 
 /**
+ * ApprovalDecisionPublic
+ */
+export type ApprovalDecisionPublic = {
+  status: ApprovalStatus
+  /**
+   * User Id
+   */
+  user_id: string | null
+  /**
+   * Decided At
+   */
+  decided_at: string | null
+  /**
+   * Reason
+   */
+  reason: string | null
+}
+
+/**
+ * ApprovalDecisionRequest
+ */
+export type ApprovalDecisionRequest = {
+  /**
+   * Decision Reason
+   */
+  decision_reason?: string | null
+  /**
+   * Item Decisions
+   */
+  item_decisions?: Array<ApprovalItemDecision>
+}
+
+/**
+ * ApprovalEnvelope
+ */
+export type ApprovalEnvelope = {
+  data: ApprovalPublic
+  meta: ResponseMeta
+}
+
+/**
+ * ApprovalItemDecision
+ */
+export type ApprovalItemDecision = {
+  /**
+   * Item Type
+   */
+  item_type: string
+  /**
+   * Item Id
+   */
+  item_id: string
+  /**
+   * Decision
+   */
+  decision: string
+  /**
+   * Reason
+   */
+  reason?: string | null
+}
+
+/**
+ * ApprovalItemPublic
+ */
+export type ApprovalItemPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Item Type
+   */
+  item_type: string
+  /**
+   * Item Id
+   */
+  item_id: string
+  /**
+   * Decision
+   */
+  decision: string | null
+  /**
+   * Reason
+   */
+  reason: string | null
+}
+
+/**
+ * ApprovalListEnvelope
+ */
+export type ApprovalListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ApprovalPublic>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * ApprovalPublic
+ */
+export type ApprovalPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  approval_type: ApprovalType
+  /**
+   * Target Object Type
+   */
+  target_object_type: string
+  /**
+   * Target Object Id
+   */
+  target_object_id: string
+  requester: ApprovalRequesterPublic
+  /**
+   * Requested At
+   */
+  requested_at: string
+  status: ApprovalStatus
+  decision: ApprovalDecisionPublic | null
+  /**
+   * Payload Hash
+   */
+  payload_hash: string
+  /**
+   * Payload Snapshot
+   */
+  payload_snapshot?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Impact Summary
+   */
+  impact_summary: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Expires At
+   */
+  expires_at: string | null
+  /**
+   * Supersedes Approval Id
+   */
+  supersedes_approval_id: string | null
+  /**
+   * Items
+   */
+  items: Array<ApprovalItemPublic>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * ApprovalRejectRequest
+ */
+export type ApprovalRejectRequest = {
+  /**
+   * Decision Reason
+   */
+  decision_reason: string
+  /**
+   * Item Decisions
+   */
+  item_decisions?: Array<ApprovalItemDecision>
+}
+
+/**
+ * ApprovalRequesterPublic
+ */
+export type ApprovalRequesterPublic = {
+  type: AuditActorType
+  /**
+   * Id
+   */
+  id: string | null
+}
+
+/**
+ * ApprovalStatus
+ */
+export type ApprovalStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "CANCELLED"
+  | "EXPIRED"
+  | "SUPERSEDED"
+
+/**
+ * ApprovalType
+ */
+export type ApprovalType =
+  | "RESEARCH_QUESTION_CONFIRMATION"
+  | "LITERATURE_DECISION_CONFIRMATION"
+  | "LITERATURE_EXTRACTION_CONFIRMATION"
+  | "CLEANING_PLAN_APPROVAL"
+  | "VARIABLE_ROLE_CONFIRMATION"
+  | "ANALYSIS_PLAN_APPROVAL"
+  | "FIGURE_CONFIRMATION"
+  | "MANUSCRIPT_FIX_APPROVAL"
+  | "CLAIM_CONFIRMATION"
+  | "EXPORT_CONFIRMATION"
+
+/**
+ * ArtifactDownload
+ */
+export type ArtifactDownload = {
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  /**
+   * Download Url
+   */
+  download_url: string
+  /**
+   * Expires At
+   */
+  expires_at: string
+  /**
+   * Disposition Filename
+   */
+  disposition_filename: string
+}
+
+/**
+ * ArtifactDownloadEnvelope
+ */
+export type ArtifactDownloadEnvelope = {
+  data: ArtifactDownload
+  meta: ResponseMeta
+}
+
+/**
+ * ArtifactEnvelope
+ */
+export type ArtifactEnvelope = {
+  data: ArtifactPublic
+  meta: ArtifactResponseMeta
+}
+
+/**
+ * ArtifactListEnvelope
+ */
+export type ArtifactListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ArtifactPublic>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * ArtifactPublic
+ */
+export type ArtifactPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  artifact_type: ArtifactType
+  /**
+   * Filename
+   */
+  filename: string
+  /**
+   * Original Filename
+   */
+  original_filename: string | null
+  /**
+   * Mime Type
+   */
+  mime_type: string
+  /**
+   * Size Bytes
+   */
+  size_bytes: number
+  /**
+   * Sha256
+   */
+  sha256: string
+  /**
+   * Source Artifact Id
+   */
+  source_artifact_id: string | null
+  /**
+   * Is Original
+   */
+  is_original: boolean
+  /**
+   * Is Immutable
+   */
+  is_immutable: boolean
+  status: ArtifactStatus
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Deleted At
+   */
+  deleted_at: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ArtifactResponseMeta
+ */
+export type ArtifactResponseMeta = {
+  /**
+   * Request Id
+   */
+  request_id: string
+  /**
+   * Schema Version
+   */
+  schema_version?: string
+  /**
+   * Idempotency Replayed
+   */
+  idempotency_replayed?: boolean
+  /**
+   * Duplicate Of Artifact Id
+   */
+  duplicate_of_artifact_id?: string | null
+}
+
+/**
+ * ArtifactStatus
+ */
+export type ArtifactStatus =
+  | "UPLOADING"
+  | "AVAILABLE"
+  | "FAILED"
+  | "DELETED"
+  | "QUARANTINED"
+
+/**
+ * ArtifactType
+ */
+export type ArtifactType =
+  | "PDF_DOCUMENT"
+  | "DATASET_FILE"
+  | "MANUSCRIPT_DOCX"
+  | "FIGURE_PNG"
+  | "FIGURE_SVG"
+  | "FIGURE_PDF"
+  | "ANALYSIS_CODE"
+  | "ANALYSIS_LOG"
+  | "JSON_RESULT"
+  | "CSV_EXPORT"
+  | "XLSX_EXPORT"
+  | "REPRO_PACKAGE"
+  | "MANIFEST"
+  | "MODEL_OUTPUT"
+  | "OTHER"
+
+/**
+ * ArtifactUploadComplete
+ */
+export type ArtifactUploadComplete = {
+  /**
+   * Sha256
+   */
+  sha256: string
+  /**
+   * Size Bytes
+   */
+  size_bytes: number
+}
+
+/**
+ * ArtifactUploadEnvelope
+ */
+export type ArtifactUploadEnvelope = {
+  data: ArtifactUploadSession
+  meta: ResponseMeta
+}
+
+/**
+ * ArtifactUploadInitiate
+ */
+export type ArtifactUploadInitiate = {
+  artifact_type: ArtifactType
+  /**
+   * Filename
+   */
+  filename: string
+  /**
+   * Mime Type
+   */
+  mime_type: string
+  /**
+   * Size Bytes
+   */
+  size_bytes: number
+  /**
+   * Sha256
+   */
+  sha256: string
+  /**
+   * Is Original
+   */
+  is_original: boolean
+  /**
+   * Source Artifact Id
+   */
+  source_artifact_id?: string | null
+}
+
+/**
+ * ArtifactUploadSession
+ */
+export type ArtifactUploadSession = {
+  /**
+   * Upload Id
+   */
+  upload_id: string
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  status: ArtifactStatus
+  /**
+   * Upload Method
+   */
+  upload_method: string
+  /**
+   * Upload Url
+   */
+  upload_url: string
+  /**
+   * Required Headers
+   */
+  required_headers: {
+    [key: string]: string
+  }
+  /**
+   * Expires At
+   */
+  expires_at: string
+}
+
+/**
+ * AuditActorPublic
+ */
+export type AuditActorPublic = {
+  /**
+   * Type
+   */
+  type: string
+  /**
+   * Id
+   */
+  id: string | null
+  /**
+   * Display Name
+   */
+  display_name: string | null
+}
+
+/**
+ * AuditActorType
+ */
+export type AuditActorType = "USER" | "AGENT" | "SYSTEM" | "WORKER"
+
+/**
+ * AuditListEnvelope
+ */
+export type AuditListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<AuditLogPublic>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * AuditLogPublic
+ */
+export type AuditLogPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string | null
+  actor: AuditActorPublic
+  /**
+   * Action
+   */
+  action: string
+  target: AuditTargetPublic
+  /**
+   * Before
+   */
+  before: {
+    [key: string]: unknown
+  } | null
+  /**
+   * After
+   */
+  after: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Reason
+   */
+  reason: string | null
+  /**
+   * Outcome
+   */
+  outcome: string
+  /**
+   * Request Id
+   */
+  request_id: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Approval Id
+   */
+  approval_id: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * AuditOutcome
+ */
+export type AuditOutcome = "SUCCEEDED" | "FAILED" | "DENIED"
+
+/**
+ * AuditTargetPublic
+ */
+export type AuditTargetPublic = {
+  /**
+   * Type
+   */
+  type: string
+  /**
+   * Id
+   */
+  id: string | null
+  /**
+   * Label
+   */
+  label: string | null
+}
+
+/**
  * Body_login_login_access_token_post_api_v1_login_access-token
  */
 export type BodyLoginLoginAccessTokenPostApiV1LoginAccessToken = {
@@ -32,6 +616,51 @@ export type BodyLoginLoginAccessTokenPostApiV1LoginAccessToken = {
    * Client Secret
    */
   client_secret?: string | null
+}
+
+/**
+ * ContractErrorDetail
+ */
+export type ContractErrorDetail = {
+  /**
+   * Code
+   */
+  code: string
+  /**
+   * Message
+   */
+  message: string
+  /**
+   * Details
+   */
+  details?: {
+    [key: string]: unknown
+  }
+  /**
+   * Field Errors
+   */
+  field_errors?: Array<{
+    [key: string]: unknown
+  }>
+  /**
+   * Request Id
+   */
+  request_id: string
+  /**
+   * Retryable
+   */
+  retryable?: boolean
+  /**
+   * Suggested Action
+   */
+  suggested_action?: string | null
+}
+
+/**
+ * ContractErrorResponse
+ */
+export type ContractErrorResponse = {
+  error: ContractErrorDetail
 }
 
 /**
@@ -97,6 +726,32 @@ export type ErrorResponse = {
 }
 
 /**
+ * FoundationCounts
+ */
+export type FoundationCounts = {
+  /**
+   * Members
+   */
+  members: number
+  /**
+   * Artifacts
+   */
+  artifacts?: number | null
+  /**
+   * Jobs Active
+   */
+  jobs_active?: number | null
+  /**
+   * Approvals Pending
+   */
+  approvals_pending?: number | null
+  /**
+   * Audit Events
+   */
+  audit_events: number
+}
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -107,6 +762,172 @@ export type HttpValidationError = {
 }
 
 /**
+ * JobCancel
+ */
+export type JobCancel = {
+  /**
+   * Reason
+   */
+  reason: string
+}
+
+/**
+ * JobEnvelope
+ */
+export type JobEnvelope = {
+  data: JobPublic
+  meta: ResponseMeta
+}
+
+/**
+ * JobErrorPublic
+ */
+export type JobErrorPublic = {
+  /**
+   * Code
+   */
+  code: string
+  /**
+   * Message
+   */
+  message: string
+  /**
+   * Retryable
+   */
+  retryable: boolean
+}
+
+/**
+ * JobListEnvelope
+ */
+export type JobListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<JobPublic>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * JobPublic
+ */
+export type JobPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  task_type: JobTaskType
+  /**
+   * Resource Type
+   */
+  resource_type: string
+  /**
+   * Resource Id
+   */
+  resource_id: string
+  status: JobStatus
+  /**
+   * Progress Percent
+   */
+  progress_percent: number
+  /**
+   * Current Step
+   */
+  current_step: string | null
+  /**
+   * Total Steps
+   */
+  total_steps: number | null
+  /**
+   * Completed Steps
+   */
+  completed_steps: number | null
+  /**
+   * Retry Count
+   */
+  retry_count: number
+  /**
+   * Max Retries
+   */
+  max_retries: number
+  /**
+   * Retryable
+   */
+  retryable: boolean
+  /**
+   * Current Processing Run Id
+   */
+  current_processing_run_id: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Started At
+   */
+  started_at: string | null
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  error: JobErrorPublic | null
+  result: JobResultPublic | null
+}
+
+/**
+ * JobResultPublic
+ */
+export type JobResultPublic = {
+  /**
+   * Object Type
+   */
+  object_type: string
+  /**
+   * Object Id
+   */
+  object_id: string
+  /**
+   * Url
+   */
+  url?: string | null
+}
+
+/**
+ * JobStatus
+ */
+export type JobStatus =
+  | "DRAFT"
+  | "QUEUED"
+  | "RUNNING"
+  | "NEEDS_REVIEW"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCEL_REQUESTED"
+  | "CANCELLED"
+  | "DISPATCH_FAILED"
+
+/**
+ * JobTaskType
+ */
+export type JobTaskType =
+  | "DOCUMENT_PARSE"
+  | "LITERATURE_EXTRACT"
+  | "DOCUMENT_EMBED"
+  | "LITERATURE_SUMMARIZE"
+  | "DATASET_PROFILE"
+  | "DATASET_TRANSFORM"
+  | "ANALYSIS_RUN"
+  | "FIGURE_RENDER"
+  | "MANUSCRIPT_CHECK"
+  | "EVIDENCE_AUDIT"
+  | "REPRO_PACKAGE_EXPORT"
+
+/**
  * LiveHealthResponse
  */
 export type LiveHealthResponse = {
@@ -115,6 +936,96 @@ export type LiveHealthResponse = {
    * Service
    */
   service?: string
+}
+
+/**
+ * MemberAdd
+ */
+export type MemberAdd = {
+  /**
+   * User Id
+   */
+  user_id: string
+  role: ProjectMemberRole
+}
+
+/**
+ * MemberEnvelope
+ */
+export type MemberEnvelope = {
+  data: ProjectMemberPublic
+  meta: ResponseMeta
+}
+
+/**
+ * MemberListEnvelope
+ */
+export type MemberListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ProjectMemberPublic>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * MemberTransferData
+ */
+export type MemberTransferData = {
+  member: ProjectMemberPublic
+  /**
+   * Project Owner Id
+   */
+  project_owner_id: string
+  /**
+   * Previous Owner
+   */
+  previous_owner: {
+    [key: string]: unknown
+  }
+}
+
+/**
+ * MemberTransferEnvelope
+ */
+export type MemberTransferEnvelope = {
+  data: MemberTransferData
+  meta: ResponseMeta
+}
+
+/**
+ * MemberUpdate
+ */
+export type MemberUpdate = {
+  role: ProjectMemberRole
+  /**
+   * Transfer Ownership
+   */
+  transfer_ownership?: boolean
+  previous_owner_role?: ProjectMemberRole | null
+  /**
+   * Reason
+   */
+  reason?: string | null
+}
+
+/**
+ * MemberUserPublic
+ */
+export type MemberUserPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Email
+   */
+  email: string
+  /**
+   * Full Name
+   */
+  full_name: string | null
 }
 
 /**
@@ -142,6 +1053,36 @@ export type NewPassword = {
 }
 
 /**
+ * PaginationMeta
+ */
+export type PaginationMeta = {
+  /**
+   * Page
+   */
+  page: number
+  /**
+   * Page Size
+   */
+  page_size: number
+  /**
+   * Total
+   */
+  total: number
+  /**
+   * Total Pages
+   */
+  total_pages: number
+  /**
+   * Has Next
+   */
+  has_next: boolean
+  /**
+   * Has Previous
+   */
+  has_previous: boolean
+}
+
+/**
  * PrivateUserCreate
  */
 export type PrivateUserCreate = {
@@ -164,6 +1105,295 @@ export type PrivateUserCreate = {
 }
 
 /**
+ * ProjectCreate
+ */
+export type ProjectCreate = {
+  /**
+   * Name
+   */
+  name: string
+  /**
+   * Description
+   */
+  description?: string | null
+  /**
+   * Discipline
+   */
+  discipline?: string | null
+  /**
+   * Research Direction
+   */
+  research_direction?: string | null
+  project_type: ProjectType
+  current_stage?: ProjectStage
+  /**
+   * Expected Completion Date
+   */
+  expected_completion_date?: string | null
+  /**
+   * Resource Constraints
+   */
+  resource_constraints?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Ethical Constraints
+   */
+  ethical_constraints?: {
+    [key: string]: unknown
+  } | null
+}
+
+/**
+ * ProjectEnvelope
+ */
+export type ProjectEnvelope = {
+  data: ProjectPublic
+  meta: ResponseMeta
+}
+
+/**
+ * ProjectListEnvelope
+ */
+export type ProjectListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ProjectPublic>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * ProjectMemberPublic
+ */
+export type ProjectMemberPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  user: MemberUserPublic
+  role: ProjectMemberRole
+  /**
+   * Joined At
+   */
+  joined_at: string
+  /**
+   * Removed At
+   */
+  removed_at: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ProjectMemberRole
+ */
+export type ProjectMemberRole = "OWNER" | "EDITOR" | "REVIEWER" | "VIEWER"
+
+/**
+ * ProjectOverviewEnvelope
+ */
+export type ProjectOverviewEnvelope = {
+  data: ProjectOverviewPublic
+  meta: ResponseMeta
+}
+
+/**
+ * ProjectOverviewPublic
+ */
+export type ProjectOverviewPublic = {
+  /**
+   * Project Id
+   */
+  project_id: string
+  current_stage: ProjectStage
+  /**
+   * Module Availability
+   */
+  module_availability: {
+    [key: string]: string
+  }
+  /**
+   * Current Research Question
+   */
+  current_research_question?: null
+  foundation_counts: FoundationCounts
+  /**
+   * Counts
+   */
+  counts: {
+    [key: string]: number | null
+  }
+  /**
+   * Pending Actions
+   */
+  pending_actions: Array<{
+    [key: string]: unknown
+  }>
+  /**
+   * Evidence Completeness
+   */
+  evidence_completeness?: null
+  /**
+   * Recent Activity
+   */
+  recent_activity: Array<AuditLogPublic>
+}
+
+/**
+ * ProjectPermissions
+ */
+export type ProjectPermissions = {
+  /**
+   * Can Update
+   */
+  can_update: boolean
+  /**
+   * Can Delete
+   */
+  can_delete: boolean
+}
+
+/**
+ * ProjectPublic
+ */
+export type ProjectPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Owner Id
+   */
+  owner_id: string
+  /**
+   * Name
+   */
+  name: string
+  /**
+   * Description
+   */
+  description: string | null
+  /**
+   * Discipline
+   */
+  discipline: string | null
+  /**
+   * Research Direction
+   */
+  research_direction: string | null
+  project_type: ProjectType
+  current_stage: ProjectStage
+  status: ProjectStatus
+  /**
+   * Expected Completion Date
+   */
+  expected_completion_date: string | null
+  /**
+   * Resource Constraints
+   */
+  resource_constraints: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Ethical Constraints
+   */
+  ethical_constraints: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  permissions: ProjectPermissions
+}
+
+/**
+ * ProjectStage
+ */
+export type ProjectStage =
+  | "INTENT"
+  | "LITERATURE"
+  | "REVIEW"
+  | "TOPIC"
+  | "DATA"
+  | "ANALYSIS"
+  | "FIGURE"
+  | "MANUSCRIPT"
+  | "EVIDENCE"
+  | "EXPORT"
+
+/**
+ * ProjectStatus
+ */
+export type ProjectStatus = "ACTIVE" | "ARCHIVED" | "DELETED"
+
+/**
+ * ProjectType
+ */
+export type ProjectType =
+  | "THESIS"
+  | "COURSE"
+  | "INNOVATION"
+  | "RESEARCH"
+  | "DEMO"
+
+/**
+ * ProjectUpdate
+ */
+export type ProjectUpdate = {
+  /**
+   * Name
+   */
+  name?: string | null
+  /**
+   * Description
+   */
+  description?: string | null
+  /**
+   * Discipline
+   */
+  discipline?: string | null
+  /**
+   * Research Direction
+   */
+  research_direction?: string | null
+  project_type?: ProjectType | null
+  current_stage?: ProjectStage | null
+  /**
+   * Expected Completion Date
+   */
+  expected_completion_date?: string | null
+  /**
+   * Resource Constraints
+   */
+  resource_constraints?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Ethical Constraints
+   */
+  ethical_constraints?: {
+    [key: string]: unknown
+  } | null
+}
+
+/**
  * ReadyHealthResponse
  */
 export type ReadyHealthResponse = {
@@ -172,6 +1402,24 @@ export type ReadyHealthResponse = {
    * Dependencies
    */
   dependencies: Array<DependencyCheck>
+}
+
+/**
+ * ResponseMeta
+ */
+export type ResponseMeta = {
+  /**
+   * Request Id
+   */
+  request_id: string
+  /**
+   * Schema Version
+   */
+  schema_version?: string
+  /**
+   * Idempotency Replayed
+   */
+  idempotency_replayed?: boolean
 }
 
 /**
@@ -886,6 +2134,1740 @@ export type UtilsTestEmailPostApiV1UtilsTestEmailResponses = {
 
 export type UtilsTestEmailPostApiV1UtilsTestEmailResponse =
   UtilsTestEmailPostApiV1UtilsTestEmailResponses[keyof UtilsTestEmailPostApiV1UtilsTestEmailResponses]
+
+export type ProjectsListProjectsGetApiV1ProjectsData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Status
+     */
+    status?: ProjectStatus | null
+    /**
+     * Current Stage
+     */
+    current_stage?: ProjectStage | null
+    /**
+     * Project Type
+     */
+    project_type?: ProjectType | null
+    /**
+     * Q
+     */
+    q?: string | null
+    /**
+     * Page
+     */
+    page?: number
+    /**
+     * Page Size
+     */
+    page_size?: number
+    /**
+     * Sort
+     */
+    sort?: string
+    /**
+     * Order
+     */
+    order?: string
+  }
+  url: "/api/v1/projects"
+}
+
+export type ProjectsListProjectsGetApiV1ProjectsErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsListProjectsGetApiV1ProjectsError =
+  ProjectsListProjectsGetApiV1ProjectsErrors[keyof ProjectsListProjectsGetApiV1ProjectsErrors]
+
+export type ProjectsListProjectsGetApiV1ProjectsResponses = {
+  /**
+   * Successful Response
+   */
+  200: ProjectListEnvelope
+}
+
+export type ProjectsListProjectsGetApiV1ProjectsResponse =
+  ProjectsListProjectsGetApiV1ProjectsResponses[keyof ProjectsListProjectsGetApiV1ProjectsResponses]
+
+export type ProjectsCreateProjectPostApiV1ProjectsData = {
+  body: ProjectCreate
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path?: never
+  query?: never
+  url: "/api/v1/projects"
+}
+
+export type ProjectsCreateProjectPostApiV1ProjectsErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsCreateProjectPostApiV1ProjectsError =
+  ProjectsCreateProjectPostApiV1ProjectsErrors[keyof ProjectsCreateProjectPostApiV1ProjectsErrors]
+
+export type ProjectsCreateProjectPostApiV1ProjectsResponses = {
+  /**
+   * Successful Response
+   */
+  201: ProjectEnvelope
+}
+
+export type ProjectsCreateProjectPostApiV1ProjectsResponse =
+  ProjectsCreateProjectPostApiV1ProjectsResponses[keyof ProjectsCreateProjectPostApiV1ProjectsResponses]
+
+export type ProjectsGetProjectGetApiV1ProjectsProjectIdData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}"
+}
+
+export type ProjectsGetProjectGetApiV1ProjectsProjectIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsGetProjectGetApiV1ProjectsProjectIdError =
+  ProjectsGetProjectGetApiV1ProjectsProjectIdErrors[keyof ProjectsGetProjectGetApiV1ProjectsProjectIdErrors]
+
+export type ProjectsGetProjectGetApiV1ProjectsProjectIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ProjectEnvelope
+}
+
+export type ProjectsGetProjectGetApiV1ProjectsProjectIdResponse =
+  ProjectsGetProjectGetApiV1ProjectsProjectIdResponses[keyof ProjectsGetProjectGetApiV1ProjectsProjectIdResponses]
+
+export type ProjectsUpdateProjectPatchApiV1ProjectsProjectIdData = {
+  body: ProjectUpdate
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}"
+}
+
+export type ProjectsUpdateProjectPatchApiV1ProjectsProjectIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsUpdateProjectPatchApiV1ProjectsProjectIdError =
+  ProjectsUpdateProjectPatchApiV1ProjectsProjectIdErrors[keyof ProjectsUpdateProjectPatchApiV1ProjectsProjectIdErrors]
+
+export type ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ProjectEnvelope
+}
+
+export type ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponse =
+  ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponses[keyof ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponses]
+
+export type ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/overview"
+}
+
+export type ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+  }
+
+export type ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewError =
+  ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewErrors[keyof ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewErrors]
+
+export type ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ProjectOverviewEnvelope
+  }
+
+export type ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewResponse =
+  ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewResponses[keyof ProjectsGetProjectOverviewGetApiV1ProjectsProjectIdOverviewResponses]
+
+export type ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/archive"
+}
+
+export type ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveError =
+  ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveErrors[keyof ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveErrors]
+
+export type ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveResponses = {
+  /**
+   * Successful Response
+   */
+  200: ProjectEnvelope
+}
+
+export type ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveResponse =
+  ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveResponses[keyof ProjectsArchiveProjectPostApiV1ProjectsProjectIdArchiveResponses]
+
+export type ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/restore"
+}
+
+export type ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreError =
+  ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreErrors[keyof ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreErrors]
+
+export type ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreResponses = {
+  /**
+   * Successful Response
+   */
+  200: ProjectEnvelope
+}
+
+export type ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreResponse =
+  ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreResponses[keyof ProjectsRestoreProjectPostApiV1ProjectsProjectIdRestoreResponses]
+
+export type ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: {
+    /**
+     * Role
+     */
+    role?: ProjectMemberRole | null
+    /**
+     * Q
+     */
+    q?: string | null
+    /**
+     * Include Removed
+     */
+    include_removed?: boolean
+    /**
+     * Page
+     */
+    page?: number
+    /**
+     * Page Size
+     */
+    page_size?: number
+  }
+  url: "/api/v1/projects/{project_id}/members"
+}
+
+export type ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersError =
+  ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersErrors[keyof ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersErrors]
+
+export type ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: MemberListEnvelope
+  }
+
+export type ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersResponse =
+  ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersResponses[keyof ProjectsListProjectMembersGetApiV1ProjectsProjectIdMembersResponses]
+
+export type ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersData = {
+  body: MemberAdd
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/members"
+}
+
+export type ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersError =
+  ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors[keyof ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors]
+
+export type ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses =
+  {
+    /**
+     * OK
+     */
+    200: MemberEnvelope
+    /**
+     * Successful Response
+     */
+    201: MemberEnvelope
+  }
+
+export type ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponse =
+  ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses[keyof ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses]
+
+export type ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+      /**
+       * Member Id
+       */
+      member_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/members/{member_id}"
+  }
+
+export type ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+  }
+
+export type ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdError =
+  ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdErrors[keyof ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdErrors]
+
+export type ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    204: void
+  }
+
+export type ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdResponse =
+  ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdResponses[keyof ProjectsRemoveProjectMemberDeleteApiV1ProjectsProjectIdMembersMemberIdResponses]
+
+export type ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdData =
+  {
+    body: MemberUpdate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+      /**
+       * Member Id
+       */
+      member_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/members/{member_id}"
+  }
+
+export type ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+  }
+
+export type ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdError =
+  ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdErrors[keyof ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdErrors]
+
+export type ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdResponses =
+  {
+    /**
+     * Response Projects Update Project Member Patch Api V1 Projects Project Id Members Member Id
+     *
+     * Successful Response
+     */
+    200: MemberEnvelope | MemberTransferEnvelope
+  }
+
+export type ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdResponse =
+  ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdResponses[keyof ProjectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberIdResponses]
+
+export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: {
+      /**
+       * Actor Type
+       */
+      actor_type?: AuditActorType | null
+      /**
+       * Action
+       */
+      action?: string | null
+      /**
+       * Object Type
+       */
+      object_type?: string | null
+      /**
+       * Object Id
+       */
+      object_id?: string | null
+      /**
+       * Outcome
+       */
+      outcome?: AuditOutcome | null
+      /**
+       * Request Id
+       */
+      request_id?: string | null
+      /**
+       * Job Id
+       */
+      job_id?: string | null
+      /**
+       * Approval Id
+       */
+      approval_id?: string | null
+      /**
+       * From
+       */
+      from?: string | null
+      /**
+       * To
+       */
+      to?: string | null
+      /**
+       * Page
+       */
+      page?: number
+      /**
+       * Page Size
+       */
+      page_size?: number
+    }
+    url: "/api/v1/projects/{project_id}/audit-logs"
+  }
+
+export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+  }
+
+export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsError =
+  ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsErrors[keyof ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsErrors]
+
+export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: AuditListEnvelope
+  }
+
+export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponse =
+  ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses[keyof ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses]
+
+export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: {
+      /**
+       * Artifact Type
+       */
+      artifact_type?: ArtifactType | null
+      /**
+       * Status
+       */
+      status?: ArtifactStatus | null
+      /**
+       * Is Original
+       */
+      is_original?: boolean | null
+      /**
+       * Q
+       */
+      q?: string | null
+      /**
+       * Page
+       */
+      page?: number
+      /**
+       * Page Size
+       */
+      page_size?: number
+    }
+    url: "/api/v1/projects/{project_id}/artifacts"
+  }
+
+export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Content Too Large
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported Media Type
+     */
+    415: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsError =
+  ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsErrors[keyof ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsErrors]
+
+export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ArtifactListEnvelope
+  }
+
+export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsResponse =
+  ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsResponses[keyof ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsResponses]
+
+export type ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsData =
+  {
+    body: ArtifactUploadInitiate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/artifacts/uploads"
+  }
+
+export type ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Content Too Large
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported Media Type
+     */
+    415: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsError =
+  ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsErrors[keyof ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsErrors]
+
+export type ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ArtifactUploadEnvelope
+  }
+
+export type ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsResponse =
+  ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsResponses[keyof ArtifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsResponses]
+
+export type ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Content-Type
+       */
+      "Content-Type"?: string | null
+    }
+    path: {
+      /**
+       * Upload Id
+       */
+      upload_id: string
+    }
+    query?: never
+    url: "/api/v1/artifact-uploads/{upload_id}/content"
+  }
+
+export type ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Content Too Large
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported Media Type
+     */
+    415: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentError =
+  ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors[keyof ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors]
+
+export type ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses =
+  {
+    /**
+     * Successful Response
+     */
+    204: void
+  }
+
+export type ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponse =
+  ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses[keyof ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses]
+
+export type ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteData =
+  {
+    body: ArtifactUploadComplete
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+      /**
+       * Upload Id
+       */
+      upload_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/artifacts/uploads/{upload_id}/complete"
+  }
+
+export type ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Content Too Large
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported Media Type
+     */
+    415: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteError =
+  ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteErrors[keyof ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteErrors]
+
+export type ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ArtifactEnvelope
+  }
+
+export type ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteResponse =
+  ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteResponses[keyof ArtifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdCompleteResponses]
+
+export type ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdData = {
+  body?: never
+  path: {
+    /**
+     * Artifact Id
+     */
+    artifact_id: string
+  }
+  query?: never
+  url: "/api/v1/artifacts/{artifact_id}"
+}
+
+export type ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Content Too Large
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported Media Type
+   */
+  415: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdError =
+  ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdErrors[keyof ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdErrors]
+
+export type ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ArtifactEnvelope
+}
+
+export type ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdResponse =
+  ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdResponses[keyof ArtifactsGetArtifactGetApiV1ArtifactsArtifactIdResponses]
+
+export type ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadData =
+  {
+    body?: never
+    path: {
+      /**
+       * Artifact Id
+       */
+      artifact_id: string
+    }
+    query?: never
+    url: "/api/v1/artifacts/{artifact_id}/download"
+  }
+
+export type ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Content Too Large
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported Media Type
+     */
+    415: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadError =
+  ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadErrors[keyof ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadErrors]
+
+export type ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ArtifactDownloadEnvelope
+  }
+
+export type ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponse =
+  ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses[keyof ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses]
+
+export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: {
+    /**
+     * Status
+     */
+    status?: JobStatus | null
+    /**
+     * Task Type
+     */
+    task_type?: JobTaskType | null
+    /**
+     * Resource Type
+     */
+    resource_type?: string | null
+    /**
+     * Resource Id
+     */
+    resource_id?: string | null
+    /**
+     * Page
+     */
+    page?: number
+    /**
+     * Page Size
+     */
+    page_size?: number
+  }
+  url: "/api/v1/projects/{project_id}/jobs"
+}
+
+export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsError =
+  JobsListProjectJobsGetApiV1ProjectsProjectIdJobsErrors[keyof JobsListProjectJobsGetApiV1ProjectsProjectIdJobsErrors]
+
+export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsResponses = {
+  /**
+   * Successful Response
+   */
+  200: JobListEnvelope
+}
+
+export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsResponse =
+  JobsListProjectJobsGetApiV1ProjectsProjectIdJobsResponses[keyof JobsListProjectJobsGetApiV1ProjectsProjectIdJobsResponses]
+
+export type JobsGetJobGetApiV1JobsJobIdData = {
+  body?: never
+  path: {
+    /**
+     * Job Id
+     */
+    job_id: string
+  }
+  query?: never
+  url: "/api/v1/jobs/{job_id}"
+}
+
+export type JobsGetJobGetApiV1JobsJobIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type JobsGetJobGetApiV1JobsJobIdError =
+  JobsGetJobGetApiV1JobsJobIdErrors[keyof JobsGetJobGetApiV1JobsJobIdErrors]
+
+export type JobsGetJobGetApiV1JobsJobIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: JobEnvelope
+}
+
+export type JobsGetJobGetApiV1JobsJobIdResponse =
+  JobsGetJobGetApiV1JobsJobIdResponses[keyof JobsGetJobGetApiV1JobsJobIdResponses]
+
+export type JobsCancelJobPostApiV1JobsJobIdCancelData = {
+  body: JobCancel
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Job Id
+     */
+    job_id: string
+  }
+  query?: never
+  url: "/api/v1/jobs/{job_id}/cancel"
+}
+
+export type JobsCancelJobPostApiV1JobsJobIdCancelErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type JobsCancelJobPostApiV1JobsJobIdCancelError =
+  JobsCancelJobPostApiV1JobsJobIdCancelErrors[keyof JobsCancelJobPostApiV1JobsJobIdCancelErrors]
+
+export type JobsCancelJobPostApiV1JobsJobIdCancelResponses = {
+  /**
+   * Successful Response
+   */
+  200: JobEnvelope
+}
+
+export type JobsCancelJobPostApiV1JobsJobIdCancelResponse =
+  JobsCancelJobPostApiV1JobsJobIdCancelResponses[keyof JobsCancelJobPostApiV1JobsJobIdCancelResponses]
+
+export type JobsRetryJobPostApiV1JobsJobIdRetryData = {
+  body?: never
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Job Id
+     */
+    job_id: string
+  }
+  query?: never
+  url: "/api/v1/jobs/{job_id}/retry"
+}
+
+export type JobsRetryJobPostApiV1JobsJobIdRetryErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type JobsRetryJobPostApiV1JobsJobIdRetryError =
+  JobsRetryJobPostApiV1JobsJobIdRetryErrors[keyof JobsRetryJobPostApiV1JobsJobIdRetryErrors]
+
+export type JobsRetryJobPostApiV1JobsJobIdRetryResponses = {
+  /**
+   * Successful Response
+   */
+  200: JobEnvelope
+}
+
+export type JobsRetryJobPostApiV1JobsJobIdRetryResponse =
+  JobsRetryJobPostApiV1JobsJobIdRetryResponses[keyof JobsRetryJobPostApiV1JobsJobIdRetryResponses]
+
+export type JobsStreamJobEventsGetApiV1JobsJobIdEventsData = {
+  body?: never
+  headers?: {
+    /**
+     * Last-Event-Id
+     */
+    "Last-Event-ID"?: number | null
+  }
+  path: {
+    /**
+     * Job Id
+     */
+    job_id: string
+  }
+  query?: never
+  url: "/api/v1/jobs/{job_id}/events"
+}
+
+export type JobsStreamJobEventsGetApiV1JobsJobIdEventsErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type JobsStreamJobEventsGetApiV1JobsJobIdEventsError =
+  JobsStreamJobEventsGetApiV1JobsJobIdEventsErrors[keyof JobsStreamJobEventsGetApiV1JobsJobIdEventsErrors]
+
+export type JobsStreamJobEventsGetApiV1JobsJobIdEventsResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown
+}
+
+export type ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: {
+      /**
+       * Status
+       */
+      status?: ApprovalStatus | null
+      /**
+       * Approval Type
+       */
+      approval_type?: ApprovalType | null
+      /**
+       * Target Object Type
+       */
+      target_object_type?: string | null
+      /**
+       * Requested By Actor Type
+       */
+      requested_by_actor_type?: AuditActorType | null
+      /**
+       * Page
+       */
+      page?: number
+      /**
+       * Page Size
+       */
+      page_size?: number
+    }
+    url: "/api/v1/projects/{project_id}/approvals"
+  }
+
+export type ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+  }
+
+export type ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsError =
+  ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsErrors[keyof ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsErrors]
+
+export type ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ApprovalListEnvelope
+  }
+
+export type ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsResponse =
+  ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsResponses[keyof ApprovalsListProjectApprovalsGetApiV1ProjectsProjectIdApprovalsResponses]
+
+export type ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdData = {
+  body?: never
+  path: {
+    /**
+     * Approval Id
+     */
+    approval_id: string
+  }
+  query?: never
+  url: "/api/v1/approvals/{approval_id}"
+}
+
+export type ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdError =
+  ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdErrors[keyof ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdErrors]
+
+export type ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ApprovalEnvelope
+}
+
+export type ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdResponse =
+  ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdResponses[keyof ApprovalsGetApprovalGetApiV1ApprovalsApprovalIdResponses]
+
+export type ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveData = {
+  body: ApprovalDecisionRequest
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Approval Id
+     */
+    approval_id: string
+  }
+  query?: never
+  url: "/api/v1/approvals/{approval_id}/approve"
+}
+
+export type ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveError =
+  ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveErrors[keyof ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveErrors]
+
+export type ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponses = {
+  /**
+   * Successful Response
+   */
+  200: ApprovalEnvelope
+}
+
+export type ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponse =
+  ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponses[keyof ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponses]
+
+export type ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectData = {
+  body: ApprovalRejectRequest
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Approval Id
+     */
+    approval_id: string
+  }
+  query?: never
+  url: "/api/v1/approvals/{approval_id}/reject"
+}
+
+export type ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectError =
+  ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectErrors[keyof ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectErrors]
+
+export type ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectResponses = {
+  /**
+   * Successful Response
+   */
+  200: ApprovalEnvelope
+}
+
+export type ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectResponse =
+  ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectResponses[keyof ApprovalsRejectPostApiV1ApprovalsApprovalIdRejectResponses]
+
+export type ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelData = {
+  body?: never
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Approval Id
+     */
+    approval_id: string
+  }
+  query?: never
+  url: "/api/v1/approvals/{approval_id}/cancel"
+}
+
+export type ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelError =
+  ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelErrors[keyof ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelErrors]
+
+export type ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses = {
+  /**
+   * Successful Response
+   */
+  200: ApprovalEnvelope
+}
+
+export type ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponse =
+  ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses[keyof ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses]
 
 export type PrivateCreateUserPostApiV1PrivateUsersData = {
   body: PrivateUserCreate

@@ -98,7 +98,7 @@
 - Planned resolution: Completed in M0-FINAL-REVIEW-2.
 - Resolution target: M0-FINAL-REVIEW-2
 - Related tests: `gh auth status`.
-- Related files: `docs/development/M0_CONTINUOUS_EXECUTION.md`.
+- Related files: `docs/archive/m0/M0_CONTINUOUS_EXECUTION.md`.
 - Introduced commit: `5fe2da6`
 - Resolved commit: `docs(m0): complete second final M0 review` (this review
   stage-close commit).
