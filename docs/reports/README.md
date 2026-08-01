@@ -6,6 +6,7 @@
 
 | 文档或目录 | 当前作用 |
 | --- | --- |
+| [M1 Completion Approval](./M1_COMPLETION_APPROVAL.md) | `APPROVED FOR M1 COMPLETION` 的 Project Owner 完成审批与本地 Exit Gate 证据 |
 | [M1 Documentation Baseline Approval](./M1_DOCUMENTATION_BASELINE_APPROVAL.md) | `APPROVED FOR M1 DEVELOPMENT` 的权威批准记录 |
 | [M1 Contract Freeze Approval](./M1_CONTRACT_FREEZE_APPROVAL.md) | `APPROVED` 的 M1 Contract Amendment 增量批准记录 |
 | [Final Open-Source Research and Document Alignment Review](./FINAL_OPEN_SOURCE_RESEARCH_AND_DOCUMENT_ALIGNMENT_REVIEW.md) | 当前开源研究与跨文档对齐的最终审计 |

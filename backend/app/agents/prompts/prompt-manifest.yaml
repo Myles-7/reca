@@ -1,0 +1,26 @@
+{
+  "manifest_version": "1.0",
+  "prompts": [
+    {
+      "prompt_id": "governance-contract-test",
+      "prompt_version": "1.0.0",
+      "task_type": "GOVERNANCE_CONTRACT_TEST",
+      "input_schema": {
+        "name": "GovernanceContractTestInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "GovernanceContractTestOutput",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": [],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "METADATA_ONLY",
+      "max_allowed_data_access_level": "METADATA_ONLY",
+      "status": "ACTIVE",
+      "content_hash": "1ca4ccd9dba590aebd6db5b54096339eb59dd9af12540cccb03dac099e67ce76"
+    }
+  ]
+}

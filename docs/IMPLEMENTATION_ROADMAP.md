@@ -434,7 +434,7 @@ M0 Regression Baseline 适用于 M1–M9，后续里程碑不得让 M0 已通过
 
 | 里程碑 | 状态 | 严格前置依赖 | 交付摘要 | 详细文件 |
 | --- | --- | --- | --- | --- |
-| M1 | ALLOWED | M0 COMPLETED | 项目、Artifact、Approval、Job、审计与 Prompt 治理底座 | [M1 Foundation](roadmap/milestones/M1_FOUNDATION.md) |
+| M1 | COMPLETION APPROVED | M0 COMPLETED | 项目、Artifact、Approval、Job、审计与 Prompt 治理底座 | [M1 Foundation](roadmap/milestones/M1_FOUNDATION.md) |
 | M2 | PLANNED | M1 | 研究问题、检索计划、真实文献与 PDF 解析 | [M2 Research and Literature](roadmap/milestones/M2_RESEARCH_AND_LITERATURE.md) |
 | M3 | PLANNED | M2 | 文献矩阵、EvidenceSpan 与当前证据集合分析 | [M3 Evidence Matrix](roadmap/milestones/M3_EVIDENCE_MATRIX.md) |
 | M4 | PLANNED | M1 | DatasetVersion、质量检查、CleaningPlan 与转换 | [M4 Data Quality](roadmap/milestones/M4_DATA_QUALITY.md) |

@@ -49,6 +49,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-reca-local-only-postgres-password}
       VALKEY_URL: valkey://valkey:6379/0
       MINIO_ENDPOINT: http://minio:9000
+      MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://127.0.0.1:9000}
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-reca-local-admin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
       MINIO_BUCKET: ${MINIO_BUCKET:-reca}
@@ -129,6 +130,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-reca-local-only-postgres-password}
       VALKEY_URL: valkey://valkey:6379/0
       MINIO_ENDPOINT: http://minio:9000
+      MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://127.0.0.1:9000}
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-reca-local-admin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
       GROBID_URL: http://grobid:8070
@@ -157,6 +159,8 @@ services:
       timeout: 5s
       retries: 12
       start_period: 10s
+    ports:
+      - "127.0.0.1:${MINIO_PORT:-9000}:9000"
     volumes:
       - minio_data:/data
     networks:

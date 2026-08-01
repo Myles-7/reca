@@ -6,6 +6,7 @@ from fastapi.routing import APIRoute
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.cors import CORSMiddleware
 
+from app.api.errors import ContractError, ContractErrorDetail, ContractErrorResponse
 from app.api.main import api_router
 from app.api.schemas.health import ErrorDetail, ErrorResponse
 from app.core.config import settings
@@ -44,6 +45,48 @@ def error_response(
     )
 
 
+def is_m1_contract_path(request: Request) -> bool:
+    path = request.url.path
+    prefixes = (
+        f"{settings.API_V1_STR}/projects",
+        f"{settings.API_V1_STR}/artifacts",
+        f"{settings.API_V1_STR}/artifact-uploads",
+        f"{settings.API_V1_STR}/jobs",
+        f"{settings.API_V1_STR}/approvals",
+    )
+    return any(path == prefix or path.startswith(f"{prefix}/") for prefix in prefixes)
+
+
+def contract_error_response(
+    *,
+    status_code: int,
+    code: str,
+    message: str,
+    request: Request,
+    details: dict[str, object] | None = None,
+    field_errors: list[dict[str, object]] | None = None,
+    retryable: bool = False,
+    suggested_action: str | None = None,
+) -> JSONResponse:
+    request_id = getattr(request.state, "request_id", current_request_id())
+    payload = ContractErrorResponse(
+        error=ContractErrorDetail(
+            code=code,
+            message=message,
+            details=details or {},
+            field_errors=field_errors or [],
+            request_id=request_id,
+            retryable=retryable,
+            suggested_action=suggested_action,
+        )
+    )
+    return JSONResponse(
+        status_code=status_code,
+        content=payload.model_dump(exclude_none=True),
+        headers={REQUEST_ID_HEADER: request_id},
+    )
+
+
 if settings.SENTRY_DSN and settings.ENVIRONMENT != "local":
     sentry_sdk.init(dsn=str(settings.SENTRY_DSN), enable_tracing=True)
 
@@ -60,6 +103,20 @@ app.add_middleware(RequestObservabilityMiddleware)
 async def http_exception_handler(
     _request: Request, exc: StarletteHTTPException
 ) -> JSONResponse:
+    if is_m1_contract_path(_request):
+        code = {
+            401: "AUTH_REQUIRED",
+            403: "TOKEN_INVALID"
+            if exc.detail == "Could not validate credentials"
+            else "PERMISSION_DENIED",
+            404: "RESOURCE_NOT_FOUND",
+        }.get(exc.status_code, "VALIDATION_ERROR")
+        return contract_error_response(
+            status_code=exc.status_code,
+            code=code,
+            message="Request could not be completed.",
+            request=_request,
+        )
     messages = {
         404: ("not_found", "Resource not found"),
         405: ("method_not_allowed", "Method not allowed"),
@@ -73,8 +130,40 @@ async def http_exception_handler(
 async def validation_exception_handler(
     _request: Request, _error: RequestValidationError
 ) -> JSONResponse:
+    if is_m1_contract_path(_request):
+        field_errors = [
+            {
+                "field": ".".join(str(part) for part in error["loc"] if part != "body"),
+                "code": error["type"],
+                "message": error["msg"],
+            }
+            for error in _error.errors()
+        ]
+        return contract_error_response(
+            status_code=422,
+            code="VALIDATION_ERROR",
+            message="Request validation failed.",
+            request=_request,
+            field_errors=field_errors,
+        )
     return error_response(
         422, "validation_error", "Request validation failed", _request
+    )
+
+
+@app.exception_handler(ContractError)
+async def contract_exception_handler(
+    request: Request, error: ContractError
+) -> JSONResponse:
+    return contract_error_response(
+        status_code=error.status_code,
+        code=error.code,
+        message=error.message,
+        request=request,
+        details=error.details,
+        field_errors=error.field_errors,
+        retryable=error.retryable,
+        suggested_action=error.suggested_action,
     )
 
 

@@ -159,7 +159,7 @@ AuditLog 记录业务操作，不等同于系统日志。
 | before_snapshot | JSONB       |  否 | 修改前摘要                    |
 | after_snapshot  | JSONB       |  否 | 修改后摘要                    |
 | reason          | Text        |  否 | 原因                       |
-| request_id      | UUID        |  否 | 请求 ID                    |
+| request_id      | String(64)  |  否 | 经过校验的 opaque 请求追踪 ID；兼容 M0 `X-Request-ID` 边界 |
 | job_id          | UUID        |  否 | 任务 ID                    |
 | approval_id     | UUID        |  否 | 审批 ID                    |
 | outcome         | Enum        |  是 | SUCCEEDED、FAILED、DENIED   |
@@ -517,7 +517,7 @@ ModelInvocation 是每次模型调用的不可变审计事实。M1 必须建立�
 | --- | --- | -: |
 | id | UUID | 是 |
 | project_id | UUID | 是 |
-| request_id | UUID | 否 |
+| request_id | String(64) | 否；经过校验的 opaque 请求追踪 ID，与 AuditLog/M0 `X-Request-ID` 边界一致 |
 | actor_type | Enum | 是 |
 | actor_id | UUID/String | 否 |
 | task_type | String | 是 |

@@ -16,7 +16,7 @@ celery_app = Celery(
     "reca",
     broker=settings.CELERY_BROKER_URL,
     backend=settings.CELERY_RESULT_BACKEND,
-    include=["app.workers.health"],
+    include=["app.workers.health", "app.workers.jobs"],
 )
 
 celery_app.conf.update(
