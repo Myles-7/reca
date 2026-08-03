@@ -70,6 +70,17 @@ def test_manifest_rejects_content_hash_mismatch(tmp_path: Path) -> None:
         load_prompt_manifest(path)
 
 
+def test_prompt_hash_is_stable_across_platform_line_endings(tmp_path: Path) -> None:
+    canonical = b"first line\nsecond line\n"
+    asset = tmp_path / "fixture-1.0.0.txt"
+    asset.write_bytes(canonical.replace(b"\n", b"\r\n"))
+    path = _write_manifest(tmp_path, [_entry(hashlib.sha256(canonical).hexdigest())])
+
+    contract = load_prompt_manifest(path)[("fixture", "1.0.0")]
+
+    assert contract.content_hash == hashlib.sha256(canonical).hexdigest()
+
+
 def test_manifest_rejects_unknown_or_escalating_access_level(tmp_path: Path) -> None:
     content = b"fixture\n"
     (tmp_path / "fixture-1.0.0.txt").write_bytes(content)

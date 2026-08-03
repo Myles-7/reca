@@ -68,6 +68,7 @@ class ArtifactEnvelope(BaseModel):
 
 class ArtifactListEnvelope(BaseModel):
     data: list[ArtifactPublic]
+    allowed_actions: list[str]
     pagination: PaginationMeta
     meta: ResponseMeta
 

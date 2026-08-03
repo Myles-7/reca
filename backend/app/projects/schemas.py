@@ -70,6 +70,7 @@ class ProjectPublic(BaseModel):
     created_at: datetime
     updated_at: datetime
     permissions: ProjectPermissions
+    allowed_actions: list[str]
 
 
 class ProjectEnvelope(BaseModel):
@@ -146,6 +147,7 @@ class MemberTransferEnvelope(BaseModel):
 
 class MemberListEnvelope(BaseModel):
     data: list[ProjectMemberPublic]
+    allowed_actions: list[str]
     pagination: PaginationMeta
     meta: ResponseMeta
 
@@ -192,11 +194,17 @@ class FoundationCounts(BaseModel):
     audit_events: int
 
 
+class CurrentResearchQuestionSummary(BaseModel):
+    id: uuid.UUID
+    current_version_id: uuid.UUID
+    status: str
+
+
 class ProjectOverviewPublic(BaseModel):
     project_id: uuid.UUID
     current_stage: ProjectStage
     module_availability: dict[str, str]
-    current_research_question: None = None
+    current_research_question: CurrentResearchQuestionSummary | None = None
     foundation_counts: FoundationCounts
     counts: dict[str, int | None]
     pending_actions: list[dict[str, Any]]

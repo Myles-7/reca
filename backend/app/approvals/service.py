@@ -39,6 +39,8 @@ def _encoded_dict(value: Any) -> dict[str, Any]:
 
 PayloadResolver = Callable[[Session, ApprovalRecord], dict[str, Any]]
 payload_resolvers: dict[str, PayloadResolver] = {}
+DecisionHandler = Callable[[Session, ApprovalRecord, ApprovalStatus, User], None]
+decision_handlers: dict[str, DecisionHandler] = {}
 
 
 @dataclass(frozen=True)
@@ -66,6 +68,12 @@ def register_payload_resolver(
     target_object_type: str, resolver: PayloadResolver
 ) -> None:
     payload_resolvers[target_object_type] = resolver
+
+
+def register_decision_handler(
+    target_object_type: str, handler: DecisionHandler
+) -> None:
+    decision_handlers[target_object_type] = handler
 
 
 def _audit(
@@ -701,6 +709,10 @@ def decide_approval(
     approval.decision_at = now
     approval.decision_reason = decision_reason
     session.add(approval)
+    session.flush([approval])
+    handler = decision_handlers.get(approval.target_object_type)
+    if handler is not None:
+        handler(session, approval, decision, actor)
     _audit(
         session,
         approval=approval,

@@ -244,7 +244,7 @@ def list_project_members(
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=100),
 ) -> dict[str, Any]:
-    data, pagination = service.list_members(
+    data, pagination, allowed_actions = service.list_members(
         session,
         actor=current_user,
         project_id=project_id,
@@ -254,7 +254,12 @@ def list_project_members(
         page=page,
         page_size=page_size,
     )
-    return {"data": data, "pagination": pagination, "meta": _meta()}
+    return {
+        "data": data,
+        "allowed_actions": allowed_actions,
+        "pagination": pagination,
+        "meta": _meta(),
+    }
 
 
 @router.post(

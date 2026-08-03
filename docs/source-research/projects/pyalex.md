@@ -1,14 +1,14 @@
 # PyAlex source research
 
-Document version: `1.0.1`
+Document version: `1.1.0`
 
 Document status: `APPROVED FOR M1 DEVELOPMENT`
 
-Research status: `PLANNED`
+Research status: `ALREADY_INTEGRATED`
 
-Last researched: 2026-07-31
+Last researched: 2026-08-01
 
-Last updated: 2026-07-31
+Last updated: 2026-08-01
 
 Phase summary: [Literature and evidence research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_2_LITERATURE.md)
 
@@ -111,9 +111,13 @@ commit.
 
 ## RECA current state
 
-OpenAlex is planned for M2 literature retrieval. Current formal documents define
-`QueryPlan`, search runs and `LiteratureRecord`, but PyAlex is not an installed
-runtime dependency and no production provider is implemented by this research.
+M2-5 adopts `pyalex==0.21`, whose `v0.21` tag is the pinned research Commit.
+`PyAlexOpenAlexProvider` uses PyAlex only for query/filter/select encoding and
+uses a RECA-owned `httpx` transport for explicit timeout, bounded retry and error
+normalization. OpenAlex JSON is validated and converted to RECA DTOs; a reviewed
+Recorded transport exercises the same normalization path without network access.
+No LiteratureSearchRun, public search API or business-table persistence is added
+by M2-5.
 
 ## Recommended integration mode
 
@@ -179,8 +183,9 @@ class crosses the provider boundary.
 ## Attribution requirements
 
 Preserve the MIT license and copyright notice if code is distributed. Record the
-exact package version and repository Commit when adopted. OpenAlex data and
-linked full text require their own source and use review.
+exact package version and repository Commit when adopted. OpenAlex documents
+the complete dataset as CC0; API service terms and linked full text still
+require separate source and use review.
 
 ## Update strategy
 
@@ -194,3 +199,4 @@ library changes without pretending the upstream API is stable forever.
 | --- | --- | --- | --- |
 | 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
 | 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |
+| 1.1.0 | 2026-08-01 | ALREADY_INTEGRATED | Adopted PyAlex 0.21 behind the RECA Provider/transport boundary with Recorded tests and implementation metadata |

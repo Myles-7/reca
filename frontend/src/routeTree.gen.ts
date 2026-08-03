@@ -22,6 +22,10 @@ import { Route as LayoutProjectsRouteImport } from './routes/_layout/projects'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
 import { Route as LayoutProjectsIndexRouteImport } from './routes/_layout/projects.index'
 import { Route as LayoutProjectsProjectIdRouteImport } from './routes/_layout/projects.$projectId'
+import { Route as LayoutProjectsProjectIdResearchQuestionRouteImport } from './routes/_layout/projects.$projectId_.research-question'
+import { Route as LayoutProjectsProjectIdLiteratureRouteImport } from './routes/_layout/projects.$projectId_.literature'
+import { Route as LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport } from './routes/_layout/projects.$projectId_.query-plans.$queryPlanId'
+import { Route as LayoutProjectsProjectIdDocumentsDocumentIdRouteImport } from './routes/_layout/projects.$projectId_.documents.$documentId'
 
 const SystemStatusRoute = SystemStatusRouteImport.update({
   id: '/system-status',
@@ -87,6 +91,30 @@ const LayoutProjectsProjectIdRoute = LayoutProjectsProjectIdRouteImport.update({
   path: '/$projectId',
   getParentRoute: () => LayoutProjectsRoute,
 } as any)
+const LayoutProjectsProjectIdResearchQuestionRoute =
+  LayoutProjectsProjectIdResearchQuestionRouteImport.update({
+    id: '/$projectId_/research-question',
+    path: '/$projectId/research-question',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
+const LayoutProjectsProjectIdLiteratureRoute =
+  LayoutProjectsProjectIdLiteratureRouteImport.update({
+    id: '/$projectId_/literature',
+    path: '/$projectId/literature',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
+const LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute =
+  LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport.update({
+    id: '/$projectId_/query-plans/$queryPlanId',
+    path: '/$projectId/query-plans/$queryPlanId',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
+const LayoutProjectsProjectIdDocumentsDocumentIdRoute =
+  LayoutProjectsProjectIdDocumentsDocumentIdRouteImport.update({
+    id: '/$projectId_/documents/$documentId',
+    path: '/$projectId/documents/$documentId',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,6 +129,10 @@ export interface FileRoutesByFullPath {
   '/settings': typeof LayoutSettingsRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/projects/': typeof LayoutProjectsIndexRoute
+  '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
+  '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
+  '/projects/$projectId/documents/$documentId': typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
+  '/projects/$projectId/query-plans/$queryPlanId': typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -114,6 +146,10 @@ export interface FileRoutesByTo {
   '/settings': typeof LayoutSettingsRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/projects': typeof LayoutProjectsIndexRoute
+  '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
+  '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
+  '/projects/$projectId/documents/$documentId': typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
+  '/projects/$projectId/query-plans/$queryPlanId': typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -130,6 +166,10 @@ export interface FileRoutesById {
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/_layout/projects/': typeof LayoutProjectsIndexRoute
+  '/_layout/projects/$projectId_/literature': typeof LayoutProjectsProjectIdLiteratureRoute
+  '/_layout/projects/$projectId_/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
+  '/_layout/projects/$projectId_/documents/$documentId': typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
+  '/_layout/projects/$projectId_/query-plans/$queryPlanId': typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -146,6 +186,10 @@ export interface FileRouteTypes {
     | '/settings'
     | '/projects/$projectId'
     | '/projects/'
+    | '/projects/$projectId/literature'
+    | '/projects/$projectId/research-question'
+    | '/projects/$projectId/documents/$documentId'
+    | '/projects/$projectId/query-plans/$queryPlanId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -159,6 +203,10 @@ export interface FileRouteTypes {
     | '/settings'
     | '/projects/$projectId'
     | '/projects'
+    | '/projects/$projectId/literature'
+    | '/projects/$projectId/research-question'
+    | '/projects/$projectId/documents/$documentId'
+    | '/projects/$projectId/query-plans/$queryPlanId'
   id:
     | '__root__'
     | '/'
@@ -174,6 +222,10 @@ export interface FileRouteTypes {
     | '/_layout/settings'
     | '/_layout/projects/$projectId'
     | '/_layout/projects/'
+    | '/_layout/projects/$projectId_/literature'
+    | '/_layout/projects/$projectId_/research-question'
+    | '/_layout/projects/$projectId_/documents/$documentId'
+    | '/_layout/projects/$projectId_/query-plans/$queryPlanId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -280,17 +332,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsProjectIdRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
+    '/_layout/projects/$projectId_/research-question': {
+      id: '/_layout/projects/$projectId_/research-question'
+      path: '/$projectId/research-question'
+      fullPath: '/projects/$projectId/research-question'
+      preLoaderRoute: typeof LayoutProjectsProjectIdResearchQuestionRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
+    '/_layout/projects/$projectId_/literature': {
+      id: '/_layout/projects/$projectId_/literature'
+      path: '/$projectId/literature'
+      fullPath: '/projects/$projectId/literature'
+      preLoaderRoute: typeof LayoutProjectsProjectIdLiteratureRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
+    '/_layout/projects/$projectId_/query-plans/$queryPlanId': {
+      id: '/_layout/projects/$projectId_/query-plans/$queryPlanId'
+      path: '/$projectId/query-plans/$queryPlanId'
+      fullPath: '/projects/$projectId/query-plans/$queryPlanId'
+      preLoaderRoute: typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
+    '/_layout/projects/$projectId_/documents/$documentId': {
+      id: '/_layout/projects/$projectId_/documents/$documentId'
+      path: '/$projectId/documents/$documentId'
+      fullPath: '/projects/$projectId/documents/$documentId'
+      preLoaderRoute: typeof LayoutProjectsProjectIdDocumentsDocumentIdRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
   }
 }
 
 interface LayoutProjectsRouteChildren {
   LayoutProjectsProjectIdRoute: typeof LayoutProjectsProjectIdRoute
   LayoutProjectsIndexRoute: typeof LayoutProjectsIndexRoute
+  LayoutProjectsProjectIdLiteratureRoute: typeof LayoutProjectsProjectIdLiteratureRoute
+  LayoutProjectsProjectIdResearchQuestionRoute: typeof LayoutProjectsProjectIdResearchQuestionRoute
+  LayoutProjectsProjectIdDocumentsDocumentIdRoute: typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
+  LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute: typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
 }
 
 const LayoutProjectsRouteChildren: LayoutProjectsRouteChildren = {
   LayoutProjectsProjectIdRoute: LayoutProjectsProjectIdRoute,
   LayoutProjectsIndexRoute: LayoutProjectsIndexRoute,
+  LayoutProjectsProjectIdLiteratureRoute:
+    LayoutProjectsProjectIdLiteratureRoute,
+  LayoutProjectsProjectIdResearchQuestionRoute:
+    LayoutProjectsProjectIdResearchQuestionRoute,
+  LayoutProjectsProjectIdDocumentsDocumentIdRoute:
+    LayoutProjectsProjectIdDocumentsDocumentIdRoute,
+  LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute:
+    LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute,
 }
 
 const LayoutProjectsRouteWithChildren = LayoutProjectsRoute._addFileChildren(

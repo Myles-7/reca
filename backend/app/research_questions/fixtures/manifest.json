@@ -1,0 +1,37 @@
+{
+  "fixture_manifest_version": "1.0",
+  "fixtures": [
+    {
+      "fixture_id": "rq-scoping-needs-input-mock-v1",
+      "mode": "MOCK",
+      "output_schema": "ResearchQuestionScopingOutput@1.0",
+      "path": "rq-scoping-needs-input-mock-v1.json",
+      "output_hash": "24e1a88ce5d8579a5575c48dbee0cc8c66ca1c135e60c6b37f8bc194e676c804"
+    },
+    {
+      "fixture_id": "rq-scoping-candidates-recorded-v1",
+      "mode": "RECORDED",
+      "output_schema": "ResearchQuestionScopingOutput@1.0",
+      "path": "rq-scoping-candidates-recorded-v1.json",
+      "output_hash": "8becfe786e26ba960bdd866105655bbb6287042dc006a4ec2aecb0e1b7debfc8",
+      "recording_version": "1.0",
+      "recording_license_status": "INTERNAL_GOLDEN_FIXTURE",
+      "recording_redaction_status": "REVIEWED_NO_PERSONAL_DATA",
+      "input_match": {
+        "topic": "生成式AI与师范生学习投入",
+        "round_number": 1,
+        "language": "zh-CN"
+      }
+    },
+    {
+      "fixture_id": "rq-parse-recorded-v1",
+      "mode": "RECORDED",
+      "output_schema": "ResearchQuestionSpec@1.0",
+      "path": "rq-parse-recorded-v1.json",
+      "output_hash": "7b78f0b56bab53b80e0cd16fd64cfd8a531feedebcea68eeff072e44e2e5a90a",
+      "recording_version": "1.0",
+      "recording_license_status": "INTERNAL_GOLDEN_FIXTURE",
+      "recording_redaction_status": "REVIEWED_NO_PERSONAL_DATA"
+    }
+  ]
+}

@@ -17,9 +17,11 @@ $envFile = Join-Path $evidenceRoot "acceptance.env"
 $results = [System.Collections.Generic.List[object]]::new()
 $apiPort = 18000
 $frontendPort = 15173
+$playwrightPort = 15174
 $minioPort = 19000
 
 New-Item -ItemType Directory -Path $evidenceRoot -Force | Out-Null
+$env:UV_PROJECT_ENVIRONMENT = Join-Path $evidenceRoot "uv-environment"
 
 function Add-Result([string]$Name, [string]$Status, [int]$ExitCode, [string]$Log) {
     $results.Add([PSCustomObject]@{ Name = $Name; Status = $Status; ExitCode = $ExitCode; Log = $Log })
@@ -155,7 +157,21 @@ try {
     }
     Invoke-Step "backend-tests" { python -m uv run pytest backend/tests -m no_database }
     Invoke-Step "frontend-tests" { bun run --cwd frontend format:check; bun run --cwd frontend lint; bun run --cwd frontend build }
-    Invoke-Step "playwright-shell" { Push-Location frontend; try { bunx playwright test -c playwright.shell.config.ts --reporter=list } finally { Pop-Location } }
+    Invoke-Step "playwright-shell" {
+        Push-Location frontend
+        $previousCI = $env:CI
+        $previousPlaywrightPort = $env:RECA_PLAYWRIGHT_PORT
+        try {
+            $env:CI = "1"
+            $env:RECA_PLAYWRIGHT_PORT = "$playwrightPort"
+            bunx playwright test -c playwright.shell.config.ts --reporter=list
+        }
+        finally {
+            $env:CI = $previousCI
+            $env:RECA_PLAYWRIGHT_PORT = $previousPlaywrightPort
+            Pop-Location
+        }
+    }
     Invoke-Step "repository-secret-scan" { $secretMatches = git grep -n -E "BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}" -- . ":(exclude).env.example" ":(exclude)scripts/m0-acceptance.ps1"; if ($LASTEXITCODE -gt 1) { throw "Secret scan could not run" }; if ($secretMatches) { throw "Secret pattern detected" }; $global:LASTEXITCODE = 0 }
     Invoke-Step "python-security-audit" { python -m uv run pip-audit }
     Invoke-NodeAudit

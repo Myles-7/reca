@@ -81,7 +81,8 @@ def prompt_asset_path(contract: PromptContract, manifest_path: Path) -> Path:
 
 
 def prompt_content_hash(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    content = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(content).hexdigest()
 
 
 def load_prompt_manifest(

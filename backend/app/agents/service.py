@@ -89,6 +89,7 @@ class InvocationCreate:
     recording_redaction_status: str | None = None
     request_id: str | None = None
     retry_of_invocation_id: uuid.UUID | None = None
+    execution_metadata: dict[str, Any] | None = None
 
 
 _ACCESS_RANK = {
@@ -177,7 +178,13 @@ def _validate_mode(command: InvocationCreate) -> dict[str, Any]:
             raise _governance_error(
                 "MODEL_FIXTURE_INVALID", "MOCK mode requires a fixture identity"
             )
-        return {"mode": command.mode.value, "fixture_id": command.fixture_id}
+        metadata: dict[str, Any] = {
+            "mode": command.mode.value,
+            "fixture_id": command.fixture_id,
+        }
+        if command.execution_metadata is not None:
+            metadata["execution"] = jsonable_encoder(command.execution_metadata)
+        return metadata
     required = (
         command.recording_id,
         command.recording_version,
@@ -197,7 +204,7 @@ def _validate_mode(command: InvocationCreate) -> dict[str, Any]:
         raise _governance_error(
             "MODEL_RECORDING_INVALID", "Recording hash must be lowercase SHA-256"
         )
-    return {
+    metadata = {
         "mode": command.mode.value,
         "recording_id": command.recording_id,
         "recording_version": command.recording_version,
@@ -206,6 +213,9 @@ def _validate_mode(command: InvocationCreate) -> dict[str, Any]:
         "recording_redaction_status": command.recording_redaction_status,
         "network_access": "DISABLED",
     }
+    if command.execution_metadata is not None:
+        metadata["execution"] = jsonable_encoder(command.execution_metadata)
+    return metadata
 
 
 def _validate_sources(
@@ -263,6 +273,7 @@ def _audit(
             object_id=invocation.id,
             after_snapshot=summary,
             request_id=invocation.request_id,
+            model_invocation_id=invocation.id,
             outcome=outcome,
         )
     )

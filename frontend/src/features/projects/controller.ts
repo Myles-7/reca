@@ -123,6 +123,14 @@ export type JobEvent = {
   message: string
 }
 
+export function jobEventMatchesRoute(
+  event: JobEvent,
+  projectId: string,
+  jobId: string,
+): boolean {
+  return event.project_id === projectId && event.job_id === jobId
+}
+
 export async function consumeJobEventStream(
   stream: ReadableStream<Uint8Array>,
   onEvent: (event: JobEvent) => void,

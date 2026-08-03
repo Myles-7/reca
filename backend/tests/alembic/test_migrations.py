@@ -1,6 +1,10 @@
 from pathlib import Path
 
 import pytest
+from alembic.config import Config
+from alembic.script import ScriptDirectory
+
+from app.models import AuditLog, ProjectMember
 
 pytestmark = pytest.mark.no_database
 
@@ -103,6 +107,32 @@ def test_m1_approval_migration_preserves_history_and_audit_invariants() -> None:
     assert 'down_revision = "0005_job_processing_foundation"' in migration
 
 
+def test_sqlmodel_metadata_preserves_inherited_m1_constraints() -> None:
+    approval_foreign_keys = {
+        constraint.name: constraint
+        for constraint in AuditLog.__table__.foreign_key_constraints
+    }
+    approval_constraint = approval_foreign_keys[
+        "fk_audit_logs_approval_id_approval_records"
+    ]
+    assert approval_constraint.ondelete == "RESTRICT"
+    assert [column.name for column in approval_constraint.columns] == ["approval_id"]
+    assert [element.target_fullname for element in approval_constraint.elements] == [
+        "approval_records.id"
+    ]
+
+    owner_index = next(
+        index
+        for index in ProjectMember.__table__.indexes
+        if index.name == "uq_project_members_active_owner"
+    )
+    assert owner_index.unique is True
+    assert [column.name for column in owner_index.columns] == ["project_id"]
+    assert str(owner_index.dialect_options["postgresql"]["where"]) == (
+        "role = 'OWNER' AND removed_at IS NULL"
+    )
+
+
 def test_m1_model_invocation_migration_preserves_governance_invariants() -> None:
     repository_root = Path(__file__).resolve().parents[3]
     migration = (
@@ -117,3 +147,110 @@ def test_m1_model_invocation_migration_preserves_governance_invariants() -> None
     assert "ck_model_invocations_outcome_fields" in migration
     assert "model_invocations_history_guard" in migration
     assert 'down_revision = "0006_approval_foundation"' in migration
+
+
+def test_m2_research_question_migration_preserves_domain_invariants() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration = (
+        repository_root
+        / "backend/app/alembic/versions/0008_research_question_domain.py"
+    ).read_text(encoding="utf-8")
+
+    assert '"research_questions"' in migration
+    assert '"research_question_versions"' in migration
+    assert "uq_research_question_versions_question_number" in migration
+    assert "fk_research_question_versions_question_project" in migration
+    assert "fk_research_questions_current_version_scope" in migration
+    assert "fk_research_projects_current_rq_version_project" in migration
+    assert "research_question_versions_history_guard" in migration
+    assert "NEEDS_USER_INPUT" not in migration
+    assert 'down_revision = "0007_model_invocation_governance"' in migration
+
+
+def test_m2_scoping_migration_registers_reversible_job_type() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration_path = (
+        repository_root / "backend/app/alembic/versions/0009_rq_scoping_job.py"
+    )
+    migration = migration_path.read_text(encoding="utf-8")
+
+    assert "RESEARCH_QUESTION_SCOPING" in migration
+    assert "ALTER TYPE job_task_type" in migration
+    assert "CREATE TYPE job_task_type AS ENUM" in migration
+    assert 'revision = "0009_rq_scoping_job"' in migration
+    assert migration_path.stem == "0009_rq_scoping_job"
+    assert len(migration_path.stem) <= 32
+    assert 'down_revision = "0008_research_question_domain"' in migration
+    assert "fk_audit_logs_model_invocation_project" in migration
+    assert "ix_audit_logs_model_invocation_id" in migration
+    assert "Cannot downgrade 0009" in migration
+    assert "NEEDS_USER_INPUT" not in migration
+
+
+def test_m2_migration_graph_has_one_contiguous_head() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    config = Config(str(repository_root / "backend/alembic.ini"))
+    config.set_main_option(
+        "script_location", str(repository_root / "backend/app/alembic")
+    )
+    scripts = ScriptDirectory.from_config(config)
+
+    assert scripts.get_heads() == ["0012_document_upload"]
+    revisions = list(scripts.walk_revisions(base="base", head="heads"))
+    assert revisions[-1].down_revision is None
+    for current, parent in zip(revisions, revisions[1:], strict=False):
+        assert current.down_revision == parent.revision
+
+
+def test_m2_query_plan_migration_preserves_scope_and_job_contract() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration = (
+        repository_root / "backend/app/alembic/versions/0010_query_plan_domain.py"
+    ).read_text(encoding="utf-8")
+
+    assert 'revision = "0010_query_plan_domain"' in migration
+    assert len("0010_query_plan_domain") <= 32
+    assert 'down_revision = "0009_rq_scoping_job"' in migration
+    assert '"query_plans"' in migration
+    assert "fk_query_plans_rq_version_project" in migration
+    assert "fk_query_plans_model_invocation_project" in migration
+    assert "ck_query_plans_lock_version" in migration
+    assert "QUERY_PLAN_GENERATION" in migration
+    assert "DRAFT" in migration
+
+
+def test_m2_literature_migration_preserves_candidate_and_dedup_boundaries() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration = (
+        repository_root / "backend/app/alembic/versions/0011_literature_search.py"
+    ).read_text(encoding="utf-8")
+
+    assert 'revision = "0011_literature_search"' in migration
+    assert len("0011_literature_search") <= 32
+    assert 'down_revision = "0010_query_plan_domain"' in migration
+    assert '"literature_search_runs"' in migration
+    assert '"literature_search_candidates"' in migration
+    assert '"literature_records"' in migration
+    assert "fk_literature_candidates_run_project" in migration
+    assert "uq_literature_records_project_doi" in migration
+    assert "uq_literature_records_project_title" not in migration
+    assert "LITERATURE_SEARCH" in migration
+
+
+def test_m2_document_migration_preserves_artifact_and_project_boundaries() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration = (
+        repository_root / "backend/app/alembic/versions/0012_document_upload.py"
+    ).read_text(encoding="utf-8")
+
+    assert 'revision = "0012_document_upload"' in migration
+    assert len("0012_document_upload") <= 32
+    assert 'down_revision = "0011_literature_search"' in migration
+    assert '"documents"' in migration
+    assert '"document_pages"' in migration
+    assert '"document_chunks"' in migration
+    assert "fk_documents_artifact_project" in migration
+    assert "fk_literature_records_document_project" in migration
+    assert "uq_document_pages_document_number" in migration
+    assert "uq_documents_artifact" in migration
+    assert 'ondelete="RESTRICT"' in migration

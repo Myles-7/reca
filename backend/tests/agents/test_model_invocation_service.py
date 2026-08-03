@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 from sqlalchemy import update
-from sqlalchemy.exc import DBAPIError
+from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlmodel import Session, select
 
 from app import crud
@@ -21,6 +21,7 @@ from app.api.errors import ContractError
 from app.models import (
     AuditActorType,
     AuditLog,
+    AuditOutcome,
     ModelDataAccessLevel,
     ModelInvocation,
     ModelInvocationStatus,
@@ -130,6 +131,7 @@ def test_mock_invocation_is_labeled_hashed_audited_and_immutable(db: Session) ->
         "MODEL_INVOCATION_CREATED",
         "MODEL_INVOCATION_SUCCEEDED",
     ]
+    assert all(audit.model_invocation_id == invocation.id for audit in audits)
     assert "must-not-be-persisted" not in serialized
 
     with pytest.raises(DBAPIError):
@@ -241,6 +243,32 @@ def test_cross_project_source_and_nonmember_are_rejected(
             ),
         )
     assert getattr(authorization_error.value, "code", None) == "RESOURCE_NOT_FOUND"
+
+
+def test_audit_model_invocation_relation_enforces_project_scope(db: Session) -> None:
+    owner, project = create_project(db)
+    _, other_project = create_project(db)
+    invocation = service.create_model_invocation(
+        db, command=command(owner=owner, project=project)
+    )
+    invalid_audit = AuditLog(
+        project_id=other_project.id,
+        actor_type=AuditActorType.SYSTEM,
+        actor_id="cross-project-test",
+        action="MODEL_INVOCATION_CROSS_PROJECT_TEST",
+        object_type="model_invocation",
+        object_id=invocation.id,
+        model_invocation_id=invocation.id,
+        outcome=AuditOutcome.FAILED,
+    )
+
+    savepoint = db.begin_nested()
+    db.add(invalid_audit)
+    with pytest.raises(IntegrityError):
+        db.flush()
+    savepoint.rollback()
+
+    assert "model_invocation_id" in AuditLog.model_fields
 
 
 def test_failed_invocation_is_terminal_and_retry_creates_new_record(

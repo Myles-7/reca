@@ -12,6 +12,8 @@ const bunExecutable =
         "bun.exe",
       )
     : "bun"
+const port = Number(process.env.RECA_PLAYWRIGHT_PORT ?? "5173")
+const baseURL = `http://127.0.0.1:${port}`
 
 if (process.platform === "win32") {
   process.env.PATH = `${path.dirname(bunExecutable)};${process.env.PATH ?? ""}`
@@ -23,12 +25,12 @@ export default defineConfig({
   fullyParallel: true,
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:5173",
+    baseURL,
     ...devices["Desktop Chrome"],
   },
   webServer: {
-    command: `"${bunExecutable}" run dev -- --host 127.0.0.1`,
-    url: "http://127.0.0.1:5173",
+    command: `"${bunExecutable}" run dev -- --host 127.0.0.1 --port ${port} --strictPort`,
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
 })

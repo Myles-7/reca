@@ -1,0 +1,135 @@
+{
+  "fixture_version": "1.0.0",
+  "source": "Sanitized recording shaped from the OpenAlex Works API v1 response observed on 2026-08-01",
+  "review": "No API key, contact email, request headers, or real author identity is retained",
+  "license_note": "OpenAlex documents the complete dataset as CC0; API access terms and linked full-text rights remain separate; this fixture contains synthetic identifiers and names",
+  "recordings": {
+    "search:*": {
+      "meta": {
+        "count": 2,
+        "next_cursor": "cursor-page-2"
+      },
+      "results": [
+        {
+          "id": "https://openalex.org/W1000000001",
+          "doi": "https://doi.org/10.1000/RECA.Sample",
+          "title": "A Recorded Study of Research Workflows",
+          "publication_date": "2025-04-03",
+          "publication_year": 2025,
+          "type": "article",
+          "authorships": [
+            {
+              "author": {
+                "id": "https://openalex.org/A1000000001",
+                "display_name": "Recorded Author One",
+                "orcid": null
+              },
+              "institutions": [
+                {
+                  "display_name": "Recorded Research Institute"
+                }
+              ]
+            },
+            {
+              "author": {
+                "id": "https://openalex.org/A1000000002",
+                "display_name": "Recorded Author Two",
+                "orcid": "https://orcid.org/0000-0000-0000-0000"
+              },
+              "institutions": []
+            }
+          ],
+          "primary_location": {
+            "landing_page_url": "https://example.invalid/article/1",
+            "pdf_url": null,
+            "source": {
+              "id": "https://openalex.org/S1000000001",
+              "display_name": "Recorded Journal"
+            },
+            "version": "publishedVersion",
+            "license": null,
+            "is_oa": false
+          },
+          "locations": [
+            {
+              "landing_page_url": "https://example.invalid/article/1",
+              "pdf_url": null,
+              "source": {
+                "id": "https://openalex.org/S1000000001",
+                "display_name": "Recorded Journal"
+              },
+              "version": "publishedVersion",
+              "license": null,
+              "is_oa": false
+            }
+          ],
+          "abstract_inverted_index": {
+            "Recorded": [0],
+            "metadata": [1],
+            "is": [2],
+            "deterministic": [3]
+          },
+          "topics": [
+            {
+              "display_name": "Research workflow"
+            }
+          ],
+          "open_access": {
+            "is_oa": false,
+            "oa_status": "closed"
+          }
+        }
+      ]
+    },
+    "search:cursor-page-2": {
+      "meta": {
+        "count": 2,
+        "next_cursor": null
+      },
+      "results": [
+        {
+          "id": "https://openalex.org/W1000000002",
+          "doi": null,
+          "title": "第二页录制文献",
+          "publication_date": "2024-11-20",
+          "publication_year": 2024,
+          "type": "review",
+          "authorships": [],
+          "primary_location": null,
+          "locations": [],
+          "abstract_inverted_index": null,
+          "topics": [],
+          "open_access": {
+            "is_oa": true,
+            "oa_status": "gold"
+          }
+        }
+      ]
+    },
+    "doi:10.1000/reca.sample": {
+      "meta": {
+        "count": 1,
+        "next_cursor": null
+      },
+      "results": [
+        {
+          "id": "https://openalex.org/W1000000001",
+          "doi": "https://doi.org/10.1000/RECA.Sample",
+          "title": "A Recorded Study of Research Workflows",
+          "publication_date": "2025-04-03",
+          "publication_year": 2025,
+          "type": "article",
+          "authorships": [],
+          "primary_location": null,
+          "locations": [],
+          "abstract_inverted_index": null,
+          "topics": [],
+          "open_access": {
+            "is_oa": false,
+            "oa_status": "closed"
+          }
+        }
+      ]
+    }
+  }
+}

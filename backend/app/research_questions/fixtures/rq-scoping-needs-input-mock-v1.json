@@ -1,0 +1,28 @@
+{
+  "status": "NEEDS_USER_INPUT",
+  "socratic_questions": [
+    {
+      "question_id": "population",
+      "question": "Which student population should the study cover?",
+      "reason": "The population determines the literature and data boundary.",
+      "required": true
+    },
+    {
+      "question_id": "relationship",
+      "question": "Should the study examine association, comparison, or prediction?",
+      "reason": "The relationship determines the defensible research design.",
+      "required": true
+    },
+    {
+      "question_id": "data",
+      "question": "What data or measurement can the project realistically obtain?",
+      "reason": "Data availability constrains feasibility.",
+      "required": true
+    }
+  ],
+  "candidates": [],
+  "evidence_gaps": [
+    "The target population and available measurement are not yet confirmed."
+  ],
+  "source_ids": ["$SOURCE_ID"]
+}

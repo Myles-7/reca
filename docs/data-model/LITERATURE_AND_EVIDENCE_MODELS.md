@@ -109,6 +109,22 @@ Document 表示上传后可被解析的文档。
 | created_at       | DateTime |  是 | 创建时间                           |
 | updated_at       | DateTime |  是 | 更新时间                           |
 
+### M2 parse_status 契约
+
+`Document.parse_status` 复用正式 `JobStatus`，不建立第二套解析状态机：
+
+* `DRAFT`：文件已上传，尚未提交解析；
+* `QUEUED`：解析任务等待执行；
+* `RUNNING`：解析中；
+* `NEEDS_REVIEW`：结果已持久化但仍需要人工复核；
+* `COMPLETED`：解析和持久化均已完成；
+* `FAILED`：解析或结果持久化失败；
+* `CANCEL_REQUESTED`、`CANCELLED`、`DISPATCH_FAILED`：保持正式 Job 语义。
+
+上传成功不得直接映射为 `COMPLETED`。`parser_type=NONE` 不表示解析成功；
+pypdf 回退必须保留 degraded 事实和 `LOW` confidence。未知状态默认禁止依赖
+解析结果的操作，客户端不得自行推断正式状态。
+
 ### 区别
 
 Document 是实际文件的业务对象。
@@ -255,7 +271,17 @@ UNIQUE(document_id, page_number)
 | limitations                  | JSONB    |  否 |
 | source_model_invocation_id   | UUID     |  否 |
 | status                       | Enum     |  是 |
+| lock_version                 | Integer  |  是 |
 | created_at                   | DateTime |  是 |
+| updated_at                   | DateTime |  是 |
+
+### M2 状态与并发契约
+
+M2 `QueryPlanStatus` 只定义 `DRAFT`。不得推断 `ACTIVE`、`CONFIRMED`、
+`EXECUTED` 或其他状态。`lock_version` 初始值为 `1`，每次成功修改递增；GET
+必须公开该值，PATCH 的 `If-Match` 必须与当前值一致。AI generation 只能生成或
+更新 `DRAFT` QueryPlan。QueryPlan 不表示文献已搜索、已验证或已确认，未知状态
+不得映射为可编辑或可执行。
 
 ---
 
@@ -274,10 +300,32 @@ UNIQUE(document_id, page_number)
 | provider_query | JSONB    |  是 |
 | result_count   | Integer  |  是 |
 | cache_hit      | Boolean  |  是 |
+| cache_stale    | Boolean  |  是 |
+| cache_source_run_id | UUID |  否 |
+| degraded       | Boolean  |  是 |
+| limitations    | JSONB    |  是 |
 | fetched_at     | DateTime |  是 |
 | status         | Enum     |  是 |
 | error_code     | String   |  否 |
 | job_id         | UUID     |  否 |
+
+`LiteratureSearchRun.status` 复用正式 `JobStatus`，只有服务端 Job/Worker 可以
+改变运行状态。`cache_hit` 只表示结果来自缓存，不表示最新；`cache_stale` 必须
+独立可见。Provider 失败且无缓存时不得创建候选或正式 LiteratureRecord。
+
+检索候选与正式 `LiteratureRecord` 始终分离。候选最小持久化字段为 `id`、
+`project_id`、`search_run_id`、`result_order`、`source_identifier`、`title`、
+`normalized_title`、`abstract`、`publication_year`、`journal_name`、`doi`、
+`normalized_doi`、`authors_text`、`keywords`、`work_type`、`open_access_status`、
+`verification_status`、`raw_source_data`、`fetched_at`、`degraded` 和
+`imported_literature_record_id`。公共候选至少公开 RECA `id`、
+`source_identifier`、标题、作者与出版信息、DOI、`verification_status`、
+`degraded` 和 `imported_literature_record_id`。候选不得自动升级为正式记录；
+未知运行状态或未知 Provider 事实默认不可导入、不可确认。
+
+缓存复制保留来源运行的 `fetched_at`，并通过 `cache_source_run_id` 指向来源。
+Recorded、缓存、陈旧缓存或 Provider 失败后的回退必须显式设置 `degraded` 与
+`limitations`，不得伪装为 Live Provider 正常完成。
 
 OpenAlex/PyAlex 等 Provider 的原始对象不得直接持久化为公共 DTO。Provider 响应
 先保存在 `raw_source_data`、Artifact 或运行日志中，经 DOI、作者与标题归一化后

@@ -1,0 +1,51 @@
+{
+  "status": "CANDIDATES_READY",
+  "socratic_questions": [],
+  "candidates": [
+    {
+      "candidate_id": "rq-candidate-1",
+      "question": "师范生生成式AI使用频率与学习投入之间是否存在关联？",
+      "spec": {
+        "normalized_question": "师范生生成式AI使用频率与学习投入之间是否存在关联？",
+        "research_object": "师范生",
+        "population": {
+          "education_level": "本科",
+          "major_scope": "师范类专业",
+          "other_constraints": []
+        },
+        "context": "高校学习场景",
+        "independent_variables": [
+          {
+            "name": "生成式AI使用频率",
+            "definition": null,
+            "measurement_hint": "使用频率量表或使用日志"
+          }
+        ],
+        "dependent_variables": [
+          {
+            "name": "学习投入",
+            "definition": null,
+            "measurement_hint": "经验证的学习投入量表"
+          }
+        ],
+        "control_variables": [],
+        "research_goal": "RELATE",
+        "relationship_type": "ASSOCIATION",
+        "method_preference": ["问卷调查"],
+        "time_scope": null,
+        "region_scope": null,
+        "language_scope": ["zh", "en"],
+        "resource_constraints": [],
+        "ethical_constraints": ["避免收集可直接识别学生身份的信息"],
+        "uncertainties": [],
+        "follow_up_questions": []
+      },
+      "supporting_source_ids": ["$SOURCE_ID"],
+      "available_data": ["项目声明可使用匿名问卷数据"],
+      "evidence_gaps": ["当前项目尚无已验证文献证据"],
+      "feasibility_risks": ["自陈使用频率可能存在回忆偏差"]
+    }
+  ],
+  "evidence_gaps": ["当前项目集合尚未包含已验证文献证据。"],
+  "source_ids": ["$SOURCE_ID"]
+}

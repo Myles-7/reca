@@ -172,6 +172,36 @@ export type ApprovalPublic = {
 }
 
 /**
+ * ApprovalReference
+ */
+export type ApprovalReference = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Target Object Id
+   */
+  target_object_id: string
+  /**
+   * Status
+   */
+  status: string
+}
+
+/**
+ * ApprovalReferenceEnvelope
+ */
+export type ApprovalReferenceEnvelope = {
+  data: ApprovalReference
+  meta: ResponseMeta
+}
+
+/**
  * ApprovalRejectRequest
  */
 export type ApprovalRejectRequest = {
@@ -268,6 +298,10 @@ export type ArtifactListEnvelope = {
    * Data
    */
   data: Array<ArtifactPublic>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
   pagination: PaginationMeta
   meta: ResponseMeta
 }
@@ -589,6 +623,21 @@ export type AuditTargetPublic = {
 }
 
 /**
+ * Body_documents_upload_document_post_api_v1_projects_project_id_documents
+ */
+export type BodyDocumentsUploadDocumentPostApiV1ProjectsProjectIdDocuments = {
+  /**
+   * File
+   */
+  file: Blob | File
+  document_type?: DocumentType
+  /**
+   * Literature Record Id
+   */
+  literature_record_id?: string | null
+}
+
+/**
  * Body_login_login_access_token_post_api_v1_login_access-token
  */
 export type BodyLoginLoginAccessTokenPostApiV1LoginAccessToken = {
@@ -664,6 +713,49 @@ export type ContractErrorResponse = {
 }
 
 /**
+ * CurrentResearchQuestionData
+ */
+export type CurrentResearchQuestionData = {
+  question: ResearchQuestionData | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Capability Availability
+   */
+  capability_availability: {
+    [key: string]: string
+  }
+}
+
+/**
+ * CurrentResearchQuestionEnvelope
+ */
+export type CurrentResearchQuestionEnvelope = {
+  data: CurrentResearchQuestionData
+  meta: ResponseMeta
+}
+
+/**
+ * CurrentResearchQuestionSummary
+ */
+export type CurrentResearchQuestionSummary = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Current Version Id
+   */
+  current_version_id: string
+  /**
+   * Status
+   */
+  status: string
+}
+
+/**
  * DependenciesHealthResponse
  */
 export type DependenciesHealthResponse = {
@@ -699,6 +791,198 @@ export type DependencyStatus =
   | "UNAVAILABLE"
   | "UNCONFIGURED"
   | "UNKNOWN"
+
+/**
+ * DocumentEnvelope
+ */
+export type DocumentEnvelope = {
+  data: DocumentPublic
+  meta: ResponseMeta
+}
+
+/**
+ * DocumentPageEnvelope
+ */
+export type DocumentPageEnvelope = {
+  data: DocumentPagePublic
+  meta: ResponseMeta
+}
+
+/**
+ * DocumentPageListEnvelope
+ */
+export type DocumentPageListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<DocumentPagePublic>
+  meta: ResponseMeta
+}
+
+/**
+ * DocumentPagePublic
+ */
+export type DocumentPagePublic = {
+  /**
+   * Document Id
+   */
+  document_id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Page Number
+   */
+  page_number: number
+  /**
+   * Printed Page Label
+   */
+  printed_page_label: string | null
+  /**
+   * Text Content
+   */
+  text_content: string | null
+  /**
+   * Width
+   */
+  width: number | null
+  /**
+   * Height
+   */
+  height: number | null
+  /**
+   * Parser Metadata
+   */
+  parser_metadata: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * DocumentParseConfidence
+ */
+export type DocumentParseConfidence = "HIGH" | "MEDIUM" | "LOW" | "UNKNOWN"
+
+/**
+ * DocumentParseRequest
+ */
+export type DocumentParseRequest = {
+  /**
+   * Allow Fallback
+   */
+  allow_fallback?: boolean
+  /**
+   * Extract Coordinates
+   */
+  extract_coordinates?: boolean
+}
+
+/**
+ * DocumentParserType
+ */
+export type DocumentParserType = "GROBID" | "PYPDF" | "NONE"
+
+/**
+ * DocumentPublic
+ */
+export type DocumentPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  /**
+   * Literature Record Id
+   */
+  literature_record_id: string | null
+  document_type: DocumentType
+  parser_type: DocumentParserType | null
+  /**
+   * Parser Version
+   */
+  parser_version: string | null
+  parse_status: JobStatus
+  /**
+   * Page Count
+   */
+  page_count: number | null
+  /**
+   * Language
+   */
+  language: string | null
+  /**
+   * Is Scanned
+   */
+  is_scanned: boolean | null
+  parse_confidence: DocumentParseConfidence | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * DocumentType
+ */
+export type DocumentType = "SCHOLARLY_PDF" | "MANUSCRIPT" | "OTHER"
+
+/**
+ * DocumentUploadData
+ */
+export type DocumentUploadData = {
+  artifact: ArtifactPublic
+  document: DocumentPublic
+}
+
+/**
+ * DocumentUploadEnvelope
+ */
+export type DocumentUploadEnvelope = {
+  data: DocumentUploadData
+  meta: DocumentUploadMeta
+}
+
+/**
+ * DocumentUploadMeta
+ */
+export type DocumentUploadMeta = {
+  /**
+   * Request Id
+   */
+  request_id: string
+  /**
+   * Schema Version
+   */
+  schema_version?: string
+  /**
+   * Idempotency Replayed
+   */
+  idempotency_replayed?: boolean
+  /**
+   * Duplicate Of Artifact Id
+   */
+  duplicate_of_artifact_id?: string | null
+}
 
 /**
  * ErrorDetail
@@ -915,7 +1199,10 @@ export type JobStatus =
  * JobTaskType
  */
 export type JobTaskType =
+  | "RESEARCH_QUESTION_SCOPING"
+  | "QUERY_PLAN_GENERATION"
   | "DOCUMENT_PARSE"
+  | "LITERATURE_SEARCH"
   | "LITERATURE_EXTRACT"
   | "DOCUMENT_EMBED"
   | "LITERATURE_SUMMARIZE"
@@ -926,6 +1213,389 @@ export type JobTaskType =
   | "MANUSCRIPT_CHECK"
   | "EVIDENCE_AUDIT"
   | "REPRO_PACKAGE_EXPORT"
+
+/**
+ * LiteratureCandidatePublic
+ */
+export type LiteratureCandidatePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Search Run Id
+   */
+  search_run_id: string
+  /**
+   * Result Order
+   */
+  result_order: number
+  /**
+   * Source Identifier
+   */
+  source_identifier: string
+  /**
+   * Title
+   */
+  title: string
+  /**
+   * Abstract
+   */
+  abstract: string | null
+  /**
+   * Publication Year
+   */
+  publication_year: number | null
+  /**
+   * Journal Name
+   */
+  journal_name: string | null
+  /**
+   * Doi
+   */
+  doi: string | null
+  /**
+   * Authors Text
+   */
+  authors_text: string | null
+  /**
+   * Keywords
+   */
+  keywords: Array<string>
+  /**
+   * Work Type
+   */
+  work_type: string | null
+  /**
+   * Open Access Status
+   */
+  open_access_status: string | null
+  verification_status: LiteratureVerificationStatus
+  /**
+   * Fetched At
+   */
+  fetched_at: string
+  /**
+   * Degraded
+   */
+  degraded: boolean
+  /**
+   * Imported Literature Record Id
+   */
+  imported_literature_record_id: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * LiteratureDecisionStatus
+ */
+export type LiteratureDecisionStatus = "INCLUDED" | "EXCLUDED" | "UNCERTAIN"
+
+/**
+ * LiteratureDoiImportRequest
+ */
+export type LiteratureDoiImportRequest = {
+  /**
+   * Doi
+   */
+  doi: string
+}
+
+/**
+ * LiteratureImportData
+ */
+export type LiteratureImportData = {
+  /**
+   * Imported
+   */
+  imported: Array<LiteratureImportResult>
+}
+
+/**
+ * LiteratureImportEnvelope
+ */
+export type LiteratureImportEnvelope = {
+  data: LiteratureImportData
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureImportRequest
+ */
+export type LiteratureImportRequest = {
+  /**
+   * Search Run Id
+   */
+  search_run_id: string
+  /**
+   * Result Ids
+   */
+  result_ids: Array<string>
+}
+
+/**
+ * LiteratureImportResult
+ */
+export type LiteratureImportResult = {
+  /**
+   * Candidate Id
+   */
+  candidate_id: string
+  /**
+   * Literature Record Id
+   */
+  literature_record_id: string
+  /**
+   * Matched Existing
+   */
+  matched_existing: boolean
+}
+
+/**
+ * LiteratureRecordEnvelope
+ */
+export type LiteratureRecordEnvelope = {
+  data: LiteratureRecordPublic
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureRecordListEnvelope
+ */
+export type LiteratureRecordListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<LiteratureRecordPublic>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureRecordPublic
+ */
+export type LiteratureRecordPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Document Id
+   */
+  document_id: string | null
+  source_type: LiteratureSourceType
+  /**
+   * Source Identifier
+   */
+  source_identifier: string | null
+  /**
+   * Title
+   */
+  title: string
+  /**
+   * Abstract
+   */
+  abstract: string | null
+  /**
+   * Publication Year
+   */
+  publication_year: number | null
+  /**
+   * Journal Name
+   */
+  journal_name: string | null
+  /**
+   * Doi
+   */
+  doi: string | null
+  /**
+   * Authors Text
+   */
+  authors_text: string | null
+  /**
+   * Keywords
+   */
+  keywords: Array<string>
+  /**
+   * Work Type
+   */
+  work_type: string | null
+  /**
+   * Open Access Status
+   */
+  open_access_status: string | null
+  verification_status: LiteratureVerificationStatus
+  current_decision: LiteratureDecisionStatus
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * LiteratureSearchAcceptedData
+ */
+export type LiteratureSearchAcceptedData = {
+  search_run: LiteratureSearchRunPublic
+  job: JobPublic
+}
+
+/**
+ * LiteratureSearchAcceptedEnvelope
+ */
+export type LiteratureSearchAcceptedEnvelope = {
+  data: LiteratureSearchAcceptedData
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureSearchCreate
+ */
+export type LiteratureSearchCreate = {
+  /**
+   * Page Size
+   */
+  page_size?: number
+  /**
+   * Use Cache
+   */
+  use_cache?: boolean
+}
+
+/**
+ * LiteratureSearchResultsData
+ */
+export type LiteratureSearchResultsData = {
+  search_run: LiteratureSearchRunPublic
+  /**
+   * Results
+   */
+  results: Array<LiteratureCandidatePublic>
+}
+
+/**
+ * LiteratureSearchResultsEnvelope
+ */
+export type LiteratureSearchResultsEnvelope = {
+  data: LiteratureSearchResultsData
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureSearchRunPublic
+ */
+export type LiteratureSearchRunPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Query Plan Id
+   */
+  query_plan_id: string
+  /**
+   * Provider
+   */
+  provider: string
+  /**
+   * Provider Query
+   */
+  provider_query: {
+    [key: string]: unknown
+  }
+  /**
+   * Result Count
+   */
+  result_count: number
+  /**
+   * Cache Hit
+   */
+  cache_hit: boolean
+  /**
+   * Cache Stale
+   */
+  cache_stale: boolean
+  /**
+   * Cache Source Run Id
+   */
+  cache_source_run_id: string | null
+  /**
+   * Degraded
+   */
+  degraded: boolean
+  /**
+   * Limitations
+   */
+  limitations: Array<string>
+  /**
+   * Fetched At
+   */
+  fetched_at: string
+  status: JobStatus
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * LiteratureSourceType
+ */
+export type LiteratureSourceType =
+  | "OPENALEX"
+  | "DOI_IMPORT"
+  | "USER_UPLOAD"
+  | "MANUAL"
+  | "CACHE"
+
+/**
+ * LiteratureVerificationStatus
+ */
+export type LiteratureVerificationStatus =
+  | "VERIFIED"
+  | "PARTIALLY_VERIFIED"
+  | "UNVERIFIED"
+  | "CONFLICTED"
 
 /**
  * LiveHealthResponse
@@ -965,6 +1635,10 @@ export type MemberListEnvelope = {
    * Data
    */
   data: Array<ProjectMemberPublic>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
   pagination: PaginationMeta
   meta: ResponseMeta
 }
@@ -1220,10 +1894,7 @@ export type ProjectOverviewPublic = {
   module_availability: {
     [key: string]: string
   }
-  /**
-   * Current Research Question
-   */
-  current_research_question?: null
+  current_research_question?: CurrentResearchQuestionSummary | null
   foundation_counts: FoundationCounts
   /**
    * Counts
@@ -1321,6 +1992,10 @@ export type ProjectPublic = {
    */
   updated_at: string
   permissions: ProjectPermissions
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
 }
 
 /**
@@ -1394,6 +2069,228 @@ export type ProjectUpdate = {
 }
 
 /**
+ * QueryPlanCreate
+ */
+export type QueryPlanCreate = {
+  /**
+   * Chinese Terms
+   */
+  chinese_terms?: Array<string> | null
+  /**
+   * English Terms
+   */
+  english_terms?: Array<string> | null
+  /**
+   * Synonyms
+   */
+  synonyms?: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Object Terms
+   */
+  object_terms?: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Method Terms
+   */
+  method_terms?: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Boolean Query
+   */
+  boolean_query?: string | null
+  filters?: QueryPlanFilters | null
+  /**
+   * Limitations
+   */
+  limitations?: Array<string> | null
+  /**
+   * Research Question Version Id
+   */
+  research_question_version_id: string
+}
+
+/**
+ * QueryPlanEnvelope
+ */
+export type QueryPlanEnvelope = {
+  data: QueryPlanPublic
+  meta: ResponseMeta
+}
+
+/**
+ * QueryPlanFields
+ */
+export type QueryPlanFields = {
+  /**
+   * Chinese Terms
+   */
+  chinese_terms?: Array<string> | null
+  /**
+   * English Terms
+   */
+  english_terms?: Array<string> | null
+  /**
+   * Synonyms
+   */
+  synonyms?: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Object Terms
+   */
+  object_terms?: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Method Terms
+   */
+  method_terms?: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Boolean Query
+   */
+  boolean_query?: string | null
+  filters?: QueryPlanFilters | null
+  /**
+   * Limitations
+   */
+  limitations?: Array<string> | null
+}
+
+/**
+ * QueryPlanFilters
+ */
+export type QueryPlanFilters = {
+  /**
+   * From Year
+   */
+  from_year?: number | null
+  /**
+   * To Year
+   */
+  to_year?: number | null
+  /**
+   * Languages
+   */
+  languages?: Array<string>
+  /**
+   * Work Types
+   */
+  work_types?: Array<string>
+  /**
+   * Open Access Only
+   */
+  open_access_only?: boolean
+}
+
+/**
+ * QueryPlanGenerateRequest
+ */
+export type QueryPlanGenerateRequest = {
+  [key: string]: never
+}
+
+/**
+ * QueryPlanPublic
+ */
+export type QueryPlanPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Research Question Version Id
+   */
+  research_question_version_id: string
+  /**
+   * Chinese Terms
+   */
+  chinese_terms: Array<string> | null
+  /**
+   * English Terms
+   */
+  english_terms: Array<string> | null
+  /**
+   * Synonyms
+   */
+  synonyms: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Object Terms
+   */
+  object_terms: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Method Terms
+   */
+  method_terms: {
+    [key: string]: Array<string>
+  } | null
+  /**
+   * Boolean Query
+   */
+  boolean_query: string | null
+  /**
+   * Filters
+   */
+  filters: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Limitations
+   */
+  limitations: Array<string> | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  status: QueryPlanStatus
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * QueryPlanStatus
+ */
+export type QueryPlanStatus = "DRAFT"
+
+/**
+ * QueryPlanUpdate
+ */
+export type QueryPlanUpdate = {
+  fields: QueryPlanFields
+  /**
+   * Change Reason
+   */
+  change_reason: string
+}
+
+/**
  * ReadyHealthResponse
  */
 export type ReadyHealthResponse = {
@@ -1403,6 +2300,367 @@ export type ReadyHealthResponse = {
    */
   dependencies: Array<DependencyCheck>
 }
+
+/**
+ * ResearchGoal
+ */
+export type ResearchGoal = "DESCRIBE" | "COMPARE" | "RELATE" | "PREDICT"
+
+/**
+ * ResearchQuestionCreate
+ */
+export type ResearchQuestionCreate = {
+  /**
+   * Raw Input
+   */
+  raw_input: string
+}
+
+/**
+ * ResearchQuestionData
+ */
+export type ResearchQuestionData = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  status: ResearchQuestionStatus
+  /**
+   * Current Version Id
+   */
+  current_version_id: string | null
+  /**
+   * Created By
+   */
+  created_by: string
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  current_version: ResearchQuestionVersionPublic
+}
+
+/**
+ * ResearchQuestionEnvelope
+ */
+export type ResearchQuestionEnvelope = {
+  data: ResearchQuestionData
+  meta: ResponseMeta
+}
+
+/**
+ * ResearchQuestionMarkReady
+ */
+export type ResearchQuestionMarkReady = {
+  /**
+   * Reason
+   */
+  reason?: string | null
+}
+
+/**
+ * ResearchQuestionParseRequest
+ */
+export type ResearchQuestionParseRequest = {
+  /**
+   * Max Follow Up Questions
+   */
+  max_follow_up_questions?: number
+  /**
+   * Language
+   */
+  language?: string
+}
+
+/**
+ * ResearchQuestionStatus
+ */
+export type ResearchQuestionStatus =
+  | "DRAFT"
+  | "CONFIRMED"
+  | "SUPERSEDED"
+  | "ARCHIVED"
+
+/**
+ * ResearchQuestionVersionCreate
+ */
+export type ResearchQuestionVersionCreate = {
+  /**
+   * Based On Version Id
+   */
+  based_on_version_id: string
+  /**
+   * Change Reason
+   */
+  change_reason: string
+  fields: ResearchQuestionVersionFields
+}
+
+/**
+ * ResearchQuestionVersionEnvelope
+ */
+export type ResearchQuestionVersionEnvelope = {
+  data: ResearchQuestionVersionPublic
+  meta: ResponseMeta
+}
+
+/**
+ * ResearchQuestionVersionFields
+ */
+export type ResearchQuestionVersionFields = {
+  /**
+   * Raw Input
+   */
+  raw_input?: string | null
+  /**
+   * Normalized Question
+   */
+  normalized_question?: string | null
+  /**
+   * Research Object
+   */
+  research_object?: string | null
+  /**
+   * Population
+   */
+  population?: string | null
+  /**
+   * Context
+   */
+  context?: string | null
+  /**
+   * Independent Variables
+   */
+  independent_variables?: Array<string> | null
+  /**
+   * Dependent Variables
+   */
+  dependent_variables?: Array<string> | null
+  /**
+   * Control Variables
+   */
+  control_variables?: Array<string> | null
+  research_goal?: ResearchGoal | null
+  relationship_type?: ResearchRelationshipType | null
+  /**
+   * Method Preference
+   */
+  method_preference?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Time Scope
+   */
+  time_scope?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Region Scope
+   */
+  region_scope?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Language Scope
+   */
+  language_scope?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Resource Constraints
+   */
+  resource_constraints?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Ethical Constraints
+   */
+  ethical_constraints?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Uncertainties
+   */
+  uncertainties?: {
+    [key: string]: unknown
+  } | null
+}
+
+/**
+ * ResearchQuestionVersionListEnvelope
+ */
+export type ResearchQuestionVersionListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ResearchQuestionVersionPublic>
+  meta: ResponseMeta
+}
+
+/**
+ * ResearchQuestionVersionPublic
+ */
+export type ResearchQuestionVersionPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Research Question Id
+   */
+  research_question_id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Version Number
+   */
+  version_number: number
+  /**
+   * Raw Input
+   */
+  raw_input: string
+  /**
+   * Normalized Question
+   */
+  normalized_question: string | null
+  /**
+   * Research Object
+   */
+  research_object: string | null
+  /**
+   * Population
+   */
+  population: string | null
+  /**
+   * Context
+   */
+  context: string | null
+  /**
+   * Independent Variables
+   */
+  independent_variables: Array<string> | null
+  /**
+   * Dependent Variables
+   */
+  dependent_variables: Array<string> | null
+  /**
+   * Control Variables
+   */
+  control_variables: Array<string> | null
+  research_goal: ResearchGoal | null
+  relationship_type: ResearchRelationshipType | null
+  /**
+   * Method Preference
+   */
+  method_preference: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Time Scope
+   */
+  time_scope: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Region Scope
+   */
+  region_scope: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Language Scope
+   */
+  language_scope: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Resource Constraints
+   */
+  resource_constraints: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Ethical Constraints
+   */
+  ethical_constraints: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Uncertainties
+   */
+  uncertainties: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  status: ResearchQuestionVersionStatus
+  /**
+   * Created By
+   */
+  created_by: string
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Is Current
+   */
+  is_current: boolean
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Pending Approval Id
+   */
+  pending_approval_id?: string | null
+  /**
+   * Pending Approval Status
+   */
+  pending_approval_status?: string | null
+}
+
+/**
+ * ResearchQuestionVersionStatus
+ */
+export type ResearchQuestionVersionStatus =
+  | "DRAFT"
+  | "NEEDS_INPUT"
+  | "READY"
+  | "CONFIRMED"
+  | "SUPERSEDED"
+
+/**
+ * ResearchQuestionVersionUpdate
+ */
+export type ResearchQuestionVersionUpdate = {
+  /**
+   * Change Reason
+   */
+  change_reason: string
+  fields: ResearchQuestionVersionFields
+}
+
+/**
+ * ResearchRelationshipType
+ */
+export type ResearchRelationshipType =
+  | "ASSOCIATION"
+  | "COMPARISON"
+  | "PREDICTION"
+  | "UNSPECIFIED"
 
 /**
  * ResponseMeta
@@ -2860,6 +4118,1603 @@ export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsRespon
 
 export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponse =
   ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses[keyof ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses]
+
+export type ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsData =
+  {
+    body: ResearchQuestionCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/research-questions"
+  }
+
+export type ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsError =
+  ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsErrors[keyof ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsErrors]
+
+export type ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ResearchQuestionEnvelope
+  }
+
+export type ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsResponse =
+  ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsResponses[keyof ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsResponses]
+
+export type ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/research-question"
+  }
+
+export type ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionError =
+  ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionErrors[keyof ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionErrors]
+
+export type ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: CurrentResearchQuestionEnvelope
+  }
+
+export type ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionResponse =
+  ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionResponses[keyof ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionResponses]
+
+export type ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdData =
+  {
+    body?: never
+    path: {
+      /**
+       * Research Question Id
+       */
+      research_question_id: string
+    }
+    query?: never
+    url: "/api/v1/research-questions/{research_question_id}"
+  }
+
+export type ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdError =
+  ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdErrors[keyof ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdErrors]
+
+export type ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ResearchQuestionEnvelope
+  }
+
+export type ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdResponse =
+  ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdResponses[keyof ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdResponses]
+
+export type ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Research Question Id
+       */
+      research_question_id: string
+    }
+    query?: never
+    url: "/api/v1/research-questions/{research_question_id}/versions"
+  }
+
+export type ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsError =
+  ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsErrors[keyof ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsErrors]
+
+export type ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ResearchQuestionVersionListEnvelope
+  }
+
+export type ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsResponse =
+  ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsResponses[keyof ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsResponses]
+
+export type ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsData =
+  {
+    body: ResearchQuestionVersionCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Research Question Id
+       */
+      research_question_id: string
+    }
+    query?: never
+    url: "/api/v1/research-questions/{research_question_id}/versions"
+  }
+
+export type ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsError =
+  ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsErrors[keyof ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsErrors]
+
+export type ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ResearchQuestionVersionEnvelope
+  }
+
+export type ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsResponse =
+  ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsResponses[keyof ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsResponses]
+
+export type ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdData =
+  {
+    body?: never
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/research-question-versions/{version_id}"
+  }
+
+export type ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdError =
+  ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdErrors[keyof ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdErrors]
+
+export type ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ResearchQuestionVersionEnvelope
+  }
+
+export type ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdResponse =
+  ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdResponses[keyof ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdResponses]
+
+export type ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdData =
+  {
+    body: ResearchQuestionVersionUpdate
+    headers?: {
+      /**
+       * If-Match
+       */
+      "If-Match"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/research-question-versions/{version_id}"
+  }
+
+export type ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdError =
+  ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdErrors[keyof ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdErrors]
+
+export type ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ResearchQuestionVersionEnvelope
+  }
+
+export type ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdResponse =
+  ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdResponses[keyof ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdResponses]
+
+export type ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseData =
+  {
+    body: ResearchQuestionParseRequest
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/research-question-versions/{version_id}/parse"
+  }
+
+export type ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseError =
+  ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseErrors[keyof ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseErrors]
+
+export type ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: JobEnvelope
+  }
+
+export type ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseResponse =
+  ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseResponses[keyof ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseResponses]
+
+export type ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyData =
+  {
+    body: ResearchQuestionMarkReady
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/research-question-versions/{version_id}/ready"
+  }
+
+export type ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyError =
+  ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyErrors[keyof ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyErrors]
+
+export type ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ResearchQuestionVersionEnvelope
+  }
+
+export type ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyResponse =
+  ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyResponses[keyof ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyResponses]
+
+export type ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/research-question-versions/{version_id}/approval-requests"
+  }
+
+export type ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsError =
+  ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsErrors[keyof ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsErrors]
+
+export type ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ApprovalReferenceEnvelope
+  }
+
+export type ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsResponse =
+  ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsResponses[keyof ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsResponses]
+
+export type QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansData =
+  {
+    body: QueryPlanCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/query-plans"
+  }
+
+export type QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansError =
+  QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansErrors[keyof QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansErrors]
+
+export type QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: QueryPlanEnvelope
+  }
+
+export type QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansResponse =
+  QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansResponses[keyof QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansResponses]
+
+export type QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdData = {
+  body?: never
+  path: {
+    /**
+     * Query Plan Id
+     */
+    query_plan_id: string
+  }
+  query?: never
+  url: "/api/v1/query-plans/{query_plan_id}"
+}
+
+export type QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdError =
+  QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdErrors[keyof QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdErrors]
+
+export type QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: QueryPlanEnvelope
+}
+
+export type QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdResponse =
+  QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdResponses[keyof QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdResponses]
+
+export type QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdData = {
+  body: QueryPlanUpdate
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Query Plan Id
+     */
+    query_plan_id: string
+  }
+  query?: never
+  url: "/api/v1/query-plans/{query_plan_id}"
+}
+
+export type QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdError =
+  QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdErrors[keyof QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdErrors]
+
+export type QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: QueryPlanEnvelope
+  }
+
+export type QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdResponse =
+  QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdResponses[keyof QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdResponses]
+
+export type QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateData =
+  {
+    /**
+     * Generate In
+     */
+    body?: QueryPlanGenerateRequest | null
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Query Plan Id
+       */
+      query_plan_id: string
+    }
+    query?: never
+    url: "/api/v1/query-plans/{query_plan_id}/generate"
+  }
+
+export type QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateError =
+  QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateErrors[keyof QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateErrors]
+
+export type QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: JobEnvelope
+  }
+
+export type QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateResponse =
+  QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateResponses[keyof QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateResponses]
+
+export type LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsData =
+  {
+    body: LiteratureSearchCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Query Plan Id
+       */
+      query_plan_id: string
+    }
+    query?: never
+    url: "/api/v1/query-plans/{query_plan_id}/search-runs"
+  }
+
+export type LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Too Many Requests
+     */
+    429: ContractErrorResponse
+    /**
+     * Bad Gateway
+     */
+    502: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsError =
+  LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsErrors[keyof LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsErrors]
+
+export type LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: LiteratureSearchAcceptedEnvelope
+  }
+
+export type LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsResponse =
+  LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsResponses[keyof LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsResponses]
+
+export type LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Search Run Id
+       */
+      search_run_id: string
+    }
+    query?: {
+      /**
+       * Verification Status
+       */
+      verification_status?: LiteratureVerificationStatus | null
+      /**
+       * Open Access Status
+       */
+      open_access_status?: string | null
+      /**
+       * From Year
+       */
+      from_year?: number | null
+      /**
+       * To Year
+       */
+      to_year?: number | null
+      /**
+       * Q
+       */
+      q?: string | null
+      /**
+       * Page
+       */
+      page?: number
+      /**
+       * Page Size
+       */
+      page_size?: number
+    }
+    url: "/api/v1/literature-search-runs/{search_run_id}/results"
+  }
+
+export type LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Too Many Requests
+     */
+    429: ContractErrorResponse
+    /**
+     * Bad Gateway
+     */
+    502: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsError =
+  LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsErrors[keyof LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsErrors]
+
+export type LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureSearchResultsEnvelope
+  }
+
+export type LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsResponse =
+  LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsResponses[keyof LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsResponses]
+
+export type LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportData =
+  {
+    body: LiteratureImportRequest
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/literature/import"
+  }
+
+export type LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Too Many Requests
+     */
+    429: ContractErrorResponse
+    /**
+     * Bad Gateway
+     */
+    502: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportError =
+  LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportErrors[keyof LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportErrors]
+
+export type LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureImportEnvelope
+  }
+
+export type LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportResponse =
+  LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportResponses[keyof LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportResponses]
+
+export type LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiData =
+  {
+    body: LiteratureDoiImportRequest
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/literature/import-doi"
+  }
+
+export type LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Too Many Requests
+     */
+    429: ContractErrorResponse
+    /**
+     * Bad Gateway
+     */
+    502: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiError =
+  LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiErrors[keyof LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiErrors]
+
+export type LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureRecordEnvelope
+  }
+
+export type LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiResponse =
+  LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiResponses[keyof LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiResponses]
+
+export type LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: {
+    /**
+     * Decision
+     */
+    decision?: LiteratureDecisionStatus | null
+    /**
+     * Verification Status
+     */
+    verification_status?: LiteratureVerificationStatus | null
+    /**
+     * Has Document
+     */
+    has_document?: boolean | null
+    /**
+     * Year From
+     */
+    year_from?: number | null
+    /**
+     * Year To
+     */
+    year_to?: number | null
+    /**
+     * Q
+     */
+    q?: string | null
+    /**
+     * Page
+     */
+    page?: number
+    /**
+     * Page Size
+     */
+    page_size?: number
+  }
+  url: "/api/v1/projects/{project_id}/literature"
+}
+
+export type LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Too Many Requests
+     */
+    429: ContractErrorResponse
+    /**
+     * Bad Gateway
+     */
+    502: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureError =
+  LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureErrors[keyof LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureErrors]
+
+export type LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureRecordListEnvelope
+  }
+
+export type LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureResponse =
+  LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureResponses[keyof LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureResponses]
+
+export type LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdData = {
+  body?: never
+  path: {
+    /**
+     * Literature Id
+     */
+    literature_id: string
+  }
+  query?: never
+  url: "/api/v1/literature/{literature_id}"
+}
+
+export type LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Too Many Requests
+   */
+  429: ContractErrorResponse
+  /**
+   * Bad Gateway
+   */
+  502: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdError =
+  LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdErrors[keyof LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdErrors]
+
+export type LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: LiteratureRecordEnvelope
+}
+
+export type LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdResponse =
+  LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdResponses[keyof LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdResponses]
+
+export type DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsData = {
+  body: BodyDocumentsUploadDocumentPostApiV1ProjectsProjectIdDocuments
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/documents"
+}
+
+export type DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Content Too Large
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported Media Type
+   */
+  415: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsError =
+  DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsErrors[keyof DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsErrors]
+
+export type DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: DocumentUploadEnvelope
+  }
+
+export type DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponse =
+  DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponses[keyof DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponses]
+
+export type DocumentsGetDocumentGetApiV1DocumentsDocumentIdData = {
+  body?: never
+  path: {
+    /**
+     * Document Id
+     */
+    document_id: string
+  }
+  query?: never
+  url: "/api/v1/documents/{document_id}"
+}
+
+export type DocumentsGetDocumentGetApiV1DocumentsDocumentIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Content Too Large
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported Media Type
+   */
+  415: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type DocumentsGetDocumentGetApiV1DocumentsDocumentIdError =
+  DocumentsGetDocumentGetApiV1DocumentsDocumentIdErrors[keyof DocumentsGetDocumentGetApiV1DocumentsDocumentIdErrors]
+
+export type DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: DocumentEnvelope
+}
+
+export type DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponse =
+  DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponses[keyof DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponses]
+
+export type DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseData = {
+  body: DocumentParseRequest
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Document Id
+     */
+    document_id: string
+  }
+  query?: never
+  url: "/api/v1/documents/{document_id}/parse"
+}
+
+export type DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Content Too Large
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported Media Type
+   */
+  415: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseError =
+  DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseErrors[keyof DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseErrors]
+
+export type DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseResponses = {
+  /**
+   * Successful Response
+   */
+  202: JobEnvelope
+}
+
+export type DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseResponse =
+  DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseResponses[keyof DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseResponses]
+
+export type DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesData = {
+  body?: never
+  path: {
+    /**
+     * Document Id
+     */
+    document_id: string
+  }
+  query?: never
+  url: "/api/v1/documents/{document_id}/pages"
+}
+
+export type DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Content Too Large
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported Media Type
+   */
+  415: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesError =
+  DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesErrors[keyof DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesErrors]
+
+export type DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: DocumentPageListEnvelope
+  }
+
+export type DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesResponse =
+  DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesResponses[keyof DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesResponses]
+
+export type DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberData =
+  {
+    body?: never
+    path: {
+      /**
+       * Document Id
+       */
+      document_id: string
+      /**
+       * Page Number
+       */
+      page_number: number
+    }
+    query?: never
+    url: "/api/v1/documents/{document_id}/pages/{page_number}"
+  }
+
+export type DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Content Too Large
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported Media Type
+     */
+    415: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberError =
+  DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberErrors[keyof DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberErrors]
+
+export type DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: DocumentPageEnvelope
+  }
+
+export type DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponse =
+  DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses[keyof DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses]
 
 export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsData =
   {

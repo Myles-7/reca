@@ -663,6 +663,9 @@ Idempotency-Key: <key>
 
 返回 Job。
 
+M2 `QueryPlanStatus` 只定义 `DRAFT`。AI generation 只能生成或更新 DRAFT
+计划，不代表文献已搜索、已验证或已确认。
+
 ---
 
 ## 16.3 更新 QueryPlan
@@ -671,6 +674,15 @@ Idempotency-Key: <key>
 PATCH /api/v1/query-plans/{query_plan_id}
 If-Match: "1"
 ```
+
+QueryPlan 响应公开 `lock_version`，初始值为 `1`，每次成功更新递增。
+`If-Match` 缺失、格式错误或与当前 `lock_version` 不一致时，Service 按正式
+validation/version conflict 错误返回，不执行部分更新。未知状态不得映射为可编辑
+或可执行。
+
+QueryPlan 公共响应还必须包含服务端 `allowed_actions`。M2 只投影
+`query_plan.read`、`query_plan.update`、`query_plan.generate`；后两项只对
+OWNER/EDITOR 可见，客户端不得从角色名称自行推断。
 
 ---
 
@@ -707,6 +719,22 @@ ProcessingRun，不进入公共资源命名。
 ```http id="z1epqi"
 GET /api/v1/literature-search-runs/{run_id}/results
 ```
+
+响应必须包含 SearchRun 的 `id`（即 `search_run_id`）、`query_plan_id`、
+`status`、`result_count`、`cache_hit`、`cache_stale`、`cache_source_run_id`、`degraded`、
+`limitations`、`error_code`（Provider error code）和 `fetched_at`，并在
+`results` 中返回候选列表。SearchRun 状态复用正式 `JobStatus`，只有服务端
+Job/Worker 可以改变。
+
+候选至少包含 RECA `id`、`source_identifier`、标题、作者与出版信息、DOI、
+`verification_status`、`degraded` 和 `imported_literature_record_id`。
+`cache_hit` 不表示最新，`cache_stale` 必须独立可见。Provider 失败且无缓存时
+不得创建候选或 LiteratureRecord；候选不得自动升级为正式记录。未知状态或未知
+Provider 事实默认不可导入、不可确认。
+
+SearchRun 与候选均必须返回服务端 `allowed_actions`。运行已完成且当前用户可更新
+项目时才投影 `literature_search.import`；尚未导入的候选才投影
+`literature_candidate.import`。未知状态、只读成员和已导入候选均只投影 read。
 
 过滤：
 
@@ -774,6 +802,12 @@ GET /api/v1/projects/{project_id}/literature
 * `year_from`；
 * `year_to`；
 * `q`。
+
+列表 Envelope 必须在 `data` 外返回项目级 `allowed_actions`。只读成员仅得到
+`literature.read`；OWNER/EDITOR 可额外得到 `literature.search`、
+`literature.import`、`literature.import_doi` 和 `document.upload`。每个
+LiteratureRecord 也返回资源级 `allowed_actions`；已有 `document_id` 时不得继续投影
+该记录的 `document.upload`。
 
 ---
 
@@ -854,6 +888,14 @@ literature_record_id=<optional uuid>
 
 返回 Artifact 和 Document。
 
+上传成功的 Document 必须为 `parse_status=DRAFT`，且尚未选择解析器时为
+`parser_type=NONE`；上传不得直接声明解析完成。
+
+Document 公共响应必须包含服务端 `allowed_actions`。所有可见成员得到
+`document.read`；OWNER/EDITOR 得到 `document.upload`，并且仅在状态不是
+`QUEUED`、`RUNNING`、`CANCEL_REQUESTED` 时得到 `document.parse`。客户端不得从
+角色名称自行推断上传、解析或重试权限。
+
 ---
 
 ## 17.2 启动解析
@@ -877,6 +919,16 @@ Idempotency-Key: <key>
 既有 `preferred_parser` 字段仅保留为管理员/测试兼容提示。普通客户端不选择
 GROBID 或 pypdf；Service 选择实际解析器并记录 ProcessingRun。GROBID TEI 是
 不可变中间产物，必须经 RECA Converter 后才能形成页面、Chunk 或引用候选。
+
+`Document.parse_status` 复用正式 `JobStatus`：`DRAFT` 表示尚未提交解析，
+`QUEUED` 表示等待执行，`RUNNING` 表示解析中，`NEEDS_REVIEW` 表示结果需要
+人工复核，`COMPLETED` 表示解析与持久化全部完成，`FAILED` 表示解析或持久化
+失败；`CANCEL_REQUESTED`、`CANCELLED`、`DISPATCH_FAILED` 保持 Job 语义。
+pypdf 回退必须公开 degraded/`LOW` confidence，未知状态默认禁止依赖解析结果的
+操作，客户端不得自行推断正式状态。
+
+`allow_fallback=false` 时 GROBID 失败必须以失败结束，不得静默调用 pypdf。允许回退时
+pypdf 不得伪造章节、坐标或 printed page label。
 
 ---
 

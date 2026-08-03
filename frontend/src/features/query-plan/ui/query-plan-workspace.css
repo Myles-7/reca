@@ -1,0 +1,285 @@
+.reca-query-plan-workspace {
+  min-height: 100%;
+  container-type: inline-size;
+  background: var(--reca-canvas);
+  color: var(--reca-foreground);
+}
+.reca-query-plan-workspace input,
+.reca-query-plan-workspace textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--reca-border-strong);
+  border-radius: var(--reca-control-radius);
+  background: var(--reca-surface);
+  color: var(--reca-foreground);
+  font: inherit;
+}
+.reca-query-plan-workspace input {
+  min-height: var(--reca-control-height);
+  padding: 6px 9px;
+}
+.reca-query-plan-workspace textarea {
+  resize: vertical;
+  padding: 8px 10px;
+  line-height: 1.55;
+}
+.reca-query-plan-workspace input:disabled,
+.reca-query-plan-workspace textarea:disabled {
+  background: var(--reca-surface-subtle);
+  color: var(--reca-foreground);
+  cursor: not-allowed;
+  opacity: 1;
+}
+.reca-query-plan-workspace input::placeholder {
+  color: var(--reca-muted-foreground);
+}
+.query-plan-header-meta {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.query-plan-header-meta time {
+  color: var(--reca-muted-foreground);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.query-plan-primary-action {
+  min-width: 102px;
+}
+.query-plan-save-button {
+  min-width: 104px;
+}
+.query-plan-top-notice {
+  padding: 14px 20px 0;
+}
+.query-plan-loadable {
+  max-width: 760px;
+  padding: 32px 20px;
+}
+.query-plan-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 340px);
+  align-items: start;
+  min-width: 0;
+}
+.query-plan-editor {
+  min-width: 0;
+  padding: 0 24px 32px;
+}
+.query-plan-section {
+  min-width: 0;
+  padding: var(--reca-section-space) 0;
+  border-bottom: 1px solid var(--reca-border);
+}
+.query-plan-section:last-child {
+  border-bottom: 0;
+}
+.query-plan-section__body {
+  min-width: 0;
+  padding-top: 16px;
+}
+.query-plan-two-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.query-plan-record-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.query-plan-field {
+  min-width: 0;
+}
+.query-plan-field > label,
+.query-plan-field__label,
+.query-plan-filter-grid > label,
+.query-plan-save-row > label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 550;
+}
+.query-plan-field > p {
+  margin: 0 0 9px;
+  color: var(--reca-muted-foreground);
+  font-size: 12px;
+}
+.query-plan-field > small {
+  display: block;
+  margin-top: 6px;
+  color: var(--reca-muted-foreground);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.query-plan-token-list {
+  display: flex;
+  min-height: 28px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.query-plan-token-list span {
+  max-width: 100%;
+  padding: 3px 7px;
+  border: 1px solid var(--reca-border);
+  border-radius: 5px;
+  background: var(--reca-surface-subtle);
+  color: var(--reca-foreground);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.query-plan-token-list span[data-empty="true"] {
+  color: var(--reca-muted-foreground);
+}
+.query-plan-record-list {
+  display: grid;
+  gap: 8px;
+}
+.query-plan-record-list > div {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+.query-plan-record-list label {
+  color: var(--reca-muted-foreground);
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+}
+.query-plan-empty-value {
+  min-height: var(--reca-control-height);
+  padding: 7px 9px;
+  border: 1px dashed var(--reca-border-strong);
+  border-radius: var(--reca-control-radius);
+  color: var(--reca-muted-foreground);
+  font-size: 12px;
+}
+.query-plan-boolean-query {
+  min-height: 112px;
+  overflow: auto;
+  background: var(--reca-surface-subtle) !important;
+  font-family:
+    "Cascadia Code", "SFMono-Regular", Consolas, monospace !important;
+  font-size: 13px !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.query-plan-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 14px;
+}
+.query-plan-checkbox {
+  display: flex !important;
+  min-height: var(--reca-control-height);
+  align-items: center;
+  gap: 8px;
+  margin: 0 !important;
+}
+.query-plan-checkbox input {
+  width: 16px;
+  min-height: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  accent-color: var(--reca-primary);
+}
+.query-plan-save-row {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.query-plan-save-row > label {
+  margin: 0;
+}
+.query-plan-inspector {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  min-width: 0;
+  max-height: calc(100vh - var(--reca-topbar-height));
+  overflow: auto;
+  border-left: 1px solid var(--reca-border);
+  background: var(--reca-background);
+}
+.query-plan-inspector-stack,
+.query-plan-limitations {
+  display: grid;
+  gap: 8px;
+}
+.query-plan-inspector-copy {
+  margin: 0;
+  color: var(--reca-muted-foreground);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.query-plan-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+@container (max-width: 960px) {
+  .query-plan-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .query-plan-inspector {
+    position: static;
+    order: 2;
+    max-height: none;
+    border-top: 1px solid var(--reca-border);
+    border-left: 0;
+  }
+  .query-plan-record-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .query-plan-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@container (max-width: 620px) {
+  .reca-workspace-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .reca-workspace-header__meta,
+  .reca-workspace-header__actions,
+  .query-plan-header-meta {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .query-plan-editor {
+    padding-inline: 14px;
+  }
+  .query-plan-top-notice {
+    padding-inline: 14px;
+  }
+  .query-plan-two-columns,
+  .query-plan-record-grid,
+  .query-plan-filter-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .query-plan-save-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .query-plan-save-row button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reca-query-plan-workspace *,
+  .reca-query-plan-workspace *::before,
+  .reca-query-plan-workspace *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

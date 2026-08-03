@@ -54,6 +54,9 @@ services:
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
       MINIO_BUCKET: ${MINIO_BUCKET:-reca}
       GROBID_URL: http://grobid:8070
+      GROBID_PARSE_TIMEOUT_SECONDS: ${GROBID_PARSE_TIMEOUT_SECONDS:-180}
+      GROBID_MAX_CONCURRENCY: ${GROBID_MAX_CONCURRENCY:-2}
+      GROBID_MAX_RESPONSE_BYTES: ${GROBID_MAX_RESPONSE_BYTES:-25000000}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://valkey:6379/0}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://valkey:6379/1}
       HOME: /tmp/reca
@@ -134,14 +137,17 @@ services:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-reca-local-admin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
       GROBID_URL: http://grobid:8070
+      GROBID_PARSE_TIMEOUT_SECONDS: ${GROBID_PARSE_TIMEOUT_SECONDS:-180}
+      GROBID_MAX_CONCURRENCY: ${GROBID_MAX_CONCURRENCY:-2}
+      GROBID_MAX_RESPONSE_BYTES: ${GROBID_MAX_RESPONSE_BYTES:-25000000}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://valkey:6379/0}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://valkey:6379/1}
       HOME: /tmp/reca
     read_only: true
     tmpfs:
-      - /tmp/reca:rw,nosuid,nodev,size=64m,uid=10001,gid=10001,mode=700
+      - /tmp/reca:rw,nosuid,nodev,size=256m,uid=10001,gid=10001,mode=700
     stop_grace_period: 30s
-    mem_limit: 512m
+    mem_limit: 1g
     cpus: 1.0
     networks:
       - internal
@@ -169,14 +175,18 @@ services:
 
   grobid:
     image: lfoppiano/grobid:0.8.2
+    environment:
+      JAVA_TOOL_OPTIONS: -XX:-UseContainerSupport
     healthcheck:
-      test: ["CMD-SHELL", "curl --fail --silent http://localhost:8070/api/isalive"]
+      test: ["CMD-SHELL", "bash -ec 'exec 3<>/dev/tcp/127.0.0.1/8070'"]
       interval: 10s
       timeout: 5s
       retries: 18
       start_period: 60s
     networks:
       - internal
+    mem_limit: 6g
+    cpus: 2.0
     restart: unless-stopped
 
 volumes:

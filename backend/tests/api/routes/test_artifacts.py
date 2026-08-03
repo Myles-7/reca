@@ -173,6 +173,7 @@ def test_artifact_lifecycle_isolated_download_and_immutability(
     )
     assert detail.status_code == listing.status_code == download.status_code == 200
     assert listing.json()["pagination"]["total"] == 1
+    assert "artifact.upload" in listing.json()["allowed_actions"]
     assert download.json()["data"]["disposition_filename"] == "paper.pdf"
     assert "storage_key" not in download.text
 

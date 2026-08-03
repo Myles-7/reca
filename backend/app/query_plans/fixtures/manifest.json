@@ -1,0 +1,18 @@
+{
+  "fixture_manifest_version": "1.0",
+  "fixtures": [
+    {
+      "fixture_id": "query-plan-generation-recorded-v1",
+      "mode": "RECORDED",
+      "output_schema": "QueryPlanGenerationOutput@1.0",
+      "path": "query-plan-generation-recorded-v1.json",
+      "output_hash": "e2beef3f7965a1f239beff942ecd1b7c780d9a1c96d7e7b4235a6739f222be38",
+      "recording_version": "1.0",
+      "recording_license_status": "INTERNAL_GOLDEN_FIXTURE",
+      "recording_redaction_status": "REVIEWED_NO_PERSONAL_DATA",
+      "input_match": {
+        "research_question": "生成式AI与师范生学习投入"
+      }
+    }
+  ]
+}

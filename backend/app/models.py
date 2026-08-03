@@ -9,15 +9,18 @@ from sqlalchemy import (
     CheckConstraint,
     Column,
     DateTime,
+    ForeignKeyConstraint,
     Index,
     String,
     Text,
     UniqueConstraint,
+    text,
 )
 from sqlalchemy import (
     Enum as SAEnum,
 )
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.types import UserDefinedType
 from sqlmodel import Field, SQLModel
 
 
@@ -174,6 +177,86 @@ class ApprovalStatus(StrEnum):
     SUPERSEDED = "SUPERSEDED"
 
 
+class ResearchQuestionStatus(StrEnum):
+    DRAFT = "DRAFT"
+    CONFIRMED = "CONFIRMED"
+    SUPERSEDED = "SUPERSEDED"
+    ARCHIVED = "ARCHIVED"
+
+
+class ResearchQuestionVersionStatus(StrEnum):
+    DRAFT = "DRAFT"
+    NEEDS_INPUT = "NEEDS_INPUT"
+    READY = "READY"
+    CONFIRMED = "CONFIRMED"
+    SUPERSEDED = "SUPERSEDED"
+
+
+class QueryPlanStatus(StrEnum):
+    DRAFT = "DRAFT"
+
+
+class LiteratureSourceType(StrEnum):
+    OPENALEX = "OPENALEX"
+    DOI_IMPORT = "DOI_IMPORT"
+    USER_UPLOAD = "USER_UPLOAD"
+    MANUAL = "MANUAL"
+    CACHE = "CACHE"
+
+
+class LiteratureVerificationStatus(StrEnum):
+    VERIFIED = "VERIFIED"
+    PARTIALLY_VERIFIED = "PARTIALLY_VERIFIED"
+    UNVERIFIED = "UNVERIFIED"
+    CONFLICTED = "CONFLICTED"
+
+
+class LiteratureDecisionStatus(StrEnum):
+    INCLUDED = "INCLUDED"
+    EXCLUDED = "EXCLUDED"
+    UNCERTAIN = "UNCERTAIN"
+
+
+class DocumentType(StrEnum):
+    SCHOLARLY_PDF = "SCHOLARLY_PDF"
+    MANUSCRIPT = "MANUSCRIPT"
+    OTHER = "OTHER"
+
+
+class DocumentParserType(StrEnum):
+    GROBID = "GROBID"
+    PYPDF = "PYPDF"
+    NONE = "NONE"
+
+
+class DocumentParseConfidence(StrEnum):
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+    UNKNOWN = "UNKNOWN"
+
+
+class ResearchGoal(StrEnum):
+    DESCRIBE = "DESCRIBE"
+    COMPARE = "COMPARE"
+    RELATE = "RELATE"
+    PREDICT = "PREDICT"
+
+
+class ResearchRelationshipType(StrEnum):
+    ASSOCIATION = "ASSOCIATION"
+    COMPARISON = "COMPARISON"
+    PREDICTION = "PREDICTION"
+    UNSPECIFIED = "UNSPECIFIED"
+
+
+class VectorType(UserDefinedType[list[float]]):
+    cache_ok = True
+
+    def get_col_spec(self, **_kw: Any) -> str:
+        return "VECTOR"
+
+
 class ArtifactType(StrEnum):
     PDF_DOCUMENT = "PDF_DOCUMENT"
     DATASET_FILE = "DATASET_FILE"
@@ -217,7 +300,10 @@ class ArtifactRelationType(StrEnum):
 
 
 class JobTaskType(StrEnum):
+    RESEARCH_QUESTION_SCOPING = "RESEARCH_QUESTION_SCOPING"
+    QUERY_PLAN_GENERATION = "QUERY_PLAN_GENERATION"
     DOCUMENT_PARSE = "DOCUMENT_PARSE"
+    LITERATURE_SEARCH = "LITERATURE_SEARCH"
     LITERATURE_EXTRACT = "LITERATURE_EXTRACT"
     DOCUMENT_EMBED = "DOCUMENT_EMBED"
     LITERATURE_SUMMARIZE = "LITERATURE_SUMMARIZE"
@@ -258,6 +344,18 @@ class ModelDataAccessLevel(StrEnum):
 
 class ResearchProject(SQLModel, table=True):
     __tablename__ = "research_projects"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["current_research_question_version_id", "id"],
+            [
+                "research_question_versions.id",
+                "research_question_versions.project_id",
+            ],
+            name="fk_research_projects_current_rq_version_project",
+            ondelete="RESTRICT",
+            use_alter=True,
+        ),
+    )
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     owner_id: uuid.UUID = Field(foreign_key="user.id", index=True, ondelete="RESTRICT")
@@ -306,6 +404,12 @@ class ProjectMember(SQLModel, table=True):
             "project_id", "user_id", name="uq_project_members_project_user"
         ),
         Index("ix_project_members_project_role", "project_id", "role"),
+        Index(
+            "uq_project_members_active_owner",
+            "project_id",
+            unique=True,
+            postgresql_where=text("role = 'OWNER' AND removed_at IS NULL"),
+        ),
     )
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
@@ -334,9 +438,475 @@ class ProjectMember(SQLModel, table=True):
     )
 
 
+class ResearchQuestion(SQLModel, table=True):
+    __tablename__ = "research_questions"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_research_questions_id_project"),
+        ForeignKeyConstraint(
+            ["current_version_id", "id", "project_id"],
+            [
+                "research_question_versions.id",
+                "research_question_versions.research_question_id",
+                "research_question_versions.project_id",
+            ],
+            name="fk_research_questions_current_version_scope",
+            ondelete="RESTRICT",
+            use_alter=True,
+        ),
+        Index("ix_research_questions_project_status", "project_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    status: ResearchQuestionStatus = Field(
+        default=ResearchQuestionStatus.DRAFT,
+        sa_column=Column(
+            SAEnum(ResearchQuestionStatus, name="research_question_status"),
+            nullable=False,
+        ),
+    )
+    current_version_id: uuid.UUID | None = Field(default=None, index=True)
+    created_by: uuid.UUID = Field(
+        foreign_key="user.id", index=True, ondelete="RESTRICT"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class ResearchQuestionVersion(SQLModel, table=True):
+    __tablename__ = "research_question_versions"
+    __table_args__ = (
+        UniqueConstraint(
+            "research_question_id",
+            "version_number",
+            name="uq_research_question_versions_question_number",
+        ),
+        UniqueConstraint(
+            "id",
+            "project_id",
+            name="uq_research_question_versions_id_project",
+        ),
+        UniqueConstraint(
+            "id",
+            "research_question_id",
+            "project_id",
+            name="uq_research_question_versions_id_question_project",
+        ),
+        CheckConstraint(
+            "version_number >= 1",
+            name="ck_research_question_versions_number_positive",
+        ),
+        ForeignKeyConstraint(
+            ["research_question_id", "project_id"],
+            ["research_questions.id", "research_questions.project_id"],
+            name="fk_research_question_versions_question_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["source_model_invocation_id", "project_id"],
+            ["model_invocations.id", "model_invocations.project_id"],
+            name="fk_research_question_versions_model_invocation_project",
+            ondelete="RESTRICT",
+        ),
+        Index("ix_research_question_versions_project_status", "project_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    research_question_id: uuid.UUID = Field(index=True)
+    project_id: uuid.UUID = Field(index=True)
+    version_number: int
+    raw_input: str = Field(sa_column=Column(Text, nullable=False))
+    normalized_question: str | None = Field(
+        default=None, sa_column=Column(Text, nullable=True)
+    )
+    research_object: str | None = Field(
+        default=None, sa_column=Column(Text, nullable=True)
+    )
+    population: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
+    context: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
+    independent_variables: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    dependent_variables: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    control_variables: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    research_goal: ResearchGoal | None = Field(
+        default=None,
+        sa_column=Column(SAEnum(ResearchGoal, name="research_goal"), nullable=True),
+    )
+    relationship_type: ResearchRelationshipType | None = Field(
+        default=None,
+        sa_column=Column(
+            SAEnum(ResearchRelationshipType, name="research_relationship_type"),
+            nullable=True,
+        ),
+    )
+    method_preference: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    time_scope: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    region_scope: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    language_scope: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    resource_constraints: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    ethical_constraints: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    uncertainties: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    source_model_invocation_id: uuid.UUID | None = Field(
+        default=None,
+        index=True,
+    )
+    status: ResearchQuestionVersionStatus = Field(
+        default=ResearchQuestionVersionStatus.DRAFT,
+        sa_column=Column(
+            SAEnum(
+                ResearchQuestionVersionStatus,
+                name="research_question_version_status",
+            ),
+            nullable=False,
+        ),
+    )
+    created_by: uuid.UUID = Field(
+        foreign_key="user.id", index=True, ondelete="RESTRICT"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class QueryPlan(SQLModel, table=True):
+    __tablename__ = "query_plans"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_query_plans_id_project"),
+        CheckConstraint("lock_version >= 1", name="ck_query_plans_lock_version"),
+        ForeignKeyConstraint(
+            ["research_question_version_id", "project_id"],
+            ["research_question_versions.id", "research_question_versions.project_id"],
+            name="fk_query_plans_rq_version_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["source_model_invocation_id", "project_id"],
+            ["model_invocations.id", "model_invocations.project_id"],
+            name="fk_query_plans_model_invocation_project",
+            ondelete="RESTRICT",
+        ),
+        Index("ix_query_plans_project_created", "project_id", "created_at"),
+        Index(
+            "ix_query_plans_rq_version",
+            "research_question_version_id",
+            "created_at",
+        ),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    research_question_version_id: uuid.UUID = Field(index=True)
+    chinese_terms: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    english_terms: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    synonyms: dict[str, list[str]] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    object_terms: dict[str, list[str]] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    method_terms: dict[str, list[str]] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    boolean_query: str | None = Field(
+        default=None, sa_column=Column(Text, nullable=True)
+    )
+    filters: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    limitations: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    source_model_invocation_id: uuid.UUID | None = Field(default=None, index=True)
+    status: QueryPlanStatus = Field(
+        default=QueryPlanStatus.DRAFT,
+        sa_column=Column(
+            SAEnum(QueryPlanStatus, name="query_plan_status"), nullable=False
+        ),
+    )
+    lock_version: int = Field(default=1, ge=1)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class LiteratureSearchRun(SQLModel, table=True):
+    __tablename__ = "literature_search_runs"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_literature_search_runs_scope"),
+        CheckConstraint(
+            "result_count >= 0", name="ck_literature_search_runs_result_count"
+        ),
+        CheckConstraint(
+            "query_fingerprint ~ '^[0-9a-f]{64}$'",
+            name="ck_literature_search_runs_fingerprint",
+        ),
+        ForeignKeyConstraint(
+            ["query_plan_id", "project_id"],
+            ["query_plans.id", "query_plans.project_id"],
+            name="fk_literature_search_runs_query_plan_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["cache_source_run_id", "project_id"],
+            ["literature_search_runs.id", "literature_search_runs.project_id"],
+            name="fk_literature_search_runs_cache_source_project",
+            ondelete="RESTRICT",
+        ),
+        Index(
+            "ix_literature_search_runs_cache_lookup",
+            "project_id",
+            "query_fingerprint",
+            "status",
+            "fetched_at",
+        ),
+        Index("ix_literature_search_runs_project_created", "project_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    query_plan_id: uuid.UUID = Field(index=True)
+    provider: str = Field(max_length=100)
+    provider_query: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    query_fingerprint: str = Field(max_length=64, index=True)
+    result_count: int = Field(default=0, ge=0)
+    cache_hit: bool = False
+    cache_stale: bool = False
+    cache_source_run_id: uuid.UUID | None = Field(default=None, index=True)
+    degraded: bool = False
+    limitations: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    fetched_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    status: JobStatus = Field(
+        default=JobStatus.DRAFT,
+        sa_column=Column(SAEnum(JobStatus, name="job_status"), nullable=False),
+    )
+    error_code: str | None = Field(default=None, max_length=100)
+    job_id: uuid.UUID | None = Field(
+        default=None, foreign_key="jobs.id", index=True, ondelete="RESTRICT"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class LiteratureRecord(SQLModel, table=True):
+    __tablename__ = "literature_records"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_literature_records_scope"),
+        UniqueConstraint(
+            "project_id",
+            "normalized_doi",
+            name="uq_literature_records_project_doi",
+        ),
+        CheckConstraint(
+            "length(normalized_title) > 0",
+            name="ck_literature_records_normalized_title",
+        ),
+        ForeignKeyConstraint(
+            ["document_id", "project_id"],
+            ["documents.id", "documents.project_id"],
+            name="fk_literature_records_document_project",
+            ondelete="RESTRICT",
+        ),
+        Index(
+            "ix_literature_records_project_title",
+            "project_id",
+            "normalized_title",
+        ),
+        Index("ix_literature_records_project_created", "project_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    document_id: uuid.UUID | None = Field(default=None, index=True)
+    source_type: LiteratureSourceType = Field(
+        sa_column=Column(
+            SAEnum(LiteratureSourceType, name="literature_source_type"),
+            nullable=False,
+        )
+    )
+    source_identifier: str | None = Field(default=None, max_length=500, index=True)
+    title: str = Field(sa_column=Column(Text, nullable=False))
+    normalized_title: str = Field(sa_column=Column(Text, nullable=False))
+    abstract: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
+    publication_year: int | None = Field(default=None, ge=1, le=9999)
+    journal_name: str | None = Field(default=None, max_length=500)
+    doi: str | None = Field(default=None, max_length=500)
+    normalized_doi: str | None = Field(default=None, max_length=500, index=True)
+    authors_text: str | None = Field(
+        default=None, sa_column=Column(Text, nullable=True)
+    )
+    keywords: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    work_type: str | None = Field(default=None, max_length=100)
+    open_access_status: str | None = Field(default=None, max_length=100)
+    verification_status: LiteratureVerificationStatus = Field(
+        default=LiteratureVerificationStatus.UNVERIFIED,
+        sa_column=Column(
+            SAEnum(
+                LiteratureVerificationStatus,
+                name="literature_verification_status",
+            ),
+            nullable=False,
+        ),
+    )
+    raw_source_data: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    current_decision: LiteratureDecisionStatus = Field(
+        default=LiteratureDecisionStatus.UNCERTAIN,
+        sa_column=Column(
+            SAEnum(LiteratureDecisionStatus, name="literature_decision_status"),
+            nullable=False,
+        ),
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    deleted_at: datetime | None = Field(
+        default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class LiteratureSearchCandidate(SQLModel, table=True):
+    __tablename__ = "literature_search_candidates"
+    __table_args__ = (
+        UniqueConstraint(
+            "search_run_id",
+            "source_identifier",
+            name="uq_literature_candidates_run_source",
+        ),
+        CheckConstraint(
+            "result_order >= 1", name="ck_literature_candidates_result_order"
+        ),
+        CheckConstraint(
+            "length(normalized_title) > 0",
+            name="ck_literature_candidates_normalized_title",
+        ),
+        ForeignKeyConstraint(
+            ["search_run_id", "project_id"],
+            ["literature_search_runs.id", "literature_search_runs.project_id"],
+            name="fk_literature_candidates_run_project",
+            ondelete="CASCADE",
+        ),
+        ForeignKeyConstraint(
+            ["imported_literature_record_id", "project_id"],
+            ["literature_records.id", "literature_records.project_id"],
+            name="fk_literature_candidates_import_project",
+            ondelete="RESTRICT",
+        ),
+        Index("ix_literature_candidates_run_order", "search_run_id", "result_order"),
+        Index("ix_literature_candidates_project_doi", "project_id", "normalized_doi"),
+        Index(
+            "ix_literature_candidates_project_title",
+            "project_id",
+            "normalized_title",
+        ),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    search_run_id: uuid.UUID = Field(index=True)
+    result_order: int = Field(ge=1)
+    source_identifier: str = Field(max_length=500)
+    title: str = Field(sa_column=Column(Text, nullable=False))
+    normalized_title: str = Field(sa_column=Column(Text, nullable=False))
+    abstract: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
+    publication_year: int | None = Field(default=None, ge=1, le=9999)
+    journal_name: str | None = Field(default=None, max_length=500)
+    doi: str | None = Field(default=None, max_length=500)
+    normalized_doi: str | None = Field(default=None, max_length=500)
+    authors_text: str | None = Field(
+        default=None, sa_column=Column(Text, nullable=True)
+    )
+    keywords: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    work_type: str | None = Field(default=None, max_length=100)
+    open_access_status: str | None = Field(default=None, max_length=100)
+    verification_status: LiteratureVerificationStatus = Field(
+        default=LiteratureVerificationStatus.UNVERIFIED,
+        sa_column=Column(
+            SAEnum(
+                LiteratureVerificationStatus,
+                name="literature_verification_status",
+            ),
+            nullable=False,
+        ),
+    )
+    raw_source_data: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    fetched_at: datetime = Field(sa_type=DateTime(timezone=True))  # type: ignore
+    degraded: bool = False
+    imported_literature_record_id: uuid.UUID | None = Field(default=None, index=True)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
 class Artifact(SQLModel, table=True):
     __tablename__ = "artifacts"
     __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_artifacts_id_project"),
         CheckConstraint("size_bytes >= 0", name="ck_artifacts_size_nonnegative"),
         CheckConstraint(
             "sha256 ~ '^[0-9a-f]{64}$'", name="ck_artifacts_sha256_lower_hex"
@@ -391,6 +961,152 @@ class Artifact(SQLModel, table=True):
     )
     deleted_at: datetime | None = Field(
         default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class Document(SQLModel, table=True):
+    __tablename__ = "documents"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_documents_id_project"),
+        UniqueConstraint("artifact_id", name="uq_documents_artifact"),
+        CheckConstraint(
+            "page_count IS NULL OR page_count >= 1",
+            name="ck_documents_page_count_positive",
+        ),
+        ForeignKeyConstraint(
+            ["artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_documents_artifact_project",
+            ondelete="RESTRICT",
+        ),
+        Index("ix_documents_project_status", "project_id", "parse_status"),
+        Index("ix_documents_project_created", "project_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    artifact_id: uuid.UUID = Field(index=True)
+    document_type: DocumentType = Field(
+        default=DocumentType.SCHOLARLY_PDF,
+        sa_column=Column(SAEnum(DocumentType, name="document_type"), nullable=False),
+    )
+    parser_type: DocumentParserType | None = Field(
+        default=DocumentParserType.NONE,
+        sa_column=Column(
+            SAEnum(DocumentParserType, name="document_parser_type"), nullable=True
+        ),
+    )
+    parser_version: str | None = Field(default=None, max_length=100)
+    parse_status: JobStatus = Field(
+        default=JobStatus.DRAFT,
+        sa_column=Column(SAEnum(JobStatus, name="job_status"), nullable=False),
+    )
+    page_count: int | None = Field(default=None, ge=1)
+    language: str | None = Field(default=None, max_length=50)
+    is_scanned: bool | None = None
+    parse_confidence: DocumentParseConfidence | None = Field(
+        default=DocumentParseConfidence.UNKNOWN,
+        sa_column=Column(
+            SAEnum(DocumentParseConfidence, name="document_parse_confidence"),
+            nullable=True,
+        ),
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class DocumentPage(SQLModel, table=True):
+    __tablename__ = "document_pages"
+    __table_args__ = (
+        UniqueConstraint(
+            "document_id", "page_number", name="uq_document_pages_document_number"
+        ),
+        CheckConstraint("page_number >= 1", name="ck_document_pages_number_positive"),
+        CheckConstraint(
+            "width IS NULL OR width > 0", name="ck_document_pages_width_positive"
+        ),
+        CheckConstraint(
+            "height IS NULL OR height > 0", name="ck_document_pages_height_positive"
+        ),
+        ForeignKeyConstraint(
+            ["document_id", "project_id"],
+            ["documents.id", "documents.project_id"],
+            name="fk_document_pages_document_project",
+            ondelete="CASCADE",
+        ),
+        Index("ix_document_pages_project_document", "project_id", "document_id"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    document_id: uuid.UUID = Field(index=True)
+    project_id: uuid.UUID = Field(index=True)
+    page_number: int = Field(ge=1)
+    printed_page_label: str | None = Field(default=None, max_length=100)
+    text_content: str | None = Field(
+        default=None, sa_column=Column(Text, nullable=True)
+    )
+    width: float | None = Field(default=None, gt=0)
+    height: float | None = Field(default=None, gt=0)
+    parser_metadata: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+
+class DocumentChunk(SQLModel, table=True):
+    __tablename__ = "document_chunks"
+    __table_args__ = (
+        CheckConstraint("page_start >= 1", name="ck_document_chunks_page_start"),
+        CheckConstraint("page_end >= page_start", name="ck_document_chunks_page_range"),
+        CheckConstraint("chunk_index >= 0", name="ck_document_chunks_index"),
+        CheckConstraint(
+            "content_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_document_chunks_content_hash",
+        ),
+        ForeignKeyConstraint(
+            ["document_id", "project_id"],
+            ["documents.id", "documents.project_id"],
+            name="fk_document_chunks_document_project",
+            ondelete="CASCADE",
+        ),
+        Index("ix_document_chunks_project_document", "project_id", "document_id"),
+        Index("ix_document_chunks_document_index", "document_id", "chunk_index"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    document_id: uuid.UUID = Field(index=True)
+    page_start: int = Field(ge=1)
+    page_end: int = Field(ge=1)
+    section_path: list[str] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    chunk_index: int = Field(ge=0)
+    content: str = Field(sa_column=Column(Text, nullable=False))
+    content_hash: str = Field(max_length=64)
+    token_count: int | None = Field(default=None, ge=0)
+    embedding: list[float] | None = Field(
+        default=None, sa_column=Column(VectorType(), nullable=True)
+    )
+    embedding_model: str | None = Field(default=None, max_length=200)
+    embedding_version: str | None = Field(default=None, max_length=100)
+    chunk_metadata: dict[str, Any] | None = Field(
+        default=None, sa_column=Column("metadata", JSONB, nullable=True)
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
         sa_type=DateTime(timezone=True),  # type: ignore
     )
 
@@ -532,6 +1248,18 @@ class ApprovalItem(SQLModel, table=True):
 class AuditLog(SQLModel, table=True):
     __tablename__ = "audit_logs"
     __table_args__ = (
+        ForeignKeyConstraint(
+            ["approval_id"],
+            ["approval_records.id"],
+            name="fk_audit_logs_approval_id_approval_records",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["model_invocation_id", "project_id"],
+            ["model_invocations.id", "model_invocations.project_id"],
+            name="fk_audit_logs_model_invocation_project",
+            ondelete="RESTRICT",
+        ),
         Index("ix_audit_logs_project_created", "project_id", "created_at"),
     )
 
@@ -563,6 +1291,7 @@ class AuditLog(SQLModel, table=True):
     request_id: str | None = Field(default=None, max_length=64, index=True)
     job_id: uuid.UUID | None = Field(default=None, index=True)
     approval_id: uuid.UUID | None = Field(default=None, index=True)
+    model_invocation_id: uuid.UUID | None = Field(default=None, index=True)
     outcome: AuditOutcome = Field(
         sa_column=Column(SAEnum(AuditOutcome, name="audit_outcome"), nullable=False)
     )
@@ -768,6 +1497,7 @@ class ModelInvocation(SQLModel, table=True):
             "AND completed_at IS NOT NULL)",
             name="ck_model_invocations_outcome_fields",
         ),
+        UniqueConstraint("id", "project_id", name="uq_model_invocations_id_project"),
         Index("ix_model_invocations_project_status", "project_id", "status"),
         Index("ix_model_invocations_prompt", "prompt_id", "prompt_version"),
     )

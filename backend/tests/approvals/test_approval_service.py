@@ -5,7 +5,7 @@ from datetime import timedelta
 
 import pytest
 from sqlalchemy import delete, update
-from sqlalchemy.exc import DBAPIError
+from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlmodel import Session, select
 
 from app.api.errors import ContractError
@@ -19,6 +19,7 @@ from app.models import (
     ApprovalType,
     AuditActorType,
     AuditLog,
+    AuditOutcome,
     User,
     get_datetime_utc,
 )
@@ -110,6 +111,27 @@ def test_internal_create_hashes_payload_and_supersedes_pending_history(
     ).all()
     assert "APPROVAL_SUPERSEDED" in actions
     assert "APPROVAL_REQUESTED" in actions
+
+
+def test_audit_log_rejects_unknown_approval_reference(db: Session) -> None:
+    actor = db.exec(select(User).where(User.email == settings.FIRST_SUPERUSER)).one()
+    project_id = make_project(db, actor)
+    invalid_audit = AuditLog(
+        project_id=project_id,
+        actor_type=AuditActorType.SYSTEM,
+        actor_id="approval-fk-test",
+        action="APPROVAL_REFERENCE_TEST",
+        object_type="approval",
+        object_id=uuid.uuid4(),
+        approval_id=uuid.uuid4(),
+        outcome=AuditOutcome.FAILED,
+    )
+
+    savepoint = db.begin_nested()
+    db.add(invalid_audit)
+    with pytest.raises(IntegrityError):
+        db.flush()
+    savepoint.rollback()
 
 
 @pytest.mark.parametrize("actor_type", [AuditActorType.AGENT, AuditActorType.WORKER])

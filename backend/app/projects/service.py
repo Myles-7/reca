@@ -32,6 +32,8 @@ from app.models import (
     ProjectStatus,
     ProjectType,
     ResearchProject,
+    ResearchQuestion,
+    ResearchQuestionStatus,
     User,
     get_datetime_utc,
 )
@@ -183,6 +185,7 @@ def project_data(project: ResearchProject, role: ProjectMemberRole) -> dict[str,
             "created_at": project.created_at,
             "updated_at": project.updated_at,
             "permissions": _project_permissions(role),
+            "allowed_actions": allowed_actions(role),
         }
     )
 
@@ -667,7 +670,7 @@ def list_members(
     include_removed: bool,
     page: int,
     page_size: int,
-) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+) -> tuple[list[dict[str, Any]], dict[str, Any], list[str]]:
     access = authorize_project(
         session,
         project_id=project_id,
@@ -704,14 +707,18 @@ def list_members(
     )
     rows = session.exec(statement).all()
     total_pages = math.ceil(total / page_size) if total else 0
-    return [member_data(member, user) for member, user in rows], {
-        "page": page,
-        "page_size": page_size,
-        "total": total,
-        "total_pages": total_pages,
-        "has_next": page < total_pages,
-        "has_previous": page > 1,
-    }
+    return (
+        [member_data(member, user) for member, user in rows],
+        {
+            "page": page,
+            "page_size": page_size,
+            "total": total,
+            "total_pages": total_pages,
+            "has_next": page < total_pages,
+            "has_previous": page > 1,
+        },
+        allowed_actions(access.membership.role),
+    )
 
 
 def add_member(
@@ -1260,6 +1267,16 @@ def project_overview(
         ),
         "NOT_AVAILABLE",
     )
+    unavailable["research_question"] = "AVAILABLE"
+    current_research_question = session.exec(
+        select(ResearchQuestion)
+        .where(
+            ResearchQuestion.project_id == project_id,
+            ResearchQuestion.status != ResearchQuestionStatus.SUPERSEDED,
+        )
+        .order_by(desc(col(ResearchQuestion.updated_at)))
+        .limit(1)
+    ).first()
     counts = {
         "literature_total": None,
         "literature_included": None,
@@ -1276,7 +1293,16 @@ def project_overview(
             "project_id": project_id,
             "current_stage": access.project.current_stage,
             "module_availability": unavailable,
-            "current_research_question": None,
+            "current_research_question": (
+                {
+                    "id": current_research_question.id,
+                    "current_version_id": current_research_question.current_version_id,
+                    "status": current_research_question.status,
+                }
+                if current_research_question is not None
+                and current_research_question.current_version_id is not None
+                else None
+            ),
             "foundation_counts": {
                 "members": member_count,
                 "artifacts": artifact_count,

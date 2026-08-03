@@ -54,7 +54,27 @@ def test_project_create_requires_idempotency_and_replays(
     )
     assert first.status_code == replay.status_code == 201
     assert first.json()["data"] == replay.json()["data"]
+    assert "project.update" in first.json()["data"]["allowed_actions"]
+    assert "project.delete" in first.json()["data"]["allowed_actions"]
     assert replay.json()["meta"]["idempotency_replayed"] is True
+
+
+def test_project_and_member_envelopes_project_formal_actions(
+    client: TestClient, normal_user_token_headers: dict[str, str]
+) -> None:
+    project = create_project(client, normal_user_token_headers)
+    detail = client.get(
+        f"/api/v1/projects/{project['id']}", headers=normal_user_token_headers
+    )
+    members = client.get(
+        f"/api/v1/projects/{project['id']}/members",
+        headers=normal_user_token_headers,
+    )
+
+    assert detail.status_code == members.status_code == 200
+    assert "project.update" in detail.json()["data"]["allowed_actions"]
+    assert "project.manage_members" in members.json()["allowed_actions"]
+    assert "artifact.upload" in members.json()["allowed_actions"]
 
 
 def test_project_isolation_returns_no_disclosure_404(

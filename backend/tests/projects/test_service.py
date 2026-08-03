@@ -2,7 +2,7 @@ import uuid
 
 import pytest
 from sqlalchemy import update
-from sqlalchemy.exc import DBAPIError
+from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlmodel import Session, func, select
 
 from app import crud
@@ -204,6 +204,22 @@ def test_ownership_transfer_is_explicit_and_preserves_single_owner(db: Session) 
         )
     ).all()
     assert len(transfer_audits) == 1
+
+
+def test_database_rejects_a_second_active_project_owner(db: Session) -> None:
+    _owner, project = create_project(db)
+    second_owner = create_random_user(db)
+    duplicate_owner = ProjectMember(
+        project_id=project.id,
+        user_id=second_owner.id,
+        role=ProjectMemberRole.OWNER,
+    )
+
+    savepoint = db.begin_nested()
+    db.add(duplicate_owner)
+    with pytest.raises(IntegrityError):
+        db.flush()
+    savepoint.rollback()
 
 
 def test_owner_cannot_be_removed_and_non_owner_can_remove_self(db: Session) -> None:

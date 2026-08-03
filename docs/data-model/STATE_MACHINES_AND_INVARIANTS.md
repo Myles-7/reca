@@ -44,6 +44,25 @@
 
 Prompt 注册表固定为 `backend/app/agents/prompts/prompt-manifest.yaml`。`requested_data_access_level` 是 PromptContract 的最低必要等级，`max_allowed_data_access_level` 是 Tool/Policy 上限，`effective_data_access_level` 是实际发送等级；必须满足 effective 不高于 max_allowed，并遵循最小化原则。
 
+Prompt 文本哈希使用规范化 LF 字节：读取 UTF-8 Prompt asset 后将 `CRLF` 与单独 `CR`
+转换为 `LF`，再计算 SHA-256。manifest 保存该规范化哈希，因此 Windows 与 Linux checkout
+必须得到相同 Prompt identity；正文的其他任何字节变化仍必须导致哈希不匹配。
+
+### M2 QueryPlan、检索运行与文档解析状态
+
+M2 的 `QueryPlan.status` 仅允许 `DRAFT`。M2 没有激活、确认、失效或检索完成态；并发修改
+使用从 1 开始的 `lock_version`，成功更新后加 1，并通过 `If-Match` 校验。
+
+`LiteratureSearchRun.status` 和 `Document.parse_status` 复用正式 `JobStatus`，不建立第二套
+第三方状态机。Service/Worker 负责映射；OpenAlex、GROBID 或 pypdf 的原生状态不能直接写入。
+M2 实际使用 `DRAFT`、`QUEUED`、`RUNNING`、`COMPLETED`、`FAILED` 和
+`DISPATCH_FAILED`；通用 Job 取消流程出现时可投影 `CANCEL_REQUESTED`、`CANCELLED`，人工
+复核时可投影 `NEEDS_REVIEW`。未知值必须安全降级且不得启用 mutation。
+
+Document 上传后为 `DRAFT`；派发后为 `QUEUED`；Worker claim 后为 `RUNNING`；只有 RECA
+Converter 或明确的 pypdf fallback 成功提交稳定页面后才能为 `COMPLETED`。GROBID 失败且
+禁止回退、回退也失败或输入不可解析时为 `FAILED`；派发失败为 `DISPATCH_FAILED`。
+
 ### M1 ProjectMember、Artifact 与创建责任
 
 * Project 创建在同一事务中创建唯一 OWNER membership 和 `PROJECT_CREATED` AuditLog；

@@ -1,0 +1,24 @@
+{
+  "chinese_terms": {
+    "core": ["生成式人工智能", "学习投入", "师范生"],
+    "synonyms": ["生成式AI", "学生投入"],
+    "object_terms": ["师范生", "教师教育学生"],
+    "method_terms": ["问卷", "相关研究"]
+  },
+  "english_terms": {
+    "core": ["generative artificial intelligence", "learning engagement", "pre-service teachers"],
+    "synonyms": ["generative AI", "student engagement", "teacher education students"],
+    "object_terms": ["pre-service teachers", "teacher education students"],
+    "method_terms": ["survey", "correlational study"]
+  },
+  "boolean_query": "(\"generative artificial intelligence\" OR \"generative AI\") AND (\"learning engagement\" OR \"student engagement\") AND (\"pre-service teacher*\" OR \"teacher education student*\")",
+  "filters": {
+    "from_year": 2020,
+    "to_year": 2026,
+    "languages": ["zh", "en"],
+    "work_types": ["article"]
+  },
+  "expansion_options": ["Remove method terms if recall is too low."],
+  "narrowing_options": ["Add survey or correlational-study terms if precision is too low."],
+  "limitations": ["The terms are a query-planning suggestion and do not represent retrieved literature."]
+}

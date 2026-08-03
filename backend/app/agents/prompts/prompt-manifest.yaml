@@ -21,6 +21,69 @@
       "max_allowed_data_access_level": "METADATA_ONLY",
       "status": "ACTIVE",
       "content_hash": "1ca4ccd9dba590aebd6db5b54096339eb59dd9af12540cccb03dac099e67ce76"
+    },
+    {
+      "prompt_id": "research-question-parse",
+      "prompt_version": "1.0.0",
+      "task_type": "RESEARCH_QUESTION_PARSE",
+      "input_schema": {
+        "name": "ResearchQuestionScopingInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "ResearchQuestionSpec",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": ["ResearchQuestionVersion"],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "REDACTED_CONTENT",
+      "max_allowed_data_access_level": "REDACTED_CONTENT",
+      "status": "ACTIVE",
+      "content_hash": "d8ddea107df903ee1695640a83c9a4df76a000a452b0080dc57a6a3d26363cc0"
+    },
+    {
+      "prompt_id": "research-question-scoping",
+      "prompt_version": "1.0.0",
+      "task_type": "RESEARCH_QUESTION_SCOPING",
+      "input_schema": {
+        "name": "ResearchQuestionScopingInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "ResearchQuestionScopingOutput",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": ["ResearchQuestionVersion"],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "REDACTED_CONTENT",
+      "max_allowed_data_access_level": "REDACTED_CONTENT",
+      "status": "ACTIVE",
+      "content_hash": "099c572f00fb405e284cc83c18efb15b776056159c41a93033bcf765830b93fc"
+    },
+    {
+      "prompt_id": "query-plan-generation",
+      "prompt_version": "1.0.0",
+      "task_type": "QUERY_PLAN_GENERATION",
+      "input_schema": {
+        "name": "QueryPlanGenerationInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "QueryPlanGenerationOutput",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": ["QueryPlan", "ResearchQuestionVersion"],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "REDACTED_CONTENT",
+      "max_allowed_data_access_level": "REDACTED_CONTENT",
+      "status": "ACTIVE",
+      "content_hash": "bf7b136b97b5379f6235068b10813d4f85071b78c643ac0f84f031ae790d90d1"
     }
   ]
 }

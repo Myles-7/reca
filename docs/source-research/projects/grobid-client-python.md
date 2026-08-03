@@ -94,8 +94,11 @@ assumptions with Artifact/Worker tests.
 
 ## RECA current state
 
-The Python client is not installed. RECA has a GROBID healthcheck only and no
-formal M2 client/converter implementation.
+The Python client is not installed. The M2 spike selected a small RECA-owned
+`httpx` Adapter after comparing the upstream client boundary with a real fixed
+PDF. RECA retains the useful multipart, coordinate, concurrency and `503`
+semantics while excluding directory crawling, batch filesystem ownership and
+lossy conversion. See [M2 GROBID and pypdf Spike](../M2_GROBID_PYPDF_SPIKE.md).
 
 ## Recommended integration mode
 

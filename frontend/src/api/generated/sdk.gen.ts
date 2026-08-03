@@ -3,6 +3,7 @@
 import {
   type Client,
   type ClientMeta,
+  formDataBodySerializer,
   type Options as Options2,
   type RequestResult,
   type TDataShape,
@@ -43,6 +44,21 @@ import type {
   ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentData,
   ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors,
   ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses,
+  DocumentsGetDocumentGetApiV1DocumentsDocumentIdData,
+  DocumentsGetDocumentGetApiV1DocumentsDocumentIdErrors,
+  DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponses,
+  DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberData,
+  DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberErrors,
+  DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses,
+  DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesData,
+  DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesErrors,
+  DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesResponses,
+  DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseData,
+  DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseErrors,
+  DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseResponses,
+  DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsData,
+  DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsErrors,
+  DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponses,
   HealthDependenciesHealthGetApiV1HealthDependenciesData,
   HealthDependenciesHealthGetApiV1HealthDependenciesErrors,
   HealthDependenciesHealthGetApiV1HealthDependenciesResponses,
@@ -67,6 +83,24 @@ import type {
   JobsStreamJobEventsGetApiV1JobsJobIdEventsData,
   JobsStreamJobEventsGetApiV1JobsJobIdEventsErrors,
   JobsStreamJobEventsGetApiV1JobsJobIdEventsResponses,
+  LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsData,
+  LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsErrors,
+  LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsResponses,
+  LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdData,
+  LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdErrors,
+  LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdResponses,
+  LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsData,
+  LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsErrors,
+  LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsResponses,
+  LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiData,
+  LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiErrors,
+  LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiResponses,
+  LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportData,
+  LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportErrors,
+  LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportResponses,
+  LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureData,
+  LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureErrors,
+  LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureResponses,
   LoginLoginAccessTokenPostApiV1LoginAccessTokenData,
   LoginLoginAccessTokenPostApiV1LoginAccessTokenErrors,
   LoginLoginAccessTokenPostApiV1LoginAccessTokenResponses,
@@ -120,6 +154,48 @@ import type {
   ProjectsUpdateProjectPatchApiV1ProjectsProjectIdData,
   ProjectsUpdateProjectPatchApiV1ProjectsProjectIdErrors,
   ProjectsUpdateProjectPatchApiV1ProjectsProjectIdResponses,
+  QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansData,
+  QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansErrors,
+  QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansResponses,
+  QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateData,
+  QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateErrors,
+  QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateResponses,
+  QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdData,
+  QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdErrors,
+  QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdResponses,
+  QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdData,
+  QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdErrors,
+  QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdResponses,
+  ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsData,
+  ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsErrors,
+  ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsResponses,
+  ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsData,
+  ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsErrors,
+  ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsResponses,
+  ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionData,
+  ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionErrors,
+  ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionResponses,
+  ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdData,
+  ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdErrors,
+  ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdResponses,
+  ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdData,
+  ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdErrors,
+  ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdResponses,
+  ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsData,
+  ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsErrors,
+  ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsResponses,
+  ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyData,
+  ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyErrors,
+  ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyResponses,
+  ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseData,
+  ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseErrors,
+  ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseResponses,
+  ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsData,
+  ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsErrors,
+  ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsResponses,
+  ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdData,
+  ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdErrors,
+  ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdResponses,
   UsersCreateUserPostApiV1UsersData,
   UsersCreateUserPostApiV1UsersErrors,
   UsersCreateUserPostApiV1UsersResponses,
@@ -954,6 +1030,668 @@ export const projectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogs = <
     url: "/api/v1/projects/{project_id}/audit-logs",
     ...options,
   })
+
+/**
+ * Create Research Question
+ */
+export const researchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestions =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsResponses,
+    ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsResponses,
+      ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/research-questions",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Current Project Research Question
+ */
+export const researchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestion =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionResponses,
+    ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionResponses,
+      ResearchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestionErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/research-question",
+      ...options,
+    })
+
+/**
+ * Get Research Question
+ */
+export const researchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdResponses,
+    ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdResponses,
+      ResearchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-questions/{research_question_id}",
+      ...options,
+    })
+
+/**
+ * List Research Question Versions
+ */
+export const researchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersions =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsResponses,
+    ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsResponses,
+      ResearchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersionsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-questions/{research_question_id}/versions",
+      ...options,
+    })
+
+/**
+ * Create Research Question Version
+ */
+export const researchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersions =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsResponses,
+    ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsResponses,
+      ResearchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersionsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-questions/{research_question_id}/versions",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Research Question Version
+ */
+export const researchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdResponses,
+    ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdResponses,
+      ResearchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-question-versions/{version_id}",
+      ...options,
+    })
+
+/**
+ * Update Research Question Version
+ */
+export const researchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdResponses,
+    ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).patch<
+      ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdResponses,
+      ResearchQuestionsUpdateResearchQuestionVersionPatchApiV1ResearchQuestionVersionsVersionIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-question-versions/{version_id}",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Parse Research Question Version
+ */
+export const researchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParse =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseResponses,
+    ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseResponses,
+      ResearchQuestionsParseResearchQuestionVersionPostApiV1ResearchQuestionVersionsVersionIdParseErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-question-versions/{version_id}/parse",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Mark Research Question Version Ready
+ */
+export const researchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReady =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyResponses,
+    ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyResponses,
+      ResearchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReadyErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-question-versions/{version_id}/ready",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Request Research Question Confirmation
+ */
+export const researchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequests =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsResponses,
+    ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsResponses,
+      ResearchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequestsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/research-question-versions/{version_id}/approval-requests",
+      ...options,
+    })
+
+/**
+ * Create Query Plan
+ */
+export const queryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlans = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansData,
+    ThrowOnError
+  >,
+): RequestResult<
+  QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansResponses,
+  QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansResponses,
+    QueryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlansErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/query-plans",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Query Plan
+ */
+export const queryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdResponses,
+  QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdResponses,
+    QueryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/query-plans/{query_plan_id}",
+    ...options,
+  })
+
+/**
+ * Update Query Plan
+ */
+export const queryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdResponses,
+  QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).patch<
+    QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdResponses,
+    QueryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/query-plans/{query_plan_id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Generate Query Plan
+ */
+export const queryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerate =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateResponses,
+    QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateResponses,
+      QueryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerateErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/query-plans/{query_plan_id}/generate",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Create Search Run
+ */
+export const literatureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRuns =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsResponses,
+    LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsResponses,
+      LiteratureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRunsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/query-plans/{query_plan_id}/search-runs",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Search Results
+ */
+export const literatureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResults =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsResponses,
+    LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsResponses,
+      LiteratureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResultsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/literature-search-runs/{search_run_id}/results",
+      ...options,
+    })
+
+/**
+ * Import Search Candidates
+ */
+export const literatureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImport =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportResponses,
+    LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportResponses,
+      LiteratureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImportErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/literature/import",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Import Doi
+ */
+export const literatureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoi =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiResponses,
+    LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiResponses,
+      LiteratureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoiErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/literature/import-doi",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * List Literature
+ */
+export const literatureListLiteratureGetApiV1ProjectsProjectIdLiterature = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureData,
+    ThrowOnError
+  >,
+): RequestResult<
+  LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureResponses,
+  LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureResponses,
+    LiteratureListLiteratureGetApiV1ProjectsProjectIdLiteratureErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/literature",
+    ...options,
+  })
+
+/**
+ * Get Literature
+ */
+export const literatureGetLiteratureGetApiV1LiteratureLiteratureId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdResponses,
+  LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdResponses,
+    LiteratureGetLiteratureGetApiV1LiteratureLiteratureIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/literature/{literature_id}",
+    ...options,
+  })
+
+/**
+ * Upload Document
+ */
+export const documentsUploadDocumentPostApiV1ProjectsProjectIdDocuments = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponses,
+  DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponses,
+    DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsErrors,
+    ThrowOnError
+  >({
+    ...formDataBodySerializer,
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/documents",
+    ...options,
+    headers: {
+      "Content-Type": null,
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Document
+ */
+export const documentsGetDocumentGetApiV1DocumentsDocumentId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DocumentsGetDocumentGetApiV1DocumentsDocumentIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponses,
+  DocumentsGetDocumentGetApiV1DocumentsDocumentIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponses,
+    DocumentsGetDocumentGetApiV1DocumentsDocumentIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/documents/{document_id}",
+    ...options,
+  })
+
+/**
+ * Parse Document
+ */
+export const documentsParseDocumentPostApiV1DocumentsDocumentIdParse = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseResponses,
+  DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseResponses,
+    DocumentsParseDocumentPostApiV1DocumentsDocumentIdParseErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/documents/{document_id}/parse",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * List Document Pages
+ */
+export const documentsListDocumentPagesGetApiV1DocumentsDocumentIdPages = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesResponses,
+  DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesResponses,
+    DocumentsListDocumentPagesGetApiV1DocumentsDocumentIdPagesErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/documents/{document_id}/pages",
+    ...options,
+  })
+
+/**
+ * Get Document Page
+ */
+export const documentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumber =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses,
+    DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses,
+      DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/documents/{document_id}/pages/{page_number}",
+      ...options,
+    })
 
 /**
  * List Project Artifacts

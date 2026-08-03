@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import tempfile
 import uuid
@@ -35,6 +36,7 @@ from app.models import (
     ArtifactType,
     IdempotencyRecord,
     ProjectMemberRole,
+    StorageProvider,
     User,
     get_datetime_utc,
 )
@@ -76,6 +78,153 @@ def _expires_at(artifact: Artifact) -> datetime:
             message="Artifact upload session has no valid expiration boundary.",
         )
     return datetime.fromisoformat(value)
+
+
+def create_generated_json_artifact(
+    session: Session,
+    *,
+    project_id: uuid.UUID,
+    payload: Any,
+    filename: str,
+    artifact_type: ArtifactType,
+    metadata: dict[str, Any],
+    created_by: uuid.UUID | None = None,
+    storage_backend: ObjectStorage | None = None,
+) -> Artifact:
+    encoded = json.dumps(
+        jsonable_encoder(payload),
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    digest = hashlib.sha256(encoded).hexdigest()
+    artifact = Artifact(
+        project_id=project_id,
+        artifact_type=artifact_type,
+        filename=filename,
+        storage_provider=StorageProvider.MINIO,
+        storage_key="",
+        mime_type="application/json",
+        size_bytes=len(encoded),
+        sha256=digest,
+        is_original=False,
+        is_immutable=True,
+        status=ArtifactStatus.AVAILABLE,
+        artifact_metadata=jsonable_encoder(metadata),
+        created_by=created_by,
+    )
+    artifact.storage_key = _artifact_key(
+        project_id=project_id,
+        artifact_id=artifact.id,
+        is_original=False,
+    )
+    with tempfile.TemporaryDirectory(prefix="reca-generated-json-") as directory:
+        path = Path(directory) / filename
+        path.write_bytes(encoded)
+        _storage(storage_backend).put_file_once(
+            object_key=artifact.storage_key,
+            path=path,
+            content_sha256=digest,
+            size_bytes=len(encoded),
+        )
+    session.add(artifact)
+    session.flush()
+    return artifact
+
+
+def create_generated_bytes_artifact(
+    session: Session,
+    *,
+    project_id: uuid.UUID,
+    content: bytes,
+    filename: str,
+    mime_type: str,
+    artifact_type: ArtifactType,
+    metadata: dict[str, Any],
+    source_artifact_id: uuid.UUID | None = None,
+    created_by: uuid.UUID | None = None,
+    storage_backend: ObjectStorage | None = None,
+) -> Artifact:
+    if not content:
+        raise ValueError("Generated Artifact content must not be empty.")
+    digest = hashlib.sha256(content).hexdigest()
+    artifact = Artifact(
+        project_id=project_id,
+        artifact_type=artifact_type,
+        filename=filename,
+        storage_provider=StorageProvider.MINIO,
+        storage_key="",
+        mime_type=mime_type,
+        size_bytes=len(content),
+        sha256=digest,
+        source_artifact_id=source_artifact_id,
+        is_original=False,
+        is_immutable=True,
+        status=ArtifactStatus.AVAILABLE,
+        artifact_metadata=jsonable_encoder(metadata),
+        created_by=created_by,
+    )
+    artifact.storage_key = _artifact_key(
+        project_id=project_id,
+        artifact_id=artifact.id,
+        is_original=False,
+    )
+    with tempfile.TemporaryDirectory(prefix="reca-generated-bytes-") as directory:
+        path = Path(directory) / filename
+        path.write_bytes(content)
+        _storage(storage_backend).put_file_once(
+            object_key=artifact.storage_key,
+            path=path,
+            content_sha256=digest,
+            size_bytes=len(content),
+        )
+    session.add(artifact)
+    session.flush()
+    if source_artifact_id is not None:
+        session.add(
+            ArtifactRelation(
+                project_id=project_id,
+                source_artifact_id=source_artifact_id,
+                target_artifact_id=artifact.id,
+                relation_type=ArtifactRelationType.DERIVED_FROM,
+                relation_metadata={"generated_sha256": digest},
+            )
+        )
+        session.flush()
+    return artifact
+
+
+def download_available_artifact_to_path(
+    session: Session,
+    *,
+    artifact_id: uuid.UUID,
+    project_id: uuid.UUID,
+    path: Path,
+    storage_backend: ObjectStorage | None = None,
+) -> Artifact:
+    artifact = session.exec(
+        select(Artifact).where(
+            Artifact.id == artifact_id,
+            Artifact.project_id == project_id,
+            Artifact.status == ArtifactStatus.AVAILABLE,
+            col(Artifact.deleted_at).is_(None),
+        )
+    ).first()
+    if artifact is None:
+        raise ContractError(
+            status_code=409,
+            code="FILE_NOT_AVAILABLE",
+            message="The source Artifact is not available for processing.",
+        )
+    _storage(storage_backend).download_to_path(
+        object_key=artifact.storage_key, path=path
+    )
+    if path.stat().st_size != artifact.size_bytes:
+        raise StorageError("Downloaded Artifact size does not match metadata.")
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    if digest != artifact.sha256:
+        raise StorageError("Downloaded Artifact hash does not match metadata.")
+    return artifact
 
 
 def _artifact_allowed_actions(
@@ -800,7 +949,7 @@ def list_artifacts(
     q: str | None,
     page: int,
     page_size: int,
-) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+) -> tuple[list[dict[str, Any]], dict[str, Any], list[str]]:
     access = project_service.authorize_project(
         session, project_id=project_id, actor=actor, action="artifact.read"
     )
@@ -835,14 +984,18 @@ def list_artifacts(
         .limit(page_size)
     ).all()
     total_pages = math.ceil(total / page_size) if total else 0
-    return [artifact_data(item, role=access.membership.role) for item in rows], {
-        "page": page,
-        "page_size": page_size,
-        "total": total,
-        "total_pages": total_pages,
-        "has_next": page < total_pages,
-        "has_previous": page > 1,
-    }
+    return (
+        [artifact_data(item, role=access.membership.role) for item in rows],
+        {
+            "page": page,
+            "page_size": page_size,
+            "total": total,
+            "total_pages": total_pages,
+            "has_next": page < total_pages,
+            "has_previous": page > 1,
+        },
+        project_service.allowed_actions(access.membership.role),
+    )
 
 
 def get_artifact(

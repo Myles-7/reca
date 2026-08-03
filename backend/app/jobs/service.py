@@ -676,6 +676,42 @@ def update_progress(
     return True
 
 
+def set_run_context(
+    session: Session,
+    *,
+    job_id: uuid.UUID,
+    run_id: uuid.UUID,
+    input_hash: str,
+    parameters: dict[str, Any],
+    implementation_metadata: dict[str, Any],
+) -> ProcessingRun:
+    job = session.get(Job, job_id)
+    run = session.exec(
+        select(ProcessingRun).where(ProcessingRun.id == run_id).with_for_update()
+    ).first()
+    if (
+        job is None
+        or run is None
+        or run.job_id != job.id
+        or run.project_id != job.project_id
+        or job.status != JobStatus.RUNNING
+        or run.status != JobStatus.RUNNING
+    ):
+        raise ContractError(
+            status_code=409,
+            code="INVALID_STATE_TRANSITION",
+            message="ProcessingRun is not available for execution context.",
+        )
+    run.input_hash = input_hash
+    run.parameters = jsonable_encoder(parameters)
+    run.parameters_hash = _canonical_hash(parameters)
+    run.implementation_metadata = jsonable_encoder(implementation_metadata)
+    session.add(run)
+    project_service._commit(session)
+    session.refresh(run)
+    return run
+
+
 def complete_job(
     session: Session,
     *,

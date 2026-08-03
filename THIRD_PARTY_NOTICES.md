@@ -48,8 +48,22 @@ planned RECA business capability for that project is implemented.
 | Celery | <https://github.com/celery/celery> | `5.5.3` | `DIRECT_DEPENDENCY` | `ALREADY_INTEGRATED` | `backend/pyproject.toml`, `uv.lock`, Worker entrypoint |
 | Valkey | <https://github.com/valkey-io/valkey> | image `8.1.7-alpine` | `INDEPENDENT_SERVICE` | `ALREADY_INTEGRATED` | `docker-compose.yml`; M0 service foundation only |
 | pgvector | <https://github.com/pgvector/pgvector> | image `0.8.2-pg17` | `INDEPENDENT_SERVICE` | `ALREADY_INTEGRATED` | `docker-compose.yml` and initialization script; M0 extension foundation only |
-| GROBID | <https://github.com/grobidOrg/grobid> | image `lfoppiano/grobid:0.8.2` | `INDEPENDENT_SERVICE` | `ALREADY_INTEGRATED` | `docker-compose.yml`; M0 health integration only |
+| GROBID | <https://github.com/grobidOrg/grobid> | image `lfoppiano/grobid:0.8.2`, digest `sha256:cab12863cab26c818479dbcb6a4f09922ed6caeedfbbf59ef957f52d7195a85d` | `INDEPENDENT_SERVICE` | `ALREADY_INTEGRATED` | M2 bounded parsing Adapter, immutable TEI Artifact and RECA Converter |
 | TanStack Table | <https://github.com/TanStack/table> | `@tanstack/react-table@8.21.3` | `DIRECT_DEPENDENCY` | `ALREADY_INTEGRATED` | `frontend/package.json` and `bun.lock`; feature adoption remains milestone-scoped |
+| PyAlex | <https://github.com/J535D165/pyalex> | `0.21` / `v0.21` / `875c708cbb6e449feebc46d2a7a26af8ed8b2fdd` | `DIRECT_DEPENDENCY_WITH_PROVIDER` | `DIRECT_DEPENDENCY` | `backend/pyproject.toml`, `uv.lock`, Provider and Recorded tests |
+| pypdf | <https://github.com/py-pdf/pypdf> | `6.14.2` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Explicit low-confidence page-text fallback |
+| defusedxml | <https://github.com/tiran/defusedxml> | `0.7.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Secure parsing boundary for untrusted GROBID TEI |
+
+## M2 document parsing dependencies
+
+- GROBID: Apache-2.0 independent service. No GROBID source or model asset is
+  copied into RECA. The fixed spike PDF and live TEI are not committed.
+- pypdf 6.14.2: BSD-3-Clause direct dependency used only for visibly degraded
+  page-level extraction; it does not create sections, coordinates or evidence.
+- defusedxml 0.7.1: Python Software Foundation License direct dependency used
+  to reject unsafe XML constructs at the TEI conversion boundary.
+- grobid-client-python: researched at commit
+  `161e0f45189c8592b2e2c58e9638cc6218bc75fb`; not installed and no source copied.
 
 ## Full Stack FastAPI Template
 
@@ -90,6 +104,26 @@ The production application must not depend on the local `upstream-lab` directory
 - Attribution location: this notice, package manifest and lockfile
 - Special restrictions: table selection and client state do not create RECA approvals or business decisions
 - Commercialization review: normal MIT dependency review
+
+## PyAlex
+
+- Project: PyAlex
+- Repository: <https://github.com/J535D165/pyalex>
+- Upstream Commit/Tag: adopted package `pyalex==0.21`; tag `v0.21` and research Commit `875c708cbb6e449feebc46d2a7a26af8ed8b2fdd`
+- License: MIT; Copyright (c) 2022 Jonathan de Bruin
+- License file: upstream `LICENSE`; package metadata/registry distribution
+- Integration mode: `DIRECT_DEPENDENCY_WITH_PROVIDER`
+- Status: `DIRECT_DEPENDENCY`
+- Copied paths: none; the Recorded OpenAlex fixture is RECA-authored and sanitized rather than copied PyAlex source
+- Modified paths: none in upstream source
+- Modification summary: PyAlex is used only to encode Works queries; RECA-owned `httpx` and Recorded transports own timeout, bounded retry, offline behavior and response conversion
+- Attribution location: this notice, `backend/pyproject.toml`, `uv.lock` and `docs/source-research/projects/pyalex.md`
+- Special restrictions: PyAlex objects cannot enter ORM, API or frontend contracts; OpenAlex documents its complete dataset as CC0, while API service terms and linked full-text rights remain separate reviews
+- Source of truth: RECA QueryPlan, Provider DTOs and later Literature Search Service records
+- Fallback: explicit sanitized Recorded OpenAlex response; never reported as live
+- Acceptance tests: `backend/tests/adapters/test_literature.py`
+- Commercialization review: normal MIT dependency attribution; OpenAlex service/data rights remain separate; RECA root license remains pending
+- Reviewed at: 2026-08-01
 
 ## M0-02 Compose infrastructure images
 
@@ -139,7 +173,6 @@ these projects by this documentation task.
 | Project | Research Commit | License | Recommended mode | Status | Incorporation evidence |
 | --- | --- | --- | --- | --- | --- |
 | pgvector-python | `60739dfd6cb9d674f32afa4184d43e6aff9dfbcf` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None |
-| PyAlex | `875c708cbb6e449feebc46d2a7a26af8ed8b2fdd` | MIT | `DIRECT_DEPENDENCY_WITH_PROVIDER` | `PLANNED` | None |
 | grobid-client-python | `161e0f45189c8592b2e2c58e9638cc6218bc75fb` | Apache-2.0 | `SELECTIVE_VENDOR` | `RESEARCHED` | None; experiment required |
 | PDF.js | `a80897dc9a2eb80c474717b683a4153f5b628ac7` | Apache-2.0 | `DIRECT_DEPENDENCY` | `PLANNED` | None |
 | PaperQA2 | `d7675d7b7eddeb3535e8c260399c5bbeeb818c50` | Apache-2.0 | `SELECTIVE_VENDOR` | `RESEARCHED` | None; experiment required |

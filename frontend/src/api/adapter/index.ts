@@ -9,6 +9,11 @@ import {
   artifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdComplete,
   artifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploads,
   artifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifacts,
+  documentsGetDocumentGetApiV1DocumentsDocumentId,
+  documentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumber,
+  documentsListDocumentPagesGetApiV1DocumentsDocumentIdPages,
+  documentsParseDocumentPostApiV1DocumentsDocumentIdParse,
+  documentsUploadDocumentPostApiV1ProjectsProjectIdDocuments,
   healthDependenciesHealthGetApiV1HealthDependencies,
   healthLiveHealthGetApiV1HealthLive,
   healthReadyHealthGetApiV1HealthReady,
@@ -16,6 +21,12 @@ import {
   jobsGetJobGetApiV1JobsJobId,
   jobsListProjectJobsGetApiV1ProjectsProjectIdJobs,
   jobsRetryJobPostApiV1JobsJobIdRetry,
+  literatureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRuns,
+  literatureGetLiteratureGetApiV1LiteratureLiteratureId,
+  literatureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResults,
+  literatureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoi,
+  literatureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImport,
+  literatureListLiteratureGetApiV1ProjectsProjectIdLiterature,
   loginLoginAccessTokenPostApiV1LoginAccessToken,
   loginRecoverPasswordPostApiV1PasswordRecoveryEmail,
   loginResetPasswordPostApiV1ResetPassword,
@@ -31,6 +42,18 @@ import {
   projectsRestoreProjectPostApiV1ProjectsProjectIdRestore,
   projectsUpdateProjectMemberPatchApiV1ProjectsProjectIdMembersMemberId,
   projectsUpdateProjectPatchApiV1ProjectsProjectId,
+  queryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlans,
+  queryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerate,
+  queryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanId,
+  queryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanId,
+  researchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestions,
+  researchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersions,
+  researchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestion,
+  researchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionId,
+  researchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionId,
+  researchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersions,
+  researchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReady,
+  researchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequests,
   usersCreateUserPostApiV1Users,
   usersDeleteUserDeleteApiV1UsersUserId,
   usersDeleteUserMeDeleteApiV1UsersMe,
@@ -55,11 +78,31 @@ export type {
   ArtifactUploadInitiate,
   AuditListEnvelope,
   BodyLoginLoginAccessTokenPostApiV1LoginAccessToken as Body_login_login_access_token_post_api_v1_login_access_token,
+  CurrentResearchQuestionEnvelope,
   DependenciesHealthResponse,
   DependencyCheck,
   DependencyStatus,
+  DocumentEnvelope,
+  DocumentPageEnvelope,
+  DocumentPageListEnvelope,
+  DocumentPagePublic,
+  DocumentParseRequest,
+  DocumentPublic,
+  DocumentType,
+  DocumentUploadEnvelope,
   JobListEnvelope,
   JobPublic,
+  LiteratureCandidatePublic,
+  LiteratureDoiImportRequest,
+  LiteratureImportEnvelope,
+  LiteratureImportRequest,
+  LiteratureRecordEnvelope,
+  LiteratureRecordListEnvelope,
+  LiteratureRecordPublic,
+  LiteratureSearchAcceptedEnvelope,
+  LiteratureSearchCreate,
+  LiteratureSearchResultsEnvelope,
+  LiteratureSearchRunPublic,
   LiveHealthResponse,
   MemberAdd,
   MemberListEnvelope,
@@ -73,7 +116,17 @@ export type {
   ProjectStatus,
   ProjectType,
   ProjectUpdate,
+  QueryPlanCreate,
+  QueryPlanEnvelope,
+  QueryPlanFields,
+  QueryPlanPublic,
+  QueryPlanUpdate,
   ReadyHealthResponse,
+  ResearchQuestionCreate,
+  ResearchQuestionData,
+  ResearchQuestionMarkReady,
+  ResearchQuestionVersionCreate,
+  ResearchQuestionVersionPublic,
   Token,
   UpdatePassword,
   UserCreate,
@@ -266,6 +319,254 @@ export class ProjectsApi {
     unwrap(
       projectsRestoreProjectPostApiV1ProjectsProjectIdRestore({
         path: { project_id: projectId },
+      }),
+    )
+}
+
+export class ResearchQuestionsApi {
+  static current = (projectId: string) =>
+    unwrap(
+      researchQuestionsGetCurrentProjectResearchQuestionGetApiV1ProjectsProjectIdResearchQuestion(
+        { path: { project_id: projectId } },
+      ),
+    )
+  static get = (researchQuestionId: string) =>
+    unwrap(
+      researchQuestionsGetResearchQuestionGetApiV1ResearchQuestionsResearchQuestionId(
+        { path: { research_question_id: researchQuestionId } },
+      ),
+    )
+  static listVersions = (researchQuestionId: string) =>
+    unwrap(
+      researchQuestionsListResearchQuestionVersionsGetApiV1ResearchQuestionsResearchQuestionIdVersions(
+        { path: { research_question_id: researchQuestionId } },
+      ),
+    )
+  static getVersion = (versionId: string) =>
+    unwrap(
+      researchQuestionsGetResearchQuestionVersionGetApiV1ResearchQuestionVersionsVersionId(
+        { path: { version_id: versionId } },
+      ),
+    )
+  static create = (
+    projectId: string,
+    body: import("../generated/types.gen").ResearchQuestionCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      researchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestions(
+        {
+          path: { project_id: projectId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static createVersion = (
+    researchQuestionId: string,
+    body: import("../generated/types.gen").ResearchQuestionVersionCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      researchQuestionsCreateResearchQuestionVersionPostApiV1ResearchQuestionsResearchQuestionIdVersions(
+        {
+          path: { research_question_id: researchQuestionId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static markReady = (
+    versionId: string,
+    body: import("../generated/types.gen").ResearchQuestionMarkReady,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      researchQuestionsMarkResearchQuestionVersionReadyPostApiV1ResearchQuestionVersionsVersionIdReady(
+        {
+          path: { version_id: versionId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static requestConfirmation = (versionId: string, idempotencyKey: string) =>
+    unwrap(
+      researchQuestionsRequestResearchQuestionConfirmationPostApiV1ResearchQuestionVersionsVersionIdApprovalRequests(
+        {
+          path: { version_id: versionId },
+          headers: { "Idempotency-Key": idempotencyKey },
+        },
+      ),
+    )
+}
+
+export class QueryPlansApi {
+  static create = (
+    projectId: string,
+    body: import("../generated/types.gen").QueryPlanCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      queryPlansCreateQueryPlanPostApiV1ProjectsProjectIdQueryPlans({
+        path: { project_id: projectId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static get = (queryPlanId: string) =>
+    unwrap(
+      queryPlansGetQueryPlanGetApiV1QueryPlansQueryPlanId({
+        path: { query_plan_id: queryPlanId },
+      }),
+    )
+  static update = (
+    queryPlanId: string,
+    body: import("../generated/types.gen").QueryPlanUpdate,
+    lockVersion: number,
+  ) =>
+    unwrap(
+      queryPlansUpdateQueryPlanPatchApiV1QueryPlansQueryPlanId({
+        path: { query_plan_id: queryPlanId },
+        headers: { "If-Match": `"${lockVersion}"` },
+        body,
+      }),
+    )
+  static generate = (queryPlanId: string, idempotencyKey: string) =>
+    unwrap(
+      queryPlansGenerateQueryPlanPostApiV1QueryPlansQueryPlanIdGenerate({
+        path: { query_plan_id: queryPlanId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body: {},
+      }),
+    )
+}
+
+export type LiteratureSearchQuery = PageQuery & {
+  verification_status?: import("../generated/types.gen").LiteratureVerificationStatus
+  open_access_status?: string
+  from_year?: number
+  to_year?: number
+  q?: string
+}
+
+export type LiteratureListQuery = PageQuery & {
+  decision?: import("../generated/types.gen").LiteratureDecisionStatus
+  verification_status?: import("../generated/types.gen").LiteratureVerificationStatus
+  has_document?: boolean
+  year_from?: number
+  year_to?: number
+  q?: string
+}
+
+export class LiteratureApi {
+  static search = (
+    queryPlanId: string,
+    body: import("../generated/types.gen").LiteratureSearchCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      literatureCreateSearchRunPostApiV1QueryPlansQueryPlanIdSearchRuns({
+        path: { query_plan_id: queryPlanId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static results = (searchRunId: string, query: LiteratureSearchQuery = {}) =>
+    unwrap(
+      literatureGetSearchResultsGetApiV1LiteratureSearchRunsSearchRunIdResults({
+        path: { search_run_id: searchRunId },
+        query,
+      }),
+    )
+  static importCandidates = (
+    projectId: string,
+    body: import("../generated/types.gen").LiteratureImportRequest,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      literatureImportSearchCandidatesPostApiV1ProjectsProjectIdLiteratureImport(
+        {
+          path: { project_id: projectId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static importDoi = (
+    projectId: string,
+    body: import("../generated/types.gen").LiteratureDoiImportRequest,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      literatureImportDoiPostApiV1ProjectsProjectIdLiteratureImportDoi({
+        path: { project_id: projectId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static list = (projectId: string, query: LiteratureListQuery = {}) =>
+    unwrap(
+      literatureListLiteratureGetApiV1ProjectsProjectIdLiterature({
+        path: { project_id: projectId },
+        query,
+      }),
+    )
+  static get = (literatureId: string) =>
+    unwrap(
+      literatureGetLiteratureGetApiV1LiteratureLiteratureId({
+        path: { literature_id: literatureId },
+      }),
+    )
+}
+
+export class DocumentsApi {
+  static upload = (
+    projectId: string,
+    file: File,
+    documentType: import("../generated/types.gen").DocumentType,
+    literatureRecordId: string | null,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      documentsUploadDocumentPostApiV1ProjectsProjectIdDocuments({
+        path: { project_id: projectId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body: {
+          file,
+          document_type: documentType,
+          literature_record_id: literatureRecordId,
+        },
+      }),
+    )
+  static get = (documentId: string) =>
+    unwrap(
+      documentsGetDocumentGetApiV1DocumentsDocumentId({
+        path: { document_id: documentId },
+      }),
+    )
+  static parse = (
+    documentId: string,
+    body: import("../generated/types.gen").DocumentParseRequest,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      documentsParseDocumentPostApiV1DocumentsDocumentIdParse({
+        path: { document_id: documentId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static listPages = (documentId: string) =>
+    unwrap(
+      documentsListDocumentPagesGetApiV1DocumentsDocumentIdPages({
+        path: { document_id: documentId },
+      }),
+    )
+  static getPage = (documentId: string, pageNumber: number) =>
+    unwrap(
+      documentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumber({
+        path: { document_id: documentId, page_number: pageNumber },
       }),
     )
 }

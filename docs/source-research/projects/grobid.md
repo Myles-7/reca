@@ -8,7 +8,7 @@ Research status: `ALREADY_INTEGRATED`
 
 Last researched: 2026-07-31
 
-Last updated: 2026-07-31
+Last updated: 2026-08-01
 
 Phase summary: [Literature and evidence research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_2_LITERATURE.md)
 
@@ -142,8 +142,11 @@ not exact reproduction of every upstream TEI byte.
 
 ## RECA current state
 
-GROBID is present only as M0 smoke/health infrastructure. The formal M2 parsing
-flow and TEI converter are planned, not implemented.
+M2 now uses the pinned `lfoppiano/grobid:0.8.2` service through a bounded
+RECA-owned `httpx` Adapter. Raw TEI is retained as an immutable derived Artifact
+before the secure RECA Converter creates DocumentPage and DocumentChunk rows.
+The real fixed-PDF measurements, image digest, Docker/JDK compatibility finding
+and fallback decision are recorded in [M2 GROBID and pypdf Spike](../M2_GROBID_PYPDF_SPIKE.md).
 
 ## Recommended integration mode
 

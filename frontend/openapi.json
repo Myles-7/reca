@@ -1,4 +1,4 @@
-{
+﻿{
   "openapi": "3.1.0",
   "info": { "title": "RECA", "version": "0.1.0" },
   "paths": {
@@ -1923,6 +1923,2940 @@
               }
             },
             "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/research-questions": {
+      "post": {
+        "tags": ["research-questions"],
+        "summary": "Create Research Question",
+        "operationId": "research-questions_create_research_question_post_api_v1_projects_project_id_research-questions",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchQuestionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResearchQuestionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/research-question": {
+      "get": {
+        "tags": ["research-questions"],
+        "summary": "Get Current Project Research Question",
+        "operationId": "research-questions_get_current_project_research_question_get_api_v1_projects_project_id_research-question",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResearchQuestionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/research-questions/{research_question_id}": {
+      "get": {
+        "tags": ["research-questions"],
+        "summary": "Get Research Question",
+        "operationId": "research-questions_get_research_question_get_api_v1_research-questions_research_question_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "research_question_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Research Question Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResearchQuestionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/research-questions/{research_question_id}/versions": {
+      "get": {
+        "tags": ["research-questions"],
+        "summary": "List Research Question Versions",
+        "operationId": "research-questions_list_research_question_versions_get_api_v1_research-questions_research_question_id_versions",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "research_question_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Research Question Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResearchQuestionVersionListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      },
+      "post": {
+        "tags": ["research-questions"],
+        "summary": "Create Research Question Version",
+        "operationId": "research-questions_create_research_question_version_post_api_v1_research-questions_research_question_id_versions",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "research_question_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Research Question Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchQuestionVersionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResearchQuestionVersionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/research-question-versions/{version_id}": {
+      "get": {
+        "tags": ["research-questions"],
+        "summary": "Get Research Question Version",
+        "operationId": "research-questions_get_research_question_version_get_api_v1_research-question-versions_version_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResearchQuestionVersionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["research-questions"],
+        "summary": "Update Research Question Version",
+        "operationId": "research-questions_update_research_question_version_patch_api_v1_research-question-versions_version_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchQuestionVersionUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResearchQuestionVersionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/research-question-versions/{version_id}/parse": {
+      "post": {
+        "tags": ["research-questions"],
+        "summary": "Parse Research Question Version",
+        "operationId": "research-questions_parse_research_question_version_post_api_v1_research-question-versions_version_id_parse",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchQuestionParseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JobEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/research-question-versions/{version_id}/ready": {
+      "post": {
+        "tags": ["research-questions"],
+        "summary": "Mark Research Question Version Ready",
+        "operationId": "research-questions_mark_research_question_version_ready_post_api_v1_research-question-versions_version_id_ready",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchQuestionMarkReady"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResearchQuestionVersionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/research-question-versions/{version_id}/approval-requests": {
+      "post": {
+        "tags": ["research-questions"],
+        "summary": "Request Research Question Confirmation",
+        "operationId": "research-questions_request_research_question_confirmation_post_api_v1_research-question-versions_version_id_approval-requests",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalReferenceEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/query-plans": {
+      "post": {
+        "tags": ["query-plans"],
+        "summary": "Create Query Plan",
+        "operationId": "query-plans_create_query_plan_post_api_v1_projects_project_id_query-plans",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/QueryPlanCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QueryPlanEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/query-plans/{query_plan_id}": {
+      "get": {
+        "tags": ["query-plans"],
+        "summary": "Get Query Plan",
+        "operationId": "query-plans_get_query_plan_get_api_v1_query-plans_query_plan_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "query_plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Query Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QueryPlanEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["query-plans"],
+        "summary": "Update Query Plan",
+        "operationId": "query-plans_update_query_plan_patch_api_v1_query-plans_query_plan_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "query_plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Query Plan Id"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/QueryPlanUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QueryPlanEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/query-plans/{query_plan_id}/generate": {
+      "post": {
+        "tags": ["query-plans"],
+        "summary": "Generate Query Plan",
+        "operationId": "query-plans_generate_query_plan_post_api_v1_query-plans_query_plan_id_generate",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "query_plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Query Plan Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  { "$ref": "#/components/schemas/QueryPlanGenerateRequest" },
+                  { "type": "null" }
+                ],
+                "title": "Generate In"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JobEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/query-plans/{query_plan_id}/search-runs": {
+      "post": {
+        "tags": ["literature"],
+        "summary": "Create Search Run",
+        "operationId": "literature_create_search_run_post_api_v1_query-plans_query_plan_id_search-runs",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "query_plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Query Plan Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiteratureSearchCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiteratureSearchAcceptedEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/literature-search-runs/{search_run_id}/results": {
+      "get": {
+        "tags": ["literature"],
+        "summary": "Get Search Results",
+        "operationId": "literature_get_search_results_get_api_v1_literature-search-runs_search_run_id_results",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "search_run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Search Run Id"
+            }
+          },
+          {
+            "name": "verification_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/LiteratureVerificationStatus" },
+                { "type": "null" }
+              ],
+              "title": "Verification Status"
+            }
+          },
+          {
+            "name": "open_access_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 100 },
+                { "type": "null" }
+              ],
+              "title": "Open Access Status"
+            }
+          },
+          {
+            "name": "from_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "integer", "maximum": 9999, "minimum": 1000 },
+                { "type": "null" }
+              ],
+              "title": "From Year"
+            }
+          },
+          {
+            "name": "to_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "integer", "maximum": 9999, "minimum": 1000 },
+                { "type": "null" }
+              ],
+              "title": "To Year"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 200 },
+                { "type": "null" }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiteratureSearchResultsEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/literature/import": {
+      "post": {
+        "tags": ["literature"],
+        "summary": "Import Search Candidates",
+        "operationId": "literature_import_search_candidates_post_api_v1_projects_project_id_literature_import",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiteratureImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiteratureImportEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/literature/import-doi": {
+      "post": {
+        "tags": ["literature"],
+        "summary": "Import Doi",
+        "operationId": "literature_import_doi_post_api_v1_projects_project_id_literature_import-doi",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LiteratureDoiImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiteratureRecordEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/literature": {
+      "get": {
+        "tags": ["literature"],
+        "summary": "List Literature",
+        "operationId": "literature_list_literature_get_api_v1_projects_project_id_literature",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "decision",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/LiteratureDecisionStatus" },
+                { "type": "null" }
+              ],
+              "title": "Decision"
+            }
+          },
+          {
+            "name": "verification_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/LiteratureVerificationStatus" },
+                { "type": "null" }
+              ],
+              "title": "Verification Status"
+            }
+          },
+          {
+            "name": "has_document",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+              "title": "Has Document"
+            }
+          },
+          {
+            "name": "year_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "integer", "maximum": 9999, "minimum": 1000 },
+                { "type": "null" }
+              ],
+              "title": "Year From"
+            }
+          },
+          {
+            "name": "year_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "integer", "maximum": 9999, "minimum": 1000 },
+                { "type": "null" }
+              ],
+              "title": "Year To"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "maxLength": 200 },
+                { "type": "null" }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiteratureRecordListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/literature/{literature_id}": {
+      "get": {
+        "tags": ["literature"],
+        "summary": "Get Literature",
+        "operationId": "literature_get_literature_get_api_v1_literature_literature_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "literature_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Literature Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiteratureRecordEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Gateway"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/documents": {
+      "post": {
+        "tags": ["documents"],
+        "summary": "Upload Document",
+        "operationId": "documents_upload_document_post_api_v1_projects_project_id_documents",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_documents_upload_document_post_api_v1_projects_project_id_documents"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentUploadEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}": {
+      "get": {
+        "tags": ["documents"],
+        "summary": "Get Document",
+        "operationId": "documents_get_document_get_api_v1_documents_document_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DocumentEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}/parse": {
+      "post": {
+        "tags": ["documents"],
+        "summary": "Parse Document",
+        "operationId": "documents_parse_document_post_api_v1_documents_document_id_parse",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Document Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DocumentParseRequest" }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JobEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}/pages": {
+      "get": {
+        "tags": ["documents"],
+        "summary": "List Document Pages",
+        "operationId": "documents_list_document_pages_get_api_v1_documents_document_id_pages",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentPageListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{document_id}/pages/{page_number}": {
+      "get": {
+        "tags": ["documents"],
+        "summary": "Get Document Page",
+        "operationId": "documents_get_document_page_get_api_v1_documents_document_id_pages_page_number",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Document Id"
+            }
+          },
+          {
+            "name": "page_number",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Page Number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentPageEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
           }
         }
       }
@@ -4016,6 +6950,34 @@
         ],
         "title": "ApprovalPublic"
       },
+      "ApprovalReference": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "target_object_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Object Id"
+          },
+          "status": { "type": "string", "title": "Status" }
+        },
+        "type": "object",
+        "required": ["id", "project_id", "target_object_id", "status"],
+        "title": "ApprovalReference"
+      },
+      "ApprovalReferenceEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ApprovalReference" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ApprovalReferenceEnvelope"
+      },
       "ApprovalRejectRequest": {
         "properties": {
           "decision_reason": {
@@ -4126,11 +7088,16 @@
             "type": "array",
             "title": "Data"
           },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
           "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
           "meta": { "$ref": "#/components/schemas/ResponseMeta" }
         },
         "type": "object",
-        "required": ["data", "pagination", "meta"],
+        "required": ["data", "allowed_actions", "pagination", "meta"],
         "title": "ArtifactListEnvelope"
       },
       "ArtifactPublic": {
@@ -4499,6 +7466,29 @@
         "required": ["type", "id", "label"],
         "title": "AuditTargetPublic"
       },
+      "Body_documents_upload_document_post_api_v1_projects_project_id_documents": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "document_type": {
+            "$ref": "#/components/schemas/DocumentType",
+            "default": "SCHOLARLY_PDF"
+          },
+          "literature_record_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Literature Record Id"
+          }
+        },
+        "type": "object",
+        "required": ["file"],
+        "title": "Body_documents_upload_document_post_api_v1_projects_project_id_documents"
+      },
       "Body_login_login_access_token_post_api_v1_login_access-token": {
         "properties": {
           "grant_type": {
@@ -4566,6 +7556,54 @@
         "required": ["error"],
         "title": "ContractErrorResponse"
       },
+      "CurrentResearchQuestionData": {
+        "properties": {
+          "question": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ResearchQuestionData" },
+              { "type": "null" }
+            ]
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
+          "capability_availability": {
+            "additionalProperties": { "type": "string" },
+            "type": "object",
+            "title": "Capability Availability"
+          }
+        },
+        "type": "object",
+        "required": ["question", "allowed_actions", "capability_availability"],
+        "title": "CurrentResearchQuestionData"
+      },
+      "CurrentResearchQuestionEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CurrentResearchQuestionData"
+          },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "CurrentResearchQuestionEnvelope"
+      },
+      "CurrentResearchQuestionSummary": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "current_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Current Version Id"
+          },
+          "status": { "type": "string", "title": "Status" }
+        },
+        "type": "object",
+        "required": ["id", "current_version_id", "status"],
+        "title": "CurrentResearchQuestionSummary"
+      },
       "DependenciesHealthResponse": {
         "properties": {
           "dependencies": {
@@ -4602,6 +7640,253 @@
           "UNKNOWN"
         ],
         "title": "DependencyStatus"
+      },
+      "DocumentEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/DocumentPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "DocumentEnvelope"
+      },
+      "DocumentPageEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/DocumentPagePublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "DocumentPageEnvelope"
+      },
+      "DocumentPageListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/DocumentPagePublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "DocumentPageListEnvelope"
+      },
+      "DocumentPagePublic": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Document Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "page_number": { "type": "integer", "title": "Page Number" },
+          "printed_page_label": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Printed Page Label"
+          },
+          "text_content": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Text Content"
+          },
+          "width": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Width"
+          },
+          "height": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Height"
+          },
+          "parser_metadata": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Parser Metadata"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_id",
+          "project_id",
+          "page_number",
+          "printed_page_label",
+          "text_content",
+          "width",
+          "height",
+          "parser_metadata",
+          "created_at"
+        ],
+        "title": "DocumentPagePublic"
+      },
+      "DocumentParseConfidence": {
+        "type": "string",
+        "enum": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"],
+        "title": "DocumentParseConfidence"
+      },
+      "DocumentParseRequest": {
+        "properties": {
+          "allow_fallback": {
+            "type": "boolean",
+            "title": "Allow Fallback",
+            "default": true
+          },
+          "extract_coordinates": {
+            "type": "boolean",
+            "title": "Extract Coordinates",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "DocumentParseRequest"
+      },
+      "DocumentParserType": {
+        "type": "string",
+        "enum": ["GROBID", "PYPDF", "NONE"],
+        "title": "DocumentParserType"
+      },
+      "DocumentPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "literature_record_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Literature Record Id"
+          },
+          "document_type": { "$ref": "#/components/schemas/DocumentType" },
+          "parser_type": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/DocumentParserType" },
+              { "type": "null" }
+            ]
+          },
+          "parser_version": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Parser Version"
+          },
+          "parse_status": { "$ref": "#/components/schemas/JobStatus" },
+          "page_count": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Page Count"
+          },
+          "language": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Language"
+          },
+          "is_scanned": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Is Scanned"
+          },
+          "parse_confidence": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/DocumentParseConfidence" },
+              { "type": "null" }
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "artifact_id",
+          "literature_record_id",
+          "document_type",
+          "parser_type",
+          "parser_version",
+          "parse_status",
+          "page_count",
+          "language",
+          "is_scanned",
+          "parse_confidence",
+          "created_at",
+          "updated_at",
+          "allowed_actions"
+        ],
+        "title": "DocumentPublic"
+      },
+      "DocumentType": {
+        "type": "string",
+        "enum": ["SCHOLARLY_PDF", "MANUSCRIPT", "OTHER"],
+        "title": "DocumentType"
+      },
+      "DocumentUploadData": {
+        "properties": {
+          "artifact": { "$ref": "#/components/schemas/ArtifactPublic" },
+          "document": { "$ref": "#/components/schemas/DocumentPublic" }
+        },
+        "type": "object",
+        "required": ["artifact", "document"],
+        "title": "DocumentUploadData"
+      },
+      "DocumentUploadEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/DocumentUploadData" },
+          "meta": { "$ref": "#/components/schemas/DocumentUploadMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "DocumentUploadEnvelope"
+      },
+      "DocumentUploadMeta": {
+        "properties": {
+          "request_id": { "type": "string", "title": "Request Id" },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          },
+          "idempotency_replayed": {
+            "type": "boolean",
+            "title": "Idempotency Replayed",
+            "default": false
+          },
+          "duplicate_of_artifact_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Duplicate Of Artifact Id"
+          }
+        },
+        "type": "object",
+        "required": ["request_id"],
+        "title": "DocumentUploadMeta"
       },
       "ErrorDetail": {
         "properties": {
@@ -4832,7 +8117,10 @@
       "JobTaskType": {
         "type": "string",
         "enum": [
+          "RESEARCH_QUESTION_SCOPING",
+          "QUERY_PLAN_GENERATION",
           "DOCUMENT_PARSE",
+          "LITERATURE_SEARCH",
           "LITERATURE_EXTRACT",
           "DOCUMENT_EMBED",
           "LITERATURE_SUMMARIZE",
@@ -4845,6 +8133,481 @@
           "REPRO_PACKAGE_EXPORT"
         ],
         "title": "JobTaskType"
+      },
+      "LiteratureCandidatePublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "search_run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Search Run Id"
+          },
+          "result_order": { "type": "integer", "title": "Result Order" },
+          "source_identifier": {
+            "type": "string",
+            "title": "Source Identifier"
+          },
+          "title": { "type": "string", "title": "Title" },
+          "abstract": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Abstract"
+          },
+          "publication_year": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Publication Year"
+          },
+          "journal_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Journal Name"
+          },
+          "doi": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Doi"
+          },
+          "authors_text": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Authors Text"
+          },
+          "keywords": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Keywords"
+          },
+          "work_type": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Work Type"
+          },
+          "open_access_status": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Open Access Status"
+          },
+          "verification_status": {
+            "$ref": "#/components/schemas/LiteratureVerificationStatus"
+          },
+          "fetched_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fetched At"
+          },
+          "degraded": { "type": "boolean", "title": "Degraded" },
+          "imported_literature_record_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Imported Literature Record Id"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "search_run_id",
+          "result_order",
+          "source_identifier",
+          "title",
+          "abstract",
+          "publication_year",
+          "journal_name",
+          "doi",
+          "authors_text",
+          "keywords",
+          "work_type",
+          "open_access_status",
+          "verification_status",
+          "fetched_at",
+          "degraded",
+          "imported_literature_record_id",
+          "allowed_actions"
+        ],
+        "title": "LiteratureCandidatePublic"
+      },
+      "LiteratureDecisionStatus": {
+        "type": "string",
+        "enum": ["INCLUDED", "EXCLUDED", "UNCERTAIN"],
+        "title": "LiteratureDecisionStatus"
+      },
+      "LiteratureDoiImportRequest": {
+        "properties": {
+          "doi": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Doi"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["doi"],
+        "title": "LiteratureDoiImportRequest"
+      },
+      "LiteratureImportData": {
+        "properties": {
+          "imported": {
+            "items": { "$ref": "#/components/schemas/LiteratureImportResult" },
+            "type": "array",
+            "title": "Imported"
+          }
+        },
+        "type": "object",
+        "required": ["imported"],
+        "title": "LiteratureImportData"
+      },
+      "LiteratureImportEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/LiteratureImportData" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "LiteratureImportEnvelope"
+      },
+      "LiteratureImportRequest": {
+        "properties": {
+          "search_run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Search Run Id"
+          },
+          "result_ids": {
+            "items": { "type": "string", "format": "uuid" },
+            "type": "array",
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Result Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["search_run_id", "result_ids"],
+        "title": "LiteratureImportRequest"
+      },
+      "LiteratureImportResult": {
+        "properties": {
+          "candidate_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Candidate Id"
+          },
+          "literature_record_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Literature Record Id"
+          },
+          "matched_existing": { "type": "boolean", "title": "Matched Existing" }
+        },
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "literature_record_id",
+          "matched_existing"
+        ],
+        "title": "LiteratureImportResult"
+      },
+      "LiteratureRecordEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/LiteratureRecordPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "LiteratureRecordEnvelope"
+      },
+      "LiteratureRecordListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/LiteratureRecordPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "allowed_actions", "pagination", "meta"],
+        "title": "LiteratureRecordListEnvelope"
+      },
+      "LiteratureRecordPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "document_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Document Id"
+          },
+          "source_type": {
+            "$ref": "#/components/schemas/LiteratureSourceType"
+          },
+          "source_identifier": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Source Identifier"
+          },
+          "title": { "type": "string", "title": "Title" },
+          "abstract": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Abstract"
+          },
+          "publication_year": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Publication Year"
+          },
+          "journal_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Journal Name"
+          },
+          "doi": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Doi"
+          },
+          "authors_text": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Authors Text"
+          },
+          "keywords": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Keywords"
+          },
+          "work_type": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Work Type"
+          },
+          "open_access_status": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Open Access Status"
+          },
+          "verification_status": {
+            "$ref": "#/components/schemas/LiteratureVerificationStatus"
+          },
+          "current_decision": {
+            "$ref": "#/components/schemas/LiteratureDecisionStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "document_id",
+          "source_type",
+          "source_identifier",
+          "title",
+          "abstract",
+          "publication_year",
+          "journal_name",
+          "doi",
+          "authors_text",
+          "keywords",
+          "work_type",
+          "open_access_status",
+          "verification_status",
+          "current_decision",
+          "created_at",
+          "updated_at",
+          "allowed_actions"
+        ],
+        "title": "LiteratureRecordPublic"
+      },
+      "LiteratureSearchAcceptedData": {
+        "properties": {
+          "search_run": {
+            "$ref": "#/components/schemas/LiteratureSearchRunPublic"
+          },
+          "job": { "$ref": "#/components/schemas/JobPublic" }
+        },
+        "type": "object",
+        "required": ["search_run", "job"],
+        "title": "LiteratureSearchAcceptedData"
+      },
+      "LiteratureSearchAcceptedEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LiteratureSearchAcceptedData"
+          },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "LiteratureSearchAcceptedEnvelope"
+      },
+      "LiteratureSearchCreate": {
+        "properties": {
+          "page_size": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Page Size",
+            "default": 25
+          },
+          "use_cache": {
+            "type": "boolean",
+            "title": "Use Cache",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "LiteratureSearchCreate"
+      },
+      "LiteratureSearchResultsData": {
+        "properties": {
+          "search_run": {
+            "$ref": "#/components/schemas/LiteratureSearchRunPublic"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/LiteratureCandidatePublic"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": ["search_run", "results"],
+        "title": "LiteratureSearchResultsData"
+      },
+      "LiteratureSearchResultsEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LiteratureSearchResultsData"
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "LiteratureSearchResultsEnvelope"
+      },
+      "LiteratureSearchRunPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "query_plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Query Plan Id"
+          },
+          "provider": { "type": "string", "title": "Provider" },
+          "provider_query": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Provider Query"
+          },
+          "result_count": { "type": "integer", "title": "Result Count" },
+          "cache_hit": { "type": "boolean", "title": "Cache Hit" },
+          "cache_stale": { "type": "boolean", "title": "Cache Stale" },
+          "cache_source_run_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Cache Source Run Id"
+          },
+          "degraded": { "type": "boolean", "title": "Degraded" },
+          "limitations": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Limitations"
+          },
+          "fetched_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fetched At"
+          },
+          "status": { "$ref": "#/components/schemas/JobStatus" },
+          "error_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Error Code"
+          },
+          "job_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Job Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "query_plan_id",
+          "provider",
+          "provider_query",
+          "result_count",
+          "cache_hit",
+          "cache_stale",
+          "cache_source_run_id",
+          "degraded",
+          "limitations",
+          "fetched_at",
+          "status",
+          "error_code",
+          "job_id",
+          "created_at",
+          "allowed_actions"
+        ],
+        "title": "LiteratureSearchRunPublic"
+      },
+      "LiteratureSourceType": {
+        "type": "string",
+        "enum": ["OPENALEX", "DOI_IMPORT", "USER_UPLOAD", "MANUAL", "CACHE"],
+        "title": "LiteratureSourceType"
+      },
+      "LiteratureVerificationStatus": {
+        "type": "string",
+        "enum": ["VERIFIED", "PARTIALLY_VERIFIED", "UNVERIFIED", "CONFLICTED"],
+        "title": "LiteratureVerificationStatus"
       },
       "LiveHealthResponse": {
         "properties": {
@@ -4882,11 +8645,16 @@
             "type": "array",
             "title": "Data"
           },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
           "pagination": { "$ref": "#/components/schemas/PaginationMeta" },
           "meta": { "$ref": "#/components/schemas/ResponseMeta" }
         },
         "type": "object",
-        "required": ["data", "pagination", "meta"],
+        "required": ["data", "allowed_actions", "pagination", "meta"],
         "title": "MemberListEnvelope"
       },
       "MemberTransferData": {
@@ -5158,8 +8926,10 @@
             "title": "Module Availability"
           },
           "current_research_question": {
-            "type": "null",
-            "title": "Current Research Question"
+            "anyOf": [
+              { "$ref": "#/components/schemas/CurrentResearchQuestionSummary" },
+              { "type": "null" }
+            ]
           },
           "foundation_counts": {
             "$ref": "#/components/schemas/FoundationCounts"
@@ -5263,7 +9033,12 @@
             "format": "date-time",
             "title": "Updated At"
           },
-          "permissions": { "$ref": "#/components/schemas/ProjectPermissions" }
+          "permissions": { "$ref": "#/components/schemas/ProjectPermissions" },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
         },
         "type": "object",
         "required": [
@@ -5282,7 +9057,8 @@
           "lock_version",
           "created_at",
           "updated_at",
-          "permissions"
+          "permissions",
+          "allowed_actions"
         ],
         "title": "ProjectPublic"
       },
@@ -5376,6 +9152,374 @@
         "type": "object",
         "title": "ProjectUpdate"
       },
+      "QueryPlanCreate": {
+        "properties": {
+          "chinese_terms": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Chinese Terms"
+          },
+          "english_terms": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "English Terms"
+          },
+          "synonyms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Synonyms"
+          },
+          "object_terms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Object Terms"
+          },
+          "method_terms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Method Terms"
+          },
+          "boolean_query": {
+            "anyOf": [
+              { "type": "string", "maxLength": 20000 },
+              { "type": "null" }
+            ],
+            "title": "Boolean Query"
+          },
+          "filters": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/QueryPlanFilters" },
+              { "type": "null" }
+            ]
+          },
+          "limitations": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Limitations"
+          },
+          "research_question_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Research Question Version Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["research_question_version_id"],
+        "title": "QueryPlanCreate"
+      },
+      "QueryPlanEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/QueryPlanPublic" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "QueryPlanEnvelope"
+      },
+      "QueryPlanFields": {
+        "properties": {
+          "chinese_terms": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Chinese Terms"
+          },
+          "english_terms": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "English Terms"
+          },
+          "synonyms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Synonyms"
+          },
+          "object_terms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Object Terms"
+          },
+          "method_terms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Method Terms"
+          },
+          "boolean_query": {
+            "anyOf": [
+              { "type": "string", "maxLength": 20000 },
+              { "type": "null" }
+            ],
+            "title": "Boolean Query"
+          },
+          "filters": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/QueryPlanFilters" },
+              { "type": "null" }
+            ]
+          },
+          "limitations": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Limitations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "QueryPlanFields"
+      },
+      "QueryPlanFilters": {
+        "properties": {
+          "from_year": {
+            "anyOf": [
+              { "type": "integer", "maximum": 9999.0, "minimum": 1.0 },
+              { "type": "null" }
+            ],
+            "title": "From Year"
+          },
+          "to_year": {
+            "anyOf": [
+              { "type": "integer", "maximum": 9999.0, "minimum": 1.0 },
+              { "type": "null" }
+            ],
+            "title": "To Year"
+          },
+          "languages": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Languages"
+          },
+          "work_types": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Work Types"
+          },
+          "open_access_only": {
+            "type": "boolean",
+            "title": "Open Access Only",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "QueryPlanFilters"
+      },
+      "QueryPlanGenerateRequest": {
+        "properties": {},
+        "additionalProperties": false,
+        "type": "object",
+        "title": "QueryPlanGenerateRequest"
+      },
+      "QueryPlanPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "research_question_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Research Question Version Id"
+          },
+          "chinese_terms": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Chinese Terms"
+          },
+          "english_terms": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "English Terms"
+          },
+          "synonyms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Synonyms"
+          },
+          "object_terms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Object Terms"
+          },
+          "method_terms": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": { "type": "string" },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              { "type": "null" }
+            ],
+            "title": "Method Terms"
+          },
+          "boolean_query": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Boolean Query"
+          },
+          "filters": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Filters"
+          },
+          "limitations": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Limitations"
+          },
+          "source_model_invocation_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Source Model Invocation Id"
+          },
+          "status": { "$ref": "#/components/schemas/QueryPlanStatus" },
+          "lock_version": { "type": "integer", "title": "Lock Version" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "research_question_version_id",
+          "chinese_terms",
+          "english_terms",
+          "synonyms",
+          "object_terms",
+          "method_terms",
+          "boolean_query",
+          "filters",
+          "limitations",
+          "source_model_invocation_id",
+          "status",
+          "lock_version",
+          "created_at",
+          "updated_at",
+          "allowed_actions"
+        ],
+        "title": "QueryPlanPublic"
+      },
+      "QueryPlanStatus": {
+        "type": "string",
+        "enum": ["DRAFT"],
+        "title": "QueryPlanStatus"
+      },
+      "QueryPlanUpdate": {
+        "properties": {
+          "fields": { "$ref": "#/components/schemas/QueryPlanFields" },
+          "change_reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Change Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["fields", "change_reason"],
+        "title": "QueryPlanUpdate"
+      },
       "ReadyHealthResponse": {
         "properties": {
           "status": { "$ref": "#/components/schemas/DependencyStatus" },
@@ -5388,6 +9532,465 @@
         "type": "object",
         "required": ["status", "dependencies"],
         "title": "ReadyHealthResponse"
+      },
+      "ResearchGoal": {
+        "type": "string",
+        "enum": ["DESCRIBE", "COMPARE", "RELATE", "PREDICT"],
+        "title": "ResearchGoal"
+      },
+      "ResearchQuestionCreate": {
+        "properties": {
+          "raw_input": { "type": "string", "title": "Raw Input" }
+        },
+        "type": "object",
+        "required": ["raw_input"],
+        "title": "ResearchQuestionCreate"
+      },
+      "ResearchQuestionData": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "status": { "$ref": "#/components/schemas/ResearchQuestionStatus" },
+          "current_version_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Current Version Id"
+          },
+          "created_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "current_version": {
+            "$ref": "#/components/schemas/ResearchQuestionVersionPublic"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "status",
+          "current_version_id",
+          "created_by",
+          "created_at",
+          "updated_at",
+          "current_version"
+        ],
+        "title": "ResearchQuestionData"
+      },
+      "ResearchQuestionEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ResearchQuestionData" },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ResearchQuestionEnvelope"
+      },
+      "ResearchQuestionMarkReady": {
+        "properties": {
+          "reason": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "title": "ResearchQuestionMarkReady"
+      },
+      "ResearchQuestionParseRequest": {
+        "properties": {
+          "max_follow_up_questions": {
+            "type": "integer",
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Max Follow Up Questions",
+            "default": 3
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 2,
+            "title": "Language",
+            "default": "zh-CN"
+          }
+        },
+        "type": "object",
+        "title": "ResearchQuestionParseRequest"
+      },
+      "ResearchQuestionStatus": {
+        "type": "string",
+        "enum": ["DRAFT", "CONFIRMED", "SUPERSEDED", "ARCHIVED"],
+        "title": "ResearchQuestionStatus"
+      },
+      "ResearchQuestionVersionCreate": {
+        "properties": {
+          "based_on_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Based On Version Id"
+          },
+          "change_reason": { "type": "string", "title": "Change Reason" },
+          "fields": {
+            "$ref": "#/components/schemas/ResearchQuestionVersionFields"
+          }
+        },
+        "type": "object",
+        "required": ["based_on_version_id", "change_reason", "fields"],
+        "title": "ResearchQuestionVersionCreate"
+      },
+      "ResearchQuestionVersionEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ResearchQuestionVersionPublic"
+          },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ResearchQuestionVersionEnvelope"
+      },
+      "ResearchQuestionVersionFields": {
+        "properties": {
+          "raw_input": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Raw Input"
+          },
+          "normalized_question": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Normalized Question"
+          },
+          "research_object": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Research Object"
+          },
+          "population": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Population"
+          },
+          "context": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Context"
+          },
+          "independent_variables": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Independent Variables"
+          },
+          "dependent_variables": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Dependent Variables"
+          },
+          "control_variables": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Control Variables"
+          },
+          "research_goal": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ResearchGoal" },
+              { "type": "null" }
+            ]
+          },
+          "relationship_type": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ResearchRelationshipType" },
+              { "type": "null" }
+            ]
+          },
+          "method_preference": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Method Preference"
+          },
+          "time_scope": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Time Scope"
+          },
+          "region_scope": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Region Scope"
+          },
+          "language_scope": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Language Scope"
+          },
+          "resource_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Resource Constraints"
+          },
+          "ethical_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Ethical Constraints"
+          },
+          "uncertainties": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Uncertainties"
+          }
+        },
+        "type": "object",
+        "title": "ResearchQuestionVersionFields"
+      },
+      "ResearchQuestionVersionListEnvelope": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ResearchQuestionVersionPublic"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "meta": { "$ref": "#/components/schemas/ResponseMeta" }
+        },
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ResearchQuestionVersionListEnvelope"
+      },
+      "ResearchQuestionVersionPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "research_question_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Research Question Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "version_number": { "type": "integer", "title": "Version Number" },
+          "raw_input": { "type": "string", "title": "Raw Input" },
+          "normalized_question": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Normalized Question"
+          },
+          "research_object": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Research Object"
+          },
+          "population": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Population"
+          },
+          "context": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Context"
+          },
+          "independent_variables": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Independent Variables"
+          },
+          "dependent_variables": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Dependent Variables"
+          },
+          "control_variables": {
+            "anyOf": [
+              { "items": { "type": "string" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Control Variables"
+          },
+          "research_goal": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ResearchGoal" },
+              { "type": "null" }
+            ]
+          },
+          "relationship_type": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/ResearchRelationshipType" },
+              { "type": "null" }
+            ]
+          },
+          "method_preference": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Method Preference"
+          },
+          "time_scope": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Time Scope"
+          },
+          "region_scope": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Region Scope"
+          },
+          "language_scope": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Language Scope"
+          },
+          "resource_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Resource Constraints"
+          },
+          "ethical_constraints": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Ethical Constraints"
+          },
+          "uncertainties": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Uncertainties"
+          },
+          "source_model_invocation_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Source Model Invocation Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ResearchQuestionVersionStatus"
+          },
+          "created_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "is_current": { "type": "boolean", "title": "Is Current" },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
+          "pending_approval_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Pending Approval Id"
+          },
+          "pending_approval_status": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Pending Approval Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "research_question_id",
+          "project_id",
+          "version_number",
+          "raw_input",
+          "normalized_question",
+          "research_object",
+          "population",
+          "context",
+          "independent_variables",
+          "dependent_variables",
+          "control_variables",
+          "research_goal",
+          "relationship_type",
+          "method_preference",
+          "time_scope",
+          "region_scope",
+          "language_scope",
+          "resource_constraints",
+          "ethical_constraints",
+          "uncertainties",
+          "source_model_invocation_id",
+          "status",
+          "created_by",
+          "created_at",
+          "is_current",
+          "allowed_actions"
+        ],
+        "title": "ResearchQuestionVersionPublic"
+      },
+      "ResearchQuestionVersionStatus": {
+        "type": "string",
+        "enum": ["DRAFT", "NEEDS_INPUT", "READY", "CONFIRMED", "SUPERSEDED"],
+        "title": "ResearchQuestionVersionStatus"
+      },
+      "ResearchQuestionVersionUpdate": {
+        "properties": {
+          "change_reason": { "type": "string", "title": "Change Reason" },
+          "fields": {
+            "$ref": "#/components/schemas/ResearchQuestionVersionFields"
+          }
+        },
+        "type": "object",
+        "required": ["change_reason", "fields"],
+        "title": "ResearchQuestionVersionUpdate"
+      },
+      "ResearchRelationshipType": {
+        "type": "string",
+        "enum": ["ASSOCIATION", "COMPARISON", "PREDICTION", "UNSPECIFIED"],
+        "title": "ResearchRelationshipType"
       },
       "ResponseMeta": {
         "properties": {

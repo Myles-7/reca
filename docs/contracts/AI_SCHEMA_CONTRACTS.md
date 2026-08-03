@@ -883,7 +883,7 @@ public create/update/delete API；授权审计读取由后续真实 consumer 的
 structured output 只负责执行校验，不能放宽 RECA Schema 或把 SDK Session
 内容当作项目状态。
 
-P0 的 PromptContract 是 `backend/app/agents/prompts/prompt-manifest.yaml` 中受 Git 管理的代码注册表，不是数据库可编辑内容。`prompt_id + prompt_version + prompt_content_hash` 必须能定位已登记合同；其声明 input/output Schema、允许工具、允许来源类型、最大工具调用数、失败行为和 `requested_data_access_level`。Tool/Policy 另声明 `max_allowed_data_access_level`；调用审计记录实际 `effective_data_access_level`，且必须不高于上限并符合最小化原则。未登记、Schema 不匹配或试图扩大工具/数据权限的调用必须在 Service 层拒绝。
+P0 的 PromptContract 是 `backend/app/agents/prompts/prompt-manifest.yaml` 中受 Git 管理的代码注册表，不是数据库可编辑内容。`prompt_id + prompt_version + prompt_content_hash` 必须能定位已登记合同；其声明 input/output Schema、允许工具、允许来源类型、最大工具调用数、失败行为和 `requested_data_access_level`。Prompt 文本的内容哈希先把 `CRLF` 和单独 `CR` 规范化为 `LF`，再对 UTF-8 字节计算 SHA-256；Git checkout 的平台行尾不得改变 Prompt identity。Tool/Policy 另声明 `max_allowed_data_access_level`；调用审计记录实际 `effective_data_access_level`，且必须不高于上限并符合最小化原则。未登记、Schema 不匹配或试图扩大工具/数据权限的调用必须在 Service 层拒绝。
 
 ## 72.1.1 ModelInvocation 最小持久化合同
 

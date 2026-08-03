@@ -17,12 +17,21 @@ export type UiErrorViewModel = {
   conflict: boolean
 }
 
+export type Loadable<T> =
+  | { state: "loading"; label: string }
+  | { state: "empty"; message: string }
+  | { state: "error"; error: UiErrorViewModel }
+  | { state: "ready"; data: T }
+
 export type ProjectListItemViewModel = {
   id: string
   name: string
   description: string | null
   stage: string
   status: string
+  knownStatus: boolean
+  permissionsKnown: boolean
+  allowedActions: ReadonlySet<string>
   type: string
   updatedAt: string
   canUpdate: boolean
@@ -54,6 +63,7 @@ export type OverviewViewModel = {
 }
 
 export type WorkspacePermissions = {
+  permissionsKnown: boolean
   actions: ReadonlySet<string>
   canManageMembers: boolean
   canUploadArtifact: boolean
@@ -84,6 +94,13 @@ export type ArtifactViewModel = {
   createdAt: string
   canDownload: boolean
   immutable: boolean
+  tone: SemanticTone
+}
+
+export type ArtifactListViewModel = {
+  artifacts: ArtifactViewModel[]
+  permissionsKnown: boolean
+  canUpload: boolean
 }
 
 export type JobViewModel = {
@@ -144,11 +161,43 @@ export type ProjectCreateCommand = {
   projectType: ProjectTypeOption
 }
 
+export type ProjectUpdateCommand = {
+  name: string
+  description: string | null
+}
+
 export type MemberRoleOption = "EDITOR" | "REVIEWER" | "VIEWER"
+
+export type MemberAddCommand = {
+  userId: string
+  role: MemberRoleOption
+}
+
+export type MemberRoleChangeCommand = {
+  memberId: string
+  role: MemberRoleOption
+}
+
+export type MemberOwnershipTransferCommand = {
+  memberId: string
+  previousOwnerRole: MemberRoleOption
+  reason: string
+}
 
 export type MemberUpdateCommand = {
   role: MemberRoleOption | "OWNER"
   transferOwnership?: boolean
   previousOwnerRole?: MemberRoleOption
   reason?: string
+}
+
+export type JobActionCommand = {
+  jobId: string
+  action: "retry" | "cancel"
+}
+
+export type ApprovalActionCommand = {
+  approvalId: string
+  action: "approve" | "reject" | "cancel"
+  reason: string | null
 }

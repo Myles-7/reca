@@ -11,6 +11,7 @@ import {
 
 import type {
   ApprovalViewModel,
+  ArtifactListViewModel,
   ArtifactViewModel,
   AuditViewModel,
   CapabilityViewModel,
@@ -71,26 +72,34 @@ export function mapUiError(error: unknown): UiErrorViewModel {
 export function mapProjectListItem(
   project: ProjectPublic,
 ): ProjectListItemViewModel {
+  const knownStatus = ["ACTIVE", "ARCHIVED", "DELETED"].includes(project.status)
+  const actions = knownStatus
+    ? new Set(project.allowed_actions)
+    : new Set<string>()
   return {
     id: project.id,
     name: project.name,
     description: project.description,
     stage: project.current_stage,
     status: project.status,
+    knownStatus,
+    permissionsKnown: true,
+    allowedActions: actions,
     type: project.project_type,
     updatedAt: formatDate(project.updated_at),
-    canUpdate: project.permissions.can_update,
+    canUpdate: actions.has("project.update"),
   }
 }
 
 export function mapProject(project: ProjectPublic): ProjectViewModel {
+  const base = mapProjectListItem(project)
   return {
-    ...mapProjectListItem(project),
+    ...base,
     ownerId: project.owner_id,
     discipline: project.discipline,
     researchDirection: project.research_direction,
     lockVersion: project.lock_version,
-    canDelete: project.permissions.can_delete,
+    canDelete: base.knownStatus && base.allowedActions.has("project.delete"),
   }
 }
 
@@ -168,9 +177,10 @@ export function mapOverview(
 export function mapMembers(
   members: ProjectMemberPublic[],
   currentUserId: string | undefined,
+  allowedActions: readonly string[] | null,
 ): { members: MemberViewModel[]; permissions: WorkspacePermissions } {
-  const current = members.find((member) => member.user.id === currentUserId)
-  const actions = new Set(current?.allowed_actions ?? [])
+  const permissionsKnown = allowedActions !== null
+  const actions = new Set(allowedActions ?? [])
   return {
     members: members.map((member) => ({
       id: member.id,
@@ -184,6 +194,7 @@ export function mapMembers(
       isOwner: member.role === "OWNER" && member.removed_at === null,
     })),
     permissions: {
+      permissionsKnown,
       actions,
       canManageMembers: actions.has("project.manage_members"),
       canUploadArtifact: actions.has("artifact.upload"),
@@ -194,6 +205,13 @@ export function mapMembers(
 }
 
 export function mapArtifact(artifact: ArtifactPublic): ArtifactViewModel {
+  const knownStatus = [
+    "UPLOADING",
+    "AVAILABLE",
+    "FAILED",
+    "DELETED",
+    "QUARANTINED",
+  ].includes(artifact.status)
   return {
     id: artifact.id,
     filename: artifact.original_filename || artifact.filename,
@@ -203,8 +221,24 @@ export function mapArtifact(artifact: ArtifactPublic): ArtifactViewModel {
     size: formatBytes(artifact.size_bytes),
     sha256: artifact.sha256,
     createdAt: formatDate(artifact.created_at),
-    canDownload: artifact.allowed_actions.includes("artifact.download"),
+    canDownload:
+      knownStatus &&
+      artifact.status === "AVAILABLE" &&
+      artifact.allowed_actions.includes("artifact.download"),
     immutable: artifact.is_immutable,
+    tone: knownStatus ? "neutral" : "warning",
+  }
+}
+
+export function mapArtifactList(
+  artifacts: ArtifactPublic[],
+  allowedActions: readonly string[] | null,
+): ArtifactListViewModel {
+  const permissionsKnown = allowedActions !== null
+  return {
+    artifacts: artifacts.map(mapArtifact),
+    permissionsKnown,
+    canUpload: allowedActions?.includes("artifact.upload") === true,
   }
 }
 
@@ -213,25 +247,37 @@ function jobTone(status: string): SemanticTone {
   if (["FAILED", "DISPATCH_FAILED"].includes(status)) return "danger"
   if (["CANCEL_REQUESTED", "NEEDS_REVIEW"].includes(status)) return "warning"
   if (["QUEUED", "RUNNING"].includes(status)) return "info"
-  return "neutral"
+  if (["DRAFT", "CANCELLED"].includes(status)) return "neutral"
+  return "degraded"
 }
 
 export function mapJob(job: JobPublic): JobViewModel {
+  const knownStatus = [
+    "DRAFT",
+    "QUEUED",
+    "RUNNING",
+    "NEEDS_REVIEW",
+    "COMPLETED",
+    "FAILED",
+    "CANCEL_REQUESTED",
+    "CANCELLED",
+    "DISPATCH_FAILED",
+  ].includes(job.status)
   return {
     id: job.id,
     taskLabel: job.task_type.replace(/_/g, " "),
     status: job.status,
     progress: job.progress_percent,
     step: job.current_step,
-    retryable: job.retryable,
+    retryable: knownStatus && job.retryable,
     retryCount: job.retry_count,
     maxRetries: job.max_retries,
     error: job.error ? `${job.error.code}: ${job.error.message}` : null,
     resultUrl: job.result?.url ?? null,
     createdAt: formatDate(job.created_at),
-    active: ["DRAFT", "QUEUED", "RUNNING", "CANCEL_REQUESTED"].includes(
-      job.status,
-    ),
+    active:
+      knownStatus &&
+      ["DRAFT", "QUEUED", "RUNNING", "CANCEL_REQUESTED"].includes(job.status),
     tone: jobTone(job.status),
   }
 }
@@ -244,6 +290,14 @@ function approvalTone(status: string): SemanticTone {
 }
 
 export function mapApproval(approval: ApprovalPublic): ApprovalViewModel {
+  const knownStatus = [
+    "PENDING",
+    "APPROVED",
+    "REJECTED",
+    "CANCELLED",
+    "EXPIRED",
+    "SUPERSEDED",
+  ].includes(approval.status)
   return {
     id: approval.id,
     type: approval.approval_type.replace(/_/g, " "),
@@ -255,9 +309,9 @@ export function mapApproval(approval: ApprovalPublic): ApprovalViewModel {
     requestedAt: formatDate(approval.requested_at),
     expiresAt: approval.expires_at ? formatDate(approval.expires_at) : null,
     payloadHash: approval.payload_hash,
-    allowedActions: new Set(approval.allowed_actions),
-    stale: ["EXPIRED", "SUPERSEDED"].includes(approval.status),
-    tone: approvalTone(approval.status),
+    allowedActions: new Set(knownStatus ? approval.allowed_actions : []),
+    stale: knownStatus && ["EXPIRED", "SUPERSEDED"].includes(approval.status),
+    tone: knownStatus ? approvalTone(approval.status) : "degraded",
   }
 }
 

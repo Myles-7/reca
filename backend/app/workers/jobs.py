@@ -68,15 +68,17 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
             }
         try:
             result = handler(session=session, job=job, run_id=claim.run_id)
-        except Exception:
+        except Exception as error:
+            error_code = str(getattr(error, "code", "JOB_EXECUTION_FAILED"))
+            retryable = bool(getattr(error, "retryable", True))
             service.fail_job(
                 session,
                 job_id=job.id,
                 run_id=claim.run_id,
                 worker_id=worker_id,
-                error_code="JOB_EXECUTION_FAILED",
+                error_code=error_code,
                 error_message="The registered domain handler failed.",
-                retryable=True,
+                retryable=retryable,
             )
             raise
         completed = service.complete_job(
@@ -98,3 +100,65 @@ execute_job = celery_app.task(
     reject_on_worker_lost=True,
     ignore_result=True,
 )(_execute_job)
+
+
+def _execute_research_question_scoping(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.research_questions.scoping import execute_scoping_job
+
+    artifact = execute_scoping_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="artifact",
+        output_object_id=artifact.id,
+        log_artifact_id=artifact.id,
+    )
+
+
+def _execute_query_plan_generation(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.query_plans.generation import execute_generation_job
+
+    artifact = execute_generation_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="artifact",
+        output_object_id=artifact.id,
+        log_artifact_id=artifact.id,
+    )
+
+
+def _execute_literature_search(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.literature.service import execute_search_job
+
+    search_run = execute_search_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="literature_search_run",
+        output_object_id=search_run.id,
+    )
+
+
+def _execute_document_parse(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.documents.service import execute_parse_job
+
+    document = execute_parse_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="document",
+        output_object_id=document.id,
+    )
+
+
+register_job_handler(
+    JobTaskType.RESEARCH_QUESTION_SCOPING,
+    _execute_research_question_scoping,
+)
+register_job_handler(
+    JobTaskType.QUERY_PLAN_GENERATION,
+    _execute_query_plan_generation,
+)
+register_job_handler(JobTaskType.LITERATURE_SEARCH, _execute_literature_search)
+register_job_handler(JobTaskType.DOCUMENT_PARSE, _execute_document_parse)

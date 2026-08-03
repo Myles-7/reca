@@ -71,6 +71,9 @@ class Settings(BaseSettings):
     MINIO_ROOT_PASSWORD: SecretStr
     MINIO_BUCKET: str = Field(default="reca", min_length=3)
     GROBID_URL: AnyHttpUrl
+    GROBID_PARSE_TIMEOUT_SECONDS: float = Field(default=180.0, gt=0, le=300)
+    GROBID_MAX_CONCURRENCY: int = Field(default=2, ge=1, le=8)
+    GROBID_MAX_RESPONSE_BYTES: int = Field(default=25_000_000, gt=0)
 
     # Reserved task infrastructure
     CELERY_BROKER_URL: str | None = None
@@ -81,6 +84,8 @@ class Settings(BaseSettings):
     MODEL_API_KEY: SecretStr | None = None
     OPENALEX_API_URL: AnyHttpUrl = AnyHttpUrl("https://api.openalex.org")
     OPENALEX_API_KEY: SecretStr | None = None
+    OPENALEX_CONTACT_EMAIL: EmailStr | None = None
+    OPENALEX_CACHE_TTL_SECONDS: int = Field(default=86_400, ge=60, le=604_800)
 
     # Email, observability, and browser access
     FRONTEND_HOST: AnyHttpUrl = AnyHttpUrl("http://localhost:5173")
