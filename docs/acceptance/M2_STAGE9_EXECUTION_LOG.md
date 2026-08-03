@@ -647,3 +647,32 @@ LOW, non-blocking disclosures. No M3 business implementation was started.
 The replacement implementation SHA closes `M2-S9-017` and `M2-S9-018` without
 changing the M2/M3 scope boundary. Final status remains
 `M2_EXIT_GATE=PASS`, `M3_ENTRY=ALLOWED`.
+
+### M2-S9-019
+
+- stage: E
+- severity: LOW
+- area: final host migration-head invocation
+- authoritative_requirement: End-state evidence must record the Alembic script
+  head without depending on a contaminated host virtual environment.
+- observed_behavior: The first final host command encountered access denied on
+  the existing root `.venv/lib64`; the next isolated invocation was launched
+  from the repository root and could not resolve Alembic's relative
+  `script_location`. Neither attempt ran a migration or changed data.
+- evidence: Host output reported the `.venv/lib64` removal failure and then
+  `No 'script_location' key found in configuration`.
+- root_cause: The one-off verification command reused a host cache and then used
+  the wrong working directory for `backend/alembic.ini`.
+- affected_files: Runtime command only.
+- blocks_current_path: NO
+- safe_continuation: Set a repository-external `UV_PROJECT_ENVIRONMENT` and run
+  `python -m uv run alembic heads` from `backend/`.
+- status: RESOLVED
+- resolution: Reused the isolated environment from the correct backend working
+  directory; no repository or database repair was required.
+- focused_verification: Alembic reported
+  `0012_document_upload (head)`. The final clean-room had already passed empty
+  and repeated upgrades through the same head.
+- exit_gate_impact: None.
+- m3_entry_impact: M3 host checks should keep project configuration paths and
+  isolated tool environments explicit.
