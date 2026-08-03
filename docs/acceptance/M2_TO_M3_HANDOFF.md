@@ -1,29 +1,28 @@
 # RECA M2 to M3 Handoff
 
 ```text
-M3_ENTRY=PENDING_FINAL_COMMIT
+M3_ENTRY=ALLOWED
 ```
 
 ## Status and Basis
 
-Stage 9 implementation and full verification are complete, but M3 entry is not
-allowed until the authorized final commit and commit-scoped fresh-checkout gates
-close `M2-ISSUE-0001`. This document freezes consumable boundaries only; it does
-not authorize M3 implementation.
+M2 Exit Gate is PASS. The authorized implementation commit and commit-scoped
+fresh-checkout gates closed `M2-ISSUE-0001`. This document freezes the M3 input
+boundary and allows M3 development without expanding M2 or bypassing M3's own
+contracts and Entry checks.
 
 ## M2 Migration, API, and Frontend Baseline
 
 - Migration head: `0012_document_upload`.
-- Verified worktree baseline: branch `feat/m2-research-literature`, baseline HEAD
-  `ac6447c081c881fedb818525871a8bd100410cb5`, with uncommitted M2/Open Design
-  changes. Stage E must replace this with the real implementation SHA.
+- Verified implementation baseline: branch `feat/m2-research-literature`, HEAD
+  `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd`.
 - M2 API resources: ResearchQuestion/Version, QueryPlan,
   LiteratureSearchRun/Candidate, LiteratureRecord, Document, and DocumentPage.
 - Production frontend routes: research question, query plan detail, literature
   workspace, and document detail, using the generated client, adapters,
   ViewModels, Containers, and Open Design workspaces.
-- Final Stage D evidence: backend 248 passed/2 opt-in Live skipped; frontend and
-  clean-room Playwright each passed 114/114; migration and quality gates passed.
+- Final Stage E evidence: Prompt LF/hash 6/6, clean-room Playwright 114/114,
+  production vertical 1/1, migration/Worker/security/quality gates passed.
 
 ## Reusable M2 Entities and Invariants
 
@@ -110,8 +109,7 @@ Job/ProcessingRun test helpers. It must not create a second fixture framework.
 
 ## M3 Entry Blockers
 
-- M2 Exit Gate is `FAIL/READY_FOR_FINAL_COMMIT_VERIFICATION`.
-- `M2-ISSUE-0001` requires a final commit and clean-checkout evidence; creating
-  that commit requires explicit user authorization.
+- None. M2 Exit Gate is `PASS/COMPLETION APPROVED` and `M2-ISSUE-0001` is
+  RESOLVED.
 - `M2-S9-002` remains a safe LOW host-tooling deferral because pinned Compose
   and clean-room verification are reproducible.

@@ -3,6 +3,7 @@
 - 所属入口文档：[IMPLEMENTATION_ROADMAP.md](../../IMPLEMENTATION_ROADMAP.md)
 - 文档状态：APPROVED FOR M1 DEVELOPMENT
 - Migration status: COMPLETE
+- Entry status: ALLOWED
 - Milestone ID: M3
 
 ## 权威范围

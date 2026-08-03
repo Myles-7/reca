@@ -340,7 +340,7 @@ All open issues are reviewed in the final M2 repair stage. An issue remains
 | --- | ---: | ---: |
 | BLOCKER | 0 | 0 |
 | CRITICAL | 0 | 0 |
-| HIGH | 1 | 4 |
+| HIGH | 0 | 5 |
 | MEDIUM | 0 | 4 |
 | LOW | 1 | 1 |
 
@@ -348,14 +348,13 @@ Exit Gate classification:
 
 | Classification | Issues |
 | --- | --- |
-| Blocks M2 Exit Gate | `M2-ISSUE-0001` |
+| Blocks M2 Exit Gate | None |
 | Does not block M2 Exit Gate | `M2-ISSUE-0008` |
 
 ## Active Issues
 
 | ID | Stage | Severity | Status | Area | Summary | Blocks current subtask | Blocks M2 Exit Gate |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| M2-ISSUE-0001 | M2-0 / M2-11 | HIGH | OPEN | Prompt asset line endings | LF canonicalization and local clean-room tests pass, but no final repair commit or clean checkout of that commit exists yet. | YES | YES |
 | M2-ISSUE-0008 | Stage 8 repair | LOW | OPEN | Node development dependency advisory | `@babel/core` has one LOW arbitrary file-read advisory through the TanStack router build plugin. | NO | NO |
 
 The open M0 and M1 disclosures remain in their original registers. They may be
@@ -386,8 +385,10 @@ Resolution evidence
 
 | ID | Stage | Severity | Resolution |
 | --- | --- | --- | --- |
+| M2-ISSUE-0001 | M2-0 / M2-11 | HIGH | Implementation SHA `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` preserves Prompt LF in a detached fresh checkout; manifest/hash tests, clean-room, and production vertical E2E pass. |
 | M2-ISSUE-0003 | M2-3 | HIGH | The Alembic revision ID was shortened and empty/repeated migration tests pass. |
 | M2-ISSUE-0007 | Stage 8 repair | HIGH | AuditLog now has a project-scoped formal ModelInvocation foreign key and Scoping provenance tests pass. |
+| M2-ISSUE-0010 | M2-9 | HIGH | Production routes, generated-client/container integration, refresh recovery, full Playwright, clean-room, and production vertical gates pass. |
 | M2-ISSUE-0011 | M2-10 | HIGH | GROBID healthcheck uses an image-supported Bash TCP probe; the recreated container is healthy and the Live PDF smoke passes. |
 | M2-ISSUE-0002 | Stage 8 final repair | MEDIUM | SQLModel metadata now represents the inherited Approval audit FK and active OWNER partial unique index; `alembic check` is clean. |
 | M2-ISSUE-0004 | Stage 8 final repair | MEDIUM | The approved M2 contract freezes QueryPlan to DRAFT with explicit lock_version and If-Match semantics. |
@@ -402,7 +403,7 @@ Resolution evidence
 - ID: M2-ISSUE-0001
 - Stage: M2-0 / M2-11
 - Severity: HIGH
-- Status: OPEN
+- Status: RESOLVED
 - Area: Prompt asset line endings
 - Summary: Raw Prompt byte hashing made Prompt identity depend on checkout line
   endings, so a Windows CRLF checkout could disagree with the LF manifest hash.
@@ -413,24 +414,21 @@ Resolution evidence
   backend quality regression gate.
 - Impact: Prompt governance and ModelInvocation creation could fail solely due
   to platform checkout behavior.
-- Safe workaround / deferred behavior: Canonical hashing and the Git LF rule
-  prevent the known platform mismatch in the current worktree, but they do not
-  replace verification from the final committed tree.
-- Blocks current subtask: YES; final Stage 8 acceptance requires commit-scoped
-  clean-checkout evidence.
-- Blocks M2 Exit Gate: YES until the final repair commit and its clean checkout
-  are verified.
+- Safe workaround / deferred behavior: None required. Canonical hashing and
+  exact Git LF attributes are both committed and verified.
+- Blocks current subtask: NO.
+- Blocks M2 Exit Gate: NO.
 - Suggested repair: Freeze Prompt text assets to LF through a repository EOL
   rule or formally define canonical hash normalization, then verify clean
   checkout behavior on Windows and Linux.
 - Resolution evidence: `prompt_content_hash` canonicalizes CRLF and lone CR to
-  LF before SHA-256, and the formal Prompt contract records that rule. A new
-  regression loads a CRLF asset against its canonical LF hash. Prompt tests
-  report `6 passed`; the rebuilt clean-room no-database suite reports
-  `73 passed, 2 skipped`; the rebuilt database suite reports
-  `247 passed, 2 skipped`. These results were produced before a final repair
-  commit existed. No commit SHA and no clean checkout of that commit are
-  available, so the issue remains OPEN.
+  LF before SHA-256, the formal Prompt contract records that rule, and
+  `.gitattributes` forces both Prompt text and the manifest to LF. Detached
+  fresh checkout of implementation SHA
+  `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` reported `i/lf w/lf` for every
+  Prompt asset; Prompt manifest/hash tests passed 6/6. Clean-room run
+  `reca-m2-stagee-cleanroom-20260803-081709` and production vertical run
+  `reca-m2-stagee-vertical-20260803-082115` passed.
 
 ### M2-ISSUE-0002
 

@@ -481,17 +481,18 @@ data were not deleted or reset.
 - root_cause: `.gitattributes` forced LF for Prompt `*.txt` files but omitted
   the Prompt manifest YAML.
 - affected_files: `.gitattributes`.
-- blocks_current_path: YES
+- blocks_current_path: NO
 - safe_continuation: Add an exact manifest LF attribute, create a new
   implementation SHA, and repeat all commit-scoped verification from a new
   detached worktree.
-- status: IN_PROGRESS
+- status: RESOLVED
 - resolution: Added an explicit LF rule for
-  `backend/app/agents/prompts/prompt-manifest.yaml`; verification pending.
-- focused_verification: Pending fresh-checkout LF/hash tests.
-- exit_gate_impact: `M2-ISSUE-0001` remains OPEN until the replacement
-  implementation SHA passes all Stage E gates.
-- m3_entry_impact: M3 Entry remains `PENDING_FINAL_COMMIT`.
+  `backend/app/agents/prompts/prompt-manifest.yaml` and created replacement
+  implementation SHA `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd`.
+- focused_verification: Detached fresh checkout reported `i/lf w/lf` for all
+  five Prompt assets; manifest/hash tests passed 6/6.
+- exit_gate_impact: None; `M2-ISSUE-0001` is RESOLVED.
+- m3_entry_impact: None; M3 Entry is ALLOWED.
 
 ### M2-S9-015
 
@@ -514,14 +515,68 @@ data were not deleted or reset.
   had an existing root `node_modules`, masking the isolation defect.
 - affected_files: `scripts/m0-acceptance.ps1`,
   `scripts/m0-acceptance.sh`.
-- blocks_current_path: YES
+- blocks_current_path: NO
 - safe_continuation: Install the exact frozen Bun lock before frontend gates,
   then repeat clean-room and the production vertical from a new implementation
   SHA. Keep Node audit fail-closed and repeat it with the clean-room run.
-- status: IN_PROGRESS
+- status: RESOLVED
 - resolution: Added a named `frontend-dependencies` step using
-  `bun install --frozen-lockfile` to both acceptance entry points; verification
-  pending.
-- focused_verification: Pending fresh-checkout clean-room rerun.
-- exit_gate_impact: Clean-room evidence is invalid until the rerun passes.
-- m3_entry_impact: M3 Entry remains `PENDING_FINAL_COMMIT`.
+  `bun install --frozen-lockfile` to both acceptance entry points.
+- focused_verification: Fresh clean-room run
+  `reca-m2-stagee-cleanroom-20260803-081709` passed dependency installation,
+  frontend format/lint/build, Playwright 114/114, and all other gates.
+- exit_gate_impact: None; clean-room is commit-scoped and reproducible.
+- m3_entry_impact: M3 must retain the frozen-lock clean-room install step.
+
+### M2-S9-016
+
+- stage: E
+- severity: LOW
+- area: production vertical harness invocation
+- authoritative_requirement: The production vertical must migrate and seed its
+  isolated database through the committed backend prestart entry point.
+- observed_behavior: The first harness command used
+  `backend/scripts/prestart.sh` inside a container whose working directory was
+  already `/app/backend`, so the command returned file not found before any
+  migration ran.
+- evidence: Fresh vertical run `reca-m2-stagee-vertical-20260803-082115` first
+  reported `backend/scripts/prestart.sh: No such file or directory`.
+- root_cause: Host-relative and container-working-directory-relative paths were
+  mixed in the one-off acceptance command.
+- affected_files: Runtime command only.
+- blocks_current_path: NO
+- safe_continuation: Invoke the committed entry point as
+  `bash scripts/prestart.sh` in the same isolated Compose project.
+- status: RESOLVED
+- resolution: Corrected the one-off command without changing repository code;
+  empty migration through `0012_document_upload` and initial user creation
+  completed before the API started.
+- focused_verification: Production vertical E2E passed 1/1 in 7.9 seconds; the
+  named API container and isolated Compose volumes were removed afterward.
+- exit_gate_impact: None.
+- m3_entry_impact: M3 acceptance commands must distinguish host and container
+  working directories.
+
+## Stage E Final Verification
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| Implementation commit | PASS | `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` on `feat/m2-research-literature`. |
+| Detached fresh checkout | PASS | Repository-external worktree created directly from the implementation SHA. |
+| Prompt LF/hash | PASS | Five assets were LF; manifest/hash tests passed 6/6. |
+| Commit-scoped clean-room | PASS | Run `reca-m2-stagee-cleanroom-20260803-081709`; Playwright 114/114 and all functional/security gates passed, with the disclosed LOW Node advisory. |
+| Production vertical | PASS | Run `reca-m2-stagee-vertical-20260803-082115`; 1/1 passed through production Route/API/database/object storage/Job/Worker and refresh. |
+| Scoped cleanup | PASS | Dedicated API container and `reca_m2_stagee_vertical` containers, networks, and volumes removed; default project untouched. |
+
+```text
+stage_e_completed_at: 2026-08-03 Asia/Shanghai
+branch: feat/m2-research-literature
+implementation_sha: ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd
+migration_head: 0012_document_upload
+M2_EXIT_GATE=PASS
+M3_ENTRY=ALLOWED
+```
+
+`M2-ISSUE-0001`, `M2-ISSUE-0010`, `M2-S9-014`, `M2-S9-015`, and
+`M2-S9-016` are RESOLVED. `M2-ISSUE-0008` and `M2-S9-002` remain explicit
+LOW, non-blocking disclosures. No M3 business implementation was started.

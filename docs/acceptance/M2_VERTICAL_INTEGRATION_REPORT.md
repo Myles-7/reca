@@ -11,10 +11,10 @@ remain explicitly distinct.
 ```text
 Stage: M2-10
 Branch: feat/m2-research-literature
-Baseline HEAD: ac6447c081c881fedb818525871a8bd100410cb5
+Implementation HEAD: ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd
 M1 baseline tag: m1-complete
 Migration head: 0012_document_upload
-Acceptance date: 2026-08-03 (Asia/Shanghai), Stage 9 refresh
+Acceptance date: 2026-08-03 (Asia/Shanghai), Stage E fresh-checkout refresh
 ```
 
 M2-10 added no migration. Stage 9 subsequently activated and vertically tested
@@ -106,13 +106,14 @@ success is not used as business acceptance anywhere in this report.
 
 - `M2-ISSUE-0011` is RESOLVED: the unsupported GROBID `curl` healthcheck was
   replaced by an image-supported Bash TCP probe and revalidated with Live parse.
-- `M2-ISSUE-0001` remains OPEN because the Prompt LF/hash repair has not yet
-  been verified from a clean checkout of a final repair commit.
+- `M2-ISSUE-0001` is RESOLVED: detached fresh checkout of implementation SHA
+  `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` passed Prompt LF/hash,
+  clean-room, and this production vertical.
 - `M2-ISSUE-0010` is RESOLVED: route activation, browser vertical, full
   Playwright, and clean-room requirements pass.
-- Other OPEN M2 issues remain governed by
-  [M2_ISSUE_REGISTER.md](./M2_ISSUE_REGISTER.md); this report does not convert
-  them to PASS or mark the M2 Exit Gate complete.
+- The remaining OPEN `M2-ISSUE-0008` is LOW and non-blocking; its exact scope
+  remains governed by [M2_ISSUE_REGISTER.md](./M2_ISSUE_REGISTER.md). The M2
+  Exit Gate is PASS.
 
 M2 production vertical integration is PASS within the explicit Recorded, cache,
 degraded, and Live boundaries above. Separate Celery-process delivery remains
