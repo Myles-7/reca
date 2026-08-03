@@ -492,3 +492,36 @@ data were not deleted or reset.
 - exit_gate_impact: `M2-ISSUE-0001` remains OPEN until the replacement
   implementation SHA passes all Stage E gates.
 - m3_entry_impact: M3 Entry remains `PENDING_FINAL_COMMIT`.
+
+### M2-S9-015
+
+- stage: E
+- severity: HIGH
+- area: clean-room frontend dependency isolation
+- authoritative_requirement: Commit-scoped clean-room must run only from the
+  committed source and locked dependency inputs, without relying on a dirty
+  development worktree.
+- observed_behavior: Fresh clean-room run
+  `reca-m2-stagee-cleanroom-20260803-081231` passed infrastructure, migration,
+  API, Worker, persistence, backend, and Secret gates, but frontend quality and
+  Playwright failed because Biome, TypeScript, and Playwright were unavailable.
+  The same run's Node audit also encountered an external connection refusal.
+- evidence: `frontend-tests.log` reported `command not found: biome` and
+  `command not found: tsc`; `playwright-shell.log` could not resolve the local
+  Playwright CLI.
+- root_cause: Both clean-room entry points invoked frontend tools without first
+  installing the root `bun.lock` dependency graph. Earlier dirty-worktree runs
+  had an existing root `node_modules`, masking the isolation defect.
+- affected_files: `scripts/m0-acceptance.ps1`,
+  `scripts/m0-acceptance.sh`.
+- blocks_current_path: YES
+- safe_continuation: Install the exact frozen Bun lock before frontend gates,
+  then repeat clean-room and the production vertical from a new implementation
+  SHA. Keep Node audit fail-closed and repeat it with the clean-room run.
+- status: IN_PROGRESS
+- resolution: Added a named `frontend-dependencies` step using
+  `bun install --frozen-lockfile` to both acceptance entry points; verification
+  pending.
+- focused_verification: Pending fresh-checkout clean-room rerun.
+- exit_gate_impact: Clean-room evidence is invalid until the rerun passes.
+- m3_entry_impact: M3 Entry remains `PENDING_FINAL_COMMIT`.

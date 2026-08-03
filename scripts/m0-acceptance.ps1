@@ -156,6 +156,7 @@ try {
         if ($FullBackendTests) { Add-NotRun "backend-database-tests" "Blocked because isolated image build failed; see build-images.log." }
     }
     Invoke-Step "backend-tests" { python -m uv run pytest backend/tests -m no_database }
+    Invoke-Step "frontend-dependencies" { bun install --frozen-lockfile }
     Invoke-Step "frontend-tests" { bun run --cwd frontend format:check; bun run --cwd frontend lint; bun run --cwd frontend build }
     Invoke-Step "playwright-shell" {
         Push-Location frontend
