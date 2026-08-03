@@ -385,7 +385,7 @@ Resolution evidence
 
 | ID | Stage | Severity | Resolution |
 | --- | --- | --- | --- |
-| M2-ISSUE-0001 | M2-0 / M2-11 | HIGH | Implementation SHA `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` preserves Prompt LF in a detached fresh checkout; manifest/hash tests, clean-room, and production vertical E2E pass. |
+| M2-ISSUE-0001 | M2-0 / M2-11 | HIGH | Implementation SHA `87e0f4ae27448b422b49c6354a188925a51e5cd7` preserves Prompt LF in a detached fresh checkout; manifest/hash tests, clean-room, and production vertical E2E pass. |
 | M2-ISSUE-0003 | M2-3 | HIGH | The Alembic revision ID was shortened and empty/repeated migration tests pass. |
 | M2-ISSUE-0007 | Stage 8 repair | HIGH | AuditLog now has a project-scoped formal ModelInvocation foreign key and Scoping provenance tests pass. |
 | M2-ISSUE-0010 | M2-9 | HIGH | Production routes, generated-client/container integration, refresh recovery, full Playwright, clean-room, and production vertical gates pass. |
@@ -425,10 +425,10 @@ Resolution evidence
   LF before SHA-256, the formal Prompt contract records that rule, and
   `.gitattributes` forces both Prompt text and the manifest to LF. Detached
   fresh checkout of implementation SHA
-  `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` reported `i/lf w/lf` for every
+  `87e0f4ae27448b422b49c6354a188925a51e5cd7` reported `i/lf w/lf` for every
   Prompt asset; Prompt manifest/hash tests passed 6/6. Clean-room run
-  `reca-m2-stagee-cleanroom-20260803-081709` and production vertical run
-  `reca-m2-stagee-vertical-20260803-082115` passed.
+  `reca-m2-stagee-final-cleanroom-20260803-083258` and production vertical run
+  `reca-m2-stagee-final-vertical-20260803-083618` passed.
 
 ### M2-ISSUE-0002
 

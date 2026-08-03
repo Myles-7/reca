@@ -11,7 +11,7 @@ remain explicitly distinct.
 ```text
 Stage: M2-10
 Branch: feat/m2-research-literature
-Implementation HEAD: ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd
+Implementation HEAD: 87e0f4ae27448b422b49c6354a188925a51e5cd7
 M1 baseline tag: m1-complete
 Migration head: 0012_document_upload
 Acceptance date: 2026-08-03 (Asia/Shanghai), Stage E fresh-checkout refresh
@@ -107,7 +107,7 @@ success is not used as business acceptance anywhere in this report.
 - `M2-ISSUE-0011` is RESOLVED: the unsupported GROBID `curl` healthcheck was
   replaced by an image-supported Bash TCP probe and revalidated with Live parse.
 - `M2-ISSUE-0001` is RESOLVED: detached fresh checkout of implementation SHA
-  `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` passed Prompt LF/hash,
+  `87e0f4ae27448b422b49c6354a188925a51e5cd7` passed Prompt LF/hash,
   clean-room, and this production vertical.
 - `M2-ISSUE-0010` is RESOLVED: route activation, browser vertical, full
   Playwright, and clean-room requirements pass.

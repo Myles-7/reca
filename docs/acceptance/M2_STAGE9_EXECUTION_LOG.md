@@ -561,17 +561,17 @@ data were not deleted or reset.
 
 | Gate | Result | Evidence |
 | --- | --- | --- |
-| Implementation commit | PASS | `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd` on `feat/m2-research-literature`. |
+| Implementation commit | PASS | `87e0f4ae27448b422b49c6354a188925a51e5cd7` on `feat/m2-research-literature`. |
 | Detached fresh checkout | PASS | Repository-external worktree created directly from the implementation SHA. |
 | Prompt LF/hash | PASS | Five assets were LF; manifest/hash tests passed 6/6. |
-| Commit-scoped clean-room | PASS | Run `reca-m2-stagee-cleanroom-20260803-081709`; Playwright 114/114 and all functional/security gates passed, with the disclosed LOW Node advisory. |
-| Production vertical | PASS | Run `reca-m2-stagee-vertical-20260803-082115`; 1/1 passed through production Route/API/database/object storage/Job/Worker and refresh. |
+| Commit-scoped clean-room | PASS | Run `reca-m2-stagee-final-cleanroom-20260803-083258`; Playwright 114/114, post-run tracked tree, and all functional/security gates passed, with the disclosed LOW Node advisory. |
+| Production vertical | PASS | Run `reca-m2-stagee-final-vertical-20260803-083618`; 1/1 passed through production Route/API/database/object storage/Job/Worker and refresh. |
 | Scoped cleanup | PASS | Dedicated API container and `reca_m2_stagee_vertical` containers, networks, and volumes removed; default project untouched. |
 
 ```text
 stage_e_completed_at: 2026-08-03 Asia/Shanghai
 branch: feat/m2-research-literature
-implementation_sha: ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd
+implementation_sha: 87e0f4ae27448b422b49c6354a188925a51e5cd7
 migration_head: 0012_document_upload
 M2_EXIT_GATE=PASS
 M3_ENTRY=ALLOWED
@@ -600,14 +600,50 @@ LOW, non-blocking disclosures. No M3 business implementation was started.
   worktree cleanliness assertion.
 - affected_files: `frontend/src/routeTree.gen.ts`,
   `scripts/m0-acceptance.ps1`, `scripts/m0-acceptance.sh`.
-- blocks_current_path: YES
+- blocks_current_path: NO
 - safe_continuation: Commit the deterministic generated output, add a final
   tracked-tree gate to both scripts, and repeat clean-room from the replacement
   implementation SHA.
-- status: IN_PROGRESS
-- resolution: Generated output and final Git-status gates prepared; verification
-  pending.
-- focused_verification: Pending replacement-SHA clean-room.
-- exit_gate_impact: The prior clean-room result remains functional evidence but
-  cannot be the final repository-integrity evidence.
-- m3_entry_impact: M3 Entry remains contingent on the replacement clean-room.
+- status: RESOLVED
+- resolution: Committed the clean generator output and added
+  `post-run-git-status` to both acceptance entry points. Stale Playwright/Vite
+  and Open Design preview watchers that kept regenerating the main worktree
+  were stopped after verification; no source or Open Design file was deleted.
+- focused_verification: Replacement SHA
+  `87e0f4ae27448b422b49c6354a188925a51e5cd7` passed clean-room run
+  `reca-m2-stagee-final-cleanroom-20260803-083258`, including frontend build,
+  Playwright 114/114, and `post-run-git-status=PASS`.
+- exit_gate_impact: None; final repository-integrity evidence is PASS.
+- m3_entry_impact: M3 clean-room inherits the final tracked-tree gate.
+
+### M2-S9-018
+
+- stage: E
+- severity: LOW
+- area: PowerShell acceptance harness compatibility
+- authoritative_requirement: One-off acceptance commands must generate random
+  secrets without relying on unavailable host runtime APIs.
+- observed_behavior: The first final vertical setup attempt called static
+  `RandomNumberGenerator.Fill`, which is unavailable in the host PowerShell
+  runtime, and stopped before creating containers or a database.
+- evidence: PowerShell reported that `RandomNumberGenerator` has no method named
+  `Fill`.
+- root_cause: The one-off command assumed a newer .NET API than the host
+  PowerShell runtime provides.
+- affected_files: Runtime command only.
+- blocks_current_path: NO
+- safe_continuation: Use `RandomNumberGenerator.Create().GetBytes()` and dispose
+  the generator.
+- status: RESOLVED
+- resolution: Replaced the unsupported call in the one-off harness; no
+  repository code change was required.
+- focused_verification: Final production vertical run
+  `reca-m2-stagee-final-vertical-20260803-083618` passed 1/1; its named API
+  container, Compose networks, and volumes were removed.
+- exit_gate_impact: None.
+- m3_entry_impact: Reusable Windows acceptance helpers must use the compatible
+  cryptographic RNG pattern.
+
+The replacement implementation SHA closes `M2-S9-017` and `M2-S9-018` without
+changing the M2/M3 scope boundary. Final status remains
+`M2_EXIT_GATE=PASS`, `M3_ENTRY=ALLOWED`.

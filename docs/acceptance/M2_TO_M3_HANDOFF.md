@@ -15,7 +15,7 @@ contracts and Entry checks.
 
 - Migration head: `0012_document_upload`.
 - Verified implementation baseline: branch `feat/m2-research-literature`, HEAD
-  `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd`.
+  `87e0f4ae27448b422b49c6354a188925a51e5cd7`.
 - M2 API resources: ResearchQuestion/Version, QueryPlan,
   LiteratureSearchRun/Candidate, LiteratureRecord, Document, and DocumentPage.
 - Production frontend routes: research question, query plan detail, literature

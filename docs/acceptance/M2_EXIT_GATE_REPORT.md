@@ -11,7 +11,7 @@ Exit Gate: PASS
 Milestone status: COMPLETION APPROVED
 Assessment date: 2026-08-03 (Asia/Shanghai), Stage E complete
 Branch: feat/m2-research-literature
-Implementation HEAD: ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd
+Implementation HEAD: 87e0f4ae27448b422b49c6354a188925a51e5cd7
 M1 baseline tag: m1-complete
 Migration head: 0012_document_upload
 ```
@@ -57,9 +57,9 @@ maintained in [M2_ISSUE_REGISTER.md](./M2_ISSUE_REGISTER.md).
 Clean-room evidence run:
 
 ```text
-implementation SHA: ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd
-clean-room: reca-m2-stagee-cleanroom-20260803-081709
-production vertical: reca-m2-stagee-vertical-20260803-082115
+implementation SHA: 87e0f4ae27448b422b49c6354a188925a51e5cd7
+clean-room: reca-m2-stagee-final-cleanroom-20260803-083258
+production vertical: reca-m2-stagee-final-vertical-20260803-083618
 ```
 
 ## Safety and Contract Outcome

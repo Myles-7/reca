@@ -9,7 +9,7 @@ state-machine, security, and milestone documents remain authoritative.
 M2_EXIT_GATE=PASS
 M2_IMPLEMENTATION=COMPLETION_APPROVED
 M3_ENTRY=ALLOWED
-implementation_sha=ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd
+implementation_sha=87e0f4ae27448b422b49c6354a188925a51e5cd7
 migration_head=0012_document_upload
 assessment_date=2026-08-03 Asia/Shanghai
 ```
@@ -28,10 +28,10 @@ assessment_date=2026-08-03 Asia/Shanghai
 ## Commit-Scoped Evidence
 
 - Detached fresh checkout Prompt assets: LF PASS; manifest/hash tests 6/6 PASS.
-- Clean-room `reca-m2-stagee-cleanroom-20260803-081709`: all functional,
+- Clean-room `reca-m2-stagee-final-cleanroom-20260803-083258`: all functional,
   migration, backend, frontend, Playwright 114/114, Secret, and Python audit
   gates PASS; Node audit PASS WITH LOW ADVISORY.
-- Production vertical `reca-m2-stagee-vertical-20260803-082115`: 1/1 PASS
+- Production vertical `reca-m2-stagee-final-vertical-20260803-083618`: 1/1 PASS
   through production Routes, real API/PostgreSQL/MinIO, registered Worker
   handlers, refresh recovery, immutable upload, parse, and DocumentPage text.
 - Stage D full backend: 248 passed, 2 opt-in Live tests skipped; strict mypy and
