@@ -176,6 +176,7 @@ try {
     Invoke-Step "repository-secret-scan" { $secretMatches = git grep -n -E "BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}" -- . ":(exclude).env.example" ":(exclude)scripts/m0-acceptance.ps1"; if ($LASTEXITCODE -gt 1) { throw "Secret scan could not run" }; if ($secretMatches) { throw "Secret pattern detected" }; $global:LASTEXITCODE = 0 }
     Invoke-Step "python-security-audit" { python -m uv run pip-audit }
     Invoke-NodeAudit
+    Invoke-Step "post-run-git-status" { $changes = git status --porcelain --untracked-files=no; if ($LASTEXITCODE -ne 0) { throw "Git status could not run" }; if ($changes) { throw "Clean-room changed tracked files: $changes" } }
 }
 finally {
     & docker @compose down -v --remove-orphans *>$null

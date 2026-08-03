@@ -91,4 +91,5 @@ step frontend-quality bun run --cwd frontend build
 step playwright-shell bash -c 'cd frontend && CI=1 RECA_PLAYWRIGHT_PORT=15174 bunx playwright test -c playwright.shell.config.ts --reporter=list'
 step python-security-audit python -m uv run pip-audit
 node_audit
+step post-run-git-status sh -c 'test -z "$(git status --porcelain --untracked-files=no)"'
 exit "$failures"

@@ -580,3 +580,34 @@ M3_ENTRY=ALLOWED
 `M2-ISSUE-0001`, `M2-ISSUE-0010`, `M2-S9-014`, `M2-S9-015`, and
 `M2-S9-016` are RESOLVED. `M2-ISSUE-0008` and `M2-S9-002` remain explicit
 LOW, non-blocking disclosures. No M3 business implementation was started.
+
+### M2-S9-017
+
+- stage: E
+- severity: HIGH
+- area: generated route tree and clean-room repository integrity
+- authoritative_requirement: A commit-scoped clean-room must use the locked
+  generator output and must finish without changing tracked repository files.
+- observed_behavior: After the first PASS clean-room on implementation SHA
+  `ac34ef95a546c71fe9a08bd3e98f4a1b1db115fd`, the detached worktree contained
+  a tracked rewrite of `frontend/src/routeTree.gen.ts` with the same routes but
+  generator-normalized ordering.
+- evidence: `git status --short` reported the route tree modified; its diff was
+  108 insertions and 108 deletions. The original clean-room only captured Git
+  status before build and therefore did not fail on the post-build drift.
+- root_cause: The committed generated route tree did not match the exact locked
+  TanStack generator output, and both acceptance scripts lacked a final tracked
+  worktree cleanliness assertion.
+- affected_files: `frontend/src/routeTree.gen.ts`,
+  `scripts/m0-acceptance.ps1`, `scripts/m0-acceptance.sh`.
+- blocks_current_path: YES
+- safe_continuation: Commit the deterministic generated output, add a final
+  tracked-tree gate to both scripts, and repeat clean-room from the replacement
+  implementation SHA.
+- status: IN_PROGRESS
+- resolution: Generated output and final Git-status gates prepared; verification
+  pending.
+- focused_verification: Pending replacement-SHA clean-room.
+- exit_gate_impact: The prior clean-room result remains functional evidence but
+  cannot be the final repository-integrity evidence.
+- m3_entry_impact: M3 Entry remains contingent on the replacement clean-room.
