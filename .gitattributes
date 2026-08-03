@@ -2,3 +2,4 @@
 *.sh text eol=lf
 frontend/** text=auto eol=lf
 backend/app/agents/prompts/*.txt text eol=lf
+backend/app/agents/prompts/prompt-manifest.yaml text eol=lf

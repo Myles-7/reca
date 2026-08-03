@@ -461,3 +461,34 @@ deferrals. No M3 business implementation was started.
 The dedicated Stage 9 API container and the six explicitly named Stage 9 test
 databases were removed after verification. Default project services and user
 data were not deleted or reset.
+
+## Stage E Commit-Scoped Verification
+
+### M2-S9-014
+
+- stage: E
+- severity: MEDIUM
+- area: Prompt checkout integrity
+- authoritative_requirement: The final implementation SHA must preserve LF
+  Prompt assets and pass manifest/hash tests in a repository-external fresh
+  checkout.
+- observed_behavior: The first detached worktree from implementation commit
+  `ec4949777190a846de45904c20d41a35df9c6510` checked out
+  `prompt-manifest.yaml` with CRLF on Windows, while all Prompt text assets
+  remained LF.
+- evidence: `git ls-files --eol` reported `i/lf w/crlf attr/text=auto` for the
+  manifest in fresh run `reca-m2-fresh-20260803-080947`.
+- root_cause: `.gitattributes` forced LF for Prompt `*.txt` files but omitted
+  the Prompt manifest YAML.
+- affected_files: `.gitattributes`.
+- blocks_current_path: YES
+- safe_continuation: Add an exact manifest LF attribute, create a new
+  implementation SHA, and repeat all commit-scoped verification from a new
+  detached worktree.
+- status: IN_PROGRESS
+- resolution: Added an explicit LF rule for
+  `backend/app/agents/prompts/prompt-manifest.yaml`; verification pending.
+- focused_verification: Pending fresh-checkout LF/hash tests.
+- exit_gate_impact: `M2-ISSUE-0001` remains OPEN until the replacement
+  implementation SHA passes all Stage E gates.
+- m3_entry_impact: M3 Entry remains `PENDING_FINAL_COMMIT`.
