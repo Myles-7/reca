@@ -152,6 +152,76 @@ def _execute_document_parse(
     )
 
 
+def _execute_literature_extraction(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.evidence.extraction import execute_extraction_job
+
+    result = execute_extraction_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="literature_extraction",
+        output_object_id=result.extraction.id,
+        log_artifact_id=(
+            result.output_artifact.id if result.output_artifact is not None else None
+        ),
+    )
+
+
+def _execute_evidence_set_summary(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.evidence.analysis import execute_summary_job
+
+    result = execute_summary_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type=result.output_object_type,
+        output_object_id=result.output_object_id,
+        log_artifact_id=(
+            result.output_artifact.id if result.output_artifact is not None else None
+        ),
+    )
+
+
+def _execute_topic_generation(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.evidence.analysis import execute_topic_job
+
+    result = execute_topic_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type=result.output_object_type,
+        output_object_id=result.output_object_id,
+        log_artifact_id=(
+            result.output_artifact.id if result.output_artifact is not None else None
+        ),
+    )
+
+
+def _execute_dataset_profile(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.data_quality.service import execute_quality_job
+
+    quality_run = execute_quality_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="data_quality_run",
+        output_object_id=quality_run.id,
+    )
+
+
+def _execute_dataset_transform(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.cleaning.service import execute_transformation_job
+
+    transformation = execute_transformation_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="data_transformation",
+        output_object_id=transformation.id,
+        log_artifact_id=transformation.log_artifact_id,
+    )
+
+
 register_job_handler(
     JobTaskType.RESEARCH_QUESTION_SCOPING,
     _execute_research_question_scoping,
@@ -162,3 +232,8 @@ register_job_handler(
 )
 register_job_handler(JobTaskType.LITERATURE_SEARCH, _execute_literature_search)
 register_job_handler(JobTaskType.DOCUMENT_PARSE, _execute_document_parse)
+register_job_handler(JobTaskType.LITERATURE_EXTRACT, _execute_literature_extraction)
+register_job_handler(JobTaskType.LITERATURE_SUMMARIZE, _execute_evidence_set_summary)
+register_job_handler(JobTaskType.TOPIC_GENERATE, _execute_topic_generation)
+register_job_handler(JobTaskType.DATASET_PROFILE, _execute_dataset_profile)
+register_job_handler(JobTaskType.DATASET_TRANSFORM, _execute_dataset_transform)

@@ -21,7 +21,7 @@ if (process.platform === "win32") {
 
 export default defineConfig({
   testDir: "./tests",
-  testMatch: ["system-shell.spec.ts", "projects-*.spec.ts"],
+  testMatch: ["system-shell.spec.ts", "projects-*.spec.ts", "m3-*.spec.ts"],
   fullyParallel: true,
   reporter: "list",
   use: {

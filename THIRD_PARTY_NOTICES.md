@@ -53,6 +53,66 @@ planned RECA business capability for that project is implemented.
 | PyAlex | <https://github.com/J535D165/pyalex> | `0.21` / `v0.21` / `875c708cbb6e449feebc46d2a7a26af8ed8b2fdd` | `DIRECT_DEPENDENCY_WITH_PROVIDER` | `DIRECT_DEPENDENCY` | `backend/pyproject.toml`, `uv.lock`, Provider and Recorded tests |
 | pypdf | <https://github.com/py-pdf/pypdf> | `6.14.2` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Explicit low-confidence page-text fallback |
 | defusedxml | <https://github.com/tiran/defusedxml> | `0.7.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Secure parsing boundary for untrusted GROBID TEI |
+| Pandera | <https://github.com/unionai-oss/pandera> | `0.32.1` / `v0.32.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M4 P0 dataframe validation runtime; RECA-owned Run/Issue normalization remains authoritative |
+| pandas | <https://github.com/pandas-dev/pandas> | `3.0.5` / `v3.0.5` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Deterministic in-process CSV/dataframe parsing used behind RECA-owned contracts |
+| openpyxl | <https://foss.heptapod.net/openpyxl/openpyxl> | `3.1.5` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | XLSX structure/value reader constrained to read-only, data-only and no-link mode |
+
+## M4 data quality runtime dependencies
+
+- Project: Pandera
+- Repository: <https://github.com/unionai-oss/pandera>
+- Upstream Commit/Tag: released tag `v0.32.1`; research commit `85cc2a16b2110d4c4b8cc7f956aab94bc53716f6`
+- License: MIT
+- License file: upstream `LICENSE.txt`; package metadata/registry distribution
+- Integration mode: `DIRECT_DEPENDENCY`
+- Status: `DIRECT_DEPENDENCY`
+- Copied paths: none
+- Modified paths: none in upstream source
+- Modification summary: Pandera failures are normalized into RECA-owned `DataQualityRun` and `DataQualityIssue`; library-native objects do not enter database or API contracts
+- Attribution location: this notice, `backend/pyproject.toml`, `uv.lock`, `docs/source-research/projects/pandera.md` and `docs/decisions/ADR-004-DATA-STATISTICS-STACK.md`
+- Special restrictions: the pandas extra is mandatory; validation must use `lazy=True`, bounded failure samples and `inplace=False`; no second P0 validation runtime
+- Source of truth: RECA ruleset ID/version/hash, DatasetVersion, Run/Issue and ProcessingRun metadata
+- Fallback: fail the quality Job with a stable RECA error; never invent counts or silently switch to AI/GX
+- Acceptance tests: Python 3.14 compatibility, lazy failure normalization, input immutability, deterministic ordering, mixed/nullable/custom checks and measured fixture performance
+- Upgrade requirement: rerun the M4 Spike, golden normalization tests and dependency audit before changing Pandera, pandas or NumPy resolution
+- Commercialization review: normal MIT dependency attribution; RECA root license remains pending
+- Reviewed at: 2026-08-04
+
+- Project: pandas
+- Repository: <https://github.com/pandas-dev/pandas>
+- Upstream Commit/Tag: released tag `v3.0.5`
+- License: BSD-3-Clause
+- License file: upstream `LICENSE`; package metadata/registry distribution
+- Integration mode: `DIRECT_DEPENDENCY`
+- Status: `DIRECT_DEPENDENCY`
+- Copied paths: none
+- Modified paths: none in upstream source
+- Modification summary: used only behind RECA parsing, preview, deterministic transformation and Pandera boundaries
+- Attribution location: this notice, `backend/pyproject.toml` and `uv.lock`
+- Special restrictions: DataFrame objects are process-local implementation details; parsing remains subject to byte/row/column/cell limits
+- Fallback: reject the Job with a stable file/data error; never publish a partial DatasetVersion
+- Acceptance tests: CSV BOM/delimiter/formula-prefix cases, dtype/mixed-value cases, memory/time bounds and input immutability
+- Upgrade requirement: rerun M4 CSV/XLSX golden, Pandera compatibility and performance tests
+- Commercialization review: normal BSD-3-Clause attribution; RECA root license remains pending
+- Reviewed at: 2026-08-04
+
+- Project: openpyxl
+- Repository: <https://foss.heptapod.net/openpyxl/openpyxl>
+- Upstream Commit/Tag: released version `3.1.5`
+- License: MIT
+- License file: upstream `LICENCE.rst`; package metadata/registry distribution
+- Integration mode: `DIRECT_DEPENDENCY`
+- Status: `DIRECT_DEPENDENCY`
+- Copied paths: none
+- Modified paths: none in upstream source
+- Modification summary: reads XLSX workbook structure and cached values with `read_only=True`, `data_only=True`, `keep_links=False`
+- Attribution location: this notice, `backend/pyproject.toml` and `uv.lock`
+- Special restrictions: formulas are never executed; external links are never fetched; ZIP ratio, expanded bytes, sheet count, row/column and cell limits are enforced before publication
+- Fallback: preserve the original Artifact, fail the pending DatasetVersion and expose a stable parse error without an AVAILABLE partial version
+- Acceptance tests: hidden/multiple worksheets, formula and external-reference cells, damaged/oversized/zip-bomb workbooks and measured streaming reads
+- Upgrade requirement: rerun the M4 workbook security Spike and golden fixtures before changing versions
+- Commercialization review: normal MIT dependency attribution; RECA root license remains pending
+- Reviewed at: 2026-08-04
 
 ## M2 document parsing dependencies
 
@@ -60,6 +120,15 @@ planned RECA business capability for that project is implemented.
   copied into RECA. The fixed spike PDF and live TEI are not committed.
 - pypdf 6.14.2: BSD-3-Clause direct dependency used only for visibly degraded
   page-level extraction; it does not create sections, coordinates or evidence.
+
+## M3 evidence viewer dependency
+
+- `pdfjs-dist` 6.2.108: Apache-2.0 direct frontend dependency. RECA uses the
+  released display API and the matching `pdf.worker.min.mjs` asset only for
+  authorized PDF rendering, page navigation and evidence highlighting. PDF.js
+  output is never treated as authoritative EvidenceSpan truth. The supported
+  fallback is server-provided page text with page-number/context display and no
+  synthesized coordinates.
 - defusedxml 0.7.1: Python Software Foundation License direct dependency used
   to reject unsafe XML constructs at the TEI conversion boundary.
 - grobid-client-python: researched at commit
@@ -174,10 +243,9 @@ these projects by this documentation task.
 | --- | --- | --- | --- | --- | --- |
 | pgvector-python | `60739dfd6cb9d674f32afa4184d43e6aff9dfbcf` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None |
 | grobid-client-python | `161e0f45189c8592b2e2c58e9638cc6218bc75fb` | Apache-2.0 | `SELECTIVE_VENDOR` | `RESEARCHED` | None; experiment required |
-| PDF.js | `a80897dc9a2eb80c474717b683a4153f5b628ac7` | Apache-2.0 | `DIRECT_DEPENDENCY` | `PLANNED` | None |
+| PDF.js | `a80897dc9a2eb80c474717b683a4153f5b628ac7` | Apache-2.0 | `DIRECT_DEPENDENCY` | `ADOPTED` | `pdfjs-dist` 6.2.108 in `frontend/package.json` and `bun.lock`; matching worker loaded from the package URL |
 | PaperQA2 | `d7675d7b7eddeb3535e8c260399c5bbeeb818c50` | Apache-2.0 | `SELECTIVE_VENDOR` | `RESEARCHED` | None; experiment required |
 | ASReview | `d3e863c94e1945ace7848b6ca5bcf2fb1eecbdb5` | Apache-2.0 | `DIRECT_DEPENDENCY_WITH_PROVIDER` | `RESEARCHED` | None; experiment required |
-| Pandera | `85cc2a16b2110d4c4b8cc7f956aab94bc53716f6` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None |
 | SciPy | `420a778219f6db170f0fda8dcda4add8a32fd1d6` | BSD-3-Clause plus bundled licenses | `DIRECT_DEPENDENCY` | `PLANNED` | None |
 | statsmodels | `d3187f844d196de1760829820a7c872a6d6ebb1d` | BSD-3-Clause | `DIRECT_DEPENDENCY` | `PLANNED` | None |
 | Matplotlib | `faf5d100aed23d3271245c2e800ea47f86dd858b` | Matplotlib license plus bundled licenses/fonts | `DIRECT_DEPENDENCY` | `PLANNED` | None |

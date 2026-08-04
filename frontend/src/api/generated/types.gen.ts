@@ -5,6 +5,16 @@ export type ClientOptions = {
 }
 
 /**
+ * AllRowsSelector
+ */
+export type AllRowsSelector = {
+  /**
+   * Selector Type
+   */
+  selector_type?: "ALL_ROWS"
+}
+
+/**
  * ApprovalDecisionPublic
  */
 export type ApprovalDecisionPublic = {
@@ -213,6 +223,32 @@ export type ApprovalRejectRequest = {
    * Item Decisions
    */
   item_decisions?: Array<ApprovalItemDecision>
+}
+
+/**
+ * ApprovalRequestPublic
+ */
+export type ApprovalRequestPublic = {
+  /**
+   * Approval Id
+   */
+  approval_id: string
+  /**
+   * Cleaning Plan Id
+   */
+  cleaning_plan_id: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Payload Hash
+   */
+  payload_hash: string
+  /**
+   * Expires At
+   */
+  expires_at: string | null
 }
 
 /**
@@ -623,6 +659,38 @@ export type AuditTargetPublic = {
 }
 
 /**
+ * Body_datasets_upload_dataset_post_api_v1_projects_project_id_datasets
+ */
+export type BodyDatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasets = {
+  /**
+   * File
+   */
+  file: Blob | File
+  /**
+   * Name
+   */
+  name: string
+  source_type?: DatasetSourceType
+  /**
+   * Publisher
+   */
+  publisher?: string | null
+  /**
+   * Source Platform
+   */
+  source_platform?: string | null
+  /**
+   * Source Identifier
+   */
+  source_identifier?: string | null
+  /**
+   * License Name
+   */
+  license_name?: string | null
+  license_status?: DatasetLicenseStatus
+}
+
+/**
  * Body_documents_upload_document_post_api_v1_projects_project_id_documents
  */
 export type BodyDocumentsUploadDocumentPostApiV1ProjectsProjectIdDocuments = {
@@ -666,6 +734,295 @@ export type BodyLoginLoginAccessTokenPostApiV1LoginAccessToken = {
    */
   client_secret?: string | null
 }
+
+/**
+ * CastTypeAction
+ */
+export type CastTypeAction = {
+  /**
+   * Target Columns
+   */
+  target_columns: Array<string>
+  /**
+   * Row Selector
+   */
+  row_selector?:
+    | ({
+        selector_type: "ALL_ROWS"
+      } & AllRowsSelector)
+    | ({
+        selector_type: "ISSUE_ROWS"
+      } & IssueRowsSelector)
+    | ({
+        selector_type: "VALUE_EQUALS"
+      } & ValueEqualsSelector)
+    | ({
+        selector_type: "VALUE_IN"
+      } & ValueInSelector)
+    | ({
+        selector_type: "IS_NOT_NULL" | "IS_NULL"
+      } & NullSelector)
+    | ({
+        selector_type: "NUMERIC_RANGE"
+      } & NumericRangeSelector)
+  /**
+   * Reason
+   */
+  reason: string
+  /**
+   * Source Issue Ids
+   */
+  source_issue_ids?: Array<string>
+  /**
+   * Action Type
+   */
+  action_type: "CAST_TYPE"
+  parameters: CastTypeParameters
+}
+
+/**
+ * CastTypeParameters
+ */
+export type CastTypeParameters = {
+  target_type: DatasetColumnType
+  /**
+   * On Invalid
+   */
+  on_invalid?: "FAIL" | "MARK_MISSING"
+}
+
+/**
+ * CleaningPlanCreate
+ */
+export type CleaningPlanCreate = {
+  /**
+   * Title
+   */
+  title: string
+  /**
+   * Rationale
+   */
+  rationale?: string | null
+  /**
+   * Actions
+   */
+  actions: Array<
+    | MarkMissingAction
+    | ReplaceValueAction
+    | MapCategoryAction
+    | CastTypeAction
+    | RenameColumnAction
+    | UnavailableAction
+  >
+}
+
+/**
+ * CleaningPlanPublic
+ */
+export type CleaningPlanPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Title
+   */
+  title: string
+  /**
+   * Rationale
+   */
+  rationale: string | null
+  status: CleaningPlanStatus
+  /**
+   * Actions
+   */
+  actions: Array<
+    | MarkMissingAction
+    | ReplaceValueAction
+    | MapCategoryAction
+    | CastTypeAction
+    | RenameColumnAction
+    | UnavailableAction
+  >
+  /**
+   * Preview Summary
+   */
+  preview_summary: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Preview Hash
+   */
+  preview_hash: string | null
+  /**
+   * Affected Row Count
+   */
+  affected_row_count: number | null
+  /**
+   * Affected Column Count
+   */
+  affected_column_count: number | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string | null
+  /**
+   * Payload Hash
+   */
+  payload_hash: string | null
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Transformation Id
+   */
+  transformation_id: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * CleaningPlanStatus
+ */
+export type CleaningPlanStatus =
+  | "DRAFT"
+  | "VALIDATING"
+  | "NEEDS_INPUT"
+  | "READY"
+  | "NEEDS_APPROVAL"
+  | "APPROVED"
+  | "REJECTED"
+  | "QUEUED"
+  | "RUNNING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+  | "INVALIDATED"
+
+/**
+ * CleaningPlanSuggestion
+ */
+export type CleaningPlanSuggestion = {
+  /**
+   * Title
+   */
+  title: string
+  /**
+   * Rationale
+   */
+  rationale?: string | null
+  /**
+   * Actions
+   */
+  actions: Array<
+    | MarkMissingAction
+    | ReplaceValueAction
+    | MapCategoryAction
+    | CastTypeAction
+    | RenameColumnAction
+    | UnavailableAction
+  >
+  /**
+   * Warnings
+   */
+  warnings?: Array<string>
+}
+
+/**
+ * CleaningPlanSuggestionPublic
+ */
+export type CleaningPlanSuggestionPublic = {
+  /**
+   * Model Invocation Id
+   */
+  model_invocation_id: string
+  /**
+   * Status
+   */
+  status: "CANDIDATE"
+  suggestion: CleaningPlanSuggestion
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * CleaningPlanSuggestionRequest
+ */
+export type CleaningPlanSuggestionRequest = {
+  /**
+   * Mode
+   */
+  mode?: "MOCK" | "LIVE"
+  /**
+   * Fixture Output
+   */
+  fixture_output?: {
+    [key: string]: unknown
+  } | null
+}
+
+/**
+ * CleaningPlanUpdate
+ */
+export type CleaningPlanUpdate = {
+  /**
+   * Title
+   */
+  title?: string | null
+  /**
+   * Rationale
+   */
+  rationale?: string | null
+  /**
+   * Actions
+   */
+  actions?: Array<
+    | MarkMissingAction
+    | ReplaceValueAction
+    | MapCategoryAction
+    | CastTypeAction
+    | RenameColumnAction
+    | UnavailableAction
+  > | null
+}
+
+/**
+ * ConfidenceLevel
+ */
+export type ConfidenceLevel = "HIGH" | "MEDIUM" | "LOW" | "UNKNOWN"
 
 /**
  * ContractErrorDetail
@@ -713,6 +1070,24 @@ export type ContractErrorResponse = {
 }
 
 /**
+ * CountDeltaPublic
+ */
+export type CountDeltaPublic = {
+  /**
+   * Before
+   */
+  before: number | null
+  /**
+   * After
+   */
+  after: number | null
+  /**
+   * Delta
+   */
+  delta: number
+}
+
+/**
  * CurrentResearchQuestionData
  */
 export type CurrentResearchQuestionData = {
@@ -754,6 +1129,785 @@ export type CurrentResearchQuestionSummary = {
    */
   status: string
 }
+
+/**
+ * DataQualityIssuePublic
+ */
+export type DataQualityIssuePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Data Quality Run Id
+   */
+  data_quality_run_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Rule Code
+   */
+  rule_code: string
+  issue_type: DataQualityIssueType
+  severity: DataQualitySeverity
+  /**
+   * Column Id
+   */
+  column_id: string | null
+  /**
+   * Affected Row Count
+   */
+  affected_row_count: number | null
+  /**
+   * Affected Rows
+   */
+  affected_rows: Array<unknown> | null
+  /**
+   * Evidence
+   */
+  evidence: {
+    [key: string]: unknown
+  }
+  /**
+   * Description
+   */
+  description: string
+  /**
+   * Suggested Actions
+   */
+  suggested_actions: Array<{
+    [key: string]: unknown
+  }> | null
+  /**
+   * Requires Approval
+   */
+  requires_approval: boolean
+  status: DataQualityIssueStatus
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Resolved At
+   */
+  resolved_at: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * DataQualityIssueStatus
+ */
+export type DataQualityIssueStatus =
+  | "OPEN"
+  | "ACKNOWLEDGED"
+  | "PLANNED"
+  | "RESOLVED"
+  | "IGNORED"
+  | "INVALIDATED"
+
+/**
+ * DataQualityIssueType
+ */
+export type DataQualityIssueType =
+  | "MISSING_VALUE"
+  | "DUPLICATE_ROW"
+  | "DUPLICATE_ID"
+  | "CONSTANT_COLUMN"
+  | "MIXED_TYPE"
+  | "CATEGORY_INCONSISTENCY"
+  | "OUT_OF_RANGE"
+  | "EXTREME_VALUE"
+  | "GROUP_IMBALANCE"
+  | "SUSPICIOUS_UNIT"
+  | "INVALID_DATE"
+  | "POSSIBLE_SENSITIVE_FIELD"
+
+/**
+ * DataQualityRunPublic
+ */
+export type DataQualityRunPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Ruleset Id
+   */
+  ruleset_id: string
+  /**
+   * Ruleset Version
+   */
+  ruleset_version: string
+  /**
+   * Ruleset Hash
+   */
+  ruleset_hash: string
+  /**
+   * Selected Rule Ids
+   */
+  selected_rule_ids: Array<string>
+  /**
+   * Include Sensitive Field Detection
+   */
+  include_sensitive_field_detection: boolean
+  status: DataQualityRunStatus
+  /**
+   * Issue Count
+   */
+  issue_count: number
+  /**
+   * High Issue Count
+   */
+  high_issue_count: number
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Started At
+   */
+  started_at: string | null
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * DataQualityRunStatus
+ */
+export type DataQualityRunStatus =
+  | "QUEUED"
+  | "RUNNING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+  | "INVALIDATED"
+
+/**
+ * DataQualitySeverity
+ */
+export type DataQualitySeverity = "HIGH" | "MEDIUM" | "INFO"
+
+/**
+ * DataTransformationPublic
+ */
+export type DataTransformationPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Cleaning Plan Id
+   */
+  cleaning_plan_id: string
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string
+  /**
+   * Source Dataset Version Id
+   */
+  source_dataset_version_id: string
+  /**
+   * Target Dataset Version Id
+   */
+  target_dataset_version_id: string | null
+  status: DataTransformationStatus
+  /**
+   * Action Count
+   */
+  action_count: number
+  /**
+   * Affected Row Count
+   */
+  affected_row_count: number | null
+  /**
+   * Affected Column Count
+   */
+  affected_column_count: number | null
+  /**
+   * Parameters Hash
+   */
+  parameters_hash: string
+  /**
+   * Output Artifact Id
+   */
+  output_artifact_id: string | null
+  /**
+   * Log Artifact Id
+   */
+  log_artifact_id: string | null
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Started At
+   */
+  started_at: string | null
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * DataTransformationStatus
+ */
+export type DataTransformationStatus =
+  | "QUEUED"
+  | "RUNNING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+
+/**
+ * DatasetColumnConfirmationStatus
+ */
+export type DatasetColumnConfirmationStatus =
+  | "UNCONFIRMED"
+  | "CONFIRMED"
+  | "NEEDS_REVIEW"
+
+/**
+ * DatasetColumnPublic
+ */
+export type DatasetColumnPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Source Name
+   */
+  source_name: string
+  /**
+   * Display Name
+   */
+  display_name: string | null
+  /**
+   * Column Order
+   */
+  column_order: number
+  inferred_type: DatasetColumnType
+  confirmed_type: DatasetColumnType | null
+  semantic_role: DatasetSemanticRole | null
+  /**
+   * Unit
+   */
+  unit: string | null
+  /**
+   * Description
+   */
+  description: string | null
+  /**
+   * Missing Codes
+   */
+  missing_codes: Array<string> | null
+  /**
+   * Category Mapping
+   */
+  category_mapping: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Is Identifier
+   */
+  is_identifier: boolean
+  /**
+   * Is Sensitive
+   */
+  is_sensitive: boolean
+  confirmation_status: DatasetColumnConfirmationStatus
+  /**
+   * Unique Count
+   */
+  unique_count: number
+  /**
+   * Missing Ratio
+   */
+  missing_ratio: number
+  /**
+   * Example Values
+   */
+  example_values: Array<unknown>
+  /**
+   * Inherited From Column Id
+   */
+  inherited_from_column_id: string | null
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+}
+
+/**
+ * DatasetColumnType
+ */
+export type DatasetColumnType =
+  | "STRING"
+  | "INTEGER"
+  | "NUMERIC"
+  | "BOOLEAN"
+  | "DATE"
+  | "DATETIME"
+  | "CATEGORY"
+  | "UNKNOWN"
+
+/**
+ * DatasetColumnUpdate
+ */
+export type DatasetColumnUpdate = {
+  /**
+   * Display Name
+   */
+  display_name?: string | null
+  confirmed_type?: DatasetColumnType | null
+  semantic_role?: DatasetSemanticRole | null
+  /**
+   * Unit
+   */
+  unit?: string | null
+  /**
+   * Description
+   */
+  description?: string | null
+  /**
+   * Missing Codes
+   */
+  missing_codes?: Array<string> | null
+  /**
+   * Category Mapping
+   */
+  category_mapping?: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Is Identifier
+   */
+  is_identifier?: boolean | null
+  /**
+   * Is Sensitive
+   */
+  is_sensitive?: boolean | null
+  confirmation_status?: DatasetColumnConfirmationStatus | null
+}
+
+/**
+ * DatasetFileFormat
+ */
+export type DatasetFileFormat = "CSV" | "XLSX"
+
+/**
+ * DatasetLicenseStatus
+ */
+export type DatasetLicenseStatus =
+  | "VERIFIED"
+  | "DECLARED_BY_USER"
+  | "UNKNOWN"
+  | "RESTRICTED"
+
+/**
+ * DatasetPermissionsPublic
+ */
+export type DatasetPermissionsPublic = {
+  /**
+   * Can Update
+   */
+  can_update: boolean
+  /**
+   * Can Upload
+   */
+  can_upload: boolean
+  /**
+   * Can Confirm Columns
+   */
+  can_confirm_columns: boolean
+}
+
+/**
+ * DatasetPreviewPublic
+ */
+export type DatasetPreviewPublic = {
+  /**
+   * Version Id
+   */
+  version_id: string
+  /**
+   * Offset
+   */
+  offset: number
+  /**
+   * Limit
+   */
+  limit: number
+  /**
+   * Columns
+   */
+  columns: Array<string>
+  /**
+   * Rows
+   */
+  rows: Array<{
+    [key: string]: unknown
+  }>
+  /**
+   * Returned
+   */
+  returned: number
+  /**
+   * Total Rows
+   */
+  total_rows: number | null
+  /**
+   * Truncated
+   */
+  truncated: boolean
+}
+
+/**
+ * DatasetPublic
+ */
+export type DatasetPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Name
+   */
+  name: string
+  /**
+   * Description
+   */
+  description: string | null
+  source_type: DatasetSourceType
+  /**
+   * Publisher
+   */
+  publisher: string | null
+  /**
+   * Source Platform
+   */
+  source_platform: string | null
+  /**
+   * Source Identifier
+   */
+  source_identifier: string | null
+  /**
+   * Doi
+   */
+  doi: string | null
+  /**
+   * Acquired At
+   */
+  acquired_at: string | null
+  /**
+   * License Name
+   */
+  license_name: string | null
+  license_status: DatasetLicenseStatus
+  /**
+   * License Warning
+   */
+  license_warning: string | null
+  /**
+   * Recommended Citation
+   */
+  recommended_citation: string | null
+  /**
+   * Known Limitations
+   */
+  known_limitations: Array<string> | null
+  /**
+   * Current Version Id
+   */
+  current_version_id: string | null
+  status: DatasetStatus
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  permissions: DatasetPermissionsPublic
+  /**
+   * Versions
+   */
+  versions?: Array<DatasetVersionPublic> | null
+}
+
+/**
+ * DatasetSemanticRole
+ */
+export type DatasetSemanticRole =
+  | "ID"
+  | "INDEPENDENT_VARIABLE"
+  | "DEPENDENT_VARIABLE"
+  | "CONTROL_VARIABLE"
+  | "GROUP_VARIABLE"
+  | "TIME_VARIABLE"
+  | "WEIGHT"
+  | "UNASSIGNED"
+
+/**
+ * DatasetSourceType
+ */
+export type DatasetSourceType =
+  | "USER_UPLOAD"
+  | "PUBLIC_DATASET"
+  | "DEMO_DATASET"
+  | "MANUAL_ENTRY"
+
+/**
+ * DatasetStatus
+ */
+export type DatasetStatus = "ACTIVE" | "ARCHIVED" | "DELETED"
+
+/**
+ * DatasetUpdate
+ */
+export type DatasetUpdate = {
+  /**
+   * Name
+   */
+  name?: string | null
+  /**
+   * Description
+   */
+  description?: string | null
+  source_type?: DatasetSourceType | null
+  /**
+   * Publisher
+   */
+  publisher?: string | null
+  /**
+   * Source Platform
+   */
+  source_platform?: string | null
+  /**
+   * Source Identifier
+   */
+  source_identifier?: string | null
+  /**
+   * Doi
+   */
+  doi?: string | null
+  /**
+   * Acquired At
+   */
+  acquired_at?: string | null
+  /**
+   * License Name
+   */
+  license_name?: string | null
+  license_status?: DatasetLicenseStatus | null
+  /**
+   * Recommended Citation
+   */
+  recommended_citation?: string | null
+  /**
+   * Known Limitations
+   */
+  known_limitations?: Array<string> | null
+  status?: DatasetStatus | null
+}
+
+/**
+ * DatasetUploadPublic
+ */
+export type DatasetUploadPublic = {
+  dataset: DatasetPublic
+  version: DatasetVersionPublic
+}
+
+/**
+ * DatasetVersionInvalidation
+ */
+export type DatasetVersionInvalidation = {
+  /**
+   * Reason
+   */
+  reason: string
+}
+
+/**
+ * DatasetVersionPublic
+ */
+export type DatasetVersionPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Dataset Id
+   */
+  dataset_id: string
+  /**
+   * Version Number
+   */
+  version_number: number
+  /**
+   * Parent Version Id
+   */
+  parent_version_id: string | null
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  version_type: DatasetVersionType
+  /**
+   * Row Count
+   */
+  row_count: number | null
+  /**
+   * Column Count
+   */
+  column_count: number | null
+  file_format: DatasetFileFormat
+  /**
+   * Worksheet Manifest
+   */
+  worksheet_manifest: Array<WorksheetPublic> | null
+  /**
+   * Selected Worksheet Name
+   */
+  selected_worksheet_name: string | null
+  /**
+   * Projection Hash
+   */
+  projection_hash: string | null
+  /**
+   * Schema Hash
+   */
+  schema_hash: string | null
+  /**
+   * Data Hash
+   */
+  data_hash: string
+  /**
+   * Transformation Id
+   */
+  transformation_id: string | null
+  status: DatasetVersionStatus
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+}
+
+/**
+ * DatasetVersionStatus
+ */
+export type DatasetVersionStatus =
+  | "CREATING"
+  | "VALIDATING"
+  | "AVAILABLE"
+  | "FAILED"
+  | "INVALIDATED"
+  | "DELETED"
+
+/**
+ * DatasetVersionType
+ */
+export type DatasetVersionType =
+  | "ORIGINAL"
+  | "CLEANED"
+  | "FILTERED"
+  | "TRANSFORMED"
+  | "DERIVED"
 
 /**
  * DependenciesHealthResponse
@@ -1010,6 +2164,585 @@ export type ErrorResponse = {
 }
 
 /**
+ * EvidenceBoundingBox
+ */
+export type EvidenceBoundingBox = {
+  /**
+   * Page
+   */
+  page: number
+  /**
+   * X
+   */
+  x: number
+  /**
+   * Y
+   */
+  y: number
+  /**
+   * Width
+   */
+  width: number
+  /**
+   * Height
+   */
+  height: number
+}
+
+/**
+ * EvidenceCandidateDTO
+ */
+export type EvidenceCandidateDto = {
+  /**
+   * Candidate Id
+   */
+  candidate_id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Literature Record Id
+   */
+  literature_record_id: string
+  /**
+   * Document Id
+   */
+  document_id: string
+  /**
+   * Chunk Id
+   */
+  chunk_id?: string | null
+  /**
+   * Page Number
+   */
+  page_number: number
+  /**
+   * Source Text
+   */
+  source_text: string
+  /**
+   * Source Text Hash
+   */
+  source_text_hash: string
+  /**
+   * Retrieval Run Id
+   */
+  retrieval_run_id?: string | null
+  /**
+   * Keyword Score
+   */
+  keyword_score?: number | null
+  /**
+   * Vector Score
+   */
+  vector_score?: number | null
+  /**
+   * Fused Rank
+   */
+  fused_rank?: number | null
+  /**
+   * Rerank Score
+   */
+  rerank_score?: number | null
+  /**
+   * Char Start
+   */
+  char_start?: number | null
+  /**
+   * Char End
+   */
+  char_end?: number | null
+  /**
+   * Bounding Boxes
+   */
+  bounding_boxes?: Array<EvidenceBoundingBox>
+  /**
+   * Limitations
+   */
+  limitations?: Array<string>
+  /**
+   * Evidence Span Id
+   */
+  evidence_span_id?: string | null
+}
+
+/**
+ * EvidenceGapItem
+ */
+export type EvidenceGapItem = {
+  /**
+   * Claim Text
+   */
+  claim_text: string
+  /**
+   * Supporting Literature Ids
+   */
+  supporting_literature_ids?: Array<string>
+  /**
+   * Contradicting Literature Ids
+   */
+  contradicting_literature_ids?: Array<string>
+  /**
+   * Evidence Span Ids
+   */
+  evidence_span_ids?: Array<string>
+  strength?: ConfidenceLevel
+  /**
+   * Limitations
+   */
+  limitations?: Array<string>
+  /**
+   * Basis
+   */
+  basis?: {
+    [key: string]: number
+  }
+}
+
+/**
+ * EvidenceRetrievalMode
+ */
+export type EvidenceRetrievalMode = "KEYWORD" | "HYBRID"
+
+/**
+ * EvidenceReviewStatus
+ */
+export type EvidenceReviewStatus =
+  | "UNREVIEWED"
+  | "REVIEWED"
+  | "CONFIRMED"
+  | "REJECTED"
+
+/**
+ * EvidenceSearchData
+ */
+export type EvidenceSearchData = {
+  /**
+   * Query
+   */
+  query: string
+  /**
+   * Retrieval Run Id
+   */
+  retrieval_run_id: string
+  /**
+   * Candidates
+   */
+  candidates: Array<EvidenceCandidateDto>
+  /**
+   * Limitations
+   */
+  limitations: Array<string>
+}
+
+/**
+ * EvidenceSearchEnvelope
+ */
+export type EvidenceSearchEnvelope = {
+  data: EvidenceSearchData
+  meta: ResponseMeta
+}
+
+/**
+ * EvidenceSearchRequest
+ */
+export type EvidenceSearchRequest = {
+  /**
+   * Query
+   */
+  query: string
+  /**
+   * Document Ids
+   */
+  document_ids?: Array<string>
+  /**
+   * Top K
+   */
+  top_k?: number
+  retrieval_mode?: EvidenceRetrievalMode
+  /**
+   * Include Uncertain Literature
+   */
+  include_uncertain_literature?: boolean
+}
+
+/**
+ * EvidenceSetSummaryCreate
+ */
+export type EvidenceSetSummaryCreate = {
+  /**
+   * Included Literature Ids
+   */
+  included_literature_ids: Array<string>
+  /**
+   * Summary Types
+   */
+  summary_types: Array<EvidenceSummaryType>
+  /**
+   * Require Evidence Spans
+   */
+  require_evidence_spans?: boolean
+}
+
+/**
+ * EvidenceSetSummaryEnvelope
+ */
+export type EvidenceSetSummaryEnvelope = {
+  data: EvidenceSetSummaryPublic
+  meta: ResponseMeta
+}
+
+/**
+ * EvidenceSetSummaryOutput
+ */
+export type EvidenceSetSummaryOutput = {
+  /**
+   * Included Literature Ids
+   */
+  included_literature_ids: Array<string>
+  /**
+   * Scope Statement
+   */
+  scope_statement: string
+  /**
+   * Consensus Items
+   */
+  consensus_items?: Array<EvidenceSummarySourceItem>
+  /**
+   * Controversy Items
+   */
+  controversy_items?: Array<EvidenceSummarySourceItem>
+  /**
+   * Evidence Gap Items
+   */
+  evidence_gap_items?: Array<EvidenceGapItem>
+  /**
+   * Counterexamples
+   */
+  counterexamples?: Array<EvidenceSummarySourceItem>
+  /**
+   * Method Difference Items
+   */
+  method_difference_items?: Array<EvidenceSummarySourceItem>
+  /**
+   * Sample Difference Items
+   */
+  sample_difference_items?: Array<EvidenceSummarySourceItem>
+  /**
+   * Missing Literature
+   */
+  missing_literature?: Array<EvidenceSummarySourceItem>
+  /**
+   * Missing Information
+   */
+  missing_information?: Array<string>
+  /**
+   * Limitations
+   */
+  limitations?: Array<string>
+}
+
+/**
+ * EvidenceSetSummaryPublic
+ */
+export type EvidenceSetSummaryPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Included Literature Ids
+   */
+  included_literature_ids: Array<string>
+  /**
+   * Scope Statement
+   */
+  scope_statement: string
+  result: EvidenceSetSummaryOutput | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  status: JobStatus
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * EvidenceSpanEnvelope
+ */
+export type EvidenceSpanEnvelope = {
+  data: EvidenceSpanPublic
+  meta: ResponseMeta
+}
+
+/**
+ * EvidenceSpanPublic
+ */
+export type EvidenceSpanPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Document Id
+   */
+  document_id: string
+  /**
+   * Document Page Id
+   */
+  document_page_id: string | null
+  /**
+   * Chunk Id
+   */
+  chunk_id: string | null
+  /**
+   * Page Number
+   */
+  page_number: number
+  /**
+   * Section Path
+   */
+  section_path: Array<string> | null
+  /**
+   * Source Text
+   */
+  source_text: string
+  /**
+   * Context Before
+   */
+  context_before: string | null
+  /**
+   * Context After
+   */
+  context_after: string | null
+  /**
+   * Bounding Boxes
+   */
+  bounding_boxes: Array<{
+    [key: string]: unknown
+  }> | null
+  /**
+   * Char Start
+   */
+  char_start: number | null
+  /**
+   * Char End
+   */
+  char_end: number | null
+  evidence_type: EvidenceType
+  confidence_level: ConfidenceLevel | null
+  /**
+   * Confidence Score
+   */
+  confidence_score: number | null
+  /**
+   * Parser Type
+   */
+  parser_type: string | null
+  /**
+   * Parser Version
+   */
+  parser_version: string | null
+  /**
+   * Model Invocation Id
+   */
+  model_invocation_id: string | null
+  /**
+   * Source Text Hash
+   */
+  source_text_hash: string
+  location_verification_status: LocationVerificationStatus
+  review_status: EvidenceReviewStatus
+  parser_coverage: ParserCoverage
+  user_declared_read_scope: UserDeclaredReadScope
+  /**
+   * Reviewed By Actor Type
+   */
+  reviewed_by_actor_type: string | null
+  /**
+   * Reviewed By Actor Id
+   */
+  reviewed_by_actor_id: string | null
+  /**
+   * Reviewed At
+   */
+  reviewed_at: string | null
+  /**
+   * Verified By Actor Id
+   */
+  verified_by_actor_id: string | null
+  /**
+   * Verified At
+   */
+  verified_at: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * EvidenceSpanVerificationCreate
+ */
+export type EvidenceSpanVerificationCreate = {
+  location_verification_status: LocationVerificationStatus
+  user_declared_read_scope: UserDeclaredReadScope
+  /**
+   * Reviewed Page Numbers
+   */
+  reviewed_page_numbers: Array<number>
+  /**
+   * Note
+   */
+  note?: string | null
+}
+
+/**
+ * EvidenceSpanVerificationEnvelope
+ */
+export type EvidenceSpanVerificationEnvelope = {
+  data: EvidenceSpanVerificationPublic
+  meta: ResponseMeta
+}
+
+/**
+ * EvidenceSpanVerificationPublic
+ */
+export type EvidenceSpanVerificationPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Evidence Span Id
+   */
+  evidence_span_id: string
+  /**
+   * Actor Type
+   */
+  actor_type: string
+  /**
+   * Actor Id
+   */
+  actor_id: string
+  location_verification_status: LocationVerificationStatus
+  user_declared_read_scope: UserDeclaredReadScope
+  /**
+   * Reviewed Page Numbers
+   */
+  reviewed_page_numbers: Array<number>
+  /**
+   * Note
+   */
+  note: string | null
+  /**
+   * Source Text Hash
+   */
+  source_text_hash: string
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * EvidenceSummarySourceItem
+ */
+export type EvidenceSummarySourceItem = {
+  /**
+   * Claim Text
+   */
+  claim_text: string
+  /**
+   * Supporting Literature Ids
+   */
+  supporting_literature_ids?: Array<string>
+  /**
+   * Contradicting Literature Ids
+   */
+  contradicting_literature_ids?: Array<string>
+  /**
+   * Evidence Span Ids
+   */
+  evidence_span_ids?: Array<string>
+  strength?: ConfidenceLevel
+  /**
+   * Limitations
+   */
+  limitations?: Array<string>
+}
+
+/**
+ * EvidenceSummaryType
+ */
+export type EvidenceSummaryType =
+  | "CONSENSUS"
+  | "CONTROVERSY"
+  | "EVIDENCE_GAP"
+  | "COUNTEREXAMPLE"
+  | "METHOD_DIFFERENCE"
+  | "SAMPLE_DIFFERENCE"
+  | "MISSING_LITERATURE"
+
+/**
+ * EvidenceType
+ */
+export type EvidenceType =
+  | "FIELD_SUPPORT"
+  | "CLAIM_SUPPORT"
+  | "CLAIM_CONTRADICTION"
+  | "METHOD_DESCRIPTION"
+  | "SAMPLE_DESCRIPTION"
+  | "LIMITATION"
+  | "OTHER"
+
+/**
+ * FieldConfirmationStatus
+ */
+export type FieldConfirmationStatus = "UNREVIEWED" | "CONFIRMED" | "REJECTED"
+
+/**
+ * FieldEvidenceStatus
+ */
+export type FieldEvidenceStatus =
+  | "UNASSESSED"
+  | "LOCATED"
+  | "LOCATION_UNCERTAIN"
+  | "NO_LOCATED_EVIDENCE"
+
+/**
  * FoundationCounts
  */
 export type FoundationCounts = {
@@ -1043,6 +2776,20 @@ export type HttpValidationError = {
    * Detail
    */
   detail?: Array<ValidationError>
+}
+
+/**
+ * IssueRowsSelector
+ */
+export type IssueRowsSelector = {
+  /**
+   * Selector Type
+   */
+  selector_type?: "ISSUE_ROWS"
+  /**
+   * Issue Ids
+   */
+  issue_ids: Array<string>
 }
 
 /**
@@ -1206,6 +2953,7 @@ export type JobTaskType =
   | "LITERATURE_EXTRACT"
   | "DOCUMENT_EMBED"
   | "LITERATURE_SUMMARIZE"
+  | "TOPIC_GENERATE"
   | "DATASET_PROFILE"
   | "DATASET_TRANSFORM"
   | "ANALYSIS_RUN"
@@ -1294,6 +3042,97 @@ export type LiteratureCandidatePublic = {
 }
 
 /**
+ * LiteratureDecisionCreate
+ */
+export type LiteratureDecisionCreate = {
+  decision: LiteratureDecisionStatus
+  reason_code?: LiteratureDecisionReason | null
+  /**
+   * Reason Text
+   */
+  reason_text?: string | null
+}
+
+/**
+ * LiteratureDecisionEnvelope
+ */
+export type LiteratureDecisionEnvelope = {
+  data: LiteratureDecisionPublic
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureDecisionListEnvelope
+ */
+export type LiteratureDecisionListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<LiteratureDecisionPublic>
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureDecisionPublic
+ */
+export type LiteratureDecisionPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Literature Record Id
+   */
+  literature_record_id: string
+  decision: LiteratureDecisionStatus
+  reason_code: LiteratureDecisionReason | null
+  /**
+   * Reason Text
+   */
+  reason_text: string | null
+  ai_recommendation: LiteratureDecisionStatus | null
+  /**
+   * Ai Score
+   */
+  ai_score: number | null
+  /**
+   * Decided By User Id
+   */
+  decided_by_user_id: string
+  /**
+   * Supersedes Decision Id
+   */
+  supersedes_decision_id: string | null
+  /**
+   * Is Current
+   */
+  is_current: boolean
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * LiteratureDecisionReason
+ */
+export type LiteratureDecisionReason =
+  | "RELEVANT_OBJECT_AND_METHOD"
+  | "OBJECT_MISMATCH"
+  | "VARIABLE_MISMATCH"
+  | "METHOD_MISMATCH"
+  | "TYPE_MISMATCH"
+  | "YEAR_MISMATCH"
+  | "DUPLICATE"
+  | "FULL_TEXT_UNAVAILABLE"
+  | "QUALITY_ISSUE"
+  | "OTHER"
+
+/**
  * LiteratureDecisionStatus
  */
 export type LiteratureDecisionStatus = "INCLUDED" | "EXCLUDED" | "UNCERTAIN"
@@ -1307,6 +3146,231 @@ export type LiteratureDoiImportRequest = {
    */
   doi: string
 }
+
+/**
+ * LiteratureExtractionCreate
+ */
+export type LiteratureExtractionCreate = {
+  /**
+   * Literature Record Id
+   */
+  literature_record_id: string
+  /**
+   * Field Codes
+   */
+  field_codes: Array<LiteratureFieldCode>
+}
+
+/**
+ * LiteratureExtractionEnvelope
+ */
+export type LiteratureExtractionEnvelope = {
+  data: LiteratureExtractionPublic
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureExtractionFieldCorrection
+ */
+export type LiteratureExtractionFieldCorrection = {
+  /**
+   * Value Text
+   */
+  value_text?: string | null
+  /**
+   * Value Json
+   */
+  value_json?:
+    | {
+        [key: string]: unknown
+      }
+    | Array<unknown>
+    | null
+  /**
+   * Evidence Span Id
+   */
+  evidence_span_id?: string | null
+  /**
+   * Correction Reason
+   */
+  correction_reason: string
+  confirmation_status: FieldConfirmationStatus
+}
+
+/**
+ * LiteratureExtractionFieldEnvelope
+ */
+export type LiteratureExtractionFieldEnvelope = {
+  data: LiteratureExtractionFieldPublic
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureExtractionFieldPublic
+ */
+export type LiteratureExtractionFieldPublic = {
+  /**
+   * Id
+   */
+  id: string | null
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Extraction Id
+   */
+  extraction_id: string
+  field_code: LiteratureFieldCode
+  /**
+   * Model Value Text
+   */
+  model_value_text: string | null
+  /**
+   * Model Value Json
+   */
+  model_value_json:
+    | {
+        [key: string]: unknown
+      }
+    | Array<unknown>
+    | null
+  /**
+   * Value Text
+   */
+  value_text: string | null
+  /**
+   * Value Json
+   */
+  value_json:
+    | {
+        [key: string]: unknown
+      }
+    | Array<unknown>
+    | null
+  /**
+   * Confidence Score
+   */
+  confidence_score: number | null
+  confidence_level: ConfidenceLevel
+  /**
+   * Evidence Span Id
+   */
+  evidence_span_id: string | null
+  confirmation_status: FieldConfirmationStatus
+  evidence_status: FieldEvidenceStatus
+  /**
+   * Evidence Limitations
+   */
+  evidence_limitations: string | null
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created At
+   */
+  created_at: string | null
+  /**
+   * Updated At
+   */
+  updated_at: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * LiteratureExtractionPublic
+ */
+export type LiteratureExtractionPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Literature Record Id
+   */
+  literature_record_id: string
+  /**
+   * Document Id
+   */
+  document_id: string
+  /**
+   * Extraction Version
+   */
+  extraction_version: number
+  /**
+   * Schema Version
+   */
+  schema_version: string
+  status: LiteratureExtractionStatus
+  overall_confidence: ConfidenceLevel | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Document Level Limitations
+   */
+  document_level_limitations: Array<string>
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Fields
+   */
+  fields: Array<LiteratureExtractionFieldPublic>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+}
+
+/**
+ * LiteratureExtractionStatus
+ */
+export type LiteratureExtractionStatus =
+  | "DRAFT"
+  | "EXTRACTING"
+  | "NEEDS_REVIEW"
+  | "CONFIRMED"
+  | "SUPERSEDED"
+  | "INVALIDATED"
+  | "FAILED"
+
+/**
+ * LiteratureFieldCode
+ */
+export type LiteratureFieldCode =
+  | "TITLE"
+  | "AUTHORS"
+  | "YEAR"
+  | "RESEARCH_OBJECT"
+  | "SAMPLE_SIZE"
+  | "CORE_VARIABLES"
+  | "RESEARCH_DESIGN"
+  | "ANALYSIS_METHOD"
+  | "MAIN_CONCLUSION"
+  | "LIMITATION"
 
 /**
  * LiteratureImportData
@@ -1356,6 +3420,101 @@ export type LiteratureImportResult = {
    * Matched Existing
    */
   matched_existing: boolean
+}
+
+/**
+ * LiteratureMatrixEnvelope
+ */
+export type LiteratureMatrixEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<LiteratureMatrixRow>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * LiteratureMatrixField
+ */
+export type LiteratureMatrixField = {
+  field_code: LiteratureFieldCode
+  /**
+   * Value Text
+   */
+  value_text: string | null
+  /**
+   * Value Json
+   */
+  value_json:
+    | {
+        [key: string]: unknown
+      }
+    | Array<unknown>
+    | null
+  confidence_level: ConfidenceLevel
+  /**
+   * Confidence Score
+   */
+  confidence_score: number | null
+  confirmation_status: FieldConfirmationStatus
+  evidence_status: FieldEvidenceStatus
+  /**
+   * Evidence Span Id
+   */
+  evidence_span_id: string | null
+  /**
+   * Evidence Limitations
+   */
+  evidence_limitations: string | null
+  /**
+   * Lock Version
+   */
+  lock_version: number | null
+}
+
+/**
+ * LiteratureMatrixRow
+ */
+export type LiteratureMatrixRow = {
+  /**
+   * Literature Record Id
+   */
+  literature_record_id: string
+  /**
+   * Document Id
+   */
+  document_id: string | null
+  /**
+   * Extraction Id
+   */
+  extraction_id: string | null
+  extraction_status: LiteratureExtractionStatus | null
+  /**
+   * Title
+   */
+  title: string
+  /**
+   * Authors Text
+   */
+  authors_text: string | null
+  /**
+   * Publication Year
+   */
+  publication_year: number | null
+  current_decision: LiteratureDecisionStatus
+  /**
+   * Fields
+   */
+  fields: Array<LiteratureMatrixField>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
 }
 
 /**
@@ -1609,6 +3768,327 @@ export type LiveHealthResponse = {
 }
 
 /**
+ * LocationVerificationStatus
+ */
+export type LocationVerificationStatus =
+  | "EXTRACTED"
+  | "LOCATED"
+  | "VERIFIED"
+  | "LOCATION_UNCERTAIN"
+
+/**
+ * M4Envelope[ApprovalRequestPublic]
+ */
+export type M4EnvelopeApprovalRequestPublic = {
+  data: ApprovalRequestPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[CleaningPlanPublic]
+ */
+export type M4EnvelopeCleaningPlanPublic = {
+  data: CleaningPlanPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[CleaningPlanSuggestionPublic]
+ */
+export type M4EnvelopeCleaningPlanSuggestionPublic = {
+  data: CleaningPlanSuggestionPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DataQualityIssuePublic]
+ */
+export type M4EnvelopeDataQualityIssuePublic = {
+  data: DataQualityIssuePublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DataQualityRunPublic]
+ */
+export type M4EnvelopeDataQualityRunPublic = {
+  data: DataQualityRunPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DataTransformationPublic]
+ */
+export type M4EnvelopeDataTransformationPublic = {
+  data: DataTransformationPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DatasetColumnPublic]
+ */
+export type M4EnvelopeDatasetColumnPublic = {
+  data: DatasetColumnPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DatasetPreviewPublic]
+ */
+export type M4EnvelopeDatasetPreviewPublic = {
+  data: DatasetPreviewPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DatasetPublic]
+ */
+export type M4EnvelopeDatasetPublic = {
+  data: DatasetPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DatasetUploadPublic]
+ */
+export type M4EnvelopeDatasetUploadPublic = {
+  data: DatasetUploadPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[DatasetVersionPublic]
+ */
+export type M4EnvelopeDatasetVersionPublic = {
+  data: DatasetVersionPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[QualityRunRequestPublic]
+ */
+export type M4EnvelopeQualityRunRequestPublic = {
+  data: QualityRunRequestPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[TransformationExecutionPublic]
+ */
+export type M4EnvelopeTransformationExecutionPublic = {
+  data: TransformationExecutionPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[VersionComparisonPublic]
+ */
+export type M4EnvelopeVersionComparisonPublic = {
+  data: VersionComparisonPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[WorksheetsPublic]
+ */
+export type M4EnvelopeWorksheetsPublic = {
+  data: WorksheetsPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[list[DatasetColumnPublic]]
+ */
+export type M4EnvelopeListDatasetColumnPublic = {
+  /**
+   * Data
+   */
+  data: Array<DatasetColumnPublic>
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[list[DatasetPublic]]
+ */
+export type M4EnvelopeListDatasetPublic = {
+  /**
+   * Data
+   */
+  data: Array<DatasetPublic>
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4Envelope[list[DatasetVersionPublic]]
+ */
+export type M4EnvelopeListDatasetVersionPublic = {
+  /**
+   * Data
+   */
+  data: Array<DatasetVersionPublic>
+  meta: M4ResponseMeta
+}
+
+/**
+ * M4ResponseMeta
+ */
+export type M4ResponseMeta = {
+  /**
+   * Request Id
+   */
+  request_id?: string | null
+  /**
+   * Schema Version
+   */
+  schema_version?: string
+  /**
+   * Idempotency Replayed
+   */
+  idempotency_replayed?: boolean
+  /**
+   * Count
+   */
+  count?: number | null
+}
+
+/**
+ * ManualEvidenceSpanCreate
+ */
+export type ManualEvidenceSpanCreate = {
+  /**
+   * Page Number
+   */
+  page_number: number
+  /**
+   * Source Text
+   */
+  source_text: string
+  /**
+   * Bounding Boxes
+   */
+  bounding_boxes?: Array<EvidenceBoundingBox>
+  evidence_type: EvidenceType
+  user_declared_read_scope: UserDeclaredReadScope
+}
+
+/**
+ * MapCategoryAction
+ */
+export type MapCategoryAction = {
+  /**
+   * Target Columns
+   */
+  target_columns: Array<string>
+  /**
+   * Row Selector
+   */
+  row_selector?:
+    | ({
+        selector_type: "ALL_ROWS"
+      } & AllRowsSelector)
+    | ({
+        selector_type: "ISSUE_ROWS"
+      } & IssueRowsSelector)
+    | ({
+        selector_type: "VALUE_EQUALS"
+      } & ValueEqualsSelector)
+    | ({
+        selector_type: "VALUE_IN"
+      } & ValueInSelector)
+    | ({
+        selector_type: "IS_NOT_NULL" | "IS_NULL"
+      } & NullSelector)
+    | ({
+        selector_type: "NUMERIC_RANGE"
+      } & NumericRangeSelector)
+  /**
+   * Reason
+   */
+  reason: string
+  /**
+   * Source Issue Ids
+   */
+  source_issue_ids?: Array<string>
+  /**
+   * Action Type
+   */
+  action_type: "MAP_CATEGORY"
+  parameters: MapCategoryParameters
+}
+
+/**
+ * MapCategoryParameters
+ */
+export type MapCategoryParameters = {
+  /**
+   * Mapping
+   */
+  mapping: {
+    [key: string]: string | number | number | boolean | null
+  }
+}
+
+/**
+ * MarkMissingAction
+ */
+export type MarkMissingAction = {
+  /**
+   * Target Columns
+   */
+  target_columns: Array<string>
+  /**
+   * Row Selector
+   */
+  row_selector?:
+    | ({
+        selector_type: "ALL_ROWS"
+      } & AllRowsSelector)
+    | ({
+        selector_type: "ISSUE_ROWS"
+      } & IssueRowsSelector)
+    | ({
+        selector_type: "VALUE_EQUALS"
+      } & ValueEqualsSelector)
+    | ({
+        selector_type: "VALUE_IN"
+      } & ValueInSelector)
+    | ({
+        selector_type: "IS_NOT_NULL" | "IS_NULL"
+      } & NullSelector)
+    | ({
+        selector_type: "NUMERIC_RANGE"
+      } & NumericRangeSelector)
+  /**
+   * Reason
+   */
+  reason: string
+  /**
+   * Source Issue Ids
+   */
+  source_issue_ids?: Array<string>
+  /**
+   * Action Type
+   */
+  action_type: "MARK_MISSING"
+  parameters?: MarkMissingParameters
+}
+
+/**
+ * MarkMissingParameters
+ */
+export type MarkMissingParameters = {
+  /**
+   * Replacement
+   */
+  replacement?: null
+}
+
+/**
+ * MatrixSort
+ */
+export type MatrixSort = "created_at" | "title" | "year" | "decision"
+
+/**
  * MemberAdd
  */
 export type MemberAdd = {
@@ -1713,6 +4193,20 @@ export type Message = {
 }
 
 /**
+ * MissingCellsPublic
+ */
+export type MissingCellsPublic = {
+  /**
+   * Before
+   */
+  before: number
+  /**
+   * After
+   */
+  after: number
+}
+
+/**
  * NewPassword
  */
 export type NewPassword = {
@@ -1724,6 +4218,50 @@ export type NewPassword = {
    * New Password
    */
   new_password: string
+}
+
+/**
+ * NullSelector
+ */
+export type NullSelector = {
+  /**
+   * Selector Type
+   */
+  selector_type: "IS_NULL" | "IS_NOT_NULL"
+  /**
+   * Column Id
+   */
+  column_id: string
+}
+
+/**
+ * NumericRangeSelector
+ */
+export type NumericRangeSelector = {
+  /**
+   * Selector Type
+   */
+  selector_type: "NUMERIC_RANGE"
+  /**
+   * Column Id
+   */
+  column_id: string
+  /**
+   * Minimum
+   */
+  minimum?: number | null
+  /**
+   * Maximum
+   */
+  maximum?: number | null
+  /**
+   * Include Minimum
+   */
+  include_minimum?: boolean
+  /**
+   * Include Maximum
+   */
+  include_maximum?: boolean
 }
 
 /**
@@ -1755,6 +4293,41 @@ export type PaginationMeta = {
    */
   has_previous: boolean
 }
+
+/**
+ * PaginationPublic
+ */
+export type PaginationPublic = {
+  /**
+   * Page
+   */
+  page: number
+  /**
+   * Page Size
+   */
+  page_size: number
+  /**
+   * Total
+   */
+  total: number
+  /**
+   * Total Pages
+   */
+  total_pages: number
+  /**
+   * Has Next
+   */
+  has_next: boolean
+  /**
+   * Has Previous
+   */
+  has_previous: boolean
+}
+
+/**
+ * ParserCoverage
+ */
+export type ParserCoverage = "UNKNOWN" | "PARTIAL_TEXT" | "FULL_TEXT"
 
 /**
  * PrivateUserCreate
@@ -2069,6 +4642,60 @@ export type ProjectUpdate = {
 }
 
 /**
+ * QualityIssueAcknowledge
+ */
+export type QualityIssueAcknowledge = {
+  /**
+   * Reason
+   */
+  reason?: string | null
+}
+
+/**
+ * QualityIssueIgnore
+ */
+export type QualityIssueIgnore = {
+  /**
+   * Reason
+   */
+  reason: string
+}
+
+/**
+ * QualityIssuesEnvelope
+ */
+export type QualityIssuesEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<DataQualityIssuePublic>
+  pagination: PaginationPublic
+  meta: M4ResponseMeta
+}
+
+/**
+ * QualityRunCreate
+ */
+export type QualityRunCreate = {
+  /**
+   * Rule Set
+   */
+  rule_set?: string
+  /**
+   * Include Sensitive Field Detection
+   */
+  include_sensitive_field_detection?: boolean
+}
+
+/**
+ * QualityRunRequestPublic
+ */
+export type QualityRunRequestPublic = {
+  run: DataQualityRunPublic
+  job: JobPublic
+}
+
+/**
  * QueryPlanCreate
  */
 export type QueryPlanCreate = {
@@ -2299,6 +4926,116 @@ export type ReadyHealthResponse = {
    * Dependencies
    */
   dependencies: Array<DependencyCheck>
+}
+
+/**
+ * RenameColumnAction
+ */
+export type RenameColumnAction = {
+  /**
+   * Target Columns
+   */
+  target_columns: Array<string>
+  /**
+   * Row Selector
+   */
+  row_selector?:
+    | ({
+        selector_type: "ALL_ROWS"
+      } & AllRowsSelector)
+    | ({
+        selector_type: "ISSUE_ROWS"
+      } & IssueRowsSelector)
+    | ({
+        selector_type: "VALUE_EQUALS"
+      } & ValueEqualsSelector)
+    | ({
+        selector_type: "VALUE_IN"
+      } & ValueInSelector)
+    | ({
+        selector_type: "IS_NOT_NULL" | "IS_NULL"
+      } & NullSelector)
+    | ({
+        selector_type: "NUMERIC_RANGE"
+      } & NumericRangeSelector)
+  /**
+   * Reason
+   */
+  reason: string
+  /**
+   * Source Issue Ids
+   */
+  source_issue_ids?: Array<string>
+  /**
+   * Action Type
+   */
+  action_type: "RENAME_COLUMN"
+  parameters: RenameColumnParameters
+}
+
+/**
+ * RenameColumnParameters
+ */
+export type RenameColumnParameters = {
+  /**
+   * New Name
+   */
+  new_name: string
+}
+
+/**
+ * ReplaceValueAction
+ */
+export type ReplaceValueAction = {
+  /**
+   * Target Columns
+   */
+  target_columns: Array<string>
+  /**
+   * Row Selector
+   */
+  row_selector?:
+    | ({
+        selector_type: "ALL_ROWS"
+      } & AllRowsSelector)
+    | ({
+        selector_type: "ISSUE_ROWS"
+      } & IssueRowsSelector)
+    | ({
+        selector_type: "VALUE_EQUALS"
+      } & ValueEqualsSelector)
+    | ({
+        selector_type: "VALUE_IN"
+      } & ValueInSelector)
+    | ({
+        selector_type: "IS_NOT_NULL" | "IS_NULL"
+      } & NullSelector)
+    | ({
+        selector_type: "NUMERIC_RANGE"
+      } & NumericRangeSelector)
+  /**
+   * Reason
+   */
+  reason: string
+  /**
+   * Source Issue Ids
+   */
+  source_issue_ids?: Array<string>
+  /**
+   * Action Type
+   */
+  action_type: "REPLACE_VALUE"
+  parameters: ReplaceValueParameters
+}
+
+/**
+ * ReplaceValueParameters
+ */
+export type ReplaceValueParameters = {
+  /**
+   * Replacement
+   */
+  replacement: string | number | number | boolean | null
 }
 
 /**
@@ -2681,6 +5418,11 @@ export type ResponseMeta = {
 }
 
 /**
+ * SortOrder
+ */
+export type SortOrder = "asc" | "desc"
+
+/**
  * Token
  */
 export type Token = {
@@ -2692,6 +5434,274 @@ export type Token = {
    * Token Type
    */
   token_type?: string
+}
+
+/**
+ * TopicCandidatePublic
+ */
+export type TopicCandidatePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Topic Generation Run Id
+   */
+  topic_generation_run_id: string
+  /**
+   * Candidate Order
+   */
+  candidate_order: number
+  /**
+   * Question Text
+   */
+  question_text: string
+  /**
+   * Research Object
+   */
+  research_object: string | null
+  /**
+   * Variables
+   */
+  variables: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Literature Basis
+   */
+  literature_basis: string | null
+  /**
+   * Possible Innovation
+   */
+  possible_innovation: string | null
+  /**
+   * Data Requirements
+   */
+  data_requirements: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Recommended Method
+   */
+  recommended_method: string | null
+  literature_basis_level: ConfidenceLevel | null
+  data_availability: ConfidenceLevel | null
+  method_difficulty: ConfidenceLevel | null
+  time_feasibility: ConfidenceLevel | null
+  ethical_risk: ConfidenceLevel | null
+  /**
+   * Major Risks
+   */
+  major_risks: Array<string> | null
+  /**
+   * Limitations
+   */
+  limitations: Array<string>
+  /**
+   * Supervisor Confirmation Items
+   */
+  supervisor_confirmation_items: Array<string> | null
+  status: TopicCandidateStatus
+  /**
+   * Sources
+   */
+  sources: Array<TopicCandidateSource>
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * TopicCandidateSource
+ */
+export type TopicCandidateSource = {
+  /**
+   * Literature Record Id
+   */
+  literature_record_id?: string | null
+  /**
+   * Evidence Span Id
+   */
+  evidence_span_id?: string | null
+  relation_type: TopicEvidenceRelation
+  /**
+   * Explanation
+   */
+  explanation?: string | null
+}
+
+/**
+ * TopicCandidateStatus
+ */
+export type TopicCandidateStatus =
+  | "PROPOSED"
+  | "SHORTLISTED"
+  | "ADOPTED"
+  | "REJECTED"
+  | "EXPIRED"
+
+/**
+ * TopicEvidenceRelation
+ */
+export type TopicEvidenceRelation =
+  | "BASIS"
+  | "SUPPORT"
+  | "CONTRADICTION"
+  | "LIMITATION"
+
+/**
+ * TopicGenerationCreate
+ */
+export type TopicGenerationCreate = {
+  /**
+   * Research Question Version Id
+   */
+  research_question_version_id: string
+  /**
+   * Evidence Set Summary Id
+   */
+  evidence_set_summary_id: string
+  /**
+   * Candidate Count
+   */
+  candidate_count?: number
+  /**
+   * User Constraints
+   */
+  user_constraints?: {
+    [key: string]: unknown
+  }
+}
+
+/**
+ * TopicGenerationRunEnvelope
+ */
+export type TopicGenerationRunEnvelope = {
+  data: TopicGenerationRunPublic
+  meta: ResponseMeta
+}
+
+/**
+ * TopicGenerationRunPublic
+ */
+export type TopicGenerationRunPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Research Question Version Id
+   */
+  research_question_version_id: string
+  /**
+   * Evidence Summary Id
+   */
+  evidence_summary_id: string | null
+  /**
+   * User Constraints
+   */
+  user_constraints: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  status: JobStatus
+  /**
+   * Candidates
+   */
+  candidates: Array<TopicCandidatePublic>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * TransformationExecutionPublic
+ */
+export type TransformationExecutionPublic = {
+  transformation: DataTransformationPublic
+  job: JobPublic
+}
+
+/**
+ * UnavailableAction
+ */
+export type UnavailableAction = {
+  /**
+   * Target Columns
+   */
+  target_columns: Array<string>
+  /**
+   * Row Selector
+   */
+  row_selector?:
+    | ({
+        selector_type: "ALL_ROWS"
+      } & AllRowsSelector)
+    | ({
+        selector_type: "ISSUE_ROWS"
+      } & IssueRowsSelector)
+    | ({
+        selector_type: "VALUE_EQUALS"
+      } & ValueEqualsSelector)
+    | ({
+        selector_type: "VALUE_IN"
+      } & ValueInSelector)
+    | ({
+        selector_type: "IS_NOT_NULL" | "IS_NULL"
+      } & NullSelector)
+    | ({
+        selector_type: "NUMERIC_RANGE"
+      } & NumericRangeSelector)
+  /**
+   * Reason
+   */
+  reason: string
+  /**
+   * Source Issue Ids
+   */
+  source_issue_ids?: Array<string>
+  /**
+   * Action Type
+   */
+  action_type:
+    | "KEEP_ROWS"
+    | "DROP_ROWS"
+    | "IMPUTE_VALUE"
+    | "CONVERT_UNIT"
+    | "CREATE_DERIVED_COLUMN"
+  parameters?: UnavailableParameters
+}
+
+/**
+ * UnavailableParameters
+ */
+export type UnavailableParameters = {
+  [key: string]: never
 }
 
 /**
@@ -2733,6 +5743,15 @@ export type UserCreate = {
    */
   password: string
 }
+
+/**
+ * UserDeclaredReadScope
+ */
+export type UserDeclaredReadScope =
+  | "UNKNOWN"
+  | "ABSTRACT"
+  | "SECTIONS"
+  | "FULL_TEXT_DECLARED"
 
 /**
  * UserPublic
@@ -2862,6 +5881,164 @@ export type ValidationError = {
   ctx?: {
     [key: string]: unknown
   }
+}
+
+/**
+ * ValueEqualsSelector
+ */
+export type ValueEqualsSelector = {
+  /**
+   * Selector Type
+   */
+  selector_type: "VALUE_EQUALS"
+  /**
+   * Column Id
+   */
+  column_id: string
+  /**
+   * Value
+   */
+  value: string | number | number | boolean | null
+}
+
+/**
+ * ValueInSelector
+ */
+export type ValueInSelector = {
+  /**
+   * Selector Type
+   */
+  selector_type: "VALUE_IN"
+  /**
+   * Column Id
+   */
+  column_id: string
+  /**
+   * Values
+   */
+  values: Array<string | number | number | boolean | null>
+}
+
+/**
+ * VersionComparisonPublic
+ */
+export type VersionComparisonPublic = {
+  /**
+   * Dataset Id
+   */
+  dataset_id: string
+  /**
+   * Base Version Id
+   */
+  base_version_id: string
+  /**
+   * Target Version Id
+   */
+  target_version_id: string
+  row_count: CountDeltaPublic
+  column_count: CountDeltaPublic
+  missing_cells: MissingCellsPublic
+  /**
+   * Actions
+   */
+  actions: Array<
+    | MarkMissingAction
+    | ReplaceValueAction
+    | MapCategoryAction
+    | CastTypeAction
+    | RenameColumnAction
+    | UnavailableAction
+  >
+  /**
+   * Affected Row Count
+   */
+  affected_row_count: number | null
+  /**
+   * Affected Column Count
+   */
+  affected_column_count: number | null
+  lineage: VersionLineagePublic
+}
+
+/**
+ * VersionLineagePublic
+ */
+export type VersionLineagePublic = {
+  /**
+   * Parent Version Id
+   */
+  parent_version_id: string | null
+  /**
+   * Transformation Id
+   */
+  transformation_id: string | null
+  /**
+   * Output Artifact Id
+   */
+  output_artifact_id: string | null
+}
+
+/**
+ * WorksheetPublic
+ */
+export type WorksheetPublic = {
+  /**
+   * Name
+   */
+  name: string
+  /**
+   * Ordinal
+   */
+  ordinal: number
+  /**
+   * Visibility
+   */
+  visibility: string
+  /**
+   * Estimated Rows
+   */
+  estimated_rows: number
+  /**
+   * Estimated Columns
+   */
+  estimated_columns: number
+  /**
+   * Warnings
+   */
+  warnings?: Array<string>
+}
+
+/**
+ * WorksheetSelection
+ */
+export type WorksheetSelection = {
+  /**
+   * Worksheet Name
+   */
+  worksheet_name: string
+  /**
+   * Acknowledge Hidden
+   */
+  acknowledge_hidden?: boolean
+}
+
+/**
+ * WorksheetsPublic
+ */
+export type WorksheetsPublic = {
+  /**
+   * Version Id
+   */
+  version_id: string
+  status: DatasetVersionStatus
+  /**
+   * Worksheets
+   */
+  worksheets: Array<WorksheetPublic>
+  /**
+   * Selected Worksheet Name
+   */
+  selected_worksheet_name: string | null
 }
 
 export type HealthLiveHealthGetApiV1HealthLiveData = {
@@ -5716,6 +8893,839 @@ export type DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberRe
 export type DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponse =
   DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses[keyof DocumentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumberResponses]
 
+export type EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsData =
+  {
+    body: LiteratureExtractionCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Document Id
+       */
+      document_id: string
+    }
+    query?: never
+    url: "/api/v1/documents/{document_id}/literature-extractions"
+  }
+
+export type EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsError =
+  EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsErrors[keyof EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsErrors]
+
+export type EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: JobEnvelope
+  }
+
+export type EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsResponse =
+  EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsResponses[keyof EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsResponses]
+
+export type EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdData =
+  {
+    body?: never
+    path: {
+      /**
+       * Extraction Id
+       */
+      extraction_id: string
+    }
+    query?: never
+    url: "/api/v1/literature-extractions/{extraction_id}"
+  }
+
+export type EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdError =
+  EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdErrors[keyof EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdErrors]
+
+export type EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureExtractionEnvelope
+  }
+
+export type EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdResponse =
+  EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdResponses[keyof EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdResponses]
+
+export type EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdData =
+  {
+    body: LiteratureExtractionFieldCorrection
+    headers?: {
+      /**
+       * If-Match
+       */
+      "If-Match"?: string | null
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Field Id
+       */
+      field_id: string
+    }
+    query?: never
+    url: "/api/v1/literature-extraction-fields/{field_id}"
+  }
+
+export type EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdError =
+  EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors[keyof EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors]
+
+export type EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureExtractionFieldEnvelope
+  }
+
+export type EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponse =
+  EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses[keyof EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses]
+
+export type EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansData =
+  {
+    body: ManualEvidenceSpanCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Document Id
+       */
+      document_id: string
+    }
+    query?: never
+    url: "/api/v1/documents/{document_id}/evidence-spans"
+  }
+
+export type EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansError =
+  EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansErrors[keyof EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansErrors]
+
+export type EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: EvidenceSpanEnvelope
+  }
+
+export type EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansResponse =
+  EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansResponses[keyof EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansResponses]
+
+export type EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdData = {
+  body?: never
+  path: {
+    /**
+     * Evidence Span Id
+     */
+    evidence_span_id: string
+  }
+  query?: never
+  url: "/api/v1/evidence-spans/{evidence_span_id}"
+}
+
+export type EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+  /**
+   * Service Unavailable
+   */
+  503: ContractErrorResponse
+}
+
+export type EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdError =
+  EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdErrors[keyof EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdErrors]
+
+export type EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: EvidenceSpanEnvelope
+  }
+
+export type EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdResponse =
+  EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdResponses[keyof EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdResponses]
+
+export type EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsData =
+  {
+    body: EvidenceSpanVerificationCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Evidence Span Id
+       */
+      evidence_span_id: string
+    }
+    query?: never
+    url: "/api/v1/evidence-spans/{evidence_span_id}/verification-records"
+  }
+
+export type EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsError =
+  EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsErrors[keyof EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsErrors]
+
+export type EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: EvidenceSpanVerificationEnvelope
+  }
+
+export type EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsResponse =
+  EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsResponses[keyof EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsResponses]
+
+export type EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Literature Id
+       */
+      literature_id: string
+    }
+    query?: never
+    url: "/api/v1/literature/{literature_id}/decisions"
+  }
+
+export type EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsError =
+  EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsErrors[keyof EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsErrors]
+
+export type EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureDecisionListEnvelope
+  }
+
+export type EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponse =
+  EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponses[keyof EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponses]
+
+export type EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsData =
+  {
+    body: LiteratureDecisionCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Literature Id
+       */
+      literature_id: string
+    }
+    query?: never
+    url: "/api/v1/literature/{literature_id}/decisions"
+  }
+
+export type EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsError =
+  EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsErrors[keyof EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsErrors]
+
+export type EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: LiteratureDecisionEnvelope
+  }
+
+export type EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsResponse =
+  EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsResponses[keyof EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsResponses]
+
+export type EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: {
+      /**
+       * Included Only
+       */
+      included_only?: boolean
+      /**
+       * Field Codes
+       */
+      field_codes?: Array<LiteratureFieldCode> | null
+      /**
+       * Page
+       */
+      page?: number
+      /**
+       * Page Size
+       */
+      page_size?: number
+      sort?: MatrixSort
+      order?: SortOrder
+    }
+    url: "/api/v1/projects/{project_id}/literature-matrix"
+  }
+
+export type EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixError =
+  EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixErrors[keyof EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixErrors]
+
+export type EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: LiteratureMatrixEnvelope
+  }
+
+export type EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixResponse =
+  EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixResponses[keyof EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixResponses]
+
+export type EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchData =
+  {
+    body: EvidenceSearchRequest
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/evidence-search"
+  }
+
+export type EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchError =
+  EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchErrors[keyof EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchErrors]
+
+export type EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: EvidenceSearchEnvelope
+  }
+
+export type EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchResponse =
+  EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchResponses[keyof EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchResponses]
+
+export type EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesData =
+  {
+    body: EvidenceSetSummaryCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/evidence-set-summaries"
+  }
+
+export type EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesError =
+  EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesErrors[keyof EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesErrors]
+
+export type EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: JobEnvelope
+  }
+
+export type EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesResponse =
+  EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesResponses[keyof EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesResponses]
+
+export type EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdData =
+  {
+    body?: never
+    path: {
+      /**
+       * Summary Id
+       */
+      summary_id: string
+    }
+    query?: never
+    url: "/api/v1/evidence-set-summaries/{summary_id}"
+  }
+
+export type EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdError =
+  EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdErrors[keyof EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdErrors]
+
+export type EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: EvidenceSetSummaryEnvelope
+  }
+
+export type EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdResponse =
+  EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdResponses[keyof EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdResponses]
+
+export type EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsData =
+  {
+    body: TopicGenerationCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/topic-generation-runs"
+  }
+
+export type EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsError =
+  EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsErrors[keyof EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsErrors]
+
+export type EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: JobEnvelope
+  }
+
+export type EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsResponse =
+  EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsResponses[keyof EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsResponses]
+
+export type EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdData =
+  {
+    body?: never
+    path: {
+      /**
+       * Run Id
+       */
+      run_id: string
+    }
+    query?: never
+    url: "/api/v1/topic-generation-runs/{run_id}"
+  }
+
+export type EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdErrors =
+  {
+    /**
+     * Bad Request
+     */
+    400: ContractErrorResponse
+    /**
+     * Forbidden
+     */
+    403: ContractErrorResponse
+    /**
+     * Not Found
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict
+     */
+    409: ContractErrorResponse
+    /**
+     * Unprocessable Content
+     */
+    422: ContractErrorResponse
+    /**
+     * Service Unavailable
+     */
+    503: ContractErrorResponse
+  }
+
+export type EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdError =
+  EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdErrors[keyof EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdErrors]
+
+export type EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: TopicGenerationRunEnvelope
+  }
+
+export type EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponse =
+  EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses[keyof EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses]
+
 export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsData =
   {
     body?: never
@@ -6137,6 +10147,1024 @@ export type ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloa
 
 export type ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponse =
   ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses[keyof ArtifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownloadResponses]
+
+export type DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsData = {
+  body?: never
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/datasets"
+}
+
+export type DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsError =
+  DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsErrors[keyof DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsErrors]
+
+export type DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsResponses = {
+  /**
+   * Successful Response
+   */
+  200: M4EnvelopeListDatasetPublic
+}
+
+export type DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsResponse =
+  DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsResponses[keyof DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsResponses]
+
+export type DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsData = {
+  body: BodyDatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasets
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/datasets"
+}
+
+export type DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsError =
+  DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsErrors[keyof DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsErrors]
+
+export type DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsResponses = {
+  /**
+   * Successful Response
+   */
+  201: M4EnvelopeDatasetUploadPublic
+}
+
+export type DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsResponse =
+  DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsResponses[keyof DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsResponses]
+
+export type DatasetsGetDatasetGetApiV1DatasetsDatasetIdData = {
+  body?: never
+  path: {
+    /**
+     * Dataset Id
+     */
+    dataset_id: string
+  }
+  query?: never
+  url: "/api/v1/datasets/{dataset_id}"
+}
+
+export type DatasetsGetDatasetGetApiV1DatasetsDatasetIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type DatasetsGetDatasetGetApiV1DatasetsDatasetIdError =
+  DatasetsGetDatasetGetApiV1DatasetsDatasetIdErrors[keyof DatasetsGetDatasetGetApiV1DatasetsDatasetIdErrors]
+
+export type DatasetsGetDatasetGetApiV1DatasetsDatasetIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: M4EnvelopeDatasetPublic
+}
+
+export type DatasetsGetDatasetGetApiV1DatasetsDatasetIdResponse =
+  DatasetsGetDatasetGetApiV1DatasetsDatasetIdResponses[keyof DatasetsGetDatasetGetApiV1DatasetsDatasetIdResponses]
+
+export type DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdData = {
+  body: DatasetUpdate
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Dataset Id
+     */
+    dataset_id: string
+  }
+  query?: never
+  url: "/api/v1/datasets/{dataset_id}"
+}
+
+export type DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdError =
+  DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdErrors[keyof DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdErrors]
+
+export type DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: M4EnvelopeDatasetPublic
+}
+
+export type DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdResponse =
+  DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdResponses[keyof DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdResponses]
+
+export type DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdData = {
+  body?: never
+  path: {
+    /**
+     * Version Id
+     */
+    version_id: string
+  }
+  query?: never
+  url: "/api/v1/dataset-versions/{version_id}"
+}
+
+export type DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdError =
+  DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdErrors[keyof DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdErrors]
+
+export type DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeDatasetVersionPublic
+  }
+
+export type DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdResponse =
+  DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdResponses[keyof DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdResponses]
+
+export type DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/dataset-versions/{version_id}/worksheets"
+  }
+
+export type DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsError =
+  DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsErrors[keyof DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsErrors]
+
+export type DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeWorksheetsPublic
+  }
+
+export type DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsResponse =
+  DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsResponses[keyof DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsResponses]
+
+export type DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateData =
+  {
+    body: DatasetVersionInvalidation
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/dataset-versions/{version_id}/invalidate"
+  }
+
+export type DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateError =
+  DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateErrors[keyof DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateErrors]
+
+export type DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeDatasetVersionPublic
+  }
+
+export type DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateResponse =
+  DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateResponses[keyof DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateResponses]
+
+export type DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionData =
+  {
+    body: WorksheetSelection
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/dataset-versions/{version_id}/worksheet-selection"
+  }
+
+export type DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionError =
+  DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionErrors[keyof DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionErrors]
+
+export type DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: M4EnvelopeDatasetVersionPublic
+  }
+
+export type DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionResponse =
+  DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionResponses[keyof DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionResponses]
+
+export type DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewData =
+  {
+    body?: never
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: {
+      /**
+       * Offset
+       */
+      offset?: number
+      /**
+       * Limit
+       */
+      limit?: number
+      /**
+       * Columns
+       */
+      columns?: Array<string> | null
+    }
+    url: "/api/v1/dataset-versions/{version_id}/preview"
+  }
+
+export type DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewError =
+  DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewErrors[keyof DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewErrors]
+
+export type DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeDatasetPreviewPublic
+  }
+
+export type DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewResponse =
+  DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewResponses[keyof DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewResponses]
+
+export type DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/dataset-versions/{version_id}/columns"
+  }
+
+export type DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsError =
+  DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsErrors[keyof DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsErrors]
+
+export type DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeListDatasetColumnPublic
+  }
+
+export type DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsResponse =
+  DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsResponses[keyof DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsResponses]
+
+export type DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdData = {
+  body: DatasetColumnUpdate
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Column Id
+     */
+    column_id: string
+  }
+  query?: never
+  url: "/api/v1/dataset-columns/{column_id}"
+}
+
+export type DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdError =
+  DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdErrors[keyof DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdErrors]
+
+export type DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeDatasetColumnPublic
+  }
+
+export type DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdResponse =
+  DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdResponses[keyof DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdResponses]
+
+export type DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsData = {
+  body?: never
+  path: {
+    /**
+     * Dataset Id
+     */
+    dataset_id: string
+  }
+  query?: never
+  url: "/api/v1/datasets/{dataset_id}/versions"
+}
+
+export type DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsError =
+  DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsErrors[keyof DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsErrors]
+
+export type DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeListDatasetVersionPublic
+  }
+
+export type DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsResponse =
+  DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsResponses[keyof DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsResponses]
+
+export type DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsData =
+  {
+    body: QualityRunCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/dataset-versions/{version_id}/quality-runs"
+  }
+
+export type DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsError =
+  DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsErrors[keyof DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsErrors]
+
+export type DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: M4EnvelopeQualityRunRequestPublic
+  }
+
+export type DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsResponse =
+  DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsResponses[keyof DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsResponses]
+
+export type DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdData = {
+  body?: never
+  path: {
+    /**
+     * Run Id
+     */
+    run_id: string
+  }
+  query?: never
+  url: "/api/v1/data-quality-runs/{run_id}"
+}
+
+export type DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdError =
+  DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdErrors[keyof DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdErrors]
+
+export type DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: M4EnvelopeDataQualityRunPublic
+}
+
+export type DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdResponse =
+  DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdResponses[keyof DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdResponses]
+
+export type DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesData =
+  {
+    body?: never
+    path: {
+      /**
+       * Run Id
+       */
+      run_id: string
+    }
+    query?: {
+      /**
+       * Severity
+       */
+      severity?: DataQualitySeverity | null
+      /**
+       * Issue Type
+       */
+      issue_type?: DataQualityIssueType | null
+      /**
+       * Status
+       */
+      status?: DataQualityIssueStatus | null
+      /**
+       * Column Id
+       */
+      column_id?: string | null
+      /**
+       * Page
+       */
+      page?: number
+      /**
+       * Page Size
+       */
+      page_size?: number
+    }
+    url: "/api/v1/data-quality-runs/{run_id}/issues"
+  }
+
+export type DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesError =
+  DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesErrors[keyof DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesErrors]
+
+export type DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: QualityIssuesEnvelope
+  }
+
+export type DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesResponse =
+  DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesResponses[keyof DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesResponses]
+
+export type DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeData =
+  {
+    body: QualityIssueAcknowledge
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Issue Id
+       */
+      issue_id: string
+    }
+    query?: never
+    url: "/api/v1/data-quality-issues/{issue_id}/acknowledge"
+  }
+
+export type DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeError =
+  DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeErrors[keyof DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeErrors]
+
+export type DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeDataQualityIssuePublic
+  }
+
+export type DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeResponse =
+  DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeResponses[keyof DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeResponses]
+
+export type DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreData =
+  {
+    body: QualityIssueIgnore
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Issue Id
+       */
+      issue_id: string
+    }
+    query?: never
+    url: "/api/v1/data-quality-issues/{issue_id}/ignore"
+  }
+
+export type DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreError =
+  DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreErrors[keyof DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreErrors]
+
+export type DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeDataQualityIssuePublic
+  }
+
+export type DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreResponse =
+  DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreResponses[keyof DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreResponses]
+
+export type DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansData =
+  {
+    body: CleaningPlanCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/dataset-versions/{version_id}/cleaning-plans"
+  }
+
+export type DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansError =
+  DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansErrors[keyof DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansErrors]
+
+export type DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: M4EnvelopeCleaningPlanPublic
+  }
+
+export type DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansResponse =
+  DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansResponses[keyof DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansResponses]
+
+export type DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdData = {
+  body?: never
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/cleaning-plans/{plan_id}"
+}
+
+export type DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdError =
+  DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdErrors[keyof DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdErrors]
+
+export type DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: M4EnvelopeCleaningPlanPublic
+}
+
+export type DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdResponse =
+  DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdResponses[keyof DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdResponses]
+
+export type DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdData = {
+  body: CleaningPlanUpdate
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/cleaning-plans/{plan_id}"
+}
+
+export type DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdError =
+  DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdErrors[keyof DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdErrors]
+
+export type DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeCleaningPlanPublic
+  }
+
+export type DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdResponse =
+  DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdResponses[keyof DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdResponses]
+
+export type DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/cleaning-plans/{plan_id}/preview"
+  }
+
+export type DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewError =
+  DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewErrors[keyof DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewErrors]
+
+export type DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeCleaningPlanPublic
+  }
+
+export type DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewResponse =
+  DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewResponses[keyof DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewResponses]
+
+export type DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/cleaning-plans/{plan_id}/approval-requests"
+  }
+
+export type DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsError =
+  DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsErrors[keyof DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsErrors]
+
+export type DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: M4EnvelopeApprovalRequestPublic
+  }
+
+export type DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsResponse =
+  DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsResponses[keyof DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsResponses]
+
+export type DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/cleaning-plans/{plan_id}/execute"
+  }
+
+export type DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteError =
+  DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteErrors[keyof DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteErrors]
+
+export type DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: M4EnvelopeTransformationExecutionPublic
+  }
+
+export type DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteResponse =
+  DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteResponses[keyof DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteResponses]
+
+export type DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonData =
+  {
+    body?: never
+    path: {
+      /**
+       * Dataset Id
+       */
+      dataset_id: string
+    }
+    query: {
+      /**
+       * Base Version Id
+       */
+      base_version_id: string
+      /**
+       * Target Version Id
+       */
+      target_version_id: string
+    }
+    url: "/api/v1/datasets/{dataset_id}/version-comparison"
+  }
+
+export type DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonError =
+  DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonErrors[keyof DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonErrors]
+
+export type DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeVersionComparisonPublic
+  }
+
+export type DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonResponse =
+  DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonResponses[keyof DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonResponses]
+
+export type DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsData =
+  {
+    body: CleaningPlanSuggestionRequest
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/dataset-versions/{version_id}/cleaning-plan-suggestions"
+  }
+
+export type DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsError =
+  DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsErrors[keyof DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsErrors]
+
+export type DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeCleaningPlanSuggestionPublic
+  }
+
+export type DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsResponse =
+  DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsResponses[keyof DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsResponses]
+
+export type DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdData =
+  {
+    body?: never
+    path: {
+      /**
+       * Transformation Id
+       */
+      transformation_id: string
+    }
+    query?: never
+    url: "/api/v1/data-transformations/{transformation_id}"
+  }
+
+export type DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdError =
+  DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdErrors[keyof DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdErrors]
+
+export type DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: M4EnvelopeDataTransformationPublic
+  }
+
+export type DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponse =
+  DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses[keyof DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses]
 
 export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsData = {
   body?: never

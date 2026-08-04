@@ -1,0 +1,45 @@
+{
+  "golden_set_id": "M4_DATA_QUALITY",
+  "golden_set_version": "1.0",
+  "fixture_kind": "RECA_AUTHORED_SYNTHETIC_DATA",
+  "contains_real_personal_data": false,
+  "ruleset": {
+    "id": "RECA_P0_DEFAULT",
+    "version": "1.0.0",
+    "content_hash": "2e46579a1ebf7cbfdd1c2fea44467d2ddbe1f7b7bf06f3700ece87a19d871ec3"
+  },
+  "limits": {
+    "max_affected_rows": 100,
+    "max_examples": 5
+  },
+  "files": {
+    "clean.csv": "4bea236b8649af02fb4a3cb972f1ccccb5e059ea763bfcc4d12b01cac0cb085b",
+    "high_cardinality.csv": "95aed6805c01c1a3a820193f35f527ea06e2ab4c2a2f42cf047bfba1b6be90f1",
+    "issues.csv": "4a5b8e48aa06ed1497c1d1394a9c9198f04129fc0fc4a1408fdf24694cef99d6",
+    "multi_sheet.xlsx": "e7c3cd7dd01c0cf1fb2ec370de80a3c39af0ab949e842fa285788f07f0a006bf",
+    "sensitive.csv": "66fdec82dfe94854deba0303aca06cff698f8be10ac3c1bb4b4fe439f183c5d1"
+  },
+  "expected_rule_ids": [
+    "MISSING_VALUE",
+    "DUPLICATE_ROW",
+    "DUPLICATE_CONFIRMED_ID",
+    "CONSTANT_COLUMN",
+    "MIXED_TYPE",
+    "CATEGORY_INCONSISTENCY",
+    "HEURISTIC_OUT_OF_RANGE",
+    "IQR_EXTREME_VALUE_CLUE",
+    "GROUP_IMBALANCE_CLUE",
+    "SUSPICIOUS_UNIT",
+    "INVALID_DATE",
+    "POSSIBLE_SENSITIVE_FIELD"
+  ],
+  "stable_assertion_boundary": [
+    "rule_id",
+    "issue_type",
+    "severity",
+    "affected_count",
+    "bounded_locator",
+    "masked_examples",
+    "ruleset_identity"
+  ]
+}

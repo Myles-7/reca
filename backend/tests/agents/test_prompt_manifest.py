@@ -23,6 +23,7 @@ def test_git_managed_prompt_manifest_and_content_hash_are_valid() -> None:
     assert contract.output_schema.version == "1.0"
     assert contract.allowed_tools == ()
     assert contract.required_source_types == ()
+    assert contract.optional_source_types == ()
 
 
 def _entry(content_hash: str) -> dict[str, object]:

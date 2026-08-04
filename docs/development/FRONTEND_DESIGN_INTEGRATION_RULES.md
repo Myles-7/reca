@@ -382,8 +382,8 @@ Registry 记录协作准备度，不是领域状态机。`AVAILABLE`、`DRAFT`�
 | System Status | M0 | `/system-status` `AVAILABLE` | local TypeScript display model `AVAILABLE` | `AVAILABLE` | `NOT_STARTED` | `AVAILABLE` | `INTEGRATED` |
 | Project Workspace | M1 | `/projects`, `/projects/$projectId` `FROZEN` | semantic projection `FROZEN`; TypeScript `NOT_STARTED` | events/states `FROZEN` | fixture semantics `FROZEN`; files `NOT_STARTED` | `READY_FOR_DESIGN` after amendment approval | `NOT_STARTED` |
 | Research Question | M2 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
-| Literature / PDF Workspace | M2-M3 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
-| Data Quality Workspace | M4 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
+| Literature / PDF Workspace | M2-M3 | `/projects/$projectId/literature` + M3 search contract `FROZEN` | three M3 feature models `FROZEN` | Props/events `FROZEN` | typed fixtures `FROZEN` | `READY_FOR_DESIGN` | `NOT_STARTED` |
+| Data Quality Workspace | M4 | `/projects/$projectId/data` `FROZEN` | `frontend/src/features/data-workspace/model.ts` `FROZEN` | `DataWorkspaceWorkspaceProps` and typed events `FROZEN` | `frontend/src/features/data-workspace/fixtures/` `FROZEN` | Open Design accepted; Codex Stage 4.5 `PASS` | `NOT_STARTED`; Stage 5 entry `ALLOWED` |
 | Analysis / Figure Workspace | M5 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
 | Manuscript Review | M6 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |
 | Evidence Graph / Export | M7 | `TBD` | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | `PLANNED` | `NOT_STARTED` |

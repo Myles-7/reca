@@ -53,7 +53,12 @@ def db() -> Generator[Session]:
         session.rollback()
         session.execute(
             text(
-                "TRUNCATE TABLE document_chunks, document_pages, documents, "
+                "TRUNCATE TABLE topic_candidate_evidence, topic_candidates, "
+                "topic_generation_runs, evidence_set_summaries, "
+                "literature_decisions, evidence_span_verification_records, "
+                "literature_extraction_field_revisions, "
+                "literature_extraction_fields, evidence_spans, "
+                "literature_extractions, document_chunks, document_pages, documents, "
                 "literature_search_candidates, "
                 "literature_records, literature_search_runs, query_plans, "
                 "research_question_versions, "

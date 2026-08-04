@@ -65,6 +65,27 @@
       "content_hash": "099c572f00fb405e284cc83c18efb15b776056159c41a93033bcf765830b93fc"
     },
     {
+      "prompt_id": "literature-extraction",
+      "prompt_version": "1.0.0",
+      "task_type": "LITERATURE_FIELD_EXTRACTION",
+      "input_schema": {
+        "name": "LiteratureExtractionInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "LiteratureExtractionCandidateOutput",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": ["Document", "LiteratureRecord"],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "REDACTED_CONTENT",
+      "max_allowed_data_access_level": "REDACTED_CONTENT",
+      "status": "ACTIVE",
+      "content_hash": "6c1b36bb38afd0ac9be9c2ea26a4f420caf85b4981a09ab6480aa86e134c8349"
+    },
+    {
       "prompt_id": "query-plan-generation",
       "prompt_version": "1.0.0",
       "task_type": "QUERY_PLAN_GENERATION",
@@ -84,6 +105,70 @@
       "max_allowed_data_access_level": "REDACTED_CONTENT",
       "status": "ACTIVE",
       "content_hash": "bf7b136b97b5379f6235068b10813d4f85071b78c643ac0f84f031ae790d90d1"
+    },
+    {
+      "prompt_id": "evidence-set-summary",
+      "prompt_version": "1.0.0",
+      "task_type": "EVIDENCE_SET_SUMMARY",
+      "input_schema": {
+        "name": "EvidenceSetSummaryInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "EvidenceSetSummaryOutput",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": ["LiteratureRecord"],
+      "optional_source_types": ["EvidenceSpan"],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "VERIFIED_EVIDENCE_ONLY",
+      "max_allowed_data_access_level": "VERIFIED_EVIDENCE_ONLY",
+      "status": "ACTIVE",
+      "content_hash": "51b28437712b29070d779edd9d42e8a987568a9164e1876add9ce6a733bce895"
+    },
+    {
+      "prompt_id": "topic-candidate-generation",
+      "prompt_version": "1.0.0",
+      "task_type": "TOPIC_CANDIDATE_GENERATION",
+      "input_schema": {
+        "name": "TopicGenerationInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "TopicGenerationOutput",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": ["ResearchQuestionVersion", "EvidenceSetSummary"],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "VERIFIED_EVIDENCE_ONLY",
+      "max_allowed_data_access_level": "VERIFIED_EVIDENCE_ONLY",
+      "status": "ACTIVE",
+      "content_hash": "5a292e4fcac98d0d424bc8b15bf391a478d9c62010d8a5e6583bb418f9216bb9"
+    },
+    {
+      "prompt_id": "cleaning-plan-suggestion",
+      "prompt_version": "1.0.0",
+      "task_type": "CLEANING_PLAN_SUGGESTION",
+      "input_schema": {
+        "name": "CleaningPlanSuggestionInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "CleaningPlanSuggestion",
+        "version": "1.0"
+      },
+      "allowed_tools": [],
+      "required_source_types": ["DatasetVersion", "DataQualityIssue", "DatasetColumn"],
+      "max_tool_calls": 0,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "REDACTED_CONTENT",
+      "max_allowed_data_access_level": "REDACTED_CONTENT",
+      "status": "ACTIVE",
+      "content_hash": "ae2ad3d878f65c822ec331a12ccdb65dd22dd597cba087cd86f09f9b2317692d"
     }
   ]
 }

@@ -58,6 +58,14 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "artifact.read",
             "artifact.upload",
             "artifact.download",
+            "dataset.read",
+            "dataset.upload",
+            "dataset.update",
+            "dataset.column.confirm",
+            "dataset.quality.run",
+            "dataset.quality.review",
+            "dataset.cleaning.plan",
+            "dataset.cleaning.execute",
             "job.read",
             "job.cancel",
             "job.retry",
@@ -74,6 +82,14 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "artifact.read",
             "artifact.upload",
             "artifact.download",
+            "dataset.read",
+            "dataset.upload",
+            "dataset.update",
+            "dataset.column.confirm",
+            "dataset.quality.run",
+            "dataset.quality.review",
+            "dataset.cleaning.plan",
+            "dataset.cleaning.execute",
             "job.read",
             "job.cancel",
             "job.retry",
@@ -87,6 +103,9 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "project.read",
             "artifact.read",
             "artifact.download",
+            "dataset.read",
+            "dataset.column.confirm",
+            "dataset.quality.review",
             "job.read",
             "approval.read",
             "approval.decide",
@@ -99,6 +118,7 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "project.read",
             "artifact.read",
             "artifact.download",
+            "dataset.read",
             "job.read",
             "approval.read",
             "approval.cancel",
@@ -350,6 +370,30 @@ def _store_idempotency(
             expires_at=datetime.now(UTC) + IDEMPOTENCY_RETENTION,
         )
     )
+
+
+def _update_idempotency_result(
+    session: Session,
+    *,
+    actor_id: uuid.UUID,
+    project_id: uuid.UUID | None,
+    method: str,
+    path_template: str,
+    key: str,
+    result: OperationResult,
+) -> None:
+    record = session.exec(
+        _idempotency_statement(
+            actor_id=actor_id,
+            project_id=project_id,
+            method=method,
+            path_template=path_template,
+            key=key,
+        ).with_for_update()
+    ).one()
+    record.response_status = result.status_code
+    record.response_body = result.data
+    session.add(record)
 
 
 def _commit(session: Session) -> None:

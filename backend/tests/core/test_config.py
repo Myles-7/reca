@@ -37,6 +37,19 @@ def test_local_minimal_configuration_keeps_optional_providers_unconfigured() -> 
     assert configured.openalex_status == "UNCONFIGURED"
 
 
+def test_model_provider_configuration_is_all_or_nothing() -> None:
+    with pytest.raises(ValidationError, match="must be configured together"):
+        build_settings(MODEL_API_KEY="provider-secret")
+
+    configured = build_settings(
+        MODEL_BASE_URL="https://model.example/v1",
+        MODEL_API_KEY="provider-secret",
+        MODEL_NAME="reca-structured-model",
+    )
+    assert configured.model_status == "CONFIGURED"
+    assert "provider-secret" not in repr(configured)
+
+
 @pytest.mark.parametrize("environment", ["test", "demo"])
 def test_test_and_demo_configurations_are_supported(environment: str) -> None:
     assert build_settings(ENVIRONMENT=environment).ENVIRONMENT == environment

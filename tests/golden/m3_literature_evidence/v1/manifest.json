@@ -1,0 +1,184 @@
+{
+  "golden_set_id": "reca-m3-literature-evidence-synthetic-subset",
+  "golden_set_version": "1.0",
+  "fixture_kind": "RECA_AUTHORED_SYNTHETIC_ACCEPTANCE_DOCUMENT",
+  "is_real_publication": false,
+  "distribution_basis": "Repository-authored synthetic fixture with no third-party or production-user content.",
+  "annotation": {
+    "primary_annotator": "RECA Stage 7 deterministic fixture author",
+    "review_status": "SINGLE_REVIEW_PENDING_FORMAL_GOLDEN_REVIEW",
+    "model_output_used_as_truth": false,
+    "disagreements": []
+  },
+  "schema_versions": {
+    "literature_extraction": "1.0",
+    "evidence_set_summary": "1.0",
+    "topic_candidate": "1.0"
+  },
+  "ids": {
+    "project_id": "11111111-1111-4111-8111-111111111111",
+    "included_literature_id": "22222222-2222-4222-8222-222222222222",
+    "excluded_literature_id": "33333333-3333-4333-8333-333333333333",
+    "document_id": "44444444-4444-4444-8444-444444444444",
+    "document_page_id": "55555555-5555-4555-8555-555555555555",
+    "chunk_id": "66666666-6666-4666-8666-666666666666"
+  },
+  "document": {
+    "filename": "reca-m3-synthetic-evidence-study.pdf",
+    "generation": "Use backend/tests/documents/test_parsing.py::text_pdf_bytes with page_text; the generated immutable Artifact hash is asserted at runtime.",
+    "page_number": 1,
+    "page_width": 600.0,
+    "page_height": 800.0,
+    "page_text": "RECA M3 Synthetic Evidence Study\nTitle: AI Use and Learning Engagement in Undergraduate Students\nYear: 2025\nResearch object: undergraduate students at one teaching university\nSample: 312 undergraduate students completed the survey.\nCore variables: weekly generative AI use and learning engagement.\nResearch design: cross-sectional observational study.\nAnalysis method: multiple linear regression adjusted for study year.\nMain conclusion: Higher reported generative AI use was associated with higher learning engagement; the study did not establish causality.\nLimitation: Single-campus self-report data and the cross-sectional design limit generalizability and causal inference.\nThis is a synthetic acceptance fixture, not a real publication.",
+    "page_text_hash": "ed58d2b6929820e0b90f0ece03eff16624499085ed039818653b9e693841c30e",
+    "section_path": ["Synthetic study", "Evidence page"]
+  },
+  "fields": [
+    {
+      "field_code": "TITLE",
+      "expected_text": "AI Use and Learning Engagement in Undergraduate Students",
+      "expected_structured": null,
+      "acceptable_missing": false,
+      "confidence": 0.99,
+      "source_text": "AI Use and Learning Engagement in Undergraduate Students",
+      "source_text_hash": "e91f57cb86f1e772997725807e3d19de935e6635a39d7da9b8e23c63a417ab49",
+      "char_start": 40,
+      "char_end": 96,
+      "bounding_boxes": []
+    },
+    {
+      "field_code": "AUTHORS",
+      "expected_text": null,
+      "expected_structured": null,
+      "acceptable_missing": true,
+      "confidence": 0.0,
+      "source_text": null,
+      "source_text_hash": null,
+      "char_start": null,
+      "char_end": null,
+      "bounding_boxes": []
+    },
+    {
+      "field_code": "YEAR",
+      "expected_text": "2025",
+      "expected_structured": {"year": 2025},
+      "acceptable_missing": false,
+      "confidence": 0.99,
+      "source_text": "2025",
+      "source_text_hash": "b2b2f104d32c638903e151a9b20d6e27b41d8c0c84cf8458738f83ca2f1dd744",
+      "char_start": 103,
+      "char_end": 107,
+      "bounding_boxes": []
+    },
+    {
+      "field_code": "RESEARCH_OBJECT",
+      "expected_text": "undergraduate students at one teaching university",
+      "expected_structured": null,
+      "acceptable_missing": false,
+      "confidence": 0.9,
+      "source_text": "undergraduate students at one teaching university",
+      "source_text_hash": "0a018b25636281934fee8d4c66e95390712b1ffd9f91c4b0664b886dd735400f",
+      "char_start": 125,
+      "char_end": 174,
+      "bounding_boxes": []
+    },
+    {
+      "field_code": "SAMPLE_SIZE",
+      "expected_text": "312",
+      "expected_structured": {"n": 312},
+      "acceptable_missing": false,
+      "confidence": 0.98,
+      "source_text": "312 undergraduate students completed the survey.",
+      "source_text_hash": "9d2e8b0e1c0969604f43cdeb2555469ba79b32d3f36565bf7a3c107c71c02376",
+      "char_start": 183,
+      "char_end": 231,
+      "bounding_boxes": [{"page": 1, "x": 72.0, "y": 210.0, "width": 310.0, "height": 14.0}]
+    },
+    {
+      "field_code": "CORE_VARIABLES",
+      "expected_text": "weekly generative AI use and learning engagement",
+      "expected_structured": {"independent": ["weekly generative AI use"], "dependent": ["learning engagement"]},
+      "acceptable_missing": false,
+      "confidence": 0.9,
+      "source_text": "weekly generative AI use and learning engagement.",
+      "source_text_hash": "4dbc75b433d358fcb6534f90271f624efd004c1984c52e025a853a7220536246",
+      "char_start": 248,
+      "char_end": 297,
+      "bounding_boxes": []
+    },
+    {
+      "field_code": "RESEARCH_DESIGN",
+      "expected_text": "cross-sectional observational study",
+      "expected_structured": null,
+      "acceptable_missing": false,
+      "confidence": 0.92,
+      "source_text": "cross-sectional observational study.",
+      "source_text_hash": "4f3378e4d23295867db0fd879a1bbf4594fdb173280f633f7c6ebe9d50096b34",
+      "char_start": 315,
+      "char_end": 351,
+      "bounding_boxes": []
+    },
+    {
+      "field_code": "ANALYSIS_METHOD",
+      "expected_text": "multiple linear regression adjusted for study year",
+      "expected_structured": null,
+      "acceptable_missing": false,
+      "confidence": 0.91,
+      "source_text": "multiple linear regression adjusted for study year.",
+      "source_text_hash": "1bbca30589363c4f976ad5358ed77b4689b6d52d2039c8557888028e919e981a",
+      "char_start": 369,
+      "char_end": 420,
+      "bounding_boxes": []
+    },
+    {
+      "field_code": "MAIN_CONCLUSION",
+      "expected_text": "Higher reported generative AI use was associated with higher learning engagement; the study did not establish causality.",
+      "expected_structured": null,
+      "acceptable_missing": false,
+      "confidence": 0.88,
+      "source_text": "Higher reported generative AI use was associated with higher learning engagement; the study did not establish causality.",
+      "source_text_hash": "41f7c66e55fcf132da4e02739cfb9039f59ca9dba27f516f10e401d98ae870ad",
+      "char_start": 438,
+      "char_end": 558,
+      "bounding_boxes": [{"page": 1, "x": 72.0, "y": 390.0, "width": 455.0, "height": 28.0}]
+    },
+    {
+      "field_code": "LIMITATION",
+      "expected_text": "Single-campus self-report data and the cross-sectional design limit generalizability and causal inference.",
+      "expected_structured": null,
+      "acceptable_missing": false,
+      "confidence": 0.9,
+      "source_text": "Single-campus self-report data and the cross-sectional design limit generalizability and causal inference.",
+      "source_text_hash": "d4204bf954d5423cc342db1c70b0da92acca6cc292cdec07fd2a672c7b73f10a",
+      "char_start": 571,
+      "char_end": 677,
+      "bounding_boxes": []
+    }
+  ],
+  "parser_expectations": {
+    "GROBID": {"parser_version": "0.8.2-recorded", "confidence": "HIGH", "coordinates_allowed": true},
+    "PYPDF": {"parser_version": "fixture-runtime", "confidence": "LOW", "coordinates_allowed": false, "section_path": null}
+  },
+  "correction_history": [
+    {"field_code": "SAMPLE_SIZE", "model_value_text": "300", "old_value_text": "300", "new_value_text": "312", "reason": "Human review of the exact page text.", "preserve_model_value": true}
+  ],
+  "decision_history": [
+    {"order": 1, "decision": "UNCERTAIN", "reason": "Awaiting method review."},
+    {"order": 2, "decision": "INCLUDED", "reason": "Object, design, and evidence match the current review scope."}
+  ],
+  "summary": {
+    "included_literature_ids": ["22222222-2222-4222-8222-222222222222"],
+    "excluded_literature_ids": ["33333333-3333-4333-8333-333333333333"],
+    "scope_statement": "Based only on the current included literature set.",
+    "items": [
+      {"kind": "CONSENSUS", "claim": "The included synthetic study reports an association, not causation.", "literature_record_ids": ["22222222-2222-4222-8222-222222222222"], "evidence_field_code": "MAIN_CONCLUSION"},
+      {"kind": "COUNTEREXAMPLE", "claim": "Cross-sectional self-report evidence limits causal interpretation.", "literature_record_ids": ["22222222-2222-4222-8222-222222222222"], "evidence_field_code": "LIMITATION"}
+    ],
+    "limitations": ["This is a synthetic single-record subset and not a claim about all scholarship."]
+  },
+  "topic_candidates": [
+    {"candidate_order": 1, "question_text": "How is weekly generative AI use associated with learning engagement among undergraduate students?", "source_literature_ids": ["22222222-2222-4222-8222-222222222222"], "source_field_codes": ["CORE_VARIABLES", "MAIN_CONCLUSION"]},
+    {"candidate_order": 2, "question_text": "Does study year moderate the association between generative AI use and learning engagement?", "source_literature_ids": ["22222222-2222-4222-8222-222222222222"], "source_field_codes": ["ANALYSIS_METHOD", "MAIN_CONCLUSION"]},
+    {"candidate_order": 3, "question_text": "How do longitudinal engagement patterns differ by generative AI use frequency?", "source_literature_ids": ["22222222-2222-4222-8222-222222222222"], "source_field_codes": ["RESEARCH_DESIGN", "LIMITATION"]}
+  ]
+}

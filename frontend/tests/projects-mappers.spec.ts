@@ -107,7 +107,7 @@ test("approval pending and stale states remain server-derived projections", () =
   expect(mapApproval({ ...approval, status: "SUPERSEDED" }).stale).toBe(true)
   const unknown = mapApproval({
     ...approval,
-    status: "FUTURE_APPROVAL_STATE",
+    status: "FUTURE_APPROVAL_STATE" as unknown as ApprovalPublic["status"],
   })
   expect(unknown.tone).toBe("degraded")
   expect(unknown.allowedActions.size).toBe(0)

@@ -1,0 +1,6 @@
+record_key,measure,observed_on,label
+r-a,10,2026-01-01,Alpha
+r-b,11,2026-01-02,Beta
+r-c,12,2026-01-03,Gamma
+r-d,13,2026-01-04,Delta
+r-e,14,2026-01-05,Epsilon

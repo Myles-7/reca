@@ -11,6 +11,7 @@ import type {
 import { invalidateLiteratureMutation } from "../src/features/literature/mutations"
 import { literatureKeys } from "../src/features/literature/queries"
 import type { LiteratureEvent } from "../src/features/literature/ui/contracts"
+import { createDeferred } from "./utils/deferred"
 
 const meta = { request_id: "request-literature", schema_version: "1.0" }
 const pagination = { page: 1, page_size: 100, total: 1, pages: 1 }
@@ -34,7 +35,7 @@ function project(overrides: Partial<ProjectPublic> = {}): ProjectPublic {
     lock_version: 1,
     created_at: "2026-08-01T00:00:00Z",
     updated_at: "2026-08-01T00:00:00Z",
-    permissions: { role: "OWNER", inherited: false },
+    permissions: { can_update: true, can_delete: true },
     allowed_actions: ["project.read", "job.read", "job.retry"],
     ...overrides,
   }
@@ -312,7 +313,8 @@ test("Literature search uses the server run id before navigating and reloading",
     }),
   )
   await page.route("**/api/v1/literature-search-runs/*/results", (route) => {
-    const id = new URL(route.request().url()).pathname.split("/").at(-2)!
+    const pathSegments = new URL(route.request().url()).pathname.split("/")
+    const id = pathSegments[pathSegments.length - 2]!
     return route.fulfill({
       json: {
         data: {
@@ -336,7 +338,8 @@ test("Literature search uses the server run id before navigating and reloading",
     })
   })
   await page.route("**/api/v1/jobs/job-*", (route) => {
-    const id = new URL(route.request().url()).pathname.split("/").at(-1)!
+    const pathSegments = new URL(route.request().url()).pathname.split("/")
+    const id = pathSegments[pathSegments.length - 1]!
     return route.fulfill({
       json: {
         data: job({
@@ -347,10 +350,7 @@ test("Literature search uses the server run id before navigating and reloading",
       },
     })
   })
-  let releaseSearch: (() => void) | null = null
-  const searchReleased = new Promise<void>((resolve) => {
-    releaseSearch = resolve
-  })
+  const searchRequest = createDeferred()
   await page.route(
     "**/api/v1/query-plans/plan-1/search-runs",
     async (route) => {
@@ -359,7 +359,7 @@ test("Literature search uses the server run id before navigating and reloading",
         page_size: 25,
         use_cache: true,
       })
-      await searchReleased
+      await searchRequest.promise
       return route.fulfill({
         status: 202,
         json: {
@@ -386,7 +386,7 @@ test("Literature search uses the server run id before navigating and reloading",
   await search.click()
   await expect(search).toBeDisabled()
   await expect(page.getByText("Old results").first()).toBeVisible()
-  releaseSearch?.()
+  searchRequest.resolve()
   await expect(page).toHaveURL(/searchRunId=search-2/)
   await expect(page.getByText("New server results").first()).toBeVisible()
 })

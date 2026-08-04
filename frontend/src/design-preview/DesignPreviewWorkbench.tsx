@@ -1,6 +1,7 @@
 import {
   BookOpenCheck,
   ClipboardList,
+  Database,
   FileText,
   FlaskConical,
   FolderKanban,
@@ -19,8 +20,14 @@ import { type ReactNode, useEffect, useMemo, useRef, useState } from "react"
 
 import { VisualThemeProvider } from "@/components/reca-visual-refresh"
 import { Button } from "@/components/ui/button"
+import { dataWorkspaceFixtures } from "@/features/data-workspace/fixtures"
+import { DataWorkspace } from "@/features/data-workspace/ui/DataWorkspace"
 import { documentFixtures } from "@/features/documents/fixtures"
 import { DocumentWorkspace } from "@/features/documents/ui/DocumentWorkspace"
+import { evidenceAnalysisFixtures } from "@/features/evidence-analysis/fixtures"
+import { EvidenceAnalysisWorkspace } from "@/features/evidence-analysis/ui/EvidenceAnalysisWorkspace"
+import { evidenceMatrixFixtures } from "@/features/evidence-matrix/fixtures"
+import { EvidenceMatrixWorkspace } from "@/features/evidence-matrix/ui/EvidenceMatrixWorkspace"
 import { literatureFixtures } from "@/features/literature/fixtures"
 import { LiteratureWorkspace } from "@/features/literature/ui/LiteratureWorkspace"
 import { projectWorkspaceFixtures } from "@/features/projects/fixtures"
@@ -29,6 +36,8 @@ import { QueryPlanWorkspace } from "@/features/query-plan/ui/QueryPlanWorkspace"
 import { researchQuestionFixtures } from "@/features/research-question/fixtures"
 import type { ResearchQuestionWorkspaceProps } from "@/features/research-question/ui/contracts"
 import { ResearchQuestionWorkspace } from "@/features/research-question/ui/ResearchQuestionWorkspace"
+import { topicCandidatesFixtures } from "@/features/topic-candidates/fixtures"
+import { TopicCandidatesWorkspace } from "@/features/topic-candidates/ui/TopicCandidatesWorkspace"
 import { ProjectWorkspacePreview } from "./ProjectWorkspacePreview"
 import { VisualFoundationsPreview } from "./VisualFoundationsPreview"
 
@@ -39,6 +48,10 @@ type ModuleId =
   | "document"
   | "research-question"
   | "project-workspace"
+  | "evidence-matrix"
+  | "evidence-analysis"
+  | "topic-candidates"
+  | "data-workspace"
 type ThemeChoice = "light" | "dark" | "system"
 type ViewportChoice = "desktop" | "tablet" | "mobile"
 
@@ -61,6 +74,10 @@ const modules: ReadonlyArray<{
   { id: "document", label: "Document", icon: FileText },
   { id: "research-question", label: "Research Question", icon: ClipboardList },
   { id: "project-workspace", label: "Project Workspace", icon: FolderKanban },
+  { id: "evidence-matrix", label: "Evidence Matrix", icon: ListTree },
+  { id: "evidence-analysis", label: "Evidence Analysis", icon: FlaskConical },
+  { id: "topic-candidates", label: "Topic Candidates", icon: ClipboardList },
+  { id: "data-workspace", label: "Data Workspace", icon: Database },
 ]
 
 const viewportOptions: ReadonlyArray<{
@@ -100,6 +117,10 @@ const viewportOptions: ReadonlyArray<{
 const queryPlanFixtureOptions = queryPlanFixtures
 const literatureFixtureOptions = literatureFixtures
 const documentFixtureOptions = documentFixtures
+const evidenceMatrixFixtureOptions = evidenceMatrixFixtures
+const evidenceAnalysisFixtureOptions = evidenceAnalysisFixtures
+const topicCandidatesFixtureOptions = topicCandidatesFixtures
+const dataWorkspaceFixtureOptions = dataWorkspaceFixtures
 
 const defaultFixtureIds: Record<ModuleId, string> = {
   foundations: "visual-foundations",
@@ -108,6 +129,10 @@ const defaultFixtureIds: Record<ModuleId, string> = {
   document: documentFixtureOptions[0].id,
   "research-question": researchQuestionFixtures[0].id,
   "project-workspace": projectWorkspaceFixtures[0].id,
+  "evidence-matrix": evidenceMatrixFixtureOptions[0].id,
+  "evidence-analysis": evidenceAnalysisFixtureOptions[0].id,
+  "topic-candidates": topicCandidatesFixtureOptions[0].id,
+  "data-workspace": dataWorkspaceFixtureOptions[0].id,
 }
 
 const moduleStatus: Record<
@@ -143,6 +168,23 @@ const moduleStatus: Record<
     { label: "Fixture ready", state: "ready" },
     { label: "integration pending", state: "pending" },
   ],
+  "evidence-matrix": [
+    { label: "Contract ready", state: "ready" },
+    { label: "Open Design pending", state: "pending" },
+  ],
+  "evidence-analysis": [
+    { label: "Contract ready", state: "ready" },
+    { label: "Open Design pending", state: "pending" },
+  ],
+  "topic-candidates": [
+    { label: "Contract ready", state: "ready" },
+    { label: "Read API pending", state: "pending" },
+  ],
+  "data-workspace": [
+    { label: "Contract ready", state: "ready" },
+    { label: "Open Design ready", state: "ready" },
+    { label: "Production route pending", state: "pending" },
+  ],
 }
 
 function fixtureOptionsFor(
@@ -153,6 +195,10 @@ function fixtureOptionsFor(
   if (module === "document") return documentFixtureOptions
   if (module === "research-question") return researchQuestionFixtures
   if (module === "project-workspace") return projectWorkspaceFixtures
+  if (module === "evidence-matrix") return evidenceMatrixFixtureOptions
+  if (module === "evidence-analysis") return evidenceAnalysisFixtureOptions
+  if (module === "topic-candidates") return topicCandidatesFixtureOptions
+  if (module === "data-workspace") return dataWorkspaceFixtureOptions
   return [{ id: "visual-foundations", label: "共享视觉基础" }]
 }
 
@@ -307,6 +353,58 @@ export function DesignPreviewWorkbench() {
         onEvent: (event) => logIntent(event.action, event.input),
       }
       return <ResearchQuestionWorkspace {...props} />
+    }
+    if (module === "evidence-matrix") {
+      const fixture =
+        evidenceMatrixFixtureOptions.find(
+          (item) => item.id === currentFixtureId,
+        ) ?? evidenceMatrixFixtureOptions[0]
+      return (
+        <EvidenceMatrixWorkspace
+          {...fixture.props}
+          onRetry={() => logIntent("retry")}
+          onEvent={(event) => logIntent(event.action, event.input)}
+        />
+      )
+    }
+    if (module === "evidence-analysis") {
+      const fixture =
+        evidenceAnalysisFixtureOptions.find(
+          (item) => item.id === currentFixtureId,
+        ) ?? evidenceAnalysisFixtureOptions[0]
+      return (
+        <EvidenceAnalysisWorkspace
+          {...fixture.props}
+          onRetry={() => logIntent("retry")}
+          onEvent={(event) => logIntent(event.action, event.input)}
+        />
+      )
+    }
+    if (module === "topic-candidates") {
+      const fixture =
+        topicCandidatesFixtureOptions.find(
+          (item) => item.id === currentFixtureId,
+        ) ?? topicCandidatesFixtureOptions[0]
+      return (
+        <TopicCandidatesWorkspace
+          {...fixture.props}
+          onRetry={() => logIntent("retry")}
+          onEvent={(event) => logIntent(event.action, event.input)}
+        />
+      )
+    }
+    if (module === "data-workspace") {
+      const fixture =
+        dataWorkspaceFixtureOptions.find(
+          (item) => item.id === currentFixtureId,
+        ) ?? dataWorkspaceFixtureOptions[0]
+      return (
+        <DataWorkspace
+          {...fixture.props}
+          onRetry={() => logIntent("retry")}
+          onEvent={(event) => logIntent(event.action, event.input)}
+        />
+      )
     }
     const fixture =
       projectWorkspaceFixtures.find((item) => item.id === currentFixtureId) ??

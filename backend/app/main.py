@@ -59,6 +59,13 @@ def is_m1_contract_path(request: Request) -> bool:
         f"{settings.API_V1_STR}/literature-search-runs",
         f"{settings.API_V1_STR}/literature",
         f"{settings.API_V1_STR}/documents",
+        f"{settings.API_V1_STR}/literature-extractions",
+        f"{settings.API_V1_STR}/literature-extraction-fields",
+        f"{settings.API_V1_STR}/evidence-spans",
+        f"{settings.API_V1_STR}/evidence-set-summaries",
+        f"{settings.API_V1_STR}/dataset-versions",
+        f"{settings.API_V1_STR}/data-quality-runs",
+        f"{settings.API_V1_STR}/data-quality-issues",
     )
     return any(path == prefix or path.startswith(f"{prefix}/") for prefix in prefixes)
 

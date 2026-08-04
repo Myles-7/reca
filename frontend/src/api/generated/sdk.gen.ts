@@ -44,6 +44,84 @@ import type {
   ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentData,
   ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentErrors,
   ArtifactsTransferArtifactContentPutApiV1ArtifactUploadsUploadIdContentResponses,
+  DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonData,
+  DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonErrors,
+  DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonResponses,
+  DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansData,
+  DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansErrors,
+  DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansResponses,
+  DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteData,
+  DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteErrors,
+  DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteResponses,
+  DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdData,
+  DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdErrors,
+  DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdResponses,
+  DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdData,
+  DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdErrors,
+  DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses,
+  DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewData,
+  DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewErrors,
+  DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewResponses,
+  DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsData,
+  DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsErrors,
+  DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsResponses,
+  DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsData,
+  DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsErrors,
+  DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsResponses,
+  DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdData,
+  DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdErrors,
+  DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdResponses,
+  DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeData,
+  DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeErrors,
+  DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeResponses,
+  DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdData,
+  DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdErrors,
+  DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdResponses,
+  DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreData,
+  DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreErrors,
+  DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreResponses,
+  DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesData,
+  DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesErrors,
+  DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesResponses,
+  DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsData,
+  DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsErrors,
+  DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsResponses,
+  DatasetsGetDatasetGetApiV1DatasetsDatasetIdData,
+  DatasetsGetDatasetGetApiV1DatasetsDatasetIdErrors,
+  DatasetsGetDatasetGetApiV1DatasetsDatasetIdResponses,
+  DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdData,
+  DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdErrors,
+  DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdResponses,
+  DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsData,
+  DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsErrors,
+  DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsResponses,
+  DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateData,
+  DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateErrors,
+  DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateResponses,
+  DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsData,
+  DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsErrors,
+  DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsResponses,
+  DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsData,
+  DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsErrors,
+  DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsResponses,
+  DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsData,
+  DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsErrors,
+  DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsResponses,
+  DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewData,
+  DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewErrors,
+  DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewResponses,
+  DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionData,
+  DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionErrors,
+  DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionResponses,
+  DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdData,
+  DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdErrors,
+  DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdResponses,
+  DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdData,
+  DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdErrors,
+  DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdResponses,
+  DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsData,
+  DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsErrors,
+  DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsResponses,
   DocumentsGetDocumentGetApiV1DocumentsDocumentIdData,
   DocumentsGetDocumentGetApiV1DocumentsDocumentIdErrors,
   DocumentsGetDocumentGetApiV1DocumentsDocumentIdResponses,
@@ -59,6 +137,48 @@ import type {
   DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsData,
   DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsErrors,
   DocumentsUploadDocumentPostApiV1ProjectsProjectIdDocumentsResponses,
+  EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesData,
+  EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesErrors,
+  EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesResponses,
+  EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansData,
+  EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansErrors,
+  EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansResponses,
+  EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsData,
+  EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsErrors,
+  EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsResponses,
+  EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsData,
+  EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsErrors,
+  EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsResponses,
+  EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsData,
+  EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsErrors,
+  EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsResponses,
+  EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsData,
+  EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsErrors,
+  EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsResponses,
+  EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdData,
+  EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdErrors,
+  EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdResponses,
+  EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdData,
+  EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdErrors,
+  EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdResponses,
+  EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdData,
+  EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdErrors,
+  EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdResponses,
+  EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixData,
+  EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixErrors,
+  EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixResponses,
+  EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdData,
+  EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdErrors,
+  EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses,
+  EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsData,
+  EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsErrors,
+  EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponses,
+  EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchData,
+  EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchErrors,
+  EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchResponses,
+  EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdData,
+  EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors,
+  EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses,
   HealthDependenciesHealthGetApiV1HealthDependenciesData,
   HealthDependenciesHealthGetApiV1HealthDependenciesErrors,
   HealthDependenciesHealthGetApiV1HealthDependenciesResponses,
@@ -1694,6 +1814,376 @@ export const documentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumber 
     })
 
 /**
+ * Create Literature Extraction
+ */
+export const evidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractions =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsResponses,
+    EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsResponses,
+      EvidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractionsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/documents/{document_id}/literature-extractions",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Literature Extraction
+ */
+export const evidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdResponses,
+    EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdResponses,
+      EvidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/literature-extractions/{extraction_id}",
+      ...options,
+    })
+
+/**
+ * Update Literature Extraction Field
+ */
+export const evidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses,
+    EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).patch<
+      EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses,
+      EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/literature-extraction-fields/{field_id}",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Create Evidence Span
+ */
+export const evidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpans =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansResponses,
+    EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansResponses,
+      EvidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpansErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/documents/{document_id}/evidence-spans",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Evidence Span
+ */
+export const evidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdResponses,
+  EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdResponses,
+    EvidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/evidence-spans/{evidence_span_id}",
+    ...options,
+  })
+
+/**
+ * Create Evidence Span Verification
+ */
+export const evidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecords =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsResponses,
+    EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsResponses,
+      EvidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecordsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/evidence-spans/{evidence_span_id}/verification-records",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * List Literature Decisions
+ */
+export const evidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisions =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponses,
+    EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponses,
+      EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/literature/{literature_id}/decisions",
+      ...options,
+    })
+
+/**
+ * Create Literature Decision
+ */
+export const evidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisions =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsResponses,
+    EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsResponses,
+      EvidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisionsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/literature/{literature_id}/decisions",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Literature Matrix
+ */
+export const evidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrix =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixResponses,
+    EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixResponses,
+      EvidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrixErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/literature-matrix",
+      ...options,
+    })
+
+/**
+ * Search Project Evidence
+ */
+export const evidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearch =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchResponses,
+    EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchResponses,
+      EvidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearchErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/evidence-search",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Create Evidence Set Summary
+ */
+export const evidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummaries =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesResponses,
+    EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesResponses,
+      EvidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummariesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/evidence-set-summaries",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Evidence Set Summary
+ */
+export const evidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdResponses,
+    EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdResponses,
+      EvidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/evidence-set-summaries/{summary_id}",
+      ...options,
+    })
+
+/**
+ * Create Topic Generation Run
+ */
+export const evidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRuns =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsResponses,
+    EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsResponses,
+      EvidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRunsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/topic-generation-runs",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Topic Generation Run
+ */
+export const evidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses,
+  EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses,
+    EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/topic-generation-runs/{run_id}",
+    ...options,
+  })
+
+/**
  * List Project Artifacts
  */
 export const artifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifacts = <
@@ -1844,6 +2334,687 @@ export const artifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownlo
     >({
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/artifacts/{artifact_id}/download",
+      ...options,
+    })
+
+/**
+ * List Datasets
+ */
+export const datasetsListDatasetsGetApiV1ProjectsProjectIdDatasets = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsResponses,
+  DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsResponses,
+    DatasetsListDatasetsGetApiV1ProjectsProjectIdDatasetsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/datasets",
+    ...options,
+  })
+
+/**
+ * Upload Dataset
+ */
+export const datasetsUploadDatasetPostApiV1ProjectsProjectIdDatasets = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsResponses,
+  DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsResponses,
+    DatasetsUploadDatasetPostApiV1ProjectsProjectIdDatasetsErrors,
+    ThrowOnError
+  >({
+    ...formDataBodySerializer,
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/datasets",
+    ...options,
+    headers: {
+      "Content-Type": null,
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Dataset
+ */
+export const datasetsGetDatasetGetApiV1DatasetsDatasetId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsGetDatasetGetApiV1DatasetsDatasetIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsGetDatasetGetApiV1DatasetsDatasetIdResponses,
+  DatasetsGetDatasetGetApiV1DatasetsDatasetIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DatasetsGetDatasetGetApiV1DatasetsDatasetIdResponses,
+    DatasetsGetDatasetGetApiV1DatasetsDatasetIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/datasets/{dataset_id}",
+    ...options,
+  })
+
+/**
+ * Update Dataset
+ */
+export const datasetsUpdateDatasetPatchApiV1DatasetsDatasetId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdResponses,
+  DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).patch<
+    DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdResponses,
+    DatasetsUpdateDatasetPatchApiV1DatasetsDatasetIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/datasets/{dataset_id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Dataset Version
+ */
+export const datasetsGetDatasetVersionGetApiV1DatasetVersionsVersionId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdResponses,
+  DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdResponses,
+    DatasetsGetDatasetVersionGetApiV1DatasetVersionsVersionIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/dataset-versions/{version_id}",
+    ...options,
+  })
+
+/**
+ * Get Worksheets
+ */
+export const datasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheets = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsResponses,
+  DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsResponses,
+    DatasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheetsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/dataset-versions/{version_id}/worksheets",
+    ...options,
+  })
+
+/**
+ * Invalidate Dataset Version
+ */
+export const datasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidate =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateResponses,
+    DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateResponses,
+      DatasetsInvalidateDatasetVersionPostApiV1DatasetVersionsVersionIdInvalidateErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/dataset-versions/{version_id}/invalidate",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Select Worksheet
+ */
+export const datasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelection =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionResponses,
+    DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionResponses,
+      DatasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelectionErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/dataset-versions/{version_id}/worksheet-selection",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Preview Dataset Version
+ */
+export const datasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreview =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewResponses,
+    DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewResponses,
+      DatasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreviewErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/dataset-versions/{version_id}/preview",
+      ...options,
+    })
+
+/**
+ * List Dataset Columns
+ */
+export const datasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumns =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsResponses,
+    DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsResponses,
+      DatasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumnsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/dataset-versions/{version_id}/columns",
+      ...options,
+    })
+
+/**
+ * Update Dataset Column
+ */
+export const datasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdResponses,
+  DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).patch<
+    DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdResponses,
+    DatasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/dataset-columns/{column_id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * List Dataset Versions
+ */
+export const datasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersions = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsResponses,
+  DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsResponses,
+    DatasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersionsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/datasets/{dataset_id}/versions",
+    ...options,
+  })
+
+/**
+ * Request Quality Run
+ */
+export const dataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRuns =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsResponses,
+    DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsResponses,
+      DataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRunsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/dataset-versions/{version_id}/quality-runs",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Quality Run
+ */
+export const dataQualityGetQualityRunGetApiV1DataQualityRunsRunId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdResponses,
+  DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdResponses,
+    DataQualityGetQualityRunGetApiV1DataQualityRunsRunIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/data-quality-runs/{run_id}",
+    ...options,
+  })
+
+/**
+ * List Quality Issues
+ */
+export const dataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssues = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesResponses,
+  DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesResponses,
+    DataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssuesErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/data-quality-runs/{run_id}/issues",
+    ...options,
+  })
+
+/**
+ * Acknowledge Quality Issue
+ */
+export const dataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledge =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeResponses,
+    DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeResponses,
+      DataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledgeErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/data-quality-issues/{issue_id}/acknowledge",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Ignore Quality Issue
+ */
+export const dataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnore =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreResponses,
+    DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreResponses,
+      DataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnoreErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/data-quality-issues/{issue_id}/ignore",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Create Cleaning Plan
+ */
+export const dataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlans =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansResponses,
+    DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansResponses,
+      DataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlansErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/dataset-versions/{version_id}/cleaning-plans",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Cleaning Plan
+ */
+export const dataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdResponses,
+  DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdResponses,
+    DataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/cleaning-plans/{plan_id}",
+    ...options,
+  })
+
+/**
+ * Update Cleaning Plan
+ */
+export const dataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdResponses,
+  DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).patch<
+    DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdResponses,
+    DataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/cleaning-plans/{plan_id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Preview Cleaning Plan
+ */
+export const dataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreview =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewResponses,
+    DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewResponses,
+      DataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreviewErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/cleaning-plans/{plan_id}/preview",
+      ...options,
+    })
+
+/**
+ * Request Cleaning Plan Approval
+ */
+export const dataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequests =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsResponses,
+    DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsResponses,
+      DataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequestsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/cleaning-plans/{plan_id}/approval-requests",
+      ...options,
+    })
+
+/**
+ * Execute Cleaning Plan
+ */
+export const dataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecute =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteResponses,
+    DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteResponses,
+      DataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecuteErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/cleaning-plans/{plan_id}/execute",
+      ...options,
+    })
+
+/**
+ * Compare Dataset Versions
+ */
+export const dataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparison =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonResponses,
+    DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonResponses,
+      DataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparisonErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/datasets/{dataset_id}/version-comparison",
+      ...options,
+    })
+
+/**
+ * Suggest Cleaning Plan
+ */
+export const dataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestions =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsResponses,
+    DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsResponses,
+      DataCleaningSuggestCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlanSuggestionsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/dataset-versions/{version_id}/cleaning-plan-suggestions",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Data Transformation
+ */
+export const dataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses,
+    DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses,
+      DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/data-transformations/{transformation_id}",
       ...options,
     })
 

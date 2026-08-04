@@ -31,6 +31,7 @@ from app.projects import service as project_service
 class ModelExecutionMode(StrEnum):
     MOCK = "MOCK"
     RECORDED = "RECORDED"
+    LIVE = "LIVE"
 
 
 class ModelGovernanceError(ValueError):
@@ -81,6 +82,8 @@ class InvocationCreate:
     source_ids: tuple[uuid.UUID, ...]
     sanitized_input: Any
     mode: ModelExecutionMode
+    provider: str | None = None
+    model: str | None = None
     fixture_id: str | None = None
     recording_id: str | None = None
     recording_version: str | None = None
@@ -173,6 +176,19 @@ def _validate_access(command: InvocationCreate) -> None:
 
 
 def _validate_mode(command: InvocationCreate) -> dict[str, Any]:
+    if command.mode == ModelExecutionMode.LIVE:
+        if not command.provider or not command.model:
+            raise _governance_error(
+                "MODEL_PROVIDER_INVALID",
+                "LIVE mode requires provider and model identity",
+            )
+        live_metadata: dict[str, Any] = {
+            "mode": command.mode.value,
+            "network_access": "ENABLED",
+        }
+        if command.execution_metadata is not None:
+            live_metadata["execution"] = jsonable_encoder(command.execution_metadata)
+        return live_metadata
     if command.mode == ModelExecutionMode.MOCK:
         if not command.fixture_id:
             raise _governance_error(
@@ -213,6 +229,8 @@ def _validate_mode(command: InvocationCreate) -> dict[str, Any]:
         "recording_redaction_status": command.recording_redaction_status,
         "network_access": "DISABLED",
     }
+    if command.fixture_id is not None:
+        metadata["fixture_id"] = command.fixture_id
     if command.execution_metadata is not None:
         metadata["execution"] = jsonable_encoder(command.execution_metadata)
     return metadata
@@ -235,7 +253,8 @@ def _validate_sources(
         raise _governance_error(
             "MODEL_SOURCE_INVALID", "No source resolver is registered for this task"
         )
-    allowed = set(contract.required_source_types)
+    required = set(contract.required_source_types)
+    allowed = required | set(contract.optional_source_types)
     seen_types: set[str] = set()
     for source_id in command.source_ids:
         source = source_resolver(session, source_id)
@@ -249,7 +268,7 @@ def _validate_sources(
                 "MODEL_SOURCE_INVALID", "Source type is not allowed by the prompt"
             )
         seen_types.add(source.source_type)
-    if not allowed.issubset(seen_types):
+    if not required.issubset(seen_types):
         raise _governance_error(
             "MODEL_SOURCE_REQUIRED", "A required source type is missing"
         )
@@ -294,6 +313,7 @@ def create_model_invocation(
     *,
     command: InvocationCreate,
     source_resolver: SourceResolver | None = None,
+    commit: bool = True,
 ) -> ModelInvocation:
     project_service.authorize_project(
         session,
@@ -340,8 +360,8 @@ def create_model_invocation(
         input_schema_version=command.input_schema_version,
         output_schema_name=command.output_schema_name,
         output_schema_version=command.output_schema_version,
-        provider=None,
-        model=None,
+        provider=command.provider,
+        model=command.model,
         requested_data_access_level=command.requested_data_access_level,
         max_allowed_data_access_level=command.max_allowed_data_access_level,
         effective_data_access_level=command.effective_data_access_level,
@@ -366,8 +386,9 @@ def create_model_invocation(
             "source_count": len(command.source_ids),
         },
     )
-    _commit(session)
-    session.refresh(invocation)
+    if commit:
+        _commit(session)
+        session.refresh(invocation)
     return invocation
 
 

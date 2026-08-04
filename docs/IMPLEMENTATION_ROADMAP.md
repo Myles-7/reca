@@ -436,9 +436,9 @@ M0 Regression Baseline 适用于 M1–M9，后续里程碑不得让 M0 已通过
 | --- | --- | --- | --- | --- |
 | M1 | COMPLETION APPROVED | M0 COMPLETED | 项目、Artifact、Approval、Job、审计与 Prompt 治理底座 | [M1 Foundation](roadmap/milestones/M1_FOUNDATION.md) |
 | M2 | COMPLETION APPROVED | M1 | 研究问题、检索计划、真实文献与 PDF 解析 | [M2 Research and Literature](roadmap/milestones/M2_RESEARCH_AND_LITERATURE.md) |
-| M3 | ENTRY ALLOWED | M2 COMPLETED | 文献矩阵、EvidenceSpan 与当前证据集合分析 | [M3 Evidence Matrix](roadmap/milestones/M3_EVIDENCE_MATRIX.md) |
-| M4 | PLANNED | M1 | DatasetVersion、质量检查、CleaningPlan 与转换 | [M4 Data Quality](roadmap/milestones/M4_DATA_QUALITY.md) |
-| M5 | PLANNED | M4 | 经批准的确定性统计、AnalysisResult 与 Figure | [M5 Analysis and Figures](roadmap/milestones/M5_ANALYSIS_AND_FIGURES.md) |
+| M3 | COMPLETION APPROVED | M2 COMPLETED | 十字段矩阵、EvidenceSpan、用户决策、当前证据分析与 3 个候选问题；工程 Exit Gate 已通过，真实论文科学指标延期且未测量 | [M3 Evidence Matrix](roadmap/milestones/M3_EVIDENCE_MATRIX.md) |
+| M4 | COMPLETED | M1 | DatasetVersion、质量检查、CleaningPlan 与转换；Exit Gate 于 2026-08-04 通过 | [M4 Data Quality](roadmap/milestones/M4_DATA_QUALITY.md) |
+| M5 | READY | M4 | M4 handoff 已冻结，可开始经批准的确定性统计、AnalysisResult 与 Figure | [M5 Analysis and Figures](roadmap/milestones/M5_ANALYSIS_AND_FIGURES.md) |
 | M6 | PLANNED | M3 + M5 | DOCX、Claim、核心检查与 MANU-P0-018 | [M6 Manuscript and Claims](roadmap/milestones/M6_MANUSCRIPT_AND_CLAIMS.md) |
 | M7 | PLANNED | M3 + M5 + M6 | Evidence Graph、AuditResult、失效传播与 ReproPackage | [M7 Evidence and Export](roadmap/milestones/M7_EVIDENCE_AND_EXPORT.md) |
 | M8 | PLANNED | M7 | StageResolver、受控单总控 Agent、ToolCall 与 AgentRun | [M8 Agent](roadmap/milestones/M8_AGENT.md) |

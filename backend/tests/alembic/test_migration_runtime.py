@@ -106,3 +106,53 @@ def test_scoping_migration_downgrade_policy_with_existing_data() -> None:
             )
             connection.execute(text(f'DROP DATABASE IF EXISTS "{database_name}"'))
         admin_engine.dispose()
+
+
+def test_m3_empty_upgrade_repeat_check_and_safe_downgrade() -> None:
+    database_name = f"reca_m3_migration_{uuid.uuid4().hex}"
+    original_database = settings.POSTGRES_DB
+    admin_url = make_url(settings.database_url).set(database="postgres")
+    test_url = make_url(settings.database_url).set(database=database_name)
+    admin_engine = create_engine(admin_url, isolation_level="AUTOCOMMIT")
+    test_engine = create_engine(test_url)
+
+    with admin_engine.connect() as connection:
+        connection.execute(text(f'CREATE DATABASE "{database_name}"'))
+
+    try:
+        settings.POSTGRES_DB = database_name
+        config = _alembic_config()
+        command.upgrade(config, "head")
+        command.upgrade(config, "head")
+        command.check(config)
+
+        table_names = set(inspect(test_engine).get_table_names())
+        assert {
+            "literature_extractions",
+            "literature_extraction_fields",
+            "literature_extraction_field_revisions",
+            "evidence_spans",
+            "evidence_span_verification_records",
+            "literature_decisions",
+            "evidence_set_summaries",
+            "topic_generation_runs",
+            "topic_candidates",
+            "topic_candidate_evidence",
+        } <= table_names
+
+        command.downgrade(config, "0012_document_upload")
+        assert "evidence_spans" not in set(inspect(test_engine).get_table_names())
+        command.upgrade(config, "head")
+    finally:
+        settings.POSTGRES_DB = original_database
+        test_engine.dispose()
+        with admin_engine.connect() as connection:
+            connection.execute(
+                text(
+                    "SELECT pg_terminate_backend(pid) FROM pg_stat_activity "
+                    "WHERE datname = :database_name AND pid <> pg_backend_pid()"
+                ),
+                {"database_name": database_name},
+            )
+            connection.execute(text(f'DROP DATABASE IF EXISTS "{database_name}"'))
+        admin_engine.dispose()

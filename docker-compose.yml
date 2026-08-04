@@ -62,6 +62,7 @@ services:
       HOME: /tmp/reca
       MODEL_BASE_URL: ${MODEL_BASE_URL:-}
       MODEL_API_KEY: ${MODEL_API_KEY:-}
+      MODEL_NAME: ${MODEL_NAME:-}
       OPENALEX_API_URL: ${OPENALEX_API_URL:-https://api.openalex.org}
       OPENALEX_API_KEY: ${OPENALEX_API_KEY:-}
       SENTRY_DSN: ${SENTRY_DSN:-}
@@ -143,6 +144,9 @@ services:
       CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://valkey:6379/0}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://valkey:6379/1}
       HOME: /tmp/reca
+      MODEL_BASE_URL: ${MODEL_BASE_URL:-}
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      MODEL_NAME: ${MODEL_NAME:-}
     read_only: true
     tmpfs:
       - /tmp/reca:rw,nosuid,nodev,size=256m,uid=10001,gid=10001,mode=700

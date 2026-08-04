@@ -97,6 +97,8 @@ $configLines | Set-Content -LiteralPath $envFile -Encoding utf8
 $compose = @("compose", "--project-name", $project, "--env-file", $envFile)
 Push-Location $root
 try {
+    $initialTrackedStatus = @(git status --porcelain --untracked-files=no)
+    if ($LASTEXITCODE -ne 0) { throw "Initial Git status could not run" }
     # This cleanup is intentionally scoped to the dedicated acceptance project.
     & docker @compose down -v --remove-orphans *>$null
 
@@ -144,7 +146,9 @@ try {
         if ($FullBackendTests) {
             Invoke-Step "backend-database-tests" {
                 docker @compose run --rm `
+                    --env ENVIRONMENT=test `
                     --volume "${root}/backend/tests:/app/backend/tests:ro" `
+                    --volume "${root}/tests/golden:/app/tests/golden:ro" `
                     --volume "${root}/frontend/src/shared/environment.ts:/app/frontend/src/shared/environment.ts:ro" `
                     --volume "${root}/.env.example:/app/.env.example:ro" `
                     api pytest -q
@@ -176,7 +180,12 @@ try {
     Invoke-Step "repository-secret-scan" { $secretMatches = git grep -n -E "BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}" -- . ":(exclude).env.example" ":(exclude)scripts/m0-acceptance.ps1"; if ($LASTEXITCODE -gt 1) { throw "Secret scan could not run" }; if ($secretMatches) { throw "Secret pattern detected" }; $global:LASTEXITCODE = 0 }
     Invoke-Step "python-security-audit" { python -m uv run pip-audit }
     Invoke-NodeAudit
-    Invoke-Step "post-run-git-status" { $changes = git status --porcelain --untracked-files=no; if ($LASTEXITCODE -ne 0) { throw "Git status could not run" }; if ($changes) { throw "Clean-room changed tracked files: $changes" } }
+    Invoke-Step "post-run-git-status" {
+        $currentTrackedStatus = @(git status --porcelain --untracked-files=no)
+        if ($LASTEXITCODE -ne 0) { throw "Git status could not run" }
+        $statusDiff = Compare-Object -ReferenceObject $initialTrackedStatus -DifferenceObject $currentTrackedStatus
+        if ($statusDiff) { throw "Clean-room changed tracked files: $statusDiff" }
+    }
 }
 finally {
     & docker @compose down -v --remove-orphans *>$null

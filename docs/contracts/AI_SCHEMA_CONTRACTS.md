@@ -361,6 +361,12 @@ LITERATURE_FIELD_EXTRACTION
 
 ## 32.2 result Schema
 
+模型 Provider 的原始结果使用内部 `LiteratureExtractionCandidateOutput@1.0`。其中
+`evidence_candidates` 只是待验证的原文候选，禁止包含或接受 `evidence_span_id`。RECA
+必须逐项完成 project、document、page、chunk、source_text、hash、offset 和坐标定位后，
+才能形成下面的 `LiteratureExtractionOutput@1.0`。该正式结果中的 `evidence_span_ids` 只能
+引用服务端已经持久化的 EvidenceSpan。
+
 ```json id="q1meva"
 {
   "literature_record_id": "uuid",

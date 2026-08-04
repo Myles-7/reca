@@ -6,6 +6,7 @@ import { projectKeys } from "../src/features/projects/queries"
 import { invalidateQueryPlanMutation } from "../src/features/query-plan/mutations"
 import { queryPlanKeys } from "../src/features/query-plan/queries"
 import type { QueryPlanEvent } from "../src/features/query-plan/ui/contracts"
+import { createDeferred } from "./utils/deferred"
 
 const meta = { request_id: "request-query-plan", schema_version: "1.0" }
 
@@ -167,10 +168,7 @@ test("Query Plan update keeps pending state and refetches after success", async 
   await authenticate(page)
   let current = plan()
   let loads = 0
-  let releaseUpdate: (() => void) | null = null
-  const updateReleased = new Promise<void>((resolve) => {
-    releaseUpdate = resolve
-  })
+  const updateRequest = createDeferred()
   await page.route("**/api/v1/query-plans/plan-1", async (route) => {
     const request = route.request()
     if (request.method() === "PATCH") {
@@ -178,7 +176,7 @@ test("Query Plan update keeps pending state and refetches after success", async 
       expect(request.postDataJSON()).toMatchObject({
         change_reason: "Narrow the publication years",
       })
-      await updateReleased
+      await updateRequest.promise
       current = plan({ lock_version: 4, updated_at: "2026-08-01T04:00:00Z" })
       return route.fulfill({ json: { data: current, meta } })
     }
@@ -193,7 +191,7 @@ test("Query Plan update keeps pending state and refetches after success", async 
   const save = page.locator(".query-plan-save-button")
   await save.click()
   await expect(save).toBeDisabled()
-  releaseUpdate?.()
+  updateRequest.resolve()
   await expect.poll(() => loads).toBe(2)
   await expect(page.getByText("4", { exact: true }).last()).toBeVisible()
 })
@@ -241,10 +239,7 @@ test("Query Plan generate is pending, idempotent, and refetches without optimist
 }) => {
   await authenticate(page)
   let loads = 0
-  let releaseGenerate: (() => void) | null = null
-  const generateReleased = new Promise<void>((resolve) => {
-    releaseGenerate = resolve
-  })
+  const generateRequest = createDeferred()
   await page.route("**/api/v1/query-plans/plan-1**", async (route) => {
     const request = route.request()
     if (request.method() === "POST") {
@@ -253,7 +248,7 @@ test("Query Plan generate is pending, idempotent, and refetches without optimist
       )
       expect(request.headers()["idempotency-key"]).toBeTruthy()
       expect(request.postDataJSON()).toEqual({})
-      await generateReleased
+      await generateRequest.promise
       return route.fulfill({
         status: 202,
         json: {
@@ -286,7 +281,7 @@ test("Query Plan generate is pending, idempotent, and refetches without optimist
   await generate.click()
   await expect(generate).toBeDisabled()
   await expect(page.getByText("DRAFT", { exact: true }).first()).toBeVisible()
-  releaseGenerate?.()
+  generateRequest.resolve()
   await expect.poll(() => loads).toBe(2)
   await expect(page.getByText("DRAFT", { exact: true }).first()).toBeVisible()
 })

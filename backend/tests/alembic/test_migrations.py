@@ -187,7 +187,7 @@ def test_m2_scoping_migration_registers_reversible_job_type() -> None:
     assert "NEEDS_USER_INPUT" not in migration
 
 
-def test_m2_migration_graph_has_one_contiguous_head() -> None:
+def test_m4_migration_graph_has_one_contiguous_head() -> None:
     repository_root = Path(__file__).resolve().parents[3]
     config = Config(str(repository_root / "backend/alembic.ini"))
     config.set_main_option(
@@ -195,11 +195,45 @@ def test_m2_migration_graph_has_one_contiguous_head() -> None:
     )
     scripts = ScriptDirectory.from_config(config)
 
-    assert scripts.get_heads() == ["0012_document_upload"]
+    assert scripts.get_heads() == ["0014_m4_data_quality"]
     revisions = list(scripts.walk_revisions(base="base", head="heads"))
     assert revisions[-1].down_revision is None
     for current, parent in zip(revisions, revisions[1:], strict=False):
         assert current.down_revision == parent.revision
+
+
+def test_m4_data_quality_migration_freezes_eight_tables_and_scope_constraints() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration_path = (
+        repository_root / "backend/app/alembic/versions/0014_m4_data_quality.py"
+    )
+    migration = migration_path.read_text(encoding="utf-8")
+
+    assert migration_path.stem == "0014_m4_data_quality"
+    assert "down_revision = '0013_m3_evidence_matrix'" in migration
+    tables = (
+        "datasets",
+        "dataset_versions",
+        "dataset_columns",
+        "data_quality_runs",
+        "data_quality_issues",
+        "cleaning_plans",
+        "cleaning_plan_actions",
+        "data_transformations",
+    )
+    assert migration.count("op.create_table(") == len(tables)
+    for table in tables:
+        assert f"op.create_table('{table}'" in migration
+    for constraint in (
+        "uq_dataset_versions_number",
+        "fk_datasets_current_version_scope",
+        "fk_dataset_versions_artifact_project",
+        "fk_dataset_versions_parent_scope",
+        "fk_dataset_versions_transformation_project",
+        "fk_data_transformations_output_project",
+    ):
+        assert constraint in migration
+    assert "CREATE TRIGGER" not in migration.upper()
 
 
 def test_m2_query_plan_migration_preserves_scope_and_job_contract() -> None:
@@ -254,3 +288,31 @@ def test_m2_document_migration_preserves_artifact_and_project_boundaries() -> No
     assert "uq_document_pages_document_number" in migration
     assert "uq_documents_artifact" in migration
     assert 'ondelete="RESTRICT"' in migration
+
+
+def test_m3_evidence_migration_preserves_scope_and_history_invariants() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration_path = (
+        repository_root / "backend/app/alembic/versions/0013_m3_evidence_matrix.py"
+    )
+    migration = migration_path.read_text(encoding="utf-8")
+
+    assert migration_path.stem == "0013_m3_evidence_matrix"
+    assert len(migration_path.stem) <= 32
+    assert 'down_revision = "0012_document_upload"' in migration
+    for table in (
+        "literature_extractions",
+        "literature_extraction_fields",
+        "literature_extraction_field_revisions",
+        "evidence_spans",
+        "evidence_span_verification_records",
+        "literature_decisions",
+        "evidence_set_summaries",
+        "topic_generation_runs",
+        "topic_candidates",
+        "topic_candidate_evidence",
+    ):
+        assert f'"{table}"' in migration
+    assert "m3_append_only_guard" in migration
+    assert "m3_topic_run_completion_guard" in migration
+    assert "TOPIC_GENERATE" in migration

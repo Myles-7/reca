@@ -11,6 +11,7 @@ import { invalidateDocumentMutation } from "../src/features/documents/mutations"
 import { documentKeys } from "../src/features/documents/queries"
 import type { DocumentEvent } from "../src/features/documents/ui/contracts"
 import { literatureKeys } from "../src/features/literature/queries"
+import { createDeferred } from "./utils/deferred"
 
 const meta = { request_id: "request-document", schema_version: "1.0" }
 
@@ -33,7 +34,7 @@ function project(overrides: Partial<ProjectPublic> = {}): ProjectPublic {
     lock_version: 1,
     created_at: "2026-08-01T00:00:00Z",
     updated_at: "2026-08-01T00:00:00Z",
-    permissions: { role: "OWNER", inherited: false },
+    permissions: { can_update: true, can_delete: true },
     allowed_actions: ["project.read", "job.read", "job.retry"],
     ...overrides,
   }
@@ -188,10 +189,7 @@ test("PDF upload navigates to the server Document without claiming parse success
   await authenticate(browserPage)
   await routeProject(browserPage)
   let currentId = "document-1"
-  let releaseUpload: (() => void) | null = null
-  const uploadReleased = new Promise<void>((resolve) => {
-    releaseUpload = resolve
-  })
+  const uploadRequest = createDeferred()
   await browserPage.route(
     "**/api/v1/projects/project-1/documents",
     async (route) => {
@@ -199,7 +197,7 @@ test("PDF upload navigates to the server Document without claiming parse success
       expect(route.request().headers()["content-type"]).toContain(
         "multipart/form-data",
       )
-      await uploadReleased
+      await uploadRequest.promise
       currentId = "document-2"
       return route.fulfill({
         status: 201,
@@ -219,7 +217,8 @@ test("PDF upload navigates to the server Document without claiming parse success
   )
   await browserPage.route("**/api/v1/documents/document-**", (route) => {
     const path = new URL(route.request().url()).pathname
-    const id = path.split("/").at(-1)!
+    const pathSegments = path.split("/")
+    const id = pathSegments[pathSegments.length - 1]!
     if (path.endsWith("/pages")) {
       return route.fulfill({ json: { data: [], meta } })
     }
@@ -245,7 +244,7 @@ test("PDF upload navigates to the server Document without claiming parse success
   await submit.click()
   await expect(submit).toBeDisabled()
   await expect(browserPage.getByText("草稿").first()).toBeVisible()
-  releaseUpload?.()
+  uploadRequest.resolve()
   await expect(browserPage).toHaveURL(/documents\/document-2$/)
   await expect(browserPage.getByText("草稿").first()).toBeVisible()
   await expect(browserPage.getByText("record-1", { exact: true })).toBeVisible()
@@ -258,10 +257,7 @@ test("Parse remains queued and running until refreshed GROBID completion and pag
   await authenticate(browserPage)
   await routeProject(browserPage)
   let status: DocumentPublic["parse_status"] = "DRAFT"
-  let releaseParse: (() => void) | null = null
-  const parseReleased = new Promise<void>((resolve) => {
-    releaseParse = resolve
-  })
+  const parseRequest = createDeferred()
   await browserPage.route("**/api/v1/documents/document-1**", async (route) => {
     const request = route.request()
     const path = new URL(request.url()).pathname
@@ -271,7 +267,7 @@ test("Parse remains queued and running until refreshed GROBID completion and pag
         allow_fallback: true,
         extract_coordinates: true,
       })
-      await parseReleased
+      await parseRequest.promise
       status = "QUEUED"
       return route.fulfill({
         status: 202,
@@ -345,7 +341,7 @@ test("Parse remains queued and running until refreshed GROBID completion and pag
   await expect(parse).toBeDisabled()
   await expect(parse).toContainText("正在提交")
   await expect(browserPage.getByText("草稿").first()).toBeVisible()
-  releaseParse?.()
+  parseRequest.resolve()
   await expect(browserPage).toHaveURL(/jobId=job-1/)
   await expect(browserPage.getByText("等待解析").first()).toBeVisible()
 

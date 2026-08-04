@@ -31,6 +31,8 @@ class ObjectStorage(Protocol):
 
     def download_to_path(self, *, object_key: str, path: Path) -> None: ...
 
+    def delete_object(self, *, object_key: str) -> None: ...
+
     def presign_download(self, *, object_key: str, expires_seconds: int) -> str: ...
 
 
@@ -179,6 +181,24 @@ class S3ObjectStorage:
             raise
         except (OSError, httpx.HTTPError) as error:
             raise StorageError("Object storage read failed.") from error
+
+    def delete_object(self, *, object_key: str) -> None:
+        uri = self._canonical_uri(object_key)
+        empty_hash = hashlib.sha256(b"").hexdigest()
+        try:
+            with httpx.Client(timeout=self.timeout, trust_env=False) as client:
+                response = client.delete(
+                    self.endpoint + uri,
+                    headers=self._signed_headers(
+                        method="DELETE",
+                        canonical_uri=uri,
+                        payload_hash=empty_hash,
+                    ),
+                )
+        except (OSError, httpx.HTTPError) as error:
+            raise StorageError("Object storage delete failed.") from error
+        if response.status_code not in {200, 204, 404}:
+            raise StorageError("Object storage delete failed.")
 
     def presign_download(self, *, object_key: str, expires_seconds: int) -> str:
         now = dt.datetime.now(dt.UTC)

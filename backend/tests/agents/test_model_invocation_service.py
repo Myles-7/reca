@@ -169,6 +169,49 @@ def test_recorded_invocation_is_offline_and_explicitly_labeled(db: Session) -> N
     assert completed.status == ModelInvocationStatus.SUCCEEDED
 
 
+def test_caller_owned_invocation_rolls_back_with_parent_transaction(
+    db: Session,
+) -> None:
+    owner, project = create_project(db)
+    invocation = service.create_model_invocation(
+        db,
+        command=command(owner=owner, project=project),
+        commit=False,
+    )
+    invocation_id = invocation.id
+
+    db.rollback()
+
+    assert db.get(ModelInvocation, invocation_id) is None
+    assert not db.exec(
+        select(AuditLog).where(AuditLog.model_invocation_id == invocation_id)
+    ).all()
+
+
+def test_live_invocation_requires_and_persists_provider_identity(db: Session) -> None:
+    owner, project = create_project(db)
+    live = replace(
+        command(owner=owner, project=project),
+        mode=ModelExecutionMode.LIVE,
+        fixture_id=None,
+        provider="openai-compatible",
+        model="reca-structured-model",
+    )
+    invocation = service.create_model_invocation(db, command=live)
+    assert invocation.provider == "openai-compatible"
+    assert invocation.model == "reca-structured-model"
+    assert invocation.implementation_metadata == {
+        "mode": "LIVE",
+        "network_access": "ENABLED",
+    }
+
+    with pytest.raises(ModelGovernanceError) as captured:
+        service.create_model_invocation(
+            db, command=replace(live, provider=None, model=None)
+        )
+    assert captured.value.code == "MODEL_PROVIDER_INVALID"
+
+
 def test_prompt_hash_schema_and_access_escalation_are_rejected(db: Session) -> None:
     owner, project = create_project(db)
     base = command(owner=owner, project=project)

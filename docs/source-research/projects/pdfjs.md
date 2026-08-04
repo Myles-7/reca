@@ -133,8 +133,12 @@ requests, denied project access and stale DocumentVersion highlights.
 
 ## RECA current state
 
-PDF viewing and EvidenceSpan interaction are planned for M2/M3. PDF.js is not a
-current dependency and this research did not add it.
+M3 Stage 6 adopts `pdfjs-dist` 6.2.108 as a direct frontend dependency after the
+Vite 8.1.5 compatibility spike. The production boundary loads the matching
+`pdf.worker.min.mjs` package asset and consumes only backend-authorized URLs.
+When PDF bytes, worker startup or trusted coordinates are unavailable, RECA
+falls back to server page text and page-number/context display without drawing
+synthetic rectangles or changing EvidenceSpan verification state.
 
 ## Recommended integration mode
 

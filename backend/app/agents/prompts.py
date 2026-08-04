@@ -33,6 +33,7 @@ class PromptContract:
     output_schema: SchemaIdentity
     allowed_tools: tuple[str, ...]
     required_source_types: tuple[str, ...]
+    optional_source_types: tuple[str, ...]
     max_tool_calls: int
     failure_behavior: str
     requested_data_access_level: str
@@ -121,6 +122,9 @@ def load_prompt_manifest(
             allowed_tools=_string_tuple(entry.get("allowed_tools"), "allowed_tools"),
             required_source_types=_string_tuple(
                 entry.get("required_source_types"), "required_source_types"
+            ),
+            optional_source_types=_string_tuple(
+                entry.get("optional_source_types", []), "optional_source_types"
             ),
             max_tool_calls=max_tool_calls,
             failure_behavior=_required_string(

@@ -1,0 +1,54 @@
+.m3-literature-page {
+  min-width: 0;
+  overflow: clip;
+  background: var(--reca-canvas);
+}
+.m3-literature-tabs {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 18px;
+  border-bottom: 1px solid var(--reca-border);
+  background: var(--reca-surface);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.m3-literature-tabs button {
+  flex: none;
+  min-width: 104px;
+}
+.m3-literature-tabs button[aria-selected="true"] {
+  box-shadow: 0 1px 0 color-mix(in oklch, var(--reca-primary) 36%, transparent);
+}
+.m3-literature-tabs button:focus-visible {
+  outline: 2px solid var(--reca-focus-ring, var(--ring));
+  outline-offset: 2px;
+}
+.m3-route-limit {
+  display: flex;
+  gap: 8px;
+  align-items: start;
+  margin: 0;
+  padding: 12px 18px;
+  color: var(--reca-warning);
+  border-top: 1px solid var(--reca-border);
+  overflow-wrap: anywhere;
+}
+.m3-route-limit svg {
+  flex: none;
+  width: 16px;
+}
+@media (max-width: 520px) {
+  .m3-literature-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-inline: 8px;
+    overflow: visible;
+  }
+  .m3-literature-tabs button {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 8px;
+  }
+}

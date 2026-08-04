@@ -82,6 +82,7 @@ class Settings(BaseSettings):
     # Optional external providers
     MODEL_BASE_URL: AnyHttpUrl | None = None
     MODEL_API_KEY: SecretStr | None = None
+    MODEL_NAME: str | None = None
     OPENALEX_API_URL: AnyHttpUrl = AnyHttpUrl("https://api.openalex.org")
     OPENALEX_API_KEY: SecretStr | None = None
     OPENALEX_CONTACT_EMAIL: EmailStr | None = None
@@ -150,6 +151,14 @@ class Settings(BaseSettings):
             if "*" in self.BACKEND_CORS_ORIGINS:
                 raise ValueError("production CORS cannot use wildcard origins")
 
+        model_fields = (self.MODEL_BASE_URL, self.MODEL_API_KEY, self.MODEL_NAME)
+        if any(value is not None for value in model_fields) and not all(
+            value is not None for value in model_fields
+        ):
+            raise ValueError(
+                "MODEL_BASE_URL, MODEL_API_KEY, and MODEL_NAME must be configured together"
+            )
+
         return self
 
     @cached_property
@@ -187,7 +196,11 @@ class Settings(BaseSettings):
 
     @property
     def model_status(self) -> ProviderConfigurationStatus:
-        return "CONFIGURED" if self.MODEL_API_KEY else "UNCONFIGURED"
+        return (
+            "CONFIGURED"
+            if self.MODEL_BASE_URL and self.MODEL_API_KEY and self.MODEL_NAME
+            else "UNCONFIGURED"
+        )
 
     @property
     def openalex_status(self) -> ProviderConfigurationStatus:

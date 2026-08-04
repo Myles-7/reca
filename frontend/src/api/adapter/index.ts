@@ -9,11 +9,49 @@ import {
   artifactsCompleteArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploadsUploadIdComplete,
   artifactsInitiateArtifactUploadPostApiV1ProjectsProjectIdArtifactsUploads,
   artifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifacts,
+  dataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparison,
+  dataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlans,
+  dataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecute,
+  dataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanId,
+  dataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationId,
+  dataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreview,
+  dataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequests,
+  dataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanId,
+  dataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledge,
+  dataQualityGetQualityRunGetApiV1DataQualityRunsRunId,
+  dataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnore,
+  dataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssues,
+  dataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRuns,
+  datasetsGetDatasetGetApiV1DatasetsDatasetId,
+  datasetsGetDatasetVersionGetApiV1DatasetVersionsVersionId,
+  datasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheets,
+  datasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumns,
+  datasetsListDatasetsGetApiV1ProjectsProjectIdDatasets,
+  datasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersions,
+  datasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreview,
+  datasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelection,
+  datasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnId,
+  datasetsUpdateDatasetPatchApiV1DatasetsDatasetId,
+  datasetsUploadDatasetPostApiV1ProjectsProjectIdDatasets,
   documentsGetDocumentGetApiV1DocumentsDocumentId,
   documentsGetDocumentPageGetApiV1DocumentsDocumentIdPagesPageNumber,
   documentsListDocumentPagesGetApiV1DocumentsDocumentIdPages,
   documentsParseDocumentPostApiV1DocumentsDocumentIdParse,
   documentsUploadDocumentPostApiV1ProjectsProjectIdDocuments,
+  evidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummaries,
+  evidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpans,
+  evidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecords,
+  evidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisions,
+  evidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractions,
+  evidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRuns,
+  evidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryId,
+  evidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanId,
+  evidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionId,
+  evidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrix,
+  evidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunId,
+  evidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisions,
+  evidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearch,
+  evidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldId,
   healthDependenciesHealthGetApiV1HealthDependencies,
   healthLiveHealthGetApiV1HealthLive,
   healthReadyHealthGetApiV1HealthReady,
@@ -90,12 +128,31 @@ export type {
   DocumentPublic,
   DocumentType,
   DocumentUploadEnvelope,
+  EvidenceCandidateDto,
+  EvidenceSearchEnvelope,
+  EvidenceSearchRequest,
+  EvidenceSetSummaryCreate,
+  EvidenceSetSummaryEnvelope,
+  EvidenceSetSummaryPublic,
+  EvidenceSpanPublic,
+  EvidenceSpanVerificationCreate,
+  FieldConfirmationStatus,
+  FieldEvidenceStatus,
   JobListEnvelope,
   JobPublic,
   LiteratureCandidatePublic,
+  LiteratureDecisionCreate,
+  LiteratureDecisionStatus,
   LiteratureDoiImportRequest,
+  LiteratureExtractionFieldCorrection,
+  LiteratureExtractionFieldPublic,
+  LiteratureExtractionPublic,
+  LiteratureFieldCode,
   LiteratureImportEnvelope,
   LiteratureImportRequest,
+  LiteratureMatrixEnvelope,
+  LiteratureMatrixField,
+  LiteratureMatrixRow,
   LiteratureRecordEnvelope,
   LiteratureRecordListEnvelope,
   LiteratureRecordPublic,
@@ -128,6 +185,7 @@ export type {
   ResearchQuestionVersionCreate,
   ResearchQuestionVersionPublic,
   Token,
+  TopicGenerationCreate,
   UpdatePassword,
   UserCreate,
   UserPublic,
@@ -271,6 +329,251 @@ async function unwrapVoid(
 }
 
 export type PageQuery = { page?: number; page_size?: number }
+
+export type DataEnvelope<T> = {
+  data: T
+  meta?: Record<string, unknown>
+}
+
+export type DatasetDto = {
+  id: string
+  project_id: string
+  name: string
+  description: string | null
+  source_type: string
+  publisher: string | null
+  source_platform: string | null
+  source_identifier: string | null
+  doi: string | null
+  acquired_at: string | null
+  license_name: string | null
+  license_status: string
+  license_warning: string | null
+  recommended_citation: string | null
+  known_limitations: readonly string[] | null
+  current_version_id: string | null
+  status: string
+  lock_version: number
+  permissions?: {
+    can_update?: boolean
+    can_upload?: boolean
+    can_confirm_columns?: boolean
+  }
+  created_at: string
+  updated_at: string
+}
+
+export type WorksheetDto = {
+  name: string
+  ordinal: number
+  visibility: string
+  estimated_rows: number
+  estimated_columns: number
+  warnings?: readonly string[]
+}
+
+export type DatasetVersionDto = {
+  id: string
+  project_id: string
+  dataset_id: string
+  version_number: number
+  parent_version_id: string | null
+  artifact_id: string
+  version_type: string
+  row_count: number | null
+  column_count: number | null
+  file_format: string
+  worksheet_manifest: readonly WorksheetDto[] | null
+  selected_worksheet_name: string | null
+  projection_hash: string | null
+  schema_hash: string | null
+  data_hash: string
+  transformation_id: string | null
+  status: string
+  created_at: string
+  invalidated_at: string | null
+  invalidation_reason: string | null
+}
+
+export type DatasetColumnDto = {
+  id: string
+  project_id: string
+  dataset_version_id: string
+  source_name: string
+  display_name: string | null
+  column_order: number
+  inferred_type: string
+  confirmed_type: string | null
+  semantic_role: string | null
+  unit: string | null
+  description: string | null
+  missing_codes: readonly string[] | null
+  category_mapping: Record<string, unknown> | null
+  is_identifier: boolean
+  is_sensitive: boolean
+  confirmation_status: string
+  unique_count: number | null
+  missing_ratio: number | null
+  example_values: readonly unknown[] | null
+  inherited_from_column_id: string | null
+  lock_version: number
+  created_at: string
+  updated_at: string
+}
+
+export type DatasetPreviewDto = {
+  version_id: string
+  offset: number
+  limit: number
+  columns: readonly string[]
+  rows: readonly Record<string, unknown>[]
+  returned: number
+  total_rows: number | null
+  truncated: boolean
+}
+
+export type DataQualityRunDto = {
+  id: string
+  project_id: string
+  dataset_version_id: string
+  ruleset_id: string
+  ruleset_version: string
+  ruleset_hash: string
+  selected_rule_ids: readonly string[]
+  include_sensitive_field_detection: boolean
+  status: string
+  issue_count: number
+  high_issue_count: number
+  processing_run_id: string | null
+  job_id: string | null
+  started_at: string | null
+  completed_at: string | null
+  error_code: string | null
+  created_at: string
+  allowed_actions?: readonly string[]
+}
+
+export type DataQualityIssueDto = {
+  id: string
+  project_id: string
+  data_quality_run_id: string
+  dataset_version_id: string
+  rule_code: string
+  issue_type: string
+  severity: string
+  column_id: string | null
+  affected_row_count: number | null
+  affected_rows: readonly unknown[] | null
+  evidence: Record<string, unknown>
+  description: string
+  suggested_actions: readonly Record<string, unknown>[] | null
+  requires_approval: boolean
+  status: string
+  created_at: string
+  resolved_at: string | null
+  allowed_actions?: readonly string[]
+}
+
+export type CleaningPlanDto = {
+  id: string
+  project_id: string
+  dataset_version_id: string
+  title: string
+  rationale: string | null
+  status: string
+  actions: readonly Record<string, unknown>[]
+  preview_summary: Record<string, unknown> | null
+  preview_hash: string | null
+  affected_row_count: number | null
+  affected_column_count: number | null
+  source_model_invocation_id: string | null
+  approval_record_id: string | null
+  payload_hash: string | null
+  lock_version: number
+  transformation_id: string | null
+  job_id: string | null
+  created_at: string
+  updated_at: string
+  allowed_actions?: readonly string[]
+}
+
+export type DataTransformationDto = {
+  id: string
+  project_id: string
+  cleaning_plan_id: string
+  approval_record_id: string
+  source_dataset_version_id: string
+  target_dataset_version_id: string | null
+  status: string
+  action_count: number
+  affected_row_count: number | null
+  affected_column_count: number | null
+  parameters_hash: string
+  output_artifact_id: string | null
+  log_artifact_id: string | null
+  processing_run_id: string | null
+  started_at: string | null
+  completed_at: string | null
+  error_code: string | null
+  created_at: string
+}
+
+export type VersionComparisonDto = {
+  dataset_id: string
+  base_version_id: string
+  target_version_id: string
+  row_count: { before: number | null; after: number | null; delta: number }
+  column_count: { before: number | null; after: number | null; delta: number }
+  missing_cells: { before: number; after: number }
+  actions: readonly Record<string, unknown>[]
+  affected_row_count: number | null
+  affected_column_count: number | null
+  lineage: {
+    parent_version_id: string | null
+    transformation_id: string | null
+    output_artifact_id: string | null
+  }
+}
+
+export type QualityIssuesEnvelope = DataEnvelope<
+  readonly DataQualityIssueDto[]
+> & {
+  pagination: { page: number; page_size: number; total: number; pages: number }
+}
+
+function contractEnvelope<T>(value: unknown, label: string): DataEnvelope<T> {
+  const root = objectValue(value)
+  if (!root || !("data" in root)) {
+    throw new ApiError(
+      0,
+      "UNKNOWN",
+      `${label} did not match the frontend contract.`,
+      "FRONTEND_CONTRACT_MISMATCH",
+    )
+  }
+  return root as DataEnvelope<T>
+}
+
+function contractQualityIssues(value: unknown): QualityIssuesEnvelope {
+  const envelope = contractEnvelope<readonly DataQualityIssueDto[]>(
+    value,
+    "Quality issues response",
+  )
+  const root = objectValue(value)
+  const pagination = objectValue(root?.pagination)
+  if (!pagination) {
+    throw new ApiError(
+      0,
+      "UNKNOWN",
+      "Quality issues pagination was unavailable.",
+      "FRONTEND_CONTRACT_MISMATCH",
+    )
+  }
+  return {
+    ...envelope,
+    pagination: pagination as QualityIssuesEnvelope["pagination"],
+  }
+}
 
 export class ProjectsApi {
   static list = (query: PageQuery & { q?: string } = {}) =>
@@ -520,6 +823,163 @@ export class LiteratureApi {
     )
 }
 
+export type LiteratureMatrixQuery = {
+  included_only?: boolean
+  field_codes?: import("../generated/types.gen").LiteratureFieldCode[] | null
+  page?: number
+  page_size?: number
+  sort?: import("../generated/types.gen").MatrixSort
+  order?: import("../generated/types.gen").SortOrder
+}
+
+export class EvidenceApi {
+  static matrix = (projectId: string, query: LiteratureMatrixQuery = {}) =>
+    unwrap(
+      evidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrix({
+        path: { project_id: projectId },
+        query,
+      }),
+    )
+  static extraction = (extractionId: string) =>
+    unwrap(
+      evidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionId({
+        path: { extraction_id: extractionId },
+      }),
+    )
+  static createExtraction = (
+    documentId: string,
+    body: import("../generated/types.gen").LiteratureExtractionCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceCreateLiteratureExtractionPostApiV1DocumentsDocumentIdLiteratureExtractions(
+        {
+          path: { document_id: documentId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static correctField = (
+    fieldId: string,
+    lockVersion: number,
+    body: import("../generated/types.gen").LiteratureExtractionFieldCorrection,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldId(
+        {
+          path: { field_id: fieldId },
+          headers: {
+            "If-Match": `"${lockVersion}"`,
+            "Idempotency-Key": idempotencyKey,
+          },
+          body,
+        },
+      ),
+    )
+  static span = (evidenceSpanId: string) =>
+    unwrap(
+      evidenceGetEvidenceSpanGetApiV1EvidenceSpansEvidenceSpanId({
+        path: { evidence_span_id: evidenceSpanId },
+      }),
+    )
+  static createSpan = (
+    documentId: string,
+    body: import("../generated/types.gen").ManualEvidenceSpanCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceCreateEvidenceSpanPostApiV1DocumentsDocumentIdEvidenceSpans({
+        path: { document_id: documentId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static verifySpan = (
+    evidenceSpanId: string,
+    body: import("../generated/types.gen").EvidenceSpanVerificationCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceCreateEvidenceSpanVerificationPostApiV1EvidenceSpansEvidenceSpanIdVerificationRecords(
+        {
+          path: { evidence_span_id: evidenceSpanId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static decisions = (literatureId: string) =>
+    unwrap(
+      evidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisions({
+        path: { literature_id: literatureId },
+      }),
+    )
+  static decide = (
+    literatureId: string,
+    body: import("../generated/types.gen").LiteratureDecisionCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceCreateLiteratureDecisionPostApiV1LiteratureLiteratureIdDecisions({
+        path: { literature_id: literatureId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static search = (
+    projectId: string,
+    body: import("../generated/types.gen").EvidenceSearchRequest,
+  ) =>
+    unwrap(
+      evidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearch({
+        path: { project_id: projectId },
+        body,
+      }),
+    )
+  static createSummary = (
+    projectId: string,
+    body: import("../generated/types.gen").EvidenceSetSummaryCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceCreateEvidenceSetSummaryPostApiV1ProjectsProjectIdEvidenceSetSummaries(
+        {
+          path: { project_id: projectId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static summary = (summaryId: string) =>
+    unwrap(
+      evidenceGetEvidenceSetSummaryGetApiV1EvidenceSetSummariesSummaryId({
+        path: { summary_id: summaryId },
+      }),
+    )
+  static generateTopics = (
+    projectId: string,
+    body: import("../generated/types.gen").TopicGenerationCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceCreateTopicGenerationRunPostApiV1ProjectsProjectIdTopicGenerationRuns(
+        {
+          path: { project_id: projectId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+  static topicRun = (runId: string) =>
+    unwrap(
+      evidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunId({
+        path: { run_id: runId },
+      }),
+    )
+}
+
 export class DocumentsApi {
   static upload = (
     projectId: string,
@@ -670,6 +1130,375 @@ export class ArtifactsApi {
       artifactsAuthorizeArtifactDownloadGetApiV1ArtifactsArtifactIdDownload({
         path: { artifact_id: artifactId },
       }),
+    )
+}
+
+export class DatasetsApi {
+  static list = async (projectId: string) =>
+    contractEnvelope<readonly DatasetDto[]>(
+      await unwrap(
+        datasetsListDatasetsGetApiV1ProjectsProjectIdDatasets({
+          path: { project_id: projectId },
+        }),
+      ),
+      "Dataset list response",
+    )
+
+  static upload = async (
+    projectId: string,
+    input: {
+      file: File
+      name: string
+      sourceType?: import("../generated/types.gen").DatasetSourceType
+      publisher?: string | null
+      sourcePlatform?: string | null
+      sourceIdentifier?: string | null
+      licenseName?: string | null
+      licenseStatus?: import("../generated/types.gen").DatasetLicenseStatus
+    },
+    idempotencyKey: string,
+  ) =>
+    contractEnvelope<{ dataset: DatasetDto; version: DatasetVersionDto }>(
+      await unwrap(
+        datasetsUploadDatasetPostApiV1ProjectsProjectIdDatasets({
+          path: { project_id: projectId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body: {
+            file: input.file,
+            name: input.name,
+            source_type: input.sourceType ?? "USER_UPLOAD",
+            publisher: input.publisher,
+            source_platform: input.sourcePlatform,
+            source_identifier: input.sourceIdentifier,
+            license_name: input.licenseName,
+            license_status: input.licenseStatus ?? "UNKNOWN",
+          },
+        }),
+      ),
+      "Dataset upload response",
+    )
+
+  static get = async (datasetId: string) =>
+    contractEnvelope<DatasetDto>(
+      await unwrap(
+        datasetsGetDatasetGetApiV1DatasetsDatasetId({
+          path: { dataset_id: datasetId },
+        }),
+      ),
+      "Dataset response",
+    )
+
+  static update = async (
+    datasetId: string,
+    body: import("../generated/types.gen").DatasetUpdate,
+    lockVersion: number,
+  ) =>
+    contractEnvelope<DatasetDto>(
+      await unwrap(
+        datasetsUpdateDatasetPatchApiV1DatasetsDatasetId({
+          path: { dataset_id: datasetId },
+          headers: { "If-Match": String(lockVersion) },
+          body,
+        }),
+      ),
+      "Dataset update response",
+    )
+
+  static version = async (versionId: string) =>
+    contractEnvelope<DatasetVersionDto>(
+      await unwrap(
+        datasetsGetDatasetVersionGetApiV1DatasetVersionsVersionId({
+          path: { version_id: versionId },
+        }),
+      ),
+      "Dataset version response",
+    )
+
+  static versions = async (datasetId: string) =>
+    contractEnvelope<readonly DatasetVersionDto[]>(
+      await unwrap(
+        datasetsListDatasetVersionsGetApiV1DatasetsDatasetIdVersions({
+          path: { dataset_id: datasetId },
+        }),
+      ),
+      "Dataset version history response",
+    )
+
+  static worksheets = async (versionId: string) =>
+    contractEnvelope<{
+      version_id: string
+      selected_worksheet_name: string | null
+      worksheets: readonly WorksheetDto[]
+    }>(
+      await unwrap(
+        datasetsGetWorksheetsGetApiV1DatasetVersionsVersionIdWorksheets({
+          path: { version_id: versionId },
+        }),
+      ),
+      "Worksheet response",
+    )
+
+  static selectWorksheet = async (
+    versionId: string,
+    body: import("../generated/types.gen").WorksheetSelection,
+    idempotencyKey: string,
+  ) =>
+    contractEnvelope<DatasetVersionDto>(
+      await unwrap(
+        datasetsSelectWorksheetPostApiV1DatasetVersionsVersionIdWorksheetSelection(
+          {
+            path: { version_id: versionId },
+            headers: { "Idempotency-Key": idempotencyKey },
+            body,
+          },
+        ),
+      ),
+      "Worksheet selection response",
+    )
+
+  static preview = async (
+    versionId: string,
+    query: { offset?: number; limit?: number; columns?: string[] } = {},
+  ) =>
+    contractEnvelope<DatasetPreviewDto>(
+      await unwrap(
+        datasetsPreviewDatasetVersionGetApiV1DatasetVersionsVersionIdPreview({
+          path: { version_id: versionId },
+          query,
+        }),
+      ),
+      "Dataset preview response",
+    )
+
+  static columns = async (versionId: string) =>
+    contractEnvelope<readonly DatasetColumnDto[]>(
+      await unwrap(
+        datasetsListDatasetColumnsGetApiV1DatasetVersionsVersionIdColumns({
+          path: { version_id: versionId },
+        }),
+      ),
+      "Dataset columns response",
+    )
+
+  static updateColumn = async (
+    columnId: string,
+    body: import("../generated/types.gen").DatasetColumnUpdate,
+    lockVersion: number,
+  ) =>
+    contractEnvelope<DatasetColumnDto>(
+      await unwrap(
+        datasetsUpdateDatasetColumnPatchApiV1DatasetColumnsColumnId({
+          path: { column_id: columnId },
+          headers: { "If-Match": String(lockVersion) },
+          body,
+        }),
+      ),
+      "Dataset column update response",
+    )
+}
+
+export class DataQualityApi {
+  static run = async (
+    versionId: string,
+    body: import("../generated/types.gen").QualityRunCreate,
+    idempotencyKey: string,
+  ) =>
+    contractEnvelope<{
+      run: DataQualityRunDto
+      job: import("../generated/types.gen").JobPublic
+    }>(
+      await unwrap(
+        dataQualityRequestQualityRunPostApiV1DatasetVersionsVersionIdQualityRuns(
+          {
+            path: { version_id: versionId },
+            headers: { "Idempotency-Key": idempotencyKey },
+            body,
+          },
+        ),
+      ),
+      "Quality run response",
+    )
+
+  static get = async (runId: string) =>
+    contractEnvelope<DataQualityRunDto>(
+      await unwrap(
+        dataQualityGetQualityRunGetApiV1DataQualityRunsRunId({
+          path: { run_id: runId },
+        }),
+      ),
+      "Quality run response",
+    )
+
+  static issues = async (
+    runId: string,
+    query: {
+      severity?: import("../generated/types.gen").DataQualitySeverity
+      issue_type?: import("../generated/types.gen").DataQualityIssueType
+      status?: import("../generated/types.gen").DataQualityIssueStatus
+      column_id?: string
+      page?: number
+      page_size?: number
+    } = {},
+  ) =>
+    contractQualityIssues(
+      await unwrap(
+        dataQualityListQualityIssuesGetApiV1DataQualityRunsRunIdIssues({
+          path: { run_id: runId },
+          query,
+        }),
+      ),
+    )
+
+  static acknowledge = async (issueId: string, idempotencyKey: string) =>
+    contractEnvelope<DataQualityIssueDto>(
+      await unwrap(
+        dataQualityAcknowledgeQualityIssuePostApiV1DataQualityIssuesIssueIdAcknowledge(
+          {
+            path: { issue_id: issueId },
+            headers: { "Idempotency-Key": idempotencyKey },
+            body: {},
+          },
+        ),
+      ),
+      "Quality issue acknowledgement response",
+    )
+
+  static ignore = async (
+    issueId: string,
+    reason: string,
+    idempotencyKey: string,
+  ) =>
+    contractEnvelope<DataQualityIssueDto>(
+      await unwrap(
+        dataQualityIgnoreQualityIssuePostApiV1DataQualityIssuesIssueIdIgnore({
+          path: { issue_id: issueId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body: { reason },
+        }),
+      ),
+      "Quality issue ignore response",
+    )
+}
+
+export class DataCleaningApi {
+  static create = async (
+    versionId: string,
+    body: import("../generated/types.gen").CleaningPlanCreate,
+    idempotencyKey: string,
+  ) =>
+    contractEnvelope<CleaningPlanDto>(
+      await unwrap(
+        dataCleaningCreateCleaningPlanPostApiV1DatasetVersionsVersionIdCleaningPlans(
+          {
+            path: { version_id: versionId },
+            headers: { "Idempotency-Key": idempotencyKey },
+            body,
+          },
+        ),
+      ),
+      "Cleaning plan response",
+    )
+
+  static get = async (planId: string) =>
+    contractEnvelope<CleaningPlanDto>(
+      await unwrap(
+        dataCleaningGetCleaningPlanGetApiV1CleaningPlansPlanId({
+          path: { plan_id: planId },
+        }),
+      ),
+      "Cleaning plan response",
+    )
+
+  static transformation = async (transformationId: string) =>
+    contractEnvelope<DataTransformationDto>(
+      await unwrap(
+        dataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationId(
+          {
+            path: { transformation_id: transformationId },
+          },
+        ),
+      ),
+      "Data transformation response",
+    )
+
+  static update = async (
+    planId: string,
+    body: import("../generated/types.gen").CleaningPlanUpdate,
+    lockVersion: number,
+  ) =>
+    contractEnvelope<CleaningPlanDto>(
+      await unwrap(
+        dataCleaningUpdateCleaningPlanPatchApiV1CleaningPlansPlanId({
+          path: { plan_id: planId },
+          headers: { "If-Match": String(lockVersion) },
+          body,
+        }),
+      ),
+      "Cleaning plan update response",
+    )
+
+  static preview = async (planId: string, idempotencyKey: string) =>
+    contractEnvelope<CleaningPlanDto>(
+      await unwrap(
+        dataCleaningPreviewCleaningPlanPostApiV1CleaningPlansPlanIdPreview({
+          path: { plan_id: planId },
+          headers: { "Idempotency-Key": idempotencyKey },
+        }),
+      ),
+      "Cleaning plan preview response",
+    )
+
+  static requestApproval = async (planId: string, idempotencyKey: string) =>
+    contractEnvelope<{
+      approval_id: string
+      cleaning_plan_id: string
+      status: string
+      payload_hash: string
+      expires_at: string
+    }>(
+      await unwrap(
+        dataCleaningRequestCleaningPlanApprovalPostApiV1CleaningPlansPlanIdApprovalRequests(
+          {
+            path: { plan_id: planId },
+            headers: { "Idempotency-Key": idempotencyKey },
+          },
+        ),
+      ),
+      "Cleaning plan approval response",
+    )
+
+  static execute = async (planId: string, idempotencyKey: string) =>
+    contractEnvelope<{
+      transformation: DataTransformationDto
+      job: import("../generated/types.gen").JobPublic
+    }>(
+      await unwrap(
+        dataCleaningExecuteCleaningPlanPostApiV1CleaningPlansPlanIdExecute({
+          path: { plan_id: planId },
+          headers: { "Idempotency-Key": idempotencyKey },
+        }),
+      ),
+      "Cleaning plan execution response",
+    )
+
+  static compare = async (
+    datasetId: string,
+    baseVersionId: string,
+    targetVersionId: string,
+  ) =>
+    contractEnvelope<VersionComparisonDto>(
+      await unwrap(
+        dataCleaningCompareDatasetVersionsGetApiV1DatasetsDatasetIdVersionComparison(
+          {
+            path: { dataset_id: datasetId },
+            query: {
+              base_version_id: baseVersionId,
+              target_version_id: targetVersionId,
+            },
+          },
+        ),
+      ),
+      "Dataset version comparison response",
     )
 }
 

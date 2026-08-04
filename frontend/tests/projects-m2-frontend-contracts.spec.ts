@@ -354,7 +354,7 @@ test("adapter preserves optimistic concurrency and idempotency headers", async (
   client.setConfig({
     baseUrl: "https://api.test",
     fetch: async (request) => {
-      requests.push(request)
+      requests.push(request instanceof Request ? request : new Request(request))
       return new Response(
         JSON.stringify({ data: {}, meta: { request_id: "test" } }),
         {
