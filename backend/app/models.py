@@ -559,6 +559,149 @@ class DataTransformationStatus(StrEnum):
     CANCELLED = "CANCELLED"
 
 
+class AnalysisGoal(StrEnum):
+    DESCRIBE = "DESCRIBE"
+    CORRELATION = "CORRELATION"
+    COMPARE_GROUPS = "COMPARE_GROUPS"
+    MODEL = "MODEL"
+
+
+class AnalysisMethod(StrEnum):
+    DESCRIPTIVE_STATISTICS = "DESCRIPTIVE_STATISTICS"
+    PEARSON_CORRELATION = "PEARSON_CORRELATION"
+    SPEARMAN_CORRELATION = "SPEARMAN_CORRELATION"
+    INDEPENDENT_TWO_GROUP = "INDEPENDENT_TWO_GROUP"
+    PAIRED_TWO_GROUP = "PAIRED_TWO_GROUP"
+    SIMPLE_LINEAR_REGRESSION = "SIMPLE_LINEAR_REGRESSION"
+
+
+class MissingDataMode(StrEnum):
+    COMPLETE_CASE = "COMPLETE_CASE"
+    PAIRWISE_COMPLETE = "PAIRWISE_COMPLETE"
+
+
+class AssumptionCheckCode(StrEnum):
+    DATA_TYPE = "DATA_TYPE"
+    SAMPLE_SIZE = "SAMPLE_SIZE"
+    MISSINGNESS = "MISSINGNESS"
+    CONSTANT = "CONSTANT"
+    LINEARITY = "LINEARITY"
+    OUTLIER_INFLUENCE = "OUTLIER_INFLUENCE"
+    NORMALITY = "NORMALITY"
+    VARIANCE_HOMOGENEITY = "VARIANCE_HOMOGENEITY"
+    PAIRING_VALIDITY = "PAIRING_VALIDITY"
+    RESIDUAL_DIAGNOSTIC = "RESIDUAL_DIAGNOSTIC"
+
+
+class AssumptionCheckStatus(StrEnum):
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+    WARNING = "WARNING"
+    NOT_APPLICABLE = "NOT_APPLICABLE"
+    REQUIRES_USER_CONFIRMATION = "REQUIRES_USER_CONFIRMATION"
+    UNKNOWN = "UNKNOWN"
+
+
+class AnalysisPlanStatus(StrEnum):
+    DRAFT = "DRAFT"
+    VALIDATING = "VALIDATING"
+    NEEDS_INPUT = "NEEDS_INPUT"
+    READY = "READY"
+    NEEDS_APPROVAL = "NEEDS_APPROVAL"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    INVALIDATED = "INVALIDATED"
+
+
+class AnalysisRunStatus(StrEnum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCEL_REQUESTED = "CANCEL_REQUESTED"
+    CANCELLED = "CANCELLED"
+    INVALIDATED = "INVALIDATED"
+
+
+class AnalysisResultType(StrEnum):
+    DESCRIPTIVE_NUMERIC = "DESCRIPTIVE_NUMERIC"
+    DESCRIPTIVE_CATEGORICAL = "DESCRIPTIVE_CATEGORICAL"
+    CORRELATION = "CORRELATION"
+    GROUP_COMPARISON = "GROUP_COMPARISON"
+    REGRESSION = "REGRESSION"
+    DIAGNOSTIC = "DIAGNOSTIC"
+
+
+class AlternativeHypothesis(StrEnum):
+    TWO_SIDED = "TWO_SIDED"
+    LESS = "LESS"
+    GREATER = "GREATER"
+
+
+class VarianceMode(StrEnum):
+    EQUAL = "EQUAL"
+    WELCH = "WELCH"
+
+
+class FigureChartType(StrEnum):
+    SCATTER = "SCATTER"
+    GROUP_COMPARISON = "GROUP_COMPARISON"
+    HISTOGRAM = "HISTOGRAM"
+    BOXPLOT = "BOXPLOT"
+    CORRELATION_MATRIX = "CORRELATION_MATRIX"
+
+
+class FigurePlanStatus(StrEnum):
+    DRAFT = "DRAFT"
+    READY = "READY"
+    INVALIDATED = "INVALIDATED"
+    ARCHIVED = "ARCHIVED"
+
+
+class FigureRenderRunStatus(StrEnum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCEL_REQUESTED = "CANCEL_REQUESTED"
+    CANCELLED = "CANCELLED"
+    INVALIDATED = "INVALIDATED"
+
+
+class FigureStatus(StrEnum):
+    DRAFT = "DRAFT"
+    READY = "READY"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+    CONFIRMED = "CONFIRMED"
+    INVALIDATED = "INVALIDATED"
+    ARCHIVED = "ARCHIVED"
+
+
+class FigureIssueType(StrEnum):
+    MISSING_AXIS_LABEL = "MISSING_AXIS_LABEL"
+    MISSING_UNIT = "MISSING_UNIT"
+    MISSING_LEGEND = "MISSING_LEGEND"
+    MISSING_CAPTION = "MISSING_CAPTION"
+    UNDEFINED_ERROR_BAR = "UNDEFINED_ERROR_BAR"
+    MISLEADING_AXIS_RANGE = "MISLEADING_AXIS_RANGE"
+    LOW_RESOLUTION = "LOW_RESOLUTION"
+    VERSION_MISMATCH = "VERSION_MISMATCH"
+    RESULT_MISMATCH = "RESULT_MISMATCH"
+
+
+class FigureIssueSeverity(StrEnum):
+    ERROR = "ERROR"
+    WARNING = "WARNING"
+    INFO = "INFO"
+
+
+class FigureIssueStatus(StrEnum):
+    OPEN = "OPEN"
+    ACKNOWLEDGED = "ACKNOWLEDGED"
+    RESOLVED = "RESOLVED"
+    INVALIDATED = "INVALIDATED"
+
+
 class ArtifactRelationType(StrEnum):
     DERIVED_FROM = "DERIVED_FROM"
     GENERATED_FROM = "GENERATED_FROM"
@@ -3089,6 +3232,650 @@ class DataTransformation(SQLModel, table=True):
     started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
     completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
     error_code: str | None = Field(default=None, max_length=100)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class AnalysisPlan(SQLModel, table=True):
+    __tablename__ = "analysis_plans"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_analysis_plans_id_project"),
+        ForeignKeyConstraint(
+            ["research_question_version_id", "project_id"],
+            ["research_question_versions.id", "research_question_versions.project_id"],
+            name="fk_analysis_plans_question_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["dataset_version_id", "project_id"],
+            ["dataset_versions.id", "dataset_versions.project_id"],
+            name="fk_analysis_plans_dataset_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["approval_record_id", "project_id"],
+            ["approval_records.id", "approval_records.project_id"],
+            name="fk_analysis_plans_approval_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_analysis_plans_lock"),
+        CheckConstraint(
+            "payload_hash IS NULL OR payload_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_analysis_plans_payload_hash",
+        ),
+        CheckConstraint(
+            "validation_hash IS NULL OR validation_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_analysis_plans_validation_hash",
+        ),
+        CheckConstraint(
+            "(invalidated_at IS NULL AND invalidation_reason IS NULL) OR "
+            "(invalidated_at IS NOT NULL AND invalidation_reason IS NOT NULL)",
+            name="ck_analysis_plans_invalidation_pair",
+        ),
+        Index("ix_analysis_plans_project_status", "project_id", "status"),
+        Index("ix_analysis_plans_dataset_created", "dataset_version_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    research_question_version_id: uuid.UUID = Field(index=True)
+    dataset_version_id: uuid.UUID = Field(index=True)
+    analysis_goal: AnalysisGoal = Field(
+        sa_column=Column(SAEnum(AnalysisGoal, name="analysis_goal"), nullable=False)
+    )
+    method: AnalysisMethod = Field(
+        sa_column=Column(SAEnum(AnalysisMethod, name="analysis_method"), nullable=False)
+    )
+    dependent_variable_ids: list[str] = Field(sa_column=Column(JSONB, nullable=False))
+    independent_variable_ids: list[str] = Field(sa_column=Column(JSONB, nullable=False))
+    control_variable_ids: list[str] = Field(sa_column=Column(JSONB, nullable=False))
+    missing_data_policy: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    sample_filter: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    parameters: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    status: AnalysisPlanStatus = Field(
+        default=AnalysisPlanStatus.DRAFT,
+        sa_column=Column(
+            SAEnum(AnalysisPlanStatus, name="analysis_plan_status"), nullable=False
+        ),
+    )
+    validation_hash: str | None = Field(default=None, max_length=64)
+    validation_warnings: list[str] = Field(
+        default_factory=list, sa_column=Column(JSONB, nullable=False)
+    )
+    approval_record_id: uuid.UUID | None = Field(default=None, index=True)
+    payload_hash: str | None = Field(default=None, max_length=64)
+    lock_version: int = Field(default=1, ge=1)
+    created_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class AnalysisAssumptionCheck(SQLModel, table=True):
+    __tablename__ = "analysis_assumption_checks"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_analysis_checks_id_project"),
+        UniqueConstraint(
+            "analysis_plan_id",
+            "check_code",
+            "subject_key",
+            name="uq_analysis_checks_subject",
+        ),
+        ForeignKeyConstraint(
+            ["analysis_plan_id", "project_id"],
+            ["analysis_plans.id", "analysis_plans.project_id"],
+            name="fk_analysis_checks_plan_project",
+            ondelete="RESTRICT",
+        ),
+        Index("ix_analysis_checks_plan_status", "analysis_plan_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    analysis_plan_id: uuid.UUID = Field(index=True)
+    check_code: AssumptionCheckCode = Field(
+        sa_column=Column(
+            SAEnum(AssumptionCheckCode, name="assumption_check_code"), nullable=False
+        )
+    )
+    subject_key: str = Field(default="__plan__", max_length=255)
+    status: AssumptionCheckStatus = Field(
+        sa_column=Column(
+            SAEnum(AssumptionCheckStatus, name="assumption_check_status"),
+            nullable=False,
+        )
+    )
+    explanation: str = Field(sa_column=Column(Text, nullable=False))
+    evidence: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    blocks_approval: bool = False
+    checked_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class AnalysisRun(SQLModel, table=True):
+    __tablename__ = "analysis_runs"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_analysis_runs_id_project"),
+        UniqueConstraint(
+            "analysis_plan_id", "run_number", name="uq_analysis_runs_number"
+        ),
+        UniqueConstraint(
+            "analysis_plan_id", "idempotency_key", name="uq_analysis_runs_idempotency"
+        ),
+        ForeignKeyConstraint(
+            ["analysis_plan_id", "project_id"],
+            ["analysis_plans.id", "analysis_plans.project_id"],
+            name="fk_analysis_runs_plan_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["dataset_version_id", "project_id"],
+            ["dataset_versions.id", "dataset_versions.project_id"],
+            name="fk_analysis_runs_dataset_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["approval_record_id", "project_id"],
+            ["approval_records.id", "approval_records.project_id"],
+            name="fk_analysis_runs_approval_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["processing_run_id", "project_id"],
+            ["processing_runs.id", "processing_runs.project_id"],
+            name="fk_analysis_runs_processing_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["code_artifact_id", "project_id"],
+            ["code_artifacts.id", "code_artifacts.project_id"],
+            name="fk_analysis_runs_code_project",
+            ondelete="RESTRICT",
+            use_alter=True,
+        ),
+        ForeignKeyConstraint(
+            ["log_artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_analysis_runs_log_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("run_number >= 1", name="ck_analysis_runs_number"),
+        CheckConstraint(
+            "parameters_hash ~ '^[0-9a-f]{64}$' AND input_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_analysis_runs_hashes",
+        ),
+        CheckConstraint(
+            "environment_hash IS NULL OR environment_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_analysis_runs_environment_hash",
+        ),
+        CheckConstraint(
+            "effective_n IS NULL OR effective_n >= 0",
+            name="ck_analysis_runs_effective_n",
+        ),
+        CheckConstraint(
+            "status <> 'COMPLETED' OR (completed_at IS NOT NULL AND environment_hash IS NOT NULL)",
+            name="ck_analysis_runs_completed_snapshot",
+        ),
+        CheckConstraint(
+            "(invalidated_at IS NULL AND invalidation_reason IS NULL) OR "
+            "(invalidated_at IS NOT NULL AND invalidation_reason IS NOT NULL)",
+            name="ck_analysis_runs_invalidation_pair",
+        ),
+        Index("ix_analysis_runs_project_status", "project_id", "status"),
+        Index("ix_analysis_runs_plan_created", "analysis_plan_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    analysis_plan_id: uuid.UUID = Field(index=True)
+    dataset_version_id: uuid.UUID = Field(index=True)
+    approval_record_id: uuid.UUID = Field(index=True)
+    processing_run_id: uuid.UUID | None = Field(default=None, index=True)
+    run_number: int = Field(ge=1)
+    idempotency_key: str = Field(max_length=255)
+    run_reason: str | None = Field(default=None, sa_column=Column(Text))
+    status: AnalysisRunStatus = Field(
+        default=AnalysisRunStatus.QUEUED,
+        sa_column=Column(
+            SAEnum(AnalysisRunStatus, name="analysis_run_status"), nullable=False
+        ),
+    )
+    parameters_hash: str = Field(max_length=64)
+    input_hash: str = Field(max_length=64)
+    environment_hash: str | None = Field(default=None, max_length=64)
+    environment_snapshot: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    effective_n: int | None = Field(default=None, ge=0)
+    code_artifact_id: uuid.UUID | None = Field(default=None, index=True)
+    log_artifact_id: uuid.UUID | None = Field(default=None, index=True)
+    requested_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    error_code: str | None = Field(default=None, max_length=100)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class AnalysisResult(SQLModel, table=True):
+    __tablename__ = "analysis_results"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_analysis_results_id_project"),
+        UniqueConstraint(
+            "analysis_run_id", "result_key", name="uq_analysis_results_key"
+        ),
+        ForeignKeyConstraint(
+            ["analysis_run_id", "project_id"],
+            ["analysis_runs.id", "analysis_runs.project_id"],
+            name="fk_analysis_results_run_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "result_hash ~ '^[0-9a-f]{64}$'", name="ck_analysis_results_hash"
+        ),
+        Index(
+            "uq_analysis_results_primary",
+            "analysis_run_id",
+            unique=True,
+            postgresql_where=text("is_primary"),
+        ),
+        Index("ix_analysis_results_run_type", "analysis_run_id", "result_type"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    analysis_run_id: uuid.UUID = Field(index=True)
+    result_key: str = Field(max_length=255)
+    result_type: AnalysisResultType = Field(
+        sa_column=Column(
+            SAEnum(AnalysisResultType, name="analysis_result_type"), nullable=False
+        )
+    )
+    schema_version: str = Field(default="analysis-result/1.0", max_length=50)
+    is_primary: bool = False
+    payload: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    result_hash: str = Field(max_length=64)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class CodeArtifact(SQLModel, table=True):
+    __tablename__ = "code_artifacts"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_code_artifacts_id_project"),
+        UniqueConstraint("analysis_run_id", name="uq_code_artifacts_run"),
+        UniqueConstraint(
+            "figure_render_run_id", name="uq_code_artifacts_figure_render_run"
+        ),
+        UniqueConstraint("artifact_id", name="uq_code_artifacts_artifact"),
+        ForeignKeyConstraint(
+            ["analysis_run_id", "project_id"],
+            ["analysis_runs.id", "analysis_runs.project_id"],
+            name="fk_code_artifacts_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["figure_render_run_id", "project_id"],
+            ["figure_render_runs.id", "figure_render_runs.project_id"],
+            name="fk_code_artifacts_figure_render_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_code_artifacts_artifact_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "input_hash ~ '^[0-9a-f]{64}$' AND output_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_code_artifacts_hashes",
+        ),
+        CheckConstraint(
+            "(analysis_run_id IS NOT NULL)::int + "
+            "(figure_render_run_id IS NOT NULL)::int = 1",
+            name="ck_code_artifacts_exactly_one_owner",
+        ),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    analysis_run_id: uuid.UUID | None = Field(default=None, index=True)
+    figure_render_run_id: uuid.UUID | None = Field(default=None, index=True)
+    artifact_id: uuid.UUID = Field(index=True)
+    template_version: str = Field(max_length=50)
+    language: str = Field(max_length=50)
+    entry: str = Field(max_length=255)
+    dependency_snapshot: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    input_hash: str = Field(max_length=64)
+    output_hash: str = Field(max_length=64)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class FigurePlan(SQLModel, table=True):
+    __tablename__ = "figure_plans"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_figure_plans_id_project"),
+        ForeignKeyConstraint(
+            ["dataset_version_id", "project_id"],
+            ["dataset_versions.id", "dataset_versions.project_id"],
+            name="fk_figure_plans_dataset_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["analysis_run_id", "project_id"],
+            ["analysis_runs.id", "analysis_runs.project_id"],
+            name="fk_figure_plans_analysis_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["analysis_result_id", "project_id"],
+            ["analysis_results.id", "analysis_results.project_id"],
+            name="fk_figure_plans_analysis_result_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_figure_plans_lock"),
+        CheckConstraint("plan_hash ~ '^[0-9a-f]{64}$'", name="ck_figure_plans_hash"),
+        CheckConstraint(
+            "analysis_result_id IS NULL OR analysis_run_id IS NOT NULL",
+            name="ck_figure_plans_result_requires_run",
+        ),
+        CheckConstraint(
+            "(invalidated_at IS NULL AND invalidation_reason IS NULL) OR "
+            "(invalidated_at IS NOT NULL AND invalidation_reason IS NOT NULL)",
+            name="ck_figure_plans_invalidation_pair",
+        ),
+        Index("ix_figure_plans_project_status", "project_id", "status"),
+        Index("ix_figure_plans_dataset_created", "dataset_version_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    dataset_version_id: uuid.UUID = Field(index=True)
+    analysis_run_id: uuid.UUID | None = Field(default=None, index=True)
+    analysis_result_id: uuid.UUID | None = Field(default=None, index=True)
+    chart_type: FigureChartType = Field(
+        sa_column=Column(
+            SAEnum(FigureChartType, name="figure_chart_type"), nullable=False
+        )
+    )
+    parameters: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    caption: str = Field(sa_column=Column(Text, nullable=False))
+    status: FigurePlanStatus = Field(
+        default=FigurePlanStatus.READY,
+        sa_column=Column(
+            SAEnum(FigurePlanStatus, name="figure_plan_status"), nullable=False
+        ),
+    )
+    plan_hash: str = Field(max_length=64)
+    lock_version: int = Field(default=1, ge=1)
+    created_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class FigureRenderRun(SQLModel, table=True):
+    __tablename__ = "figure_render_runs"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_figure_render_runs_id_project"),
+        UniqueConstraint(
+            "figure_plan_id", "render_number", name="uq_figure_render_runs_number"
+        ),
+        UniqueConstraint(
+            "figure_plan_id",
+            "idempotency_key",
+            name="uq_figure_render_runs_idempotency",
+        ),
+        ForeignKeyConstraint(
+            ["figure_plan_id", "project_id"],
+            ["figure_plans.id", "figure_plans.project_id"],
+            name="fk_figure_render_runs_plan_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["dataset_version_id", "project_id"],
+            ["dataset_versions.id", "dataset_versions.project_id"],
+            name="fk_figure_render_runs_dataset_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["processing_run_id", "project_id"],
+            ["processing_runs.id", "processing_runs.project_id"],
+            name="fk_figure_render_runs_processing_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("render_number >= 1", name="ck_figure_render_runs_number"),
+        CheckConstraint(
+            "input_hash ~ '^[0-9a-f]{64}$' AND parameters_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_figure_render_runs_hashes",
+        ),
+        CheckConstraint(
+            "environment_hash IS NULL OR environment_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_figure_render_runs_environment_hash",
+        ),
+        CheckConstraint(
+            "status <> 'COMPLETED' OR (completed_at IS NOT NULL AND environment_hash IS NOT NULL)",
+            name="ck_figure_render_runs_completed_snapshot",
+        ),
+        Index("ix_figure_render_runs_project_status", "project_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    figure_plan_id: uuid.UUID = Field(index=True)
+    dataset_version_id: uuid.UUID = Field(index=True)
+    processing_run_id: uuid.UUID | None = Field(default=None, index=True)
+    render_number: int = Field(ge=1)
+    idempotency_key: str = Field(max_length=255)
+    status: FigureRenderRunStatus = Field(
+        default=FigureRenderRunStatus.QUEUED,
+        sa_column=Column(
+            SAEnum(FigureRenderRunStatus, name="figure_render_run_status"),
+            nullable=False,
+        ),
+    )
+    parameters_hash: str = Field(max_length=64)
+    input_hash: str = Field(max_length=64)
+    environment_hash: str | None = Field(default=None, max_length=64)
+    environment_snapshot: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    requested_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    error_code: str | None = Field(default=None, max_length=100)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class Figure(SQLModel, table=True):
+    __tablename__ = "figures"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_figures_id_project"),
+        UniqueConstraint("figure_render_run_id", name="uq_figures_render_run"),
+        ForeignKeyConstraint(
+            ["figure_plan_id", "project_id"],
+            ["figure_plans.id", "figure_plans.project_id"],
+            name="fk_figures_plan_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["figure_render_run_id", "project_id"],
+            ["figure_render_runs.id", "figure_render_runs.project_id"],
+            name="fk_figures_render_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["dataset_version_id", "project_id"],
+            ["dataset_versions.id", "dataset_versions.project_id"],
+            name="fk_figures_dataset_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["analysis_run_id", "project_id"],
+            ["analysis_runs.id", "analysis_runs.project_id"],
+            name="fk_figures_analysis_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["analysis_result_id", "project_id"],
+            ["analysis_results.id", "analysis_results.project_id"],
+            name="fk_figures_analysis_result_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["approval_record_id", "project_id"],
+            ["approval_records.id", "approval_records.project_id"],
+            name="fk_figures_approval_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["png_artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_figures_png_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["svg_artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_figures_svg_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["pdf_artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_figures_pdf_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["code_artifact_id", "project_id"],
+            ["code_artifacts.id", "code_artifacts.project_id"],
+            name="fk_figures_code_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("version_number >= 1", name="ck_figures_version_number"),
+        CheckConstraint("figure_hash ~ '^[0-9a-f]{64}$'", name="ck_figures_hash"),
+        CheckConstraint(
+            "analysis_result_id IS NULL OR analysis_run_id IS NOT NULL",
+            name="ck_figures_result_requires_run",
+        ),
+        CheckConstraint(
+            "(invalidated_at IS NULL AND invalidation_reason IS NULL) OR "
+            "(invalidated_at IS NOT NULL AND invalidation_reason IS NOT NULL)",
+            name="ck_figures_invalidation_pair",
+        ),
+        Index("ix_figures_project_status", "project_id", "status"),
+        Index("ix_figures_plan_version", "figure_plan_id", "version_number"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    figure_plan_id: uuid.UUID = Field(index=True)
+    figure_render_run_id: uuid.UUID = Field(index=True)
+    dataset_version_id: uuid.UUID = Field(index=True)
+    analysis_run_id: uuid.UUID | None = Field(default=None, index=True)
+    analysis_result_id: uuid.UUID | None = Field(default=None, index=True)
+    version_number: int = Field(ge=1)
+    chart_type: FigureChartType = Field(
+        sa_column=Column(
+            SAEnum(FigureChartType, name="figure_chart_type"), nullable=False
+        )
+    )
+    status: FigureStatus = Field(
+        default=FigureStatus.READY,
+        sa_column=Column(SAEnum(FigureStatus, name="figure_status"), nullable=False),
+    )
+    caption: str = Field(sa_column=Column(Text, nullable=False))
+    figure_hash: str = Field(max_length=64)
+    png_artifact_id: uuid.UUID = Field(index=True)
+    svg_artifact_id: uuid.UUID = Field(index=True)
+    pdf_artifact_id: uuid.UUID = Field(index=True)
+    code_artifact_id: uuid.UUID = Field(index=True)
+    approval_record_id: uuid.UUID | None = Field(default=None, index=True)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    confirmed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class FigureValidationIssue(SQLModel, table=True):
+    __tablename__ = "figure_validation_issues"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_figure_issues_id_project"),
+        UniqueConstraint(
+            "figure_id", "issue_type", "subject_key", name="uq_figure_issues_subject"
+        ),
+        ForeignKeyConstraint(
+            ["figure_id", "project_id"],
+            ["figures.id", "figures.project_id"],
+            name="fk_figure_issues_figure_project",
+            ondelete="RESTRICT",
+        ),
+        Index("ix_figure_issues_figure_status", "figure_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    figure_id: uuid.UUID = Field(index=True)
+    issue_type: FigureIssueType = Field(
+        sa_column=Column(
+            SAEnum(FigureIssueType, name="figure_issue_type"), nullable=False
+        )
+    )
+    severity: FigureIssueSeverity = Field(
+        sa_column=Column(
+            SAEnum(FigureIssueSeverity, name="figure_issue_severity"), nullable=False
+        )
+    )
+    status: FigureIssueStatus = Field(
+        default=FigureIssueStatus.OPEN,
+        sa_column=Column(
+            SAEnum(FigureIssueStatus, name="figure_issue_status"), nullable=False
+        ),
+    )
+    subject_key: str = Field(default="__figure__", max_length=255)
+    message: str = Field(sa_column=Column(Text, nullable=False))
+    evidence: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    blocks_confirmation: bool = False
     created_at: datetime = Field(
         default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
     )  # type: ignore

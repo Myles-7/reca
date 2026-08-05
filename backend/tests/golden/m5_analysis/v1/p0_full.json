@@ -1,0 +1,27 @@
+{
+  "independent_welch": {
+    "group": ["A", "A", "A", "B", "B", "B", "B"],
+    "value": [1, 2, 3, 4, 5, 6, 7],
+    "mean_difference": -3.5,
+    "df": 4.959183673469388,
+    "p_value": 0.01007694334798886
+  },
+  "paired": {
+    "before": [2, 4, 6],
+    "after": [1, 2, 3],
+    "pair": ["a", "b", "c"],
+    "mean_difference": 2.0,
+    "statistic": 3.464101615137755
+  },
+  "regression": {
+    "x": [1, 2, 3, 4, 5],
+    "y": [3, 5, 8, 9, 11],
+    "intercept": 1.2,
+    "slope": 2.0,
+    "r_squared": 0.9803921568627451
+  },
+  "tolerance": {
+    "absolute": 1e-12,
+    "relative": 1e-10
+  }
+}

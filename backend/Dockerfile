@@ -16,6 +16,11 @@ ENV UV_LINK_MODE=copy
 
 WORKDIR /app/
 
+# Fixed CJK font for deterministic headless scientific figures.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/*
+
 # Place executables in the environment at the front of the path
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#using-the-environment
 ENV PATH="/app/.venv/bin:$PATH"

@@ -9,52 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SystemStatusRouteImport } from './routes/system-status'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as LayoutRouteImport } from './routes/_layout'
-import { Route as R404RouteImport } from './routes/404'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
-import { Route as LayoutProjectsRouteImport } from './routes/_layout/projects'
+import { Route as R404RouteImport } from './routes/404'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SystemStatusRouteImport } from './routes/system-status'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
+import { Route as LayoutProjectsRouteImport } from './routes/_layout/projects'
+import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutProjectsIndexRouteImport } from './routes/_layout/projects.index'
 import { Route as LayoutProjectsProjectIdRouteImport } from './routes/_layout/projects.$projectId'
-import { Route as LayoutProjectsProjectIdResearchQuestionRouteImport } from './routes/_layout/projects.$projectId_.research-question'
-import { Route as LayoutProjectsProjectIdLiteratureRouteImport } from './routes/_layout/projects.$projectId_.literature'
+import { Route as LayoutProjectsProjectIdAnalysisRouteImport } from './routes/_layout/projects.$projectId_.analysis'
 import { Route as LayoutProjectsProjectIdDataRouteImport } from './routes/_layout/projects.$projectId_.data'
-import { Route as LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport } from './routes/_layout/projects.$projectId_.query-plans.$queryPlanId'
+import { Route as LayoutProjectsProjectIdLiteratureRouteImport } from './routes/_layout/projects.$projectId_.literature'
+import { Route as LayoutProjectsProjectIdResearchQuestionRouteImport } from './routes/_layout/projects.$projectId_.research-question'
 import { Route as LayoutProjectsProjectIdDocumentsDocumentIdRouteImport } from './routes/_layout/projects.$projectId_.documents.$documentId'
+import { Route as LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport } from './routes/_layout/projects.$projectId_.query-plans.$queryPlanId'
 
-const SystemStatusRoute = SystemStatusRouteImport.update({
-  id: '/system-status',
-  path: '/system-status',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
-  id: '/recover-password',
-  path: '/recover-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutRoute = LayoutRouteImport.update({
-  id: '/_layout',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const R404Route = R404RouteImport.update({
@@ -62,14 +39,38 @@ const R404Route = R404RouteImport.update({
   path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LayoutRoute = LayoutRouteImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
+  id: '/recover-password',
+  path: '/recover-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SystemStatusRoute = SystemStatusRouteImport.update({
+  id: '/system-status',
+  path: '/system-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutAdminRoute = LayoutAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutProjectsRoute = LayoutProjectsRouteImport.update({
@@ -77,9 +78,9 @@ const LayoutProjectsRoute = LayoutProjectsRouteImport.update({
   path: '/projects',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutAdminRoute = LayoutAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutProjectsIndexRoute = LayoutProjectsIndexRouteImport.update({
@@ -92,16 +93,10 @@ const LayoutProjectsProjectIdRoute = LayoutProjectsProjectIdRouteImport.update({
   path: '/$projectId',
   getParentRoute: () => LayoutProjectsRoute,
 } as any)
-const LayoutProjectsProjectIdResearchQuestionRoute =
-  LayoutProjectsProjectIdResearchQuestionRouteImport.update({
-    id: '/$projectId_/research-question',
-    path: '/$projectId/research-question',
-    getParentRoute: () => LayoutProjectsRoute,
-  } as any)
-const LayoutProjectsProjectIdLiteratureRoute =
-  LayoutProjectsProjectIdLiteratureRouteImport.update({
-    id: '/$projectId_/literature',
-    path: '/$projectId/literature',
+const LayoutProjectsProjectIdAnalysisRoute =
+  LayoutProjectsProjectIdAnalysisRouteImport.update({
+    id: '/$projectId_/analysis',
+    path: '/$projectId/analysis',
     getParentRoute: () => LayoutProjectsRoute,
   } as any)
 const LayoutProjectsProjectIdDataRoute =
@@ -110,16 +105,28 @@ const LayoutProjectsProjectIdDataRoute =
     path: '/$projectId/data',
     getParentRoute: () => LayoutProjectsRoute,
   } as any)
-const LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute =
-  LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport.update({
-    id: '/$projectId_/query-plans/$queryPlanId',
-    path: '/$projectId/query-plans/$queryPlanId',
+const LayoutProjectsProjectIdLiteratureRoute =
+  LayoutProjectsProjectIdLiteratureRouteImport.update({
+    id: '/$projectId_/literature',
+    path: '/$projectId/literature',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
+const LayoutProjectsProjectIdResearchQuestionRoute =
+  LayoutProjectsProjectIdResearchQuestionRouteImport.update({
+    id: '/$projectId_/research-question',
+    path: '/$projectId/research-question',
     getParentRoute: () => LayoutProjectsRoute,
   } as any)
 const LayoutProjectsProjectIdDocumentsDocumentIdRoute =
   LayoutProjectsProjectIdDocumentsDocumentIdRouteImport.update({
     id: '/$projectId_/documents/$documentId',
     path: '/$projectId/documents/$documentId',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
+const LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute =
+  LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport.update({
+    id: '/$projectId_/query-plans/$queryPlanId',
+    path: '/$projectId/query-plans/$queryPlanId',
     getParentRoute: () => LayoutProjectsRoute,
   } as any)
 
@@ -136,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof LayoutSettingsRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/projects/': typeof LayoutProjectsIndexRoute
+  '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
   '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
   '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -154,6 +162,7 @@ export interface FileRoutesByTo {
   '/settings': typeof LayoutSettingsRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/projects': typeof LayoutProjectsIndexRoute
+  '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
   '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
   '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -175,6 +184,7 @@ export interface FileRoutesById {
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/_layout/projects/': typeof LayoutProjectsIndexRoute
+  '/_layout/projects/$projectId_/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/_layout/projects/$projectId_/data': typeof LayoutProjectsProjectIdDataRoute
   '/_layout/projects/$projectId_/literature': typeof LayoutProjectsProjectIdLiteratureRoute
   '/_layout/projects/$projectId_/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/projects/$projectId'
     | '/projects/'
+    | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
     | '/projects/$projectId/literature'
     | '/projects/$projectId/research-question'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/projects/$projectId'
     | '/projects'
+    | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
     | '/projects/$projectId/literature'
     | '/projects/$projectId/research-question'
@@ -234,6 +246,7 @@ export interface FileRouteTypes {
     | '/_layout/settings'
     | '/_layout/projects/$projectId'
     | '/_layout/projects/'
+    | '/_layout/projects/$projectId_/analysis'
     | '/_layout/projects/$projectId_/data'
     | '/_layout/projects/$projectId_/literature'
     | '/_layout/projects/$projectId_/research-question'
@@ -254,46 +267,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/system-status': {
-      id: '/system-status'
-      path: '/system-status'
-      fullPath: '/system-status'
-      preLoaderRoute: typeof SystemStatusRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recover-password': {
-      id: '/recover-password'
-      path: '/recover-password'
-      fullPath: '/recover-password'
-      preLoaderRoute: typeof RecoverPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_layout': {
-      id: '/_layout'
-      path: ''
+    '/': {
+      id: '/'
+      path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof LayoutRouteImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/404': {
@@ -303,18 +281,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_layout': {
+      id: '/_layout'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_layout/settings': {
-      id: '/_layout/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof LayoutSettingsRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recover-password': {
+      id: '/recover-password'
+      path: '/recover-password'
+      fullPath: '/recover-password'
+      preLoaderRoute: typeof RecoverPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/system-status': {
+      id: '/system-status'
+      path: '/system-status'
+      fullPath: '/system-status'
+      preLoaderRoute: typeof SystemStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_layout/admin': {
+      id: '/_layout/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof LayoutAdminRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/projects': {
@@ -324,11 +337,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/admin': {
-      id: '/_layout/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof LayoutAdminRouteImport
+    '/_layout/settings': {
+      id: '/_layout/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/projects/': {
@@ -345,18 +358,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsProjectIdRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
-    '/_layout/projects/$projectId_/research-question': {
-      id: '/_layout/projects/$projectId_/research-question'
-      path: '/$projectId/research-question'
-      fullPath: '/projects/$projectId/research-question'
-      preLoaderRoute: typeof LayoutProjectsProjectIdResearchQuestionRouteImport
-      parentRoute: typeof LayoutProjectsRoute
-    }
-    '/_layout/projects/$projectId_/literature': {
-      id: '/_layout/projects/$projectId_/literature'
-      path: '/$projectId/literature'
-      fullPath: '/projects/$projectId/literature'
-      preLoaderRoute: typeof LayoutProjectsProjectIdLiteratureRouteImport
+    '/_layout/projects/$projectId_/analysis': {
+      id: '/_layout/projects/$projectId_/analysis'
+      path: '/$projectId/analysis'
+      fullPath: '/projects/$projectId/analysis'
+      preLoaderRoute: typeof LayoutProjectsProjectIdAnalysisRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
     '/_layout/projects/$projectId_/data': {
@@ -366,11 +372,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsProjectIdDataRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
-    '/_layout/projects/$projectId_/query-plans/$queryPlanId': {
-      id: '/_layout/projects/$projectId_/query-plans/$queryPlanId'
-      path: '/$projectId/query-plans/$queryPlanId'
-      fullPath: '/projects/$projectId/query-plans/$queryPlanId'
-      preLoaderRoute: typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport
+    '/_layout/projects/$projectId_/literature': {
+      id: '/_layout/projects/$projectId_/literature'
+      path: '/$projectId/literature'
+      fullPath: '/projects/$projectId/literature'
+      preLoaderRoute: typeof LayoutProjectsProjectIdLiteratureRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
+    '/_layout/projects/$projectId_/research-question': {
+      id: '/_layout/projects/$projectId_/research-question'
+      path: '/$projectId/research-question'
+      fullPath: '/projects/$projectId/research-question'
+      preLoaderRoute: typeof LayoutProjectsProjectIdResearchQuestionRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
     '/_layout/projects/$projectId_/documents/$documentId': {
@@ -380,12 +393,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsProjectIdDocumentsDocumentIdRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
+    '/_layout/projects/$projectId_/query-plans/$queryPlanId': {
+      id: '/_layout/projects/$projectId_/query-plans/$queryPlanId'
+      path: '/$projectId/query-plans/$queryPlanId'
+      fullPath: '/projects/$projectId/query-plans/$queryPlanId'
+      preLoaderRoute: typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
   }
 }
 
 interface LayoutProjectsRouteChildren {
   LayoutProjectsProjectIdRoute: typeof LayoutProjectsProjectIdRoute
   LayoutProjectsIndexRoute: typeof LayoutProjectsIndexRoute
+  LayoutProjectsProjectIdAnalysisRoute: typeof LayoutProjectsProjectIdAnalysisRoute
   LayoutProjectsProjectIdDataRoute: typeof LayoutProjectsProjectIdDataRoute
   LayoutProjectsProjectIdLiteratureRoute: typeof LayoutProjectsProjectIdLiteratureRoute
   LayoutProjectsProjectIdResearchQuestionRoute: typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -396,6 +417,7 @@ interface LayoutProjectsRouteChildren {
 const LayoutProjectsRouteChildren: LayoutProjectsRouteChildren = {
   LayoutProjectsProjectIdRoute: LayoutProjectsProjectIdRoute,
   LayoutProjectsIndexRoute: LayoutProjectsIndexRoute,
+  LayoutProjectsProjectIdAnalysisRoute: LayoutProjectsProjectIdAnalysisRoute,
   LayoutProjectsProjectIdDataRoute: LayoutProjectsProjectIdDataRoute,
   LayoutProjectsProjectIdLiteratureRoute:
     LayoutProjectsProjectIdLiteratureRoute,

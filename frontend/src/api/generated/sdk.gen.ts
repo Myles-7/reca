@@ -11,6 +11,33 @@ import {
 } from "./client"
 import { client } from "./client.gen"
 import type {
+  AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansData,
+  AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansErrors,
+  AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponses,
+  AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdData,
+  AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdErrors,
+  AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdResponses,
+  AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsData,
+  AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsErrors,
+  AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsResponses,
+  AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdData,
+  AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdErrors,
+  AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdResponses,
+  AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateData,
+  AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateErrors,
+  AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateResponses,
+  AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsData,
+  AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsErrors,
+  AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsResponses,
+  AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsData,
+  AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsErrors,
+  AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsResponses,
+  AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdData,
+  AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdErrors,
+  AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdResponses,
+  AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateData,
+  AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateErrors,
+  AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateResponses,
   ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveData,
   ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveErrors,
   ApprovalsApprovePostApiV1ApprovalsApprovalIdApproveResponses,
@@ -179,6 +206,33 @@ import type {
   EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdData,
   EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors,
   EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses,
+  FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansData,
+  FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansErrors,
+  FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponses,
+  FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameData,
+  FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameErrors,
+  FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses,
+  FiguresGetFigureGetApiV1FiguresFigureIdData,
+  FiguresGetFigureGetApiV1FiguresFigureIdErrors,
+  FiguresGetFigureGetApiV1FiguresFigureIdResponses,
+  FiguresGetFigurePlanGetApiV1FigurePlansPlanIdData,
+  FiguresGetFigurePlanGetApiV1FigurePlansPlanIdErrors,
+  FiguresGetFigurePlanGetApiV1FigurePlansPlanIdResponses,
+  FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsData,
+  FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsErrors,
+  FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsResponses,
+  FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdData,
+  FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdErrors,
+  FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdResponses,
+  FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesData,
+  FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesErrors,
+  FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesResponses,
+  FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsData,
+  FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsErrors,
+  FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsResponses,
+  FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsData,
+  FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsErrors,
+  FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsResponses,
   HealthDependenciesHealthGetApiV1HealthDependenciesData,
   HealthDependenciesHealthGetApiV1HealthDependenciesErrors,
   HealthDependenciesHealthGetApiV1HealthDependenciesResponses,
@@ -235,9 +289,6 @@ import type {
   LoginResetPasswordPostApiV1ResetPasswordResponses,
   LoginTestTokenPostApiV1LoginTestTokenData,
   LoginTestTokenPostApiV1LoginTestTokenResponses,
-  PrivateCreateUserPostApiV1PrivateUsersData,
-  PrivateCreateUserPostApiV1PrivateUsersErrors,
-  PrivateCreateUserPostApiV1PrivateUsersResponses,
   ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersData,
   ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors,
   ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses,
@@ -3019,6 +3070,473 @@ export const dataCleaningGetDataTransformationGetApiV1DataTransformationsTransfo
     })
 
 /**
+ * Create Analysis Plan
+ */
+export const analysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlans =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponses,
+    AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponses,
+      AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/analysis-plans",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Analysis Plan
+ */
+export const analysisGetAnalysisPlanGetApiV1AnalysisPlansPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdResponses,
+  AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdResponses,
+    AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/analysis-plans/{plan_id}",
+    ...options,
+  })
+
+/**
+ * Update Analysis Plan
+ */
+export const analysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdResponses,
+  AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).patch<
+    AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdResponses,
+    AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/analysis-plans/{plan_id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Validate Analysis Plan
+ */
+export const analysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidate =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateResponses,
+    AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateResponses,
+      AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/analysis-plans/{plan_id}/validate",
+      ...options,
+    })
+
+/**
+ * Request Analysis Approval
+ */
+export const analysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequests =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsResponses,
+    AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsResponses,
+      AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/analysis-plans/{plan_id}/approval-requests",
+      ...options,
+    })
+
+/**
+ * Run Analysis Plan
+ */
+export const analysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRuns = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsResponses,
+  AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsResponses,
+    AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/analysis-plans/{plan_id}/runs",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Analysis Run
+ */
+export const analysisGetAnalysisRunGetApiV1AnalysisRunsRunId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdResponses,
+  AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdResponses,
+    AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/analysis-runs/{run_id}",
+    ...options,
+  })
+
+/**
+ * Get Analysis Results
+ */
+export const analysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResults = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsResponses,
+  AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsResponses,
+    AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/analysis-runs/{run_id}/results",
+    ...options,
+  })
+
+/**
+ * Invalidate Analysis Run
+ */
+export const analysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidate =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateResponses,
+    AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateResponses,
+      AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/analysis-runs/{run_id}/invalidate",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Create Figure Plan
+ */
+export const figuresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlans = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansData,
+    ThrowOnError
+  >,
+): RequestResult<
+  FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponses,
+  FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponses,
+    FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/figure-plans",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Figure Plan
+ */
+export const figuresGetFigurePlanGetApiV1FigurePlansPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    FiguresGetFigurePlanGetApiV1FigurePlansPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  FiguresGetFigurePlanGetApiV1FigurePlansPlanIdResponses,
+  FiguresGetFigurePlanGetApiV1FigurePlansPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    FiguresGetFigurePlanGetApiV1FigurePlansPlanIdResponses,
+    FiguresGetFigurePlanGetApiV1FigurePlansPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/figure-plans/{plan_id}",
+    ...options,
+  })
+
+/**
+ * Get Figure Recommendations
+ */
+export const figuresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendations =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsResponses,
+    FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsResponses,
+      FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/figure-recommendations",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Render Figure Plan
+ */
+export const figuresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRuns = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsResponses,
+  FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsResponses,
+    FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/figure-plans/{plan_id}/render-runs",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Figure Render Run
+ */
+export const figuresGetFigureRenderRunGetApiV1FigureRenderRunsRunId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdResponses,
+  FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdResponses,
+    FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/figure-render-runs/{run_id}",
+    ...options,
+  })
+
+/**
+ * Get Figure
+ */
+export const figuresGetFigureGetApiV1FiguresFigureId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<FiguresGetFigureGetApiV1FiguresFigureIdData, ThrowOnError>,
+): RequestResult<
+  FiguresGetFigureGetApiV1FiguresFigureIdResponses,
+  FiguresGetFigureGetApiV1FiguresFigureIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    FiguresGetFigureGetApiV1FiguresFigureIdResponses,
+    FiguresGetFigureGetApiV1FiguresFigureIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/figures/{figure_id}",
+    ...options,
+  })
+
+/**
+ * Get Figure Validation Issues
+ */
+export const figuresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssues =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesResponses,
+    FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesResponses,
+      FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/figures/{figure_id}/validation-issues",
+      ...options,
+    })
+
+/**
+ * Request Figure Confirmation
+ */
+export const figuresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequests =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsResponses,
+    FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsResponses,
+      FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/figures/{figure_id}/approval-requests",
+      ...options,
+    })
+
+/**
+ * Download Figure Format
+ */
+export const figuresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatName =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses,
+    FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses,
+      FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/figures/{figure_id}/downloads/{format_name}",
+      ...options,
+    })
+
+/**
  * List Project Jobs
  */
 export const jobsListProjectJobsGetApiV1ProjectsProjectIdJobs = <
@@ -3269,31 +3787,4 @@ export const approvalsCancelPostApiV1ApprovalsApprovalIdCancel = <
     security: [{ scheme: "bearer", type: "http" }],
     url: "/api/v1/approvals/{approval_id}/cancel",
     ...options,
-  })
-
-/**
- * Create User
- *
- * Create a new user.
- */
-export const privateCreateUserPostApiV1PrivateUsers = <
-  ThrowOnError extends boolean = false,
->(
-  options: Options<PrivateCreateUserPostApiV1PrivateUsersData, ThrowOnError>,
-): RequestResult<
-  PrivateCreateUserPostApiV1PrivateUsersResponses,
-  PrivateCreateUserPostApiV1PrivateUsersErrors,
-  ThrowOnError
-> =>
-  (options.client ?? client).post<
-    PrivateCreateUserPostApiV1PrivateUsersResponses,
-    PrivateCreateUserPostApiV1PrivateUsersErrors,
-    ThrowOnError
-  >({
-    url: "/api/v1/private/users/",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
   })

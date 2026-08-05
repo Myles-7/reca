@@ -1,5 +1,14 @@
 import { client } from "../generated/client.gen"
 import {
+  analysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlans,
+  analysisGetAnalysisPlanGetApiV1AnalysisPlansPlanId,
+  analysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResults,
+  analysisGetAnalysisRunGetApiV1AnalysisRunsRunId,
+  analysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidate,
+  analysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequests,
+  analysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRuns,
+  analysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanId,
+  analysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidate,
   approvalsApprovePostApiV1ApprovalsApprovalIdApprove,
   approvalsCancelPostApiV1ApprovalsApprovalIdCancel,
   approvalsGetApprovalGetApiV1ApprovalsApprovalId,
@@ -52,6 +61,15 @@ import {
   evidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisions,
   evidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearch,
   evidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldId,
+  figuresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlans,
+  figuresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatName,
+  figuresGetFigureGetApiV1FiguresFigureId,
+  figuresGetFigurePlanGetApiV1FigurePlansPlanId,
+  figuresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendations,
+  figuresGetFigureRenderRunGetApiV1FigureRenderRunsRunId,
+  figuresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssues,
+  figuresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRuns,
+  figuresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequests,
   healthDependenciesHealthGetApiV1HealthDependencies,
   healthLiveHealthGetApiV1HealthLive,
   healthReadyHealthGetApiV1HealthReady,
@@ -104,6 +122,26 @@ import {
 } from "../generated/sdk.gen"
 
 export type {
+  AnalysisApprovalEnvelope,
+  AnalysisApprovalPublic,
+  AnalysisAssumptionPublic,
+  AnalysisGoal,
+  AnalysisInvalidate,
+  AnalysisMethod,
+  AnalysisParameters,
+  AnalysisPlanCreate,
+  AnalysisPlanEnvelope,
+  AnalysisPlanPublic,
+  AnalysisPlanStatus,
+  AnalysisPlanUpdate,
+  AnalysisResultPublic,
+  AnalysisResultsEnvelope,
+  AnalysisResultType,
+  AnalysisRunCreate,
+  AnalysisRunEnvelope,
+  AnalysisRunPublic,
+  AnalysisRunRequestEnvelope,
+  AnalysisRunStatus,
   ApprovalDecisionRequest,
   ApprovalListEnvelope,
   ApprovalPublic,
@@ -114,6 +152,8 @@ export type {
   ArtifactType,
   ArtifactUploadComplete,
   ArtifactUploadInitiate,
+  AssumptionCheckCode,
+  AssumptionCheckStatus,
   AuditListEnvelope,
   BodyLoginLoginAccessTokenPostApiV1LoginAccessToken as Body_login_login_access_token_post_api_v1_login_access_token,
   CurrentResearchQuestionEnvelope,
@@ -138,6 +178,22 @@ export type {
   EvidenceSpanVerificationCreate,
   FieldConfirmationStatus,
   FieldEvidenceStatus,
+  FigureArtifactPublic,
+  FigureChartType,
+  FigurePlanCreate,
+  FigurePlanEnvelope,
+  FigurePlanPublic,
+  FigurePlanStatus,
+  FigurePublic,
+  FigureRecommendationEnvelope,
+  FigureRecommendationPublic,
+  FigureRenderCreate,
+  FigureRenderRequestEnvelope,
+  FigureRenderRunEnvelope,
+  FigureRenderRunPublic,
+  FigureRenderRunStatus,
+  FigureStatus,
+  FigureValidationIssuePublic,
   JobListEnvelope,
   JobPublic,
   LiteratureCandidatePublic,
@@ -1377,6 +1433,167 @@ export class DataQualityApi {
         }),
       ),
       "Quality issue ignore response",
+    )
+}
+
+export class AnalysisApi {
+  static create = (
+    projectId: string,
+    body: import("../generated/types.gen").AnalysisPlanCreate,
+  ) =>
+    unwrap(
+      analysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlans({
+        path: { project_id: projectId },
+        body,
+      }),
+    )
+
+  static getPlan = (planId: string) =>
+    unwrap(
+      analysisGetAnalysisPlanGetApiV1AnalysisPlansPlanId({
+        path: { plan_id: planId },
+      }),
+    )
+
+  static update = (
+    planId: string,
+    body: import("../generated/types.gen").AnalysisPlanUpdate,
+    lockVersion: number,
+  ) =>
+    unwrap(
+      analysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanId({
+        path: { plan_id: planId },
+        headers: { "If-Match": String(lockVersion) },
+        body,
+      }),
+    )
+
+  static validate = (planId: string, idempotencyKey: string) =>
+    unwrap(
+      analysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidate({
+        path: { plan_id: planId },
+        headers: { "Idempotency-Key": idempotencyKey },
+      }),
+    )
+
+  static requestApproval = (planId: string) =>
+    unwrap(
+      analysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequests(
+        { path: { plan_id: planId } },
+      ),
+    )
+
+  static run = (
+    planId: string,
+    body: import("../generated/types.gen").AnalysisRunCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      analysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRuns({
+        path: { plan_id: planId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+
+  static getRun = (runId: string) =>
+    unwrap(
+      analysisGetAnalysisRunGetApiV1AnalysisRunsRunId({
+        path: { run_id: runId },
+      }),
+    )
+
+  static getResults = (runId: string) =>
+    unwrap(
+      analysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResults({
+        path: { run_id: runId },
+      }),
+    )
+
+  static invalidate = (runId: string, reason: string) =>
+    unwrap(
+      analysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidate({
+        path: { run_id: runId },
+        body: { reason },
+      }),
+    )
+}
+
+export class FiguresApi {
+  static create = (
+    projectId: string,
+    body: import("../generated/types.gen").FigurePlanCreate,
+  ) =>
+    unwrap(
+      figuresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlans({
+        path: { project_id: projectId },
+        body,
+      }),
+    )
+
+  static getPlan = (planId: string) =>
+    unwrap(
+      figuresGetFigurePlanGetApiV1FigurePlansPlanId({
+        path: { plan_id: planId },
+      }),
+    )
+
+  static recommend = (
+    projectId: string,
+    body: import("../generated/types.gen").FigureRecommendationRequest,
+  ) =>
+    unwrap(
+      figuresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendations(
+        { path: { project_id: projectId }, body },
+      ),
+    )
+
+  static render = (
+    planId: string,
+    body: import("../generated/types.gen").FigureRenderCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      figuresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRuns({
+        path: { plan_id: planId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+
+  static getRenderRun = (runId: string) =>
+    unwrap(
+      figuresGetFigureRenderRunGetApiV1FigureRenderRunsRunId({
+        path: { run_id: runId },
+      }),
+    )
+
+  static get = (figureId: string) =>
+    unwrap(
+      figuresGetFigureGetApiV1FiguresFigureId({
+        path: { figure_id: figureId },
+      }),
+    )
+
+  static issues = (figureId: string) =>
+    unwrap(
+      figuresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssues({
+        path: { figure_id: figureId },
+      }),
+    )
+
+  static requestConfirmation = (figureId: string) =>
+    unwrap(
+      figuresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequests({
+        path: { figure_id: figureId },
+      }),
+    )
+
+  static download = (figureId: string, formatName: string) =>
+    unwrap(
+      figuresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatName({
+        path: { figure_id: figureId, format_name: formatName.toLowerCase() },
+      }),
     )
 }
 

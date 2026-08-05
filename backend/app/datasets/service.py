@@ -40,6 +40,10 @@ from app.models import (
     DatasetVersion,
     DatasetVersionStatus,
     DatasetVersionType,
+    Figure,
+    FigurePlan,
+    FigurePlanStatus,
+    FigureStatus,
     IdempotencyRecord,
     ProjectMemberRole,
     StorageProvider,
@@ -883,6 +887,30 @@ def invalidate_version(
     version.status = DatasetVersionStatus.INVALIDATED
     version.invalidated_at = get_datetime_utc()
     version.invalidation_reason = payload.reason.strip()
+    for plan in session.exec(
+        select(FigurePlan).where(
+            FigurePlan.dataset_version_id == version.id,
+            FigurePlan.status != FigurePlanStatus.INVALIDATED,
+        )
+    ):
+        plan.status = FigurePlanStatus.INVALIDATED
+        plan.invalidated_at = version.invalidated_at
+        plan.invalidation_reason = (
+            f"Upstream DatasetVersion invalidated: {version.invalidation_reason}"
+        )
+        session.add(plan)
+    for figure in session.exec(
+        select(Figure).where(
+            Figure.dataset_version_id == version.id,
+            Figure.status != FigureStatus.INVALIDATED,
+        )
+    ):
+        figure.status = FigureStatus.INVALIDATED
+        figure.invalidated_at = version.invalidated_at
+        figure.invalidation_reason = (
+            f"Upstream DatasetVersion invalidated: {version.invalidation_reason}"
+        )
+        session.add(figure)
     if dataset.current_version_id == version.id:
         replacement = session.exec(
             select(DatasetVersion)

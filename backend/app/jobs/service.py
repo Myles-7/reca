@@ -783,6 +783,24 @@ def fail_job(
     job.retryable = retryable
     session.add(run)
     session.add(job)
+    if job.task_type == JobTaskType.ANALYSIS_RUN:
+        from app.analysis.service import mark_failed_analysis_job
+
+        mark_failed_analysis_job(
+            session,
+            job=job,
+            error_code=error_code,
+            worker_id=worker_id,
+        )
+    elif job.task_type == JobTaskType.FIGURE_RENDER:
+        from app.figures.service import mark_failed_figure_job
+
+        mark_failed_figure_job(
+            session,
+            job=job,
+            error_code=error_code,
+            worker_id=worker_id,
+        )
     _audit(
         session,
         job=job,

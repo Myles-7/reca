@@ -15,6 +15,623 @@ export type AllRowsSelector = {
 }
 
 /**
+ * AlternativeHypothesis
+ */
+export type AlternativeHypothesis = "TWO_SIDED" | "LESS" | "GREATER"
+
+/**
+ * AnalysisApprovalEnvelope
+ */
+export type AnalysisApprovalEnvelope = {
+  data: AnalysisApprovalPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * AnalysisApprovalPublic
+ */
+export type AnalysisApprovalPublic = {
+  /**
+   * Approval Id
+   */
+  approval_id: string
+  /**
+   * Analysis Plan Id
+   */
+  analysis_plan_id: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Payload Hash
+   */
+  payload_hash: string
+  /**
+   * Expires At
+   */
+  expires_at: string | null
+}
+
+/**
+ * AnalysisAssumptionPublic
+ */
+export type AnalysisAssumptionPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Analysis Plan Id
+   */
+  analysis_plan_id: string
+  check_code: AssumptionCheckCode
+  /**
+   * Subject Key
+   */
+  subject_key: string
+  status: AssumptionCheckStatus
+  /**
+   * Explanation
+   */
+  explanation: string
+  /**
+   * Evidence
+   */
+  evidence: {
+    [key: string]: unknown
+  }
+  /**
+   * Blocks Approval
+   */
+  blocks_approval: boolean
+  /**
+   * Checked At
+   */
+  checked_at: string
+}
+
+/**
+ * AnalysisGoal
+ */
+export type AnalysisGoal =
+  | "DESCRIBE"
+  | "CORRELATION"
+  | "COMPARE_GROUPS"
+  | "MODEL"
+
+/**
+ * AnalysisInvalidate
+ */
+export type AnalysisInvalidate = {
+  /**
+   * Reason
+   */
+  reason: string
+}
+
+/**
+ * AnalysisMethod
+ */
+export type AnalysisMethod =
+  | "DESCRIPTIVE_STATISTICS"
+  | "PEARSON_CORRELATION"
+  | "SPEARMAN_CORRELATION"
+  | "INDEPENDENT_TWO_GROUP"
+  | "PAIRED_TWO_GROUP"
+  | "SIMPLE_LINEAR_REGRESSION"
+
+/**
+ * AnalysisParameters
+ */
+export type AnalysisParameters = {
+  /**
+   * Confidence Level
+   */
+  confidence_level?: number
+  alternative?: AlternativeHypothesis
+  variance_mode?: VarianceMode
+  /**
+   * Independence Confirmed
+   */
+  independence_confirmed?: boolean
+  /**
+   * Pairing Confirmed
+   */
+  pairing_confirmed?: boolean
+  /**
+   * Pair Id Column Id
+   */
+  pair_id_column_id?: string | null
+  /**
+   * Assumption Confirmations
+   */
+  assumption_confirmations?: Array<AssumptionCheckCode>
+  /**
+   * Acknowledged Quality Issue Ids
+   */
+  acknowledged_quality_issue_ids?: Array<string>
+  /**
+   * Sensitive Column Acknowledgements
+   */
+  sensitive_column_acknowledgements?: Array<string>
+}
+
+/**
+ * AnalysisPlanCreate
+ */
+export type AnalysisPlanCreate = {
+  /**
+   * Research Question Version Id
+   */
+  research_question_version_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  analysis_goal: AnalysisGoal
+  method: AnalysisMethod
+  /**
+   * Dependent Variable Ids
+   */
+  dependent_variable_ids?: Array<string>
+  /**
+   * Independent Variable Ids
+   */
+  independent_variable_ids?: Array<string>
+  /**
+   * Control Variable Ids
+   */
+  control_variable_ids?: Array<string>
+  missing_data_policy: MissingDataPolicy
+  /**
+   * Sample Filter
+   */
+  sample_filter?:
+    | ({
+        operator: "EQUALS"
+      } & EqualsFilter)
+    | ({
+        operator: "IN"
+      } & InFilter)
+    | ({
+        operator: "IS_NOT_NULL" | "IS_NULL"
+      } & NullFilter)
+    | ({
+        operator: "NUMERIC_RANGE"
+      } & NumericRangeFilter)
+    | null
+  parameters?: AnalysisParameters
+}
+
+/**
+ * AnalysisPlanEnvelope
+ */
+export type AnalysisPlanEnvelope = {
+  data: AnalysisPlanPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * AnalysisPlanPublic
+ */
+export type AnalysisPlanPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Research Question Version Id
+   */
+  research_question_version_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  analysis_goal: AnalysisGoal
+  method: AnalysisMethod
+  /**
+   * Dependent Variable Ids
+   */
+  dependent_variable_ids: Array<string>
+  /**
+   * Independent Variable Ids
+   */
+  independent_variable_ids: Array<string>
+  /**
+   * Control Variable Ids
+   */
+  control_variable_ids: Array<string>
+  /**
+   * Missing Data Policy
+   */
+  missing_data_policy: {
+    [key: string]: unknown
+  }
+  /**
+   * Sample Filter
+   */
+  sample_filter: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Parameters
+   */
+  parameters: {
+    [key: string]: unknown
+  }
+  status: AnalysisPlanStatus
+  /**
+   * Validation Hash
+   */
+  validation_hash: string | null
+  /**
+   * Validation Warnings
+   */
+  validation_warnings: Array<string>
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string | null
+  /**
+   * Payload Hash
+   */
+  payload_hash: string | null
+  /**
+   * Approval Stale
+   */
+  approval_stale: boolean
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Checks
+   */
+  checks: Array<AnalysisAssumptionPublic>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * AnalysisPlanStatus
+ */
+export type AnalysisPlanStatus =
+  | "DRAFT"
+  | "VALIDATING"
+  | "NEEDS_INPUT"
+  | "READY"
+  | "NEEDS_APPROVAL"
+  | "APPROVED"
+  | "REJECTED"
+  | "INVALIDATED"
+
+/**
+ * AnalysisPlanUpdate
+ */
+export type AnalysisPlanUpdate = {
+  analysis_goal?: AnalysisGoal | null
+  method?: AnalysisMethod | null
+  /**
+   * Dependent Variable Ids
+   */
+  dependent_variable_ids?: Array<string> | null
+  /**
+   * Independent Variable Ids
+   */
+  independent_variable_ids?: Array<string> | null
+  /**
+   * Control Variable Ids
+   */
+  control_variable_ids?: Array<string> | null
+  missing_data_policy?: MissingDataPolicy | null
+  /**
+   * Sample Filter
+   */
+  sample_filter?:
+    | ({
+        operator: "EQUALS"
+      } & EqualsFilter)
+    | ({
+        operator: "IN"
+      } & InFilter)
+    | ({
+        operator: "IS_NOT_NULL" | "IS_NULL"
+      } & NullFilter)
+    | ({
+        operator: "NUMERIC_RANGE"
+      } & NumericRangeFilter)
+    | null
+  parameters?: AnalysisParameters | null
+}
+
+/**
+ * AnalysisResultPublic
+ */
+export type AnalysisResultPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Analysis Run Id
+   */
+  analysis_run_id: string
+  /**
+   * Result Key
+   */
+  result_key: string
+  result_type: AnalysisResultType
+  /**
+   * Schema Version
+   */
+  schema_version: string
+  /**
+   * Is Primary
+   */
+  is_primary: boolean
+  /**
+   * Payload
+   */
+  payload: {
+    [key: string]: unknown
+  }
+  /**
+   * Result Hash
+   */
+  result_hash: string
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * AnalysisResultType
+ */
+export type AnalysisResultType =
+  | "DESCRIPTIVE_NUMERIC"
+  | "DESCRIPTIVE_CATEGORICAL"
+  | "CORRELATION"
+  | "GROUP_COMPARISON"
+  | "REGRESSION"
+  | "DIAGNOSTIC"
+
+/**
+ * AnalysisResultsEnvelope
+ */
+export type AnalysisResultsEnvelope = {
+  data: AnalysisResultsPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * AnalysisResultsPublic
+ */
+export type AnalysisResultsPublic = {
+  /**
+   * Analysis Run Id
+   */
+  analysis_run_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  status: AnalysisRunStatus
+  /**
+   * Results
+   */
+  results: Array<AnalysisResultPublic>
+  /**
+   * Code Artifact Id
+   */
+  code_artifact_id: string | null
+  /**
+   * Log Artifact Id
+   */
+  log_artifact_id: string | null
+  /**
+   * Environment
+   */
+  environment: {
+    [key: string]: unknown
+  } | null
+}
+
+/**
+ * AnalysisRunCreate
+ */
+export type AnalysisRunCreate = {
+  /**
+   * Run Reason
+   */
+  run_reason?: string | null
+}
+
+/**
+ * AnalysisRunEnvelope
+ */
+export type AnalysisRunEnvelope = {
+  data: AnalysisRunPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * AnalysisRunPublic
+ */
+export type AnalysisRunPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Analysis Plan Id
+   */
+  analysis_plan_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Run Number
+   */
+  run_number: number
+  /**
+   * Idempotency Key
+   */
+  idempotency_key: string
+  /**
+   * Run Reason
+   */
+  run_reason: string | null
+  status: AnalysisRunStatus
+  /**
+   * Parameters Hash
+   */
+  parameters_hash: string
+  /**
+   * Input Hash
+   */
+  input_hash: string
+  /**
+   * Environment Hash
+   */
+  environment_hash: string | null
+  /**
+   * Environment Snapshot
+   */
+  environment_snapshot: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Effective N
+   */
+  effective_n: number | null
+  /**
+   * Code Artifact Id
+   */
+  code_artifact_id: string | null
+  /**
+   * Log Artifact Id
+   */
+  log_artifact_id: string | null
+  /**
+   * Requested By
+   */
+  requested_by: string | null
+  /**
+   * Started At
+   */
+  started_at: string | null
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Result Count
+   */
+  result_count: number
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * AnalysisRunRequestEnvelope
+ */
+export type AnalysisRunRequestEnvelope = {
+  data: AnalysisRunRequestPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * AnalysisRunRequestPublic
+ */
+export type AnalysisRunRequestPublic = {
+  analysis_run: AnalysisRunPublic
+  job: JobPublic
+}
+
+/**
+ * AnalysisRunStatus
+ */
+export type AnalysisRunStatus =
+  | "QUEUED"
+  | "RUNNING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCEL_REQUESTED"
+  | "CANCELLED"
+  | "INVALIDATED"
+
+/**
  * ApprovalDecisionPublic
  */
 export type ApprovalDecisionPublic = {
@@ -545,6 +1162,32 @@ export type ArtifactUploadSession = {
 }
 
 /**
+ * AssumptionCheckCode
+ */
+export type AssumptionCheckCode =
+  | "DATA_TYPE"
+  | "SAMPLE_SIZE"
+  | "MISSINGNESS"
+  | "CONSTANT"
+  | "LINEARITY"
+  | "OUTLIER_INFLUENCE"
+  | "NORMALITY"
+  | "VARIANCE_HOMOGENEITY"
+  | "PAIRING_VALIDITY"
+  | "RESIDUAL_DIAGNOSTIC"
+
+/**
+ * AssumptionCheckStatus
+ */
+export type AssumptionCheckStatus =
+  | "PASSED"
+  | "FAILED"
+  | "WARNING"
+  | "NOT_APPLICABLE"
+  | "REQUIRES_USER_CONFIRMATION"
+  | "UNKNOWN"
+
+/**
  * AuditActorPublic
  */
 export type AuditActorPublic = {
@@ -733,6 +1376,56 @@ export type BodyLoginLoginAccessTokenPostApiV1LoginAccessToken = {
    * Client Secret
    */
   client_secret?: string | null
+}
+
+/**
+ * BoxplotParameters
+ */
+export type BoxplotParameters = {
+  /**
+   * Width Inches
+   */
+  width_inches?: number
+  /**
+   * Height Inches
+   */
+  height_inches?: number
+  /**
+   * Dpi
+   */
+  dpi?: number
+  /**
+   * Title
+   */
+  title?: string | null
+  /**
+   * X Label
+   */
+  x_label?: string | null
+  /**
+   * Y Label
+   */
+  y_label?: string | null
+  /**
+   * X Unit
+   */
+  x_unit?: string | null
+  /**
+   * Y Unit
+   */
+  y_unit?: string | null
+  /**
+   * Kind
+   */
+  kind?: "BOXPLOT"
+  /**
+   * Value Column Id
+   */
+  value_column_id: string
+  /**
+   * Group Column Id
+   */
+  group_column_id?: string | null
 }
 
 /**
@@ -1067,6 +1760,52 @@ export type ContractErrorDetail = {
  */
 export type ContractErrorResponse = {
   error: ContractErrorDetail
+}
+
+/**
+ * CorrelationMatrixParameters
+ */
+export type CorrelationMatrixParameters = {
+  /**
+   * Width Inches
+   */
+  width_inches?: number
+  /**
+   * Height Inches
+   */
+  height_inches?: number
+  /**
+   * Dpi
+   */
+  dpi?: number
+  /**
+   * Title
+   */
+  title?: string | null
+  /**
+   * X Label
+   */
+  x_label?: string | null
+  /**
+   * Y Label
+   */
+  y_label?: string | null
+  /**
+   * X Unit
+   */
+  x_unit?: string | null
+  /**
+   * Y Unit
+   */
+  y_unit?: string | null
+  /**
+   * Kind
+   */
+  kind?: "CORRELATION_MATRIX"
+  /**
+   * Column Ids
+   */
+  column_ids: Array<string>
 }
 
 /**
@@ -2139,6 +2878,24 @@ export type DocumentUploadMeta = {
 }
 
 /**
+ * EqualsFilter
+ */
+export type EqualsFilter = {
+  /**
+   * Operator
+   */
+  operator: "EQUALS"
+  /**
+   * Column Id
+   */
+  column_id: string
+  /**
+   * Value
+   */
+  value: string | number | number | boolean
+}
+
+/**
  * ErrorDetail
  */
 export type ErrorDetail = {
@@ -2743,6 +3500,596 @@ export type FieldEvidenceStatus =
   | "NO_LOCATED_EVIDENCE"
 
 /**
+ * FigureApprovalEnvelope
+ */
+export type FigureApprovalEnvelope = {
+  data: FigureApprovalPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * FigureApprovalPublic
+ */
+export type FigureApprovalPublic = {
+  /**
+   * Approval Id
+   */
+  approval_id: string
+  /**
+   * Figure Id
+   */
+  figure_id: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Payload Hash
+   */
+  payload_hash: string
+  /**
+   * Expires At
+   */
+  expires_at: string | null
+}
+
+/**
+ * FigureArtifactPublic
+ */
+export type FigureArtifactPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Format
+   */
+  format: string
+  artifact_type: ArtifactType
+  status: ArtifactStatus
+  /**
+   * Sha256
+   */
+  sha256: string
+  /**
+   * Mime Type
+   */
+  mime_type: string
+  /**
+   * Size Bytes
+   */
+  size_bytes: number
+  /**
+   * Downloadable
+   */
+  downloadable: boolean
+}
+
+/**
+ * FigureChartType
+ */
+export type FigureChartType =
+  | "SCATTER"
+  | "GROUP_COMPARISON"
+  | "HISTOGRAM"
+  | "BOXPLOT"
+  | "CORRELATION_MATRIX"
+
+/**
+ * FigureEnvelope
+ */
+export type FigureEnvelope = {
+  data: FigurePublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * FigureIssueSeverity
+ */
+export type FigureIssueSeverity = "ERROR" | "WARNING" | "INFO"
+
+/**
+ * FigureIssueStatus
+ */
+export type FigureIssueStatus =
+  | "OPEN"
+  | "ACKNOWLEDGED"
+  | "RESOLVED"
+  | "INVALIDATED"
+
+/**
+ * FigureIssueType
+ */
+export type FigureIssueType =
+  | "MISSING_AXIS_LABEL"
+  | "MISSING_UNIT"
+  | "MISSING_LEGEND"
+  | "MISSING_CAPTION"
+  | "UNDEFINED_ERROR_BAR"
+  | "MISLEADING_AXIS_RANGE"
+  | "LOW_RESOLUTION"
+  | "VERSION_MISMATCH"
+  | "RESULT_MISMATCH"
+
+/**
+ * FigureIssuesEnvelope
+ */
+export type FigureIssuesEnvelope = {
+  data: FigureIssuesPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * FigureIssuesPublic
+ */
+export type FigureIssuesPublic = {
+  /**
+   * Figure Id
+   */
+  figure_id: string
+  /**
+   * Issues
+   */
+  issues: Array<FigureValidationIssuePublic>
+}
+
+/**
+ * FigurePlanCreate
+ */
+export type FigurePlanCreate = {
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Analysis Run Id
+   */
+  analysis_run_id?: string | null
+  /**
+   * Analysis Result Id
+   */
+  analysis_result_id?: string | null
+  chart_type: FigureChartType
+  /**
+   * Parameters
+   */
+  parameters:
+    | ({
+        kind: "SCATTER"
+      } & ScatterParameters)
+    | ({
+        kind: "GROUP_COMPARISON"
+      } & GroupComparisonParameters)
+    | ({
+        kind: "HISTOGRAM"
+      } & HistogramParameters)
+    | ({
+        kind: "BOXPLOT"
+      } & BoxplotParameters)
+    | ({
+        kind: "CORRELATION_MATRIX"
+      } & CorrelationMatrixParameters)
+  /**
+   * Caption
+   */
+  caption: string
+}
+
+/**
+ * FigurePlanEnvelope
+ */
+export type FigurePlanEnvelope = {
+  data: FigurePlanPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * FigurePlanPublic
+ */
+export type FigurePlanPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Analysis Run Id
+   */
+  analysis_run_id: string | null
+  /**
+   * Analysis Result Id
+   */
+  analysis_result_id: string | null
+  chart_type: FigureChartType
+  /**
+   * Parameters
+   */
+  parameters: {
+    [key: string]: unknown
+  }
+  /**
+   * Caption
+   */
+  caption: string
+  status: FigurePlanStatus
+  /**
+   * Plan Hash
+   */
+  plan_hash: string
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * FigurePlanStatus
+ */
+export type FigurePlanStatus = "DRAFT" | "READY" | "INVALIDATED" | "ARCHIVED"
+
+/**
+ * FigurePublic
+ */
+export type FigurePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Figure Plan Id
+   */
+  figure_plan_id: string
+  /**
+   * Figure Render Run Id
+   */
+  figure_render_run_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Analysis Run Id
+   */
+  analysis_run_id: string | null
+  /**
+   * Analysis Result Id
+   */
+  analysis_result_id: string | null
+  /**
+   * Version Number
+   */
+  version_number: number
+  chart_type: FigureChartType
+  status: FigureStatus
+  /**
+   * Caption
+   */
+  caption: string
+  /**
+   * Figure Hash
+   */
+  figure_hash: string
+  /**
+   * Png Artifact Id
+   */
+  png_artifact_id: string
+  /**
+   * Svg Artifact Id
+   */
+  svg_artifact_id: string
+  /**
+   * Pdf Artifact Id
+   */
+  pdf_artifact_id: string
+  /**
+   * Code Artifact Id
+   */
+  code_artifact_id: string
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Confirmed At
+   */
+  confirmed_at: string | null
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Validation Issues
+   */
+  validation_issues: Array<FigureValidationIssuePublic>
+  /**
+   * Artifacts
+   */
+  artifacts: Array<FigureArtifactPublic>
+  /**
+   * Approval Stale
+   */
+  approval_stale: boolean
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * FigureRecommendationEnvelope
+ */
+export type FigureRecommendationEnvelope = {
+  data: FigureRecommendationPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * FigureRecommendationPublic
+ */
+export type FigureRecommendationPublic = {
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Suggestions
+   */
+  suggestions: Array<{
+    [key: string]: unknown
+  }>
+  /**
+   * Deterministic
+   */
+  deterministic: boolean
+  /**
+   * Reason
+   */
+  reason: string | null
+}
+
+/**
+ * FigureRecommendationRequest
+ */
+export type FigureRecommendationRequest = {
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Analysis Run Id
+   */
+  analysis_run_id?: string | null
+}
+
+/**
+ * FigureRenderCreate
+ */
+export type FigureRenderCreate = {
+  /**
+   * Reason
+   */
+  reason?: string | null
+}
+
+/**
+ * FigureRenderRequestEnvelope
+ */
+export type FigureRenderRequestEnvelope = {
+  data: FigureRenderRequestPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * FigureRenderRequestPublic
+ */
+export type FigureRenderRequestPublic = {
+  figure_render_run: FigureRenderRunPublic
+  job: JobPublic
+}
+
+/**
+ * FigureRenderRunEnvelope
+ */
+export type FigureRenderRunEnvelope = {
+  data: FigureRenderRunPublic
+  meta: M5ResponseMeta
+}
+
+/**
+ * FigureRenderRunPublic
+ */
+export type FigureRenderRunPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Figure Plan Id
+   */
+  figure_plan_id: string
+  /**
+   * Dataset Version Id
+   */
+  dataset_version_id: string
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Render Number
+   */
+  render_number: number
+  /**
+   * Idempotency Key
+   */
+  idempotency_key: string
+  status: FigureRenderRunStatus
+  /**
+   * Parameters Hash
+   */
+  parameters_hash: string
+  /**
+   * Input Hash
+   */
+  input_hash: string
+  /**
+   * Environment Hash
+   */
+  environment_hash: string | null
+  /**
+   * Environment Snapshot
+   */
+  environment_snapshot: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Requested By
+   */
+  requested_by: string | null
+  /**
+   * Started At
+   */
+  started_at: string | null
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Figure Id
+   */
+  figure_id: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * FigureRenderRunStatus
+ */
+export type FigureRenderRunStatus =
+  | "QUEUED"
+  | "RUNNING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCEL_REQUESTED"
+  | "CANCELLED"
+  | "INVALIDATED"
+
+/**
+ * FigureStatus
+ */
+export type FigureStatus =
+  | "DRAFT"
+  | "READY"
+  | "NEEDS_REVIEW"
+  | "CONFIRMED"
+  | "INVALIDATED"
+  | "ARCHIVED"
+
+/**
+ * FigureValidationIssuePublic
+ */
+export type FigureValidationIssuePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Figure Id
+   */
+  figure_id: string
+  issue_type: FigureIssueType
+  severity: FigureIssueSeverity
+  status: FigureIssueStatus
+  /**
+   * Subject Key
+   */
+  subject_key: string
+  /**
+   * Message
+   */
+  message: string
+  /**
+   * Evidence
+   */
+  evidence: {
+    [key: string]: unknown
+  }
+  /**
+   * Blocks Confirmation
+   */
+  blocks_confirmation: boolean
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
  * FoundationCounts
  */
 export type FoundationCounts = {
@@ -2769,6 +4116,60 @@ export type FoundationCounts = {
 }
 
 /**
+ * GroupComparisonParameters
+ */
+export type GroupComparisonParameters = {
+  /**
+   * Width Inches
+   */
+  width_inches?: number
+  /**
+   * Height Inches
+   */
+  height_inches?: number
+  /**
+   * Dpi
+   */
+  dpi?: number
+  /**
+   * Title
+   */
+  title?: string | null
+  /**
+   * X Label
+   */
+  x_label?: string | null
+  /**
+   * Y Label
+   */
+  y_label?: string | null
+  /**
+   * X Unit
+   */
+  x_unit?: string | null
+  /**
+   * Y Unit
+   */
+  y_unit?: string | null
+  /**
+   * Kind
+   */
+  kind?: "GROUP_COMPARISON"
+  /**
+   * Group Column Id
+   */
+  group_column_id: string
+  /**
+   * Value Column Id
+   */
+  value_column_id: string
+  /**
+   * Error Bar
+   */
+  error_bar?: "CI_FROM_RESULT" | "NONE"
+}
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -2776,6 +4177,74 @@ export type HttpValidationError = {
    * Detail
    */
   detail?: Array<ValidationError>
+}
+
+/**
+ * HistogramParameters
+ */
+export type HistogramParameters = {
+  /**
+   * Width Inches
+   */
+  width_inches?: number
+  /**
+   * Height Inches
+   */
+  height_inches?: number
+  /**
+   * Dpi
+   */
+  dpi?: number
+  /**
+   * Title
+   */
+  title?: string | null
+  /**
+   * X Label
+   */
+  x_label?: string | null
+  /**
+   * Y Label
+   */
+  y_label?: string | null
+  /**
+   * X Unit
+   */
+  x_unit?: string | null
+  /**
+   * Y Unit
+   */
+  y_unit?: string | null
+  /**
+   * Kind
+   */
+  kind?: "HISTOGRAM"
+  /**
+   * Value Column Id
+   */
+  value_column_id: string
+  /**
+   * Bins
+   */
+  bins?: number
+}
+
+/**
+ * InFilter
+ */
+export type InFilter = {
+  /**
+   * Operator
+   */
+  operator: "IN"
+  /**
+   * Column Id
+   */
+  column_id: string
+  /**
+   * Values
+   */
+  values: Array<string | number | number | boolean>
 }
 
 /**
@@ -3952,6 +5421,24 @@ export type M4ResponseMeta = {
 }
 
 /**
+ * M5ResponseMeta
+ */
+export type M5ResponseMeta = {
+  /**
+   * Request Id
+   */
+  request_id?: string | null
+  /**
+   * Schema Version
+   */
+  schema_version?: string
+  /**
+   * Idempotency Replayed
+   */
+  idempotency_replayed?: boolean
+}
+
+/**
  * ManualEvidenceSpanCreate
  */
 export type ManualEvidenceSpanCreate = {
@@ -4207,6 +5694,18 @@ export type MissingCellsPublic = {
 }
 
 /**
+ * MissingDataMode
+ */
+export type MissingDataMode = "COMPLETE_CASE" | "PAIRWISE_COMPLETE"
+
+/**
+ * MissingDataPolicy
+ */
+export type MissingDataPolicy = {
+  mode: MissingDataMode
+}
+
+/**
  * NewPassword
  */
 export type NewPassword = {
@@ -4221,6 +5720,20 @@ export type NewPassword = {
 }
 
 /**
+ * NullFilter
+ */
+export type NullFilter = {
+  /**
+   * Operator
+   */
+  operator: "IS_NULL" | "IS_NOT_NULL"
+  /**
+   * Column Id
+   */
+  column_id: string
+}
+
+/**
  * NullSelector
  */
 export type NullSelector = {
@@ -4232,6 +5745,36 @@ export type NullSelector = {
    * Column Id
    */
   column_id: string
+}
+
+/**
+ * NumericRangeFilter
+ */
+export type NumericRangeFilter = {
+  /**
+   * Operator
+   */
+  operator: "NUMERIC_RANGE"
+  /**
+   * Column Id
+   */
+  column_id: string
+  /**
+   * Minimum
+   */
+  minimum?: number | null
+  /**
+   * Maximum
+   */
+  maximum?: number | null
+  /**
+   * Include Minimum
+   */
+  include_minimum?: boolean
+  /**
+   * Include Maximum
+   */
+  include_maximum?: boolean
 }
 
 /**
@@ -4328,28 +5871,6 @@ export type PaginationPublic = {
  * ParserCoverage
  */
 export type ParserCoverage = "UNKNOWN" | "PARTIAL_TEXT" | "FULL_TEXT"
-
-/**
- * PrivateUserCreate
- */
-export type PrivateUserCreate = {
-  /**
-   * Email
-   */
-  email: string
-  /**
-   * Password
-   */
-  password: string
-  /**
-   * Full Name
-   */
-  full_name: string
-  /**
-   * Is Verified
-   */
-  is_verified?: boolean
-}
 
 /**
  * ProjectCreate
@@ -5418,6 +6939,56 @@ export type ResponseMeta = {
 }
 
 /**
+ * ScatterParameters
+ */
+export type ScatterParameters = {
+  /**
+   * Width Inches
+   */
+  width_inches?: number
+  /**
+   * Height Inches
+   */
+  height_inches?: number
+  /**
+   * Dpi
+   */
+  dpi?: number
+  /**
+   * Title
+   */
+  title?: string | null
+  /**
+   * X Label
+   */
+  x_label?: string | null
+  /**
+   * Y Label
+   */
+  y_label?: string | null
+  /**
+   * X Unit
+   */
+  x_unit?: string | null
+  /**
+   * Y Unit
+   */
+  y_unit?: string | null
+  /**
+   * Kind
+   */
+  kind?: "SCATTER"
+  /**
+   * X Column Id
+   */
+  x_column_id: string
+  /**
+   * Y Column Id
+   */
+  y_column_id: string
+}
+
+/**
  * SortOrder
  */
 export type SortOrder = "asc" | "desc"
@@ -5918,6 +7489,11 @@ export type ValueInSelector = {
    */
   values: Array<string | number | number | boolean | null>
 }
+
+/**
+ * VarianceMode
+ */
+export type VarianceMode = "EQUAL" | "WELCH"
 
 /**
  * VersionComparisonPublic
@@ -11166,6 +12742,639 @@ export type DataCleaningGetDataTransformationGetApiV1DataTransformationsTransfor
 export type DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponse =
   DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses[keyof DataCleaningGetDataTransformationGetApiV1DataTransformationsTransformationIdResponses]
 
+export type AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansData =
+  {
+    body: AnalysisPlanCreate
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/analysis-plans"
+  }
+
+export type AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansError =
+  AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansErrors[keyof AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansErrors]
+
+export type AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: AnalysisPlanEnvelope
+  }
+
+export type AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponse =
+  AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponses[keyof AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponses]
+
+export type AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdData = {
+  body?: never
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/analysis-plans/{plan_id}"
+}
+
+export type AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdError =
+  AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdErrors[keyof AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdErrors]
+
+export type AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: AnalysisPlanEnvelope
+}
+
+export type AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdResponse =
+  AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdResponses[keyof AnalysisGetAnalysisPlanGetApiV1AnalysisPlansPlanIdResponses]
+
+export type AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdData = {
+  body: AnalysisPlanUpdate
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/analysis-plans/{plan_id}"
+}
+
+export type AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdError =
+  AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdErrors[keyof AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdErrors]
+
+export type AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: AnalysisPlanEnvelope
+}
+
+export type AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdResponse =
+  AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdResponses[keyof AnalysisUpdateAnalysisPlanPatchApiV1AnalysisPlansPlanIdResponses]
+
+export type AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/analysis-plans/{plan_id}/validate"
+  }
+
+export type AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateError =
+  AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateErrors[keyof AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateErrors]
+
+export type AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: AnalysisPlanEnvelope
+  }
+
+export type AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateResponse =
+  AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateResponses[keyof AnalysisValidateAnalysisPlanPostApiV1AnalysisPlansPlanIdValidateResponses]
+
+export type AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/analysis-plans/{plan_id}/approval-requests"
+  }
+
+export type AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsError =
+  AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsErrors[keyof AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsErrors]
+
+export type AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: AnalysisApprovalEnvelope
+  }
+
+export type AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsResponse =
+  AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsResponses[keyof AnalysisRequestAnalysisApprovalPostApiV1AnalysisPlansPlanIdApprovalRequestsResponses]
+
+export type AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsData = {
+  body: AnalysisRunCreate
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/analysis-plans/{plan_id}/runs"
+}
+
+export type AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsError =
+  AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsErrors[keyof AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsErrors]
+
+export type AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsResponses = {
+  /**
+   * Successful Response
+   */
+  202: AnalysisRunRequestEnvelope
+}
+
+export type AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsResponse =
+  AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsResponses[keyof AnalysisRunAnalysisPlanPostApiV1AnalysisPlansPlanIdRunsResponses]
+
+export type AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdData = {
+  body?: never
+  path: {
+    /**
+     * Run Id
+     */
+    run_id: string
+  }
+  query?: never
+  url: "/api/v1/analysis-runs/{run_id}"
+}
+
+export type AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdError =
+  AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdErrors[keyof AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdErrors]
+
+export type AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: AnalysisRunEnvelope
+}
+
+export type AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdResponse =
+  AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdResponses[keyof AnalysisGetAnalysisRunGetApiV1AnalysisRunsRunIdResponses]
+
+export type AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsData = {
+  body?: never
+  path: {
+    /**
+     * Run Id
+     */
+    run_id: string
+  }
+  query?: never
+  url: "/api/v1/analysis-runs/{run_id}/results"
+}
+
+export type AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsError =
+  AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsErrors[keyof AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsErrors]
+
+export type AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: AnalysisResultsEnvelope
+  }
+
+export type AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsResponse =
+  AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsResponses[keyof AnalysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResultsResponses]
+
+export type AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateData =
+  {
+    body: AnalysisInvalidate
+    path: {
+      /**
+       * Run Id
+       */
+      run_id: string
+    }
+    query?: never
+    url: "/api/v1/analysis-runs/{run_id}/invalidate"
+  }
+
+export type AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateError =
+  AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateErrors[keyof AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateErrors]
+
+export type AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: AnalysisRunEnvelope
+  }
+
+export type AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateResponse =
+  AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateResponses[keyof AnalysisInvalidateAnalysisRunPostApiV1AnalysisRunsRunIdInvalidateResponses]
+
+export type FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansData = {
+  body: FigurePlanCreate
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/figure-plans"
+}
+
+export type FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansError =
+  FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansErrors[keyof FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansErrors]
+
+export type FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: FigurePlanEnvelope
+  }
+
+export type FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponse =
+  FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponses[keyof FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponses]
+
+export type FiguresGetFigurePlanGetApiV1FigurePlansPlanIdData = {
+  body?: never
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/figure-plans/{plan_id}"
+}
+
+export type FiguresGetFigurePlanGetApiV1FigurePlansPlanIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type FiguresGetFigurePlanGetApiV1FigurePlansPlanIdError =
+  FiguresGetFigurePlanGetApiV1FigurePlansPlanIdErrors[keyof FiguresGetFigurePlanGetApiV1FigurePlansPlanIdErrors]
+
+export type FiguresGetFigurePlanGetApiV1FigurePlansPlanIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: FigurePlanEnvelope
+}
+
+export type FiguresGetFigurePlanGetApiV1FigurePlansPlanIdResponse =
+  FiguresGetFigurePlanGetApiV1FigurePlansPlanIdResponses[keyof FiguresGetFigurePlanGetApiV1FigurePlansPlanIdResponses]
+
+export type FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsData =
+  {
+    body: FigureRecommendationRequest
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/figure-recommendations"
+  }
+
+export type FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsError =
+  FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsErrors[keyof FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsErrors]
+
+export type FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: FigureRecommendationEnvelope
+  }
+
+export type FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsResponse =
+  FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsResponses[keyof FiguresGetFigureRecommendationsPostApiV1ProjectsProjectIdFigureRecommendationsResponses]
+
+export type FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsData = {
+  body: FigureRenderCreate
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/figure-plans/{plan_id}/render-runs"
+}
+
+export type FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsError =
+  FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsErrors[keyof FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsErrors]
+
+export type FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: FigureRenderRequestEnvelope
+  }
+
+export type FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsResponse =
+  FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsResponses[keyof FiguresRenderFigurePlanPostApiV1FigurePlansPlanIdRenderRunsResponses]
+
+export type FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdData = {
+  body?: never
+  path: {
+    /**
+     * Run Id
+     */
+    run_id: string
+  }
+  query?: never
+  url: "/api/v1/figure-render-runs/{run_id}"
+}
+
+export type FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdError =
+  FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdErrors[keyof FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdErrors]
+
+export type FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: FigureRenderRunEnvelope
+}
+
+export type FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdResponse =
+  FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdResponses[keyof FiguresGetFigureRenderRunGetApiV1FigureRenderRunsRunIdResponses]
+
+export type FiguresGetFigureGetApiV1FiguresFigureIdData = {
+  body?: never
+  path: {
+    /**
+     * Figure Id
+     */
+    figure_id: string
+  }
+  query?: never
+  url: "/api/v1/figures/{figure_id}"
+}
+
+export type FiguresGetFigureGetApiV1FiguresFigureIdErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError
+}
+
+export type FiguresGetFigureGetApiV1FiguresFigureIdError =
+  FiguresGetFigureGetApiV1FiguresFigureIdErrors[keyof FiguresGetFigureGetApiV1FiguresFigureIdErrors]
+
+export type FiguresGetFigureGetApiV1FiguresFigureIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: FigureEnvelope
+}
+
+export type FiguresGetFigureGetApiV1FiguresFigureIdResponse =
+  FiguresGetFigureGetApiV1FiguresFigureIdResponses[keyof FiguresGetFigureGetApiV1FiguresFigureIdResponses]
+
+export type FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesData =
+  {
+    body?: never
+    path: {
+      /**
+       * Figure Id
+       */
+      figure_id: string
+    }
+    query?: never
+    url: "/api/v1/figures/{figure_id}/validation-issues"
+  }
+
+export type FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesError =
+  FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesErrors[keyof FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesErrors]
+
+export type FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: FigureIssuesEnvelope
+  }
+
+export type FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesResponse =
+  FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesResponses[keyof FiguresGetFigureValidationIssuesGetApiV1FiguresFigureIdValidationIssuesResponses]
+
+export type FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Figure Id
+       */
+      figure_id: string
+    }
+    query?: never
+    url: "/api/v1/figures/{figure_id}/approval-requests"
+  }
+
+export type FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsError =
+  FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsErrors[keyof FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsErrors]
+
+export type FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: FigureApprovalEnvelope
+  }
+
+export type FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsResponse =
+  FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsResponses[keyof FiguresRequestFigureConfirmationPostApiV1FiguresFigureIdApprovalRequestsResponses]
+
+export type FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameData =
+  {
+    body?: never
+    path: {
+      /**
+       * Figure Id
+       */
+      figure_id: string
+      /**
+       * Format Name
+       */
+      format_name: string
+    }
+    query?: never
+    url: "/api/v1/figures/{figure_id}/downloads/{format_name}"
+  }
+
+export type FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameErrors =
+  {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError
+  }
+
+export type FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameError =
+  FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameErrors[keyof FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameErrors]
+
+export type FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ArtifactDownloadEnvelope
+  }
+
+export type FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponse =
+  FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses[keyof FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses]
+
 export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsData = {
   body?: never
   path: {
@@ -11751,30 +13960,3 @@ export type ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses = {
 
 export type ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponse =
   ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses[keyof ApprovalsCancelPostApiV1ApprovalsApprovalIdCancelResponses]
-
-export type PrivateCreateUserPostApiV1PrivateUsersData = {
-  body: PrivateUserCreate
-  path?: never
-  query?: never
-  url: "/api/v1/private/users/"
-}
-
-export type PrivateCreateUserPostApiV1PrivateUsersErrors = {
-  /**
-   * Validation Error
-   */
-  422: HttpValidationError
-}
-
-export type PrivateCreateUserPostApiV1PrivateUsersError =
-  PrivateCreateUserPostApiV1PrivateUsersErrors[keyof PrivateCreateUserPostApiV1PrivateUsersErrors]
-
-export type PrivateCreateUserPostApiV1PrivateUsersResponses = {
-  /**
-   * Successful Response
-   */
-  200: UserPublic
-}
-
-export type PrivateCreateUserPostApiV1PrivateUsersResponse =
-  PrivateCreateUserPostApiV1PrivateUsersResponses[keyof PrivateCreateUserPostApiV1PrivateUsersResponses]

@@ -1,0 +1,41 @@
+{
+  "descriptive_numeric": {
+    "values": [1.0, 2.0, 3.0, 4.0, 5.0, null],
+    "n": 5,
+    "missing_n": 1,
+    "mean": 3.0,
+    "standard_deviation": 1.5811388300841898,
+    "q1": 2.0,
+    "median": 3.0,
+    "q3": 4.0
+  },
+  "descriptive_categorical": {
+    "values": ["A", "B", "A", null],
+    "n": 3,
+    "missing_n": 1,
+    "categories": {
+      "A": {"count": 2, "proportion": 0.6666666666666666},
+      "B": {"count": 1, "proportion": 0.3333333333333333}
+    }
+  },
+  "pearson_positive": {
+    "x": [1.0, 2.0, 3.0, 4.0, 5.0],
+    "y": [2.0, 4.0, 6.0, 8.0, 10.0],
+    "coefficient": 1.0,
+    "p_value": 0.0,
+    "effective_n": 5
+  },
+  "pearson_negative": {
+    "x": [1.0, 2.0, 3.0, 4.0, 5.0],
+    "y": [10.0, 8.0, 6.0, 4.0, 2.0],
+    "coefficient": -1.0,
+    "p_value": 0.0,
+    "effective_n": 5
+  },
+  "spearman_ties": {
+    "x": [1.0, 2.0, 2.0, 3.0, 4.0],
+    "y": [10.0, 20.0, 20.0, 30.0, 40.0],
+    "coefficient": 1.0,
+    "effective_n": 5
+  }
+}

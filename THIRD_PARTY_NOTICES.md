@@ -56,6 +56,11 @@ planned RECA business capability for that project is implemented.
 | Pandera | <https://github.com/unionai-oss/pandera> | `0.32.1` / `v0.32.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M4 P0 dataframe validation runtime; RECA-owned Run/Issue normalization remains authoritative |
 | pandas | <https://github.com/pandas-dev/pandas> | `3.0.5` / `v3.0.5` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Deterministic in-process CSV/dataframe parsing used behind RECA-owned contracts |
 | openpyxl | <https://foss.heptapod.net/openpyxl/openpyxl> | `3.1.5` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | XLSX structure/value reader constrained to read-only, data-only and no-link mode |
+| NumPy | <https://github.com/numpy/numpy> | `2.5.1` / `v2.5.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 deterministic array and descriptive-statistics runtime |
+| SciPy | <https://github.com/scipy/scipy> | `1.18.0` / `v1.18.0` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 approved comparisons, correlations and assumption checks behind RECA normalization |
+| statsmodels | <https://github.com/statsmodels/statsmodels> | `0.14.6` / `v0.14.6` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 simple OLS structured numerical runtime; textual Summary is non-authoritative |
+| Matplotlib | <https://github.com/matplotlib/matplotlib> | `3.11.1` / `v3.11.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 deterministic Agg figure renderer using fixed RECA templates |
+| Noto CJK fonts | <https://github.com/notofonts/noto-cjk> | Debian `fonts-noto-cjk` `1:20220127+repack1-1` | `SYSTEM_PACKAGE` | `ALREADY_INTEGRATED` | Fixed headless CJK font supplied by the Worker image; font files are SIL Open Font License 1.1 |
 
 ## M4 data quality runtime dependencies
 
@@ -76,6 +81,45 @@ planned RECA business capability for that project is implemented.
 - Acceptance tests: Python 3.14 compatibility, lazy failure normalization, input immutability, deterministic ordering, mixed/nullable/custom checks and measured fixture performance
 - Upgrade requirement: rerun the M4 Spike, golden normalization tests and dependency audit before changing Pandera, pandas or NumPy resolution
 - Commercialization review: normal MIT dependency attribution; RECA root license remains pending
+- Reviewed at: 2026-08-04
+
+## M5 analysis and figure runtime dependencies
+
+- Projects: NumPy, SciPy, statsmodels and Matplotlib
+- Repositories: <https://github.com/numpy/numpy>, <https://github.com/scipy/scipy>, <https://github.com/statsmodels/statsmodels>, <https://github.com/matplotlib/matplotlib>
+- Upstream Commit/Tag: released versions `2.5.1`, `1.18.0`, `0.14.6` and `3.11.1`; research commits remain recorded in the corresponding source-research documents
+- License: NumPy BSD-3-Clause with bundled notices; SciPy BSD-3-Clause with bundled binary/runtime notices; statsmodels BSD-3-Clause; Matplotlib License with bundled component notices
+- License files: installed wheel metadata and upstream license directories; SciPy/NumPy/Matplotlib bundled notices remain part of the distributed packages
+- Integration mode: `DIRECT_DEPENDENCY` behind RECA-owned `StatisticalEngine` and `FigureRenderer` protocols
+- Status: `DIRECT_DEPENDENCY`
+- Copied paths: none
+- Modified paths: none in upstream source
+- Modification summary: released wheels are called only through method-specific normalization; library objects, repr, textual Summary and arbitrary callable selection do not enter API or persistence contracts
+- Attribution location: this notice, `backend/pyproject.toml`, root workspace `uv.lock`, ADR-004 and the SciPy/statsmodels/Matplotlib source-research records
+- Special restrictions: Python 3.14 official wheels only; explicit missing/alternative/variance/CI policies; finite-number validation; Warning normalization; fixed Agg templates and output metadata; no user code, formula language, pickle or arbitrary function execution
+- Source of truth: approved AnalysisPlan, immutable DatasetVersion/Artifact hashes, AnalysisRun environment snapshot, immutable AnalysisResult, Figure/Artifact records and RECA template/config hashes
+- Fallback: unsupported or invalid numerical output fails with stable RECA errors; no AI calculation and no alternate engine is silently substituted
+- Acceptance tests: hand-checkable statistics, independent golden values, warning/NaN/constant/small-sample/singular cases, repeated structured equality, five chart types in PNG/SVG/PDF and Worker image wheel verification
+- Upgrade requirement: rerun M5 golden statistics, structured regression, rendering metadata/hash, font, performance, Python 3.14 wheel and dependency-audit gates
+- Commercialization review: preserve all package and bundled-component notices; RECA root license remains pending
+- Reviewed at: 2026-08-04
+
+- Project: Noto CJK fonts
+- Repository: <https://github.com/notofonts/noto-cjk>
+- Upstream Commit/Tag: Debian package `fonts-noto-cjk` `1:20220127+repack1-1`
+- License: font files under SIL Open Font License 1.1; Debian package copyright metadata also identifies packaging materials under GPL-3+
+- License file: `/usr/share/doc/fonts-noto-cjk/copyright` in the Worker image
+- Integration mode: `SYSTEM_PACKAGE`
+- Status: `ALREADY_INTEGRATED`
+- Copied paths: none in the repository
+- Modified paths: none
+- Modification summary: installed by `backend/Dockerfile` to provide a deterministic CJK-capable Matplotlib font
+- Attribution location: this notice, Worker image package metadata and `backend/Dockerfile`
+- Special restrictions: render configuration must select the approved Noto CJK family and fail closed when the font is unavailable; do not silently fall back to a glyph-incomplete font
+- Fallback: Figure render fails with `EXTERNAL_CAPABILITY_UNAVAILABLE`; no successful Artifact is finalized
+- Acceptance tests: font discovery, CJK glyph render, missing-font failure and repeated PNG/SVG/PDF output checks
+- Upgrade requirement: repeat font discovery, glyph, output metadata/hash and package-license checks
+- Commercialization review: retain SIL OFL attribution and Debian package copyright metadata in distributed images
 - Reviewed at: 2026-08-04
 
 - Project: pandas
@@ -246,9 +290,6 @@ these projects by this documentation task.
 | PDF.js | `a80897dc9a2eb80c474717b683a4153f5b628ac7` | Apache-2.0 | `DIRECT_DEPENDENCY` | `ADOPTED` | `pdfjs-dist` 6.2.108 in `frontend/package.json` and `bun.lock`; matching worker loaded from the package URL |
 | PaperQA2 | `d7675d7b7eddeb3535e8c260399c5bbeeb818c50` | Apache-2.0 | `SELECTIVE_VENDOR` | `RESEARCHED` | None; experiment required |
 | ASReview | `d3e863c94e1945ace7848b6ca5bcf2fb1eecbdb5` | Apache-2.0 | `DIRECT_DEPENDENCY_WITH_PROVIDER` | `RESEARCHED` | None; experiment required |
-| SciPy | `420a778219f6db170f0fda8dcda4add8a32fd1d6` | BSD-3-Clause plus bundled licenses | `DIRECT_DEPENDENCY` | `PLANNED` | None |
-| statsmodels | `d3187f844d196de1760829820a7c872a6d6ebb1d` | BSD-3-Clause | `DIRECT_DEPENDENCY` | `PLANNED` | None |
-| Matplotlib | `faf5d100aed23d3271245c2e800ea47f86dd858b` | Matplotlib license plus bundled licenses/fonts | `DIRECT_DEPENDENCY` | `PLANNED` | None |
 | DVC | `f74c1c0e709de61f571905802bc0c75035dc6ef2` | Apache-2.0 | `DEVELOPMENT_ONLY` | `RESEARCHED` | None |
 | Great Expectations | `33614cd70a407f8b9589fa2cf5f1cb1d7d0723aa` | Apache-2.0 | `DESIGN_REFERENCE` | `RESEARCHED` | None |
 | python-docx | `e45454602b53e8e572b179ccf1c91093ec9f4ed7` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None |

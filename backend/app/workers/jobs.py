@@ -46,6 +46,15 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
             implementation_metadata={"task_name": "reca.execute_job"},
         )
         if claim is None:
+            job = session.get(Job, parsed_job_id)
+            if job is not None and job.task_type == JobTaskType.ANALYSIS_RUN:
+                from app.analysis.service import mark_cancelled_analysis_job
+
+                mark_cancelled_analysis_job(session, job=job)
+            if job is not None and job.task_type == JobTaskType.FIGURE_RENDER:
+                from app.figures.service import mark_cancelled_figure_job
+
+                mark_cancelled_figure_job(session, job=job)
             return {"job_id": job_id, "claimed": False}
         job = session.get(Job, parsed_job_id)
         assert job is not None
@@ -222,6 +231,31 @@ def _execute_dataset_transform(
     )
 
 
+def _execute_analysis_run(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.analysis.service import execute_analysis_job
+
+    analysis_run = execute_analysis_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="analysis_run",
+        output_object_id=analysis_run.id,
+        log_artifact_id=analysis_run.log_artifact_id,
+    )
+
+
+def _execute_figure_render(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.figures.service import execute_render_job
+
+    render_run = execute_render_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="figure_render_run",
+        output_object_id=render_run.id,
+    )
+
+
 register_job_handler(
     JobTaskType.RESEARCH_QUESTION_SCOPING,
     _execute_research_question_scoping,
@@ -237,3 +271,5 @@ register_job_handler(JobTaskType.LITERATURE_SUMMARIZE, _execute_evidence_set_sum
 register_job_handler(JobTaskType.TOPIC_GENERATE, _execute_topic_generation)
 register_job_handler(JobTaskType.DATASET_PROFILE, _execute_dataset_profile)
 register_job_handler(JobTaskType.DATASET_TRANSFORM, _execute_dataset_transform)
+register_job_handler(JobTaskType.ANALYSIS_RUN, _execute_analysis_run)
+register_job_handler(JobTaskType.FIGURE_RENDER, _execute_figure_render)
