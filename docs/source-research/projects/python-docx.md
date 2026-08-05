@@ -1,14 +1,14 @@
 # python-docx source research
 
-Document version: `1.0.1`
+Document version: `1.1.0`
 
 Document status: `APPROVED FOR M1 DEVELOPMENT`
 
-Research status: `PLANNED`
+Research status: `ADOPTED_DEPENDENCY`
 
 Last researched: 2026-07-31
 
-Last updated: 2026-07-31
+Last updated: 2026-08-05
 
 Phase summary: [Manuscript, citation and frontend research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_4_MANUSCRIPT_FRONTEND.md)
 
@@ -124,10 +124,11 @@ LibreOffice, and compare package relationships and protected content.
 
 ## RECA current state
 
-python-docx plus controlled OOXML handling is planned for M6 manuscript checks
-and low-risk fixes. This research installs nothing and does not implement DOCX
-processing. ManuscriptVersion, ManuscriptIssue, transformation, Artifact and
-approval remain RECA-owned.
+M6 stage 0 adopted `python-docx==1.2.0` with `lxml==6.1.1` in the Python 3.14.3
+API/Worker dependency lock and verified the combination with an isolated DOCX/OOXML
+Spike. No production Manuscript parser, endpoint, Worker handler or domain migration is
+implemented by that dependency adoption. ManuscriptVersion, ManuscriptIssue,
+transformation, Artifact and approval remain RECA-owned.
 
 ## Recommended integration mode
 
@@ -198,3 +199,4 @@ compatibility pass.
 | --- | --- | --- | --- |
 | 1.0.0 | 2026-07-31 | Conditional Approval | Recorded the research evidence, recommendation and RECA authority boundaries |
 | 1.0.1 | 2026-07-31 | APPROVED FOR M1 DEVELOPMENT | Synchronized documentation approval; research status and integration facts are unchanged |
+| 1.1.0 | 2026-08-05 | ADOPTED_DEPENDENCY | M6 stage 0 pinned python-docx 1.2.0 and lxml 6.1.1 after Python 3.14.3 Worker/OOXML Spike verification; production manuscript behavior remains unimplemented |

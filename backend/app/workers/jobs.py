@@ -55,6 +55,17 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
                 from app.figures.service import mark_cancelled_figure_job
 
                 mark_cancelled_figure_job(session, job=job)
+            if job is not None and job.task_type == JobTaskType.MANUSCRIPT_CHECK:
+                from app.manuscripts.service import mark_cancelled_check_job
+
+                mark_cancelled_check_job(session, job=job)
+            if job is not None and job.task_type in {
+                JobTaskType.MANUSCRIPT_REVISION_AUDIT,
+                JobTaskType.MANUSCRIPT_TRANSFORM,
+            }:
+                from app.manuscripts.stage2 import mark_cancelled_stage2_job
+
+                mark_cancelled_stage2_job(session, job=job)
             return {"job_id": job_id, "claimed": False}
         job = session.get(Job, parsed_job_id)
         assert job is not None
@@ -256,6 +267,41 @@ def _execute_figure_render(
     )
 
 
+def _execute_manuscript_check(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.manuscripts.service import execute_check_job
+
+    check_run = execute_check_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="manuscript_check_run",
+        output_object_id=check_run.id,
+    )
+
+
+def _execute_manuscript_revision_audit(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.manuscripts.stage2 import execute_revision_audit_job
+
+    audit = execute_revision_audit_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="audit_result", output_object_id=audit.id
+    )
+
+
+def _execute_manuscript_transform(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.manuscripts.stage2 import execute_fix_job
+
+    transformation = execute_fix_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="manuscript_transformation",
+        output_object_id=transformation.id,
+    )
+
+
 register_job_handler(
     JobTaskType.RESEARCH_QUESTION_SCOPING,
     _execute_research_question_scoping,
@@ -273,3 +319,8 @@ register_job_handler(JobTaskType.DATASET_PROFILE, _execute_dataset_profile)
 register_job_handler(JobTaskType.DATASET_TRANSFORM, _execute_dataset_transform)
 register_job_handler(JobTaskType.ANALYSIS_RUN, _execute_analysis_run)
 register_job_handler(JobTaskType.FIGURE_RENDER, _execute_figure_render)
+register_job_handler(JobTaskType.MANUSCRIPT_CHECK, _execute_manuscript_check)
+register_job_handler(
+    JobTaskType.MANUSCRIPT_REVISION_AUDIT, _execute_manuscript_revision_audit
+)
+register_job_handler(JobTaskType.MANUSCRIPT_TRANSFORM, _execute_manuscript_transform)

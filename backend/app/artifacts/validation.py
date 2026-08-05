@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import re
+import stat
 import unicodedata
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
+
+from defusedxml import ElementTree
 
 from app.core.config import settings
 from app.models import ArtifactType
@@ -37,6 +40,23 @@ _DANGEROUS_SUFFIXES = {
     ".scr",
     ".sh",
 }
+
+_DOCX_MAX_ENTRIES = 2_000
+_DOCX_MAX_EXPANDED_BYTES = 120_000_000
+_DOCX_MAX_MEMBER_RATIO = 100
+_DOCX_MAX_PATH_DEPTH = 20
+_DOCX_MAX_XML_BYTES = 10_000_000
+_NESTED_ARCHIVE_SUFFIXES = {".zip", ".7z", ".rar", ".tar", ".gz", ".bz2", ".xz"}
+_ACTIVE_RELATIONSHIP_MARKERS = (
+    "/attachedtemplate",
+    "/oleobject",
+    "/package",
+    "/control",
+    "/vbaProject".lower(),
+)
+_WORD_MAIN_CONTENT_TYPE = (
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"
+)
 
 
 def normalize_filename(value: str) -> str:
@@ -107,30 +127,106 @@ def policy_for(
     )
 
 
+def _safe_member_name(name: str) -> PurePosixPath:
+    if "\\" in name or name.startswith(("/", "\\")) or re.match(r"^[A-Za-z]:", name):
+        raise ValueError("unsafe archive path")
+    member = PurePosixPath(name)
+    if (
+        member.is_absolute()
+        or ".." in member.parts
+        or len(member.parts) > _DOCX_MAX_PATH_DEPTH
+    ):
+        raise ValueError("unsafe archive path")
+    return member
+
+
+def _validate_docx_package(
+    archive: zipfile.ZipFile, entries: list[zipfile.ZipInfo]
+) -> None:
+    names = {entry.filename for entry in entries}
+    if "[Content_Types].xml" not in names or "word/document.xml" not in names:
+        raise ValueError("required word document structure is missing")
+    content_types = ElementTree.fromstring(archive.read("[Content_Types].xml"))
+    main_types = {
+        item.attrib.get("ContentType", "")
+        for item in content_types
+        if item.attrib.get("PartName") == "/word/document.xml"
+    }
+    if main_types != {_WORD_MAIN_CONTENT_TYPE}:
+        raise ValueError("macro-enabled or invalid Word main content type")
+    for item in content_types:
+        content_type = item.attrib.get("ContentType", "").lower()
+        part_name = item.attrib.get("PartName", "").lower()
+        if (
+            "macroenabled" in content_type
+            or "vba" in content_type
+            or "vbaproject" in part_name
+        ):
+            raise ValueError("macro-enabled package is not accepted")
+    for name in names:
+        lowered = name.lower()
+        if lowered.endswith("vbaproject.bin"):
+            raise ValueError("VBA project is not accepted")
+        if Path(lowered).suffix in _NESTED_ARCHIVE_SUFFIXES:
+            raise ValueError("nested archive is not accepted")
+        if not lowered.endswith(".rels"):
+            continue
+        root = ElementTree.fromstring(archive.read(name))
+        for relationship in root:
+            relation_type = relationship.attrib.get("Type", "").lower()
+            target_mode = relationship.attrib.get("TargetMode", "").lower()
+            if any(
+                relation_type.endswith(marker)
+                for marker in _ACTIVE_RELATIONSHIP_MARKERS
+            ):
+                raise ValueError("active package relationship is not accepted")
+            if target_mode == "external" and not relation_type.endswith("/hyperlink"):
+                raise ValueError("external package relationship is not accepted")
+
+
 def _validate_zip(path: Path, *, expected_prefix: str) -> None:
     try:
         with zipfile.ZipFile(path) as archive:
             entries = archive.infolist()
-            if len(entries) > 10_000:
+            is_docx = expected_prefix == "word/"
+            max_entries = _DOCX_MAX_ENTRIES if is_docx else 10_000
+            max_expanded = (
+                _DOCX_MAX_EXPANDED_BYTES if is_docx else settings.MAX_UPLOAD_BYTES * 4
+            )
+            max_ratio = _DOCX_MAX_MEMBER_RATIO if is_docx else 1_000
+            if len(entries) > max_entries:
                 raise ValueError("too many archive entries")
             total_uncompressed = 0
             found_expected = False
+            seen_names: set[str] = set()
             for entry in entries:
-                member = PurePosixPath(entry.filename.replace("\\", "/"))
-                if member.is_absolute() or ".." in member.parts:
-                    raise ValueError("unsafe archive path")
+                member = _safe_member_name(entry.filename)
+                normalized_name = member.as_posix().casefold()
+                if normalized_name in seen_names:
+                    raise ValueError("duplicate archive member")
+                seen_names.add(normalized_name)
+                mode = entry.external_attr >> 16
+                file_type = stat.S_IFMT(mode)
+                if file_type not in {0, stat.S_IFREG, stat.S_IFDIR}:
+                    raise ValueError("non-regular archive member")
                 total_uncompressed += entry.file_size
-                if total_uncompressed > settings.MAX_UPLOAD_BYTES * 4:
+                if total_uncompressed > max_expanded:
                     raise ValueError("archive expansion exceeds limit")
                 if (
                     entry.compress_size
-                    and entry.file_size / entry.compress_size > 1_000
+                    and entry.file_size / entry.compress_size > max_ratio
                 ):
                     raise ValueError("archive compression ratio exceeds limit")
+                if is_docx and member.suffix.lower() == ".xml":
+                    if entry.file_size > _DOCX_MAX_XML_BYTES:
+                        raise ValueError("XML part exceeds limit")
+                    ElementTree.fromstring(archive.read(entry))
                 if entry.filename.startswith(expected_prefix):
                     found_expected = True
             if "[Content_Types].xml" not in archive.namelist() or not found_expected:
                 raise ValueError("required office document structure is missing")
+            if is_docx:
+                _validate_docx_package(archive, entries)
     except (OSError, ValueError, zipfile.BadZipFile) as error:
         raise ArtifactValidationError(
             status_code=415,

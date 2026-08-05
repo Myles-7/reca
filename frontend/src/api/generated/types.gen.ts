@@ -843,29 +843,11 @@ export type ApprovalRejectRequest = {
 }
 
 /**
- * ApprovalRequestPublic
+ * ApprovalRequestEnvelope
  */
-export type ApprovalRequestPublic = {
-  /**
-   * Approval Id
-   */
-  approval_id: string
-  /**
-   * Cleaning Plan Id
-   */
-  cleaning_plan_id: string
-  /**
-   * Status
-   */
-  status: string
-  /**
-   * Payload Hash
-   */
-  payload_hash: string
-  /**
-   * Expires At
-   */
-  expires_at: string | null
+export type ApprovalRequestEnvelope = {
+  data: AppApiM6ResponsesApprovalRequestPublic
+  meta: M6ResponseMeta
 }
 
 /**
@@ -1284,6 +1266,16 @@ export type AuditLogPublic = {
 export type AuditOutcome = "SUCCEEDED" | "FAILED" | "DENIED"
 
 /**
+ * AuditResultStatus
+ */
+export type AuditResultStatus =
+  | "QUEUED"
+  | "RUNNING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+
+/**
  * AuditTargetPublic
  */
 export type AuditTargetPublic = {
@@ -1300,6 +1292,11 @@ export type AuditTargetPublic = {
    */
   label: string | null
 }
+
+/**
+ * AuditType
+ */
+export type AuditType = "REVISION_DRIFT_AUDIT"
 
 /**
  * Body_datasets_upload_dataset_post_api_v1_projects_project_id_datasets
@@ -1482,6 +1479,240 @@ export type CastTypeParameters = {
    * On Invalid
    */
   on_invalid?: "FAIL" | "MARK_MISSING"
+}
+
+/**
+ * CheckRunCreate
+ */
+export type CheckRunCreate = {
+  /**
+   * Checks
+   */
+  checks: Array<
+    | "CITATION"
+    | "NUMERIC_CONSISTENCY"
+    | "CAUSALITY"
+    | "TERMINOLOGY"
+    | "BASIC_FORMAT"
+  >
+  /**
+   * Use Project Literature
+   */
+  use_project_literature?: boolean
+  /**
+   * Use Project Analysis Results
+   */
+  use_project_analysis_results?: boolean
+  /**
+   * Use Project Figures
+   */
+  use_project_figures?: boolean
+}
+
+/**
+ * ClaimConfidence
+ */
+export type ClaimConfidence = "HIGH" | "MEDIUM" | "LOW" | "UNKNOWN"
+
+/**
+ * ClaimCreate
+ */
+export type ClaimCreate = {
+  claim_type: ClaimType
+  /**
+   * Source Object Type
+   */
+  source_object_type:
+    | "manuscript_version"
+    | "analysis_result"
+    | "figure"
+    | "evidence_span"
+  /**
+   * Source Object Id
+   */
+  source_object_id: string
+  /**
+   * Source Location
+   */
+  source_location: {
+    [key: string]: unknown
+  }
+  /**
+   * Claim Text
+   */
+  claim_text: string
+  /**
+   * Normalized Claim
+   */
+  normalized_claim?: string | null
+  /**
+   * Scope Statement
+   */
+  scope_statement?: string | null
+  status?: ClaimStatus
+  confidence?: ClaimConfidence
+}
+
+/**
+ * ClaimEnvelope
+ */
+export type ClaimEnvelope = {
+  data: ClaimPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ClaimPublic
+ */
+export type ClaimPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  claim_type: ClaimType
+  /**
+   * Claim Text
+   */
+  claim_text: string
+  /**
+   * Normalized Claim
+   */
+  normalized_claim: string
+  /**
+   * Scope Statement
+   */
+  scope_statement: string | null
+  /**
+   * Source Object Type
+   */
+  source_object_type: string
+  /**
+   * Source Object Id
+   */
+  source_object_id: string
+  /**
+   * Source Location
+   */
+  source_location: {
+    [key: string]: unknown
+  }
+  /**
+   * Source Hash
+   */
+  source_hash: string
+  /**
+   * Text Hash
+   */
+  text_hash: string
+  status: ClaimStatus
+  confidence: ClaimConfidence
+  created_by_actor_type: AuditActorType
+  /**
+   * Created By Actor Id
+   */
+  created_by_actor_id: string | null
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string | null
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Confirmed At
+   */
+  confirmed_at: string | null
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ClaimStatus
+ */
+export type ClaimStatus =
+  | "DRAFT"
+  | "NEEDS_EVIDENCE"
+  | "SUPPORTED"
+  | "CONFLICTED"
+  | "INSUFFICIENT"
+  | "CONFIRMED"
+  | "REJECTED"
+  | "INVALIDATED"
+
+/**
+ * ClaimType
+ */
+export type ClaimType =
+  | "LITERATURE_SUMMARY"
+  | "CONSENSUS"
+  | "CONTROVERSY"
+  | "EVIDENCE_GAP"
+  | "TOPIC_RATIONALE"
+  | "DATA_DESCRIPTION"
+  | "STATISTICAL_RESULT"
+  | "INTERPRETATION"
+  | "MANUSCRIPT_STATEMENT"
+
+/**
+ * ClaimUpdate
+ */
+export type ClaimUpdate = {
+  /**
+   * Claim Text
+   */
+  claim_text?: string | null
+  /**
+   * Normalized Claim
+   */
+  normalized_claim?: string | null
+  /**
+   * Scope Statement
+   */
+  scope_statement?: string | null
+  /**
+   * Source Object Type
+   */
+  source_object_type?:
+    | "manuscript_version"
+    | "analysis_result"
+    | "figure"
+    | "evidence_span"
+    | null
+  /**
+   * Source Object Id
+   */
+  source_object_id?: string | null
+  /**
+   * Source Location
+   */
+  source_location?: {
+    [key: string]: unknown
+  } | null
+  status?: ClaimStatus | null
+  confidence?: ClaimConfidence | null
 }
 
 /**
@@ -4090,6 +4321,16 @@ export type FigureValidationIssuePublic = {
 }
 
 /**
+ * FixPlanCreate
+ */
+export type FixPlanCreate = {
+  /**
+   * Issue Ids
+   */
+  issue_ids: Array<string>
+}
+
+/**
  * FoundationCounts
  */
 export type FoundationCounts = {
@@ -4245,6 +4486,16 @@ export type InFilter = {
    * Values
    */
   values: Array<string | number | number | boolean>
+}
+
+/**
+ * IssueDecision
+ */
+export type IssueDecision = {
+  /**
+   * Reason
+   */
+  reason?: string | null
 }
 
 /**
@@ -4428,6 +4679,8 @@ export type JobTaskType =
   | "ANALYSIS_RUN"
   | "FIGURE_RENDER"
   | "MANUSCRIPT_CHECK"
+  | "MANUSCRIPT_TRANSFORM"
+  | "MANUSCRIPT_REVISION_AUDIT"
   | "EVIDENCE_AUDIT"
   | "REPRO_PACKAGE_EXPORT"
 
@@ -5249,7 +5502,7 @@ export type LocationVerificationStatus =
  * M4Envelope[ApprovalRequestPublic]
  */
 export type M4EnvelopeApprovalRequestPublic = {
-  data: ApprovalRequestPublic
+  data: AppApiM4ResponsesApprovalRequestPublic
   meta: M4ResponseMeta
 }
 
@@ -5345,7 +5598,7 @@ export type M4EnvelopeQualityRunRequestPublic = {
  * M4Envelope[TransformationExecutionPublic]
  */
 export type M4EnvelopeTransformationExecutionPublic = {
-  data: TransformationExecutionPublic
+  data: AppApiM4ResponsesTransformationExecutionPublic
   meta: M4ResponseMeta
 }
 
@@ -5439,6 +5692,24 @@ export type M5ResponseMeta = {
 }
 
 /**
+ * M6ResponseMeta
+ */
+export type M6ResponseMeta = {
+  /**
+   * Request Id
+   */
+  request_id?: string | null
+  /**
+   * Schema Version
+   */
+  schema_version?: string
+  /**
+   * Idempotency Replayed
+   */
+  idempotency_replayed?: boolean
+}
+
+/**
  * ManualEvidenceSpanCreate
  */
 export type ManualEvidenceSpanCreate = {
@@ -5457,6 +5728,674 @@ export type ManualEvidenceSpanCreate = {
   evidence_type: EvidenceType
   user_declared_read_scope: UserDeclaredReadScope
 }
+
+/**
+ * ManuscriptCheckRequestEnvelope
+ */
+export type ManuscriptCheckRequestEnvelope = {
+  data: ManuscriptCheckRequestPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptCheckRequestPublic
+ */
+export type ManuscriptCheckRequestPublic = {
+  manuscript_check_run: ManuscriptCheckRunPublic
+  job: JobPublic
+}
+
+/**
+ * ManuscriptCheckRunEnvelope
+ */
+export type ManuscriptCheckRunEnvelope = {
+  data: ManuscriptCheckRunPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptCheckRunPublic
+ */
+export type ManuscriptCheckRunPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Manuscript Version Id
+   */
+  manuscript_version_id: string
+  /**
+   * Rule Set Version
+   */
+  rule_set_version: string
+  /**
+   * Parser Version
+   */
+  parser_version: string
+  /**
+   * Source Hash
+   */
+  source_hash: string
+  /**
+   * Idempotency Key
+   */
+  idempotency_key: string
+  /**
+   * Requested Checks
+   */
+  requested_checks: Array<string>
+  status: ManuscriptCheckRunStatus
+  /**
+   * Issue Count
+   */
+  issue_count: number
+  /**
+   * High Issue Count
+   */
+  high_issue_count: number
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  /**
+   * Degradation
+   */
+  degradation: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Requested By
+   */
+  requested_by: string | null
+  /**
+   * Started At
+   */
+  started_at: string | null
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ManuscriptCheckRunStatus
+ */
+export type ManuscriptCheckRunStatus =
+  | "UPLOADED"
+  | "QUEUED"
+  | "PARSING"
+  | "CHECKING_RULES"
+  | "CHECKING_PROJECT_CONSISTENCY"
+  | "NEEDS_REVIEW"
+  | "COMPLETED"
+  | "FAILED"
+  | "LOW_CONFIDENCE"
+  | "CANCELLED"
+
+/**
+ * ManuscriptCreate
+ */
+export type ManuscriptCreate = {
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  /**
+   * Title
+   */
+  title?: string | null
+}
+
+/**
+ * ManuscriptCreatedEnvelope
+ */
+export type ManuscriptCreatedEnvelope = {
+  data: ManuscriptCreatedPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptCreatedPublic
+ */
+export type ManuscriptCreatedPublic = {
+  manuscript: ManuscriptPublic
+  version: ManuscriptVersionPublic
+}
+
+/**
+ * ManuscriptDownloadEnvelope
+ */
+export type ManuscriptDownloadEnvelope = {
+  data: ArtifactDownload
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptEnvelope
+ */
+export type ManuscriptEnvelope = {
+  data: ManuscriptPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptEvidenceType
+ */
+export type ManuscriptEvidenceType =
+  | "LITERATURE_RECORD"
+  | "EVIDENCE_SPAN"
+  | "ANALYSIS_RESULT"
+  | "FIGURE"
+  | "MANUSCRIPT_LOCATION"
+  | "RULE"
+
+/**
+ * ManuscriptIssueEnvelope
+ */
+export type ManuscriptIssueEnvelope = {
+  data: ManuscriptIssuePublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptIssueEvidencePublic
+ */
+export type ManuscriptIssueEvidencePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Manuscript Issue Id
+   */
+  manuscript_issue_id: string
+  evidence_type: ManuscriptEvidenceType
+  /**
+   * Evidence Object Type
+   */
+  evidence_object_type: string
+  /**
+   * Evidence Object Id
+   */
+  evidence_object_id: string | null
+  /**
+   * Evidence Text
+   */
+  evidence_text: string | null
+  /**
+   * Evidence Hash
+   */
+  evidence_hash: string
+  /**
+   * Evidence Metadata
+   */
+  evidence_metadata: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * ManuscriptIssueListEnvelope
+ */
+export type ManuscriptIssueListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ManuscriptIssuePublic>
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptIssuePublic
+ */
+export type ManuscriptIssuePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Manuscript Check Run Id
+   */
+  manuscript_check_run_id: string
+  /**
+   * Manuscript Version Id
+   */
+  manuscript_version_id: string
+  issue_type: ManuscriptIssueType
+  severity: ManuscriptIssueSeverity
+  /**
+   * Section Name
+   */
+  section_name: string | null
+  /**
+   * Paragraph Index
+   */
+  paragraph_index: number | null
+  /**
+   * Table Index
+   */
+  table_index: number | null
+  /**
+   * Locator
+   */
+  locator: {
+    [key: string]: unknown
+  }
+  /**
+   * Original Text
+   */
+  original_text: string | null
+  /**
+   * Normalized Reference
+   */
+  normalized_reference: string | null
+  /**
+   * Reason
+   */
+  reason: string
+  /**
+   * Suggestion
+   */
+  suggestion: string | null
+  /**
+   * Finding Hash
+   */
+  finding_hash: string
+  /**
+   * Confidence
+   */
+  confidence: string
+  /**
+   * Auto Fixable
+   */
+  auto_fixable: boolean
+  status: ManuscriptIssueStatus
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Decision Reason
+   */
+  decision_reason: string | null
+  /**
+   * Decided By
+   */
+  decided_by: string | null
+  /**
+   * Source Model Invocation Id
+   */
+  source_model_invocation_id: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Resolved At
+   */
+  resolved_at: string | null
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Evidence
+   */
+  evidence?: Array<ManuscriptIssueEvidencePublic>
+}
+
+/**
+ * ManuscriptIssueSeverity
+ */
+export type ManuscriptIssueSeverity = "HIGH" | "MEDIUM" | "LOW" | "INFO"
+
+/**
+ * ManuscriptIssueStatus
+ */
+export type ManuscriptIssueStatus =
+  | "OPEN"
+  | "ACKNOWLEDGED"
+  | "ACCEPTED"
+  | "REJECTED"
+  | "RESOLVED"
+  | "INVALIDATED"
+
+/**
+ * ManuscriptIssueType
+ */
+export type ManuscriptIssueType =
+  | "IN_TEXT_CITATION_MISSING_REFERENCE"
+  | "UNUSED_REFERENCE"
+  | "CITATION_METADATA_MISMATCH"
+  | "DUPLICATE_REFERENCE"
+  | "INVALID_DOI_FORMAT"
+  | "SAMPLE_SIZE_MISMATCH"
+  | "STATISTIC_MISMATCH"
+  | "FIGURE_TEXT_MISMATCH"
+  | "CAUSAL_OVERCLAIM"
+  | "POPULATION_OVERGENERALIZATION"
+  | "CONSENSUS_OVERCLAIM"
+  | "TERMINOLOGY_INCONSISTENCY"
+  | "UNDEFINED_ABBREVIATION"
+  | "HEADING_LEVEL_ISSUE"
+  | "FIGURE_NUMBERING_ISSUE"
+  | "UNIT_FORMAT_ISSUE"
+  | "PUNCTUATION_ISSUE"
+
+/**
+ * ManuscriptPublic
+ */
+export type ManuscriptPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Title
+   */
+  title: string | null
+  /**
+   * Current Version Id
+   */
+  current_version_id: string | null
+  status: ManuscriptStatus
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ManuscriptStatus
+ */
+export type ManuscriptStatus = "ACTIVE" | "ARCHIVED" | "INVALIDATED"
+
+/**
+ * ManuscriptTransformationEnvelope
+ */
+export type ManuscriptTransformationEnvelope = {
+  data: ManuscriptTransformationPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptTransformationPublic
+ */
+export type ManuscriptTransformationPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Manuscript Version Id
+   */
+  manuscript_version_id: string
+  /**
+   * Approved Issue Ids
+   */
+  approved_issue_ids: Array<string>
+  /**
+   * Plan Payload
+   */
+  plan_payload: {
+    [key: string]: unknown
+  }
+  /**
+   * Input Artifact Hash
+   */
+  input_artifact_hash: string
+  /**
+   * Preview
+   */
+  preview: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Preview Hash
+   */
+  preview_hash: string | null
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string | null
+  /**
+   * Output Manuscript Version Id
+   */
+  output_manuscript_version_id: string | null
+  /**
+   * Idempotency Key
+   */
+  idempotency_key: string | null
+  status: ManuscriptTransformationStatus
+  /**
+   * Payload Hash
+   */
+  payload_hash: string
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ManuscriptTransformationStatus
+ */
+export type ManuscriptTransformationStatus =
+  | "DRAFT"
+  | "NEEDS_APPROVAL"
+  | "APPROVED"
+  | "REJECTED"
+  | "QUEUED"
+  | "RUNNING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+  | "INVALIDATED"
+
+/**
+ * ManuscriptVersionEnvelope
+ */
+export type ManuscriptVersionEnvelope = {
+  data: ManuscriptVersionPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptVersionListEnvelope
+ */
+export type ManuscriptVersionListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ManuscriptVersionPublic>
+  meta: M6ResponseMeta
+}
+
+/**
+ * ManuscriptVersionPublic
+ */
+export type ManuscriptVersionPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Manuscript Id
+   */
+  manuscript_id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Version Number
+   */
+  version_number: number
+  /**
+   * Parent Version Id
+   */
+  parent_version_id: string | null
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  version_type: ManuscriptVersionType
+  /**
+   * Source Transformation Id
+   */
+  source_transformation_id: string | null
+  status: ManuscriptVersionStatus
+  /**
+   * Source Hash
+   */
+  source_hash: string
+  /**
+   * Parse Snapshot
+   */
+  parse_snapshot: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Created By
+   */
+  created_by: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ManuscriptVersionStatus
+ */
+export type ManuscriptVersionStatus =
+  | "UPLOADED"
+  | "AVAILABLE"
+  | "FAILED"
+  | "INVALIDATED"
+
+/**
+ * ManuscriptVersionType
+ */
+export type ManuscriptVersionType =
+  | "ORIGINAL"
+  | "USER_UPLOAD"
+  | "AUTO_FIXED"
+  | "USER_REVISED"
+  | "DERIVED"
 
 /**
  * MapCategoryAction
@@ -5930,6 +6869,34 @@ export type ProjectListEnvelope = {
   data: Array<ProjectPublic>
   pagination: PaginationMeta
   meta: ResponseMeta
+}
+
+/**
+ * ProjectManuscriptDiscoveryEnvelope
+ */
+export type ProjectManuscriptDiscoveryEnvelope = {
+  data: ProjectManuscriptDiscoveryPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * ProjectManuscriptDiscoveryPublic
+ */
+export type ProjectManuscriptDiscoveryPublic = {
+  /**
+   * State
+   */
+  state: "NONE" | "ACTIVE" | "ARCHIVED" | "INVALIDATED"
+  current_manuscript: ManuscriptPublic | null
+  current_version: ManuscriptVersionPublic | null
+  /**
+   * Manuscripts
+   */
+  manuscripts: Array<ManuscriptPublic>
+  /**
+   * Versions
+   */
+  versions: Array<ManuscriptVersionPublic>
 }
 
 /**
@@ -6939,6 +7906,136 @@ export type ResponseMeta = {
 }
 
 /**
+ * RevisionAuditCreate
+ */
+export type RevisionAuditCreate = {
+  /**
+   * Baseline Manuscript Version Id
+   */
+  baseline_manuscript_version_id: string
+  /**
+   * Candidate Manuscript Version Id
+   */
+  candidate_manuscript_version_id: string
+  /**
+   * Referenced Result Ids
+   */
+  referenced_result_ids?: Array<string>
+}
+
+/**
+ * RevisionAuditEnvelope
+ */
+export type RevisionAuditEnvelope = {
+  data: RevisionAuditPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * RevisionAuditPublic
+ */
+export type RevisionAuditPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  audit_type: AuditType
+  /**
+   * Before Version Id
+   */
+  before_version_id: string
+  /**
+   * After Version Id
+   */
+  after_version_id: string
+  /**
+   * Manuscript Id
+   */
+  manuscript_id: string
+  status: AuditResultStatus
+  /**
+   * Rule Set Version
+   */
+  rule_set_version: string
+  /**
+   * Before Source Hash
+   */
+  before_source_hash: string
+  /**
+   * After Source Hash
+   */
+  after_source_hash: string
+  /**
+   * Idempotency Key
+   */
+  idempotency_key: string
+  /**
+   * Request Snapshot
+   */
+  request_snapshot: {
+    [key: string]: unknown
+  }
+  /**
+   * Result
+   */
+  result: {
+    [key: string]: unknown
+  } | null
+  /**
+   * Result Hash
+   */
+  result_hash: string | null
+  /**
+   * Processing Run Id
+   */
+  processing_run_id: string | null
+  /**
+   * Requested By
+   */
+  requested_by: string | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * RevisionAuditRequestEnvelope
+ */
+export type RevisionAuditRequestEnvelope = {
+  data: RevisionAuditRequestPublic
+  meta: M6ResponseMeta
+}
+
+/**
+ * RevisionAuditRequestPublic
+ */
+export type RevisionAuditRequestPublic = {
+  audit_result: RevisionAuditPublic
+  job: JobPublic
+}
+
+/**
  * ScatterParameters
  */
 export type ScatterParameters = {
@@ -7211,11 +8308,11 @@ export type TopicGenerationRunPublic = {
 }
 
 /**
- * TransformationExecutionPublic
+ * TransformationExecutionEnvelope
  */
-export type TransformationExecutionPublic = {
-  transformation: DataTransformationPublic
-  job: JobPublic
+export type TransformationExecutionEnvelope = {
+  data: AppApiM6ResponsesTransformationExecutionPublic
+  meta: M6ResponseMeta
 }
 
 /**
@@ -7615,6 +8712,75 @@ export type WorksheetsPublic = {
    * Selected Worksheet Name
    */
   selected_worksheet_name: string | null
+}
+
+/**
+ * ApprovalRequestPublic
+ */
+export type AppApiM4ResponsesApprovalRequestPublic = {
+  /**
+   * Approval Id
+   */
+  approval_id: string
+  /**
+   * Cleaning Plan Id
+   */
+  cleaning_plan_id: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Payload Hash
+   */
+  payload_hash: string
+  /**
+   * Expires At
+   */
+  expires_at: string | null
+}
+
+/**
+ * TransformationExecutionPublic
+ */
+export type AppApiM4ResponsesTransformationExecutionPublic = {
+  transformation: DataTransformationPublic
+  job: JobPublic
+}
+
+/**
+ * ApprovalRequestPublic
+ */
+export type AppApiM6ResponsesApprovalRequestPublic = {
+  /**
+   * Approval Id
+   */
+  approval_id: string
+  status: ApprovalStatus
+  /**
+   * Payload Hash
+   */
+  payload_hash: string
+  /**
+   * Expires At
+   */
+  expires_at: string | null
+  /**
+   * Plan Id
+   */
+  plan_id?: string | null
+  /**
+   * Claim Id
+   */
+  claim_id?: string | null
+}
+
+/**
+ * TransformationExecutionPublic
+ */
+export type AppApiM6ResponsesTransformationExecutionPublic = {
+  transformation: ManuscriptTransformationPublic
+  job: JobPublic
 }
 
 export type HealthLiveHealthGetApiV1HealthLiveData = {
@@ -13374,6 +14540,1679 @@ export type FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNam
 
 export type FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponse =
   FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses[keyof FiguresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNameResponses]
+
+export type ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsData =
+  {
+    body: ManuscriptCreate
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/manuscripts"
+  }
+
+export type ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsError =
+  ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsErrors[keyof ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsErrors]
+
+export type ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ManuscriptCreatedEnvelope
+  }
+
+export type ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsResponse =
+  ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsResponses[keyof ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsResponses]
+
+export type ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/manuscript"
+  }
+
+export type ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptError =
+  ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptErrors[keyof ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptErrors]
+
+export type ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ProjectManuscriptDiscoveryEnvelope
+  }
+
+export type ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptResponse =
+  ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptResponses[keyof ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptResponses]
+
+export type ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdData = {
+  body?: never
+  path: {
+    /**
+     * Manuscript Id
+     */
+    manuscript_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscripts/{manuscript_id}"
+}
+
+export type ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdError =
+  ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdErrors[keyof ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdErrors]
+
+export type ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ManuscriptEnvelope
+}
+
+export type ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdResponse =
+  ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdResponses[keyof ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdResponses]
+
+export type ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsData =
+  {
+    body?: never
+    path: {
+      /**
+       * Manuscript Id
+       */
+      manuscript_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscripts/{manuscript_id}/versions"
+  }
+
+export type ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsError =
+  ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsErrors[keyof ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsErrors]
+
+export type ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ManuscriptVersionListEnvelope
+  }
+
+export type ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsResponse =
+  ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsResponses[keyof ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsResponses]
+
+export type ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdData = {
+  body?: never
+  path: {
+    /**
+     * Version Id
+     */
+    version_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscript-versions/{version_id}"
+}
+
+export type ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdError =
+  ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdErrors[keyof ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdErrors]
+
+export type ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ManuscriptVersionEnvelope
+  }
+
+export type ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdResponse =
+  ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdResponses[keyof ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdResponses]
+
+export type ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadData =
+  {
+    body?: never
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscript-versions/{version_id}/download"
+  }
+
+export type ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadError =
+  ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadErrors[keyof ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadErrors]
+
+export type ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ManuscriptDownloadEnvelope
+  }
+
+export type ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadResponse =
+  ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadResponses[keyof ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadResponses]
+
+export type ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsData =
+  {
+    body: CheckRunCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscript-versions/{version_id}/check-runs"
+  }
+
+export type ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsError =
+  ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsErrors[keyof ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsErrors]
+
+export type ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: ManuscriptCheckRequestEnvelope
+  }
+
+export type ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsResponse =
+  ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsResponses[keyof ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsResponses]
+
+export type ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdData = {
+  body?: never
+  path: {
+    /**
+     * Run Id
+     */
+    run_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscript-check-runs/{run_id}"
+}
+
+export type ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdError =
+  ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdErrors[keyof ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdErrors]
+
+export type ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ManuscriptCheckRunEnvelope
+}
+
+export type ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdResponse =
+  ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdResponses[keyof ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdResponses]
+
+export type ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesData = {
+  body?: never
+  path: {
+    /**
+     * Run Id
+     */
+    run_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscript-check-runs/{run_id}/issues"
+}
+
+export type ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesError =
+  ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesErrors[keyof ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesErrors]
+
+export type ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ManuscriptIssueListEnvelope
+  }
+
+export type ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesResponse =
+  ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesResponses[keyof ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesResponses]
+
+export type ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdData = {
+  body?: never
+  path: {
+    /**
+     * Issue Id
+     */
+    issue_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscript-issues/{issue_id}"
+}
+
+export type ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdError =
+  ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdErrors[keyof ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdErrors]
+
+export type ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ManuscriptIssueEnvelope
+}
+
+export type ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdResponse =
+  ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdResponses[keyof ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdResponses]
+
+export type ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptData = {
+  body: IssueDecision
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Issue Id
+     */
+    issue_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscript-issues/{issue_id}/accept"
+}
+
+export type ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptError =
+  ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptErrors[keyof ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptErrors]
+
+export type ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ManuscriptIssueEnvelope
+  }
+
+export type ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptResponse =
+  ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptResponses[keyof ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptResponses]
+
+export type ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectData = {
+  body: IssueDecision
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Issue Id
+     */
+    issue_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscript-issues/{issue_id}/reject"
+}
+
+export type ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectError =
+  ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectErrors[keyof ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectErrors]
+
+export type ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ManuscriptIssueEnvelope
+  }
+
+export type ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectResponse =
+  ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectResponses[keyof ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectResponses]
+
+export type ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsData =
+  {
+    body: RevisionAuditCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/manuscript-revision-audits"
+  }
+
+export type ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsError =
+  ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsErrors[keyof ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsErrors]
+
+export type ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: RevisionAuditRequestEnvelope
+  }
+
+export type ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsResponse =
+  ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsResponses[keyof ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsResponses]
+
+export type ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdData =
+  {
+    body?: never
+    path: {
+      /**
+       * Audit Id
+       */
+      audit_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscript-revision-audits/{audit_id}"
+  }
+
+export type ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdError =
+  ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdErrors[keyof ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdErrors]
+
+export type ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: RevisionAuditEnvelope
+  }
+
+export type ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdResponse =
+  ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdResponses[keyof ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdResponses]
+
+export type ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansData =
+  {
+    body: FixPlanCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Version Id
+       */
+      version_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscript-versions/{version_id}/fix-plans"
+  }
+
+export type ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansError =
+  ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansErrors[keyof ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansErrors]
+
+export type ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ManuscriptTransformationEnvelope
+  }
+
+export type ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansResponse =
+  ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansResponses[keyof ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansResponses]
+
+export type ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdData = {
+  body?: never
+  path: {
+    /**
+     * Plan Id
+     */
+    plan_id: string
+  }
+  query?: never
+  url: "/api/v1/manuscript-fix-plans/{plan_id}"
+}
+
+export type ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdError =
+  ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdErrors[keyof ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdErrors]
+
+export type ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ManuscriptTransformationEnvelope
+}
+
+export type ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdResponse =
+  ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdResponses[keyof ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdResponses]
+
+export type ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * If-Match
+       */
+      "If-Match"?: string | null
+    }
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscript-fix-plans/{plan_id}/preview"
+  }
+
+export type ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewError =
+  ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewErrors[keyof ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewErrors]
+
+export type ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ManuscriptTransformationEnvelope
+  }
+
+export type ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewResponse =
+  ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewResponses[keyof ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewResponses]
+
+export type ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscript-fix-plans/{plan_id}/approval-requests"
+  }
+
+export type ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsError =
+  ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsErrors[keyof ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsErrors]
+
+export type ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ApprovalRequestEnvelope
+  }
+
+export type ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsResponse =
+  ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsResponses[keyof ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsResponses]
+
+export type ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Plan Id
+       */
+      plan_id: string
+    }
+    query?: never
+    url: "/api/v1/manuscript-fix-plans/{plan_id}/execute"
+  }
+
+export type ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteError =
+  ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteErrors[keyof ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteErrors]
+
+export type ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: TransformationExecutionEnvelope
+  }
+
+export type ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteResponse =
+  ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteResponses[keyof ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteResponses]
+
+export type ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsData = {
+  body: ClaimCreate
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/claims"
+}
+
+export type ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsError =
+  ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsErrors[keyof ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsErrors]
+
+export type ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsResponses = {
+  /**
+   * Successful Response
+   */
+  201: ClaimEnvelope
+}
+
+export type ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsResponse =
+  ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsResponses[keyof ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsResponses]
+
+export type ManuscriptsGetClaimGetApiV1ClaimsClaimIdData = {
+  body?: never
+  path: {
+    /**
+     * Claim Id
+     */
+    claim_id: string
+  }
+  query?: never
+  url: "/api/v1/claims/{claim_id}"
+}
+
+export type ManuscriptsGetClaimGetApiV1ClaimsClaimIdErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsGetClaimGetApiV1ClaimsClaimIdError =
+  ManuscriptsGetClaimGetApiV1ClaimsClaimIdErrors[keyof ManuscriptsGetClaimGetApiV1ClaimsClaimIdErrors]
+
+export type ManuscriptsGetClaimGetApiV1ClaimsClaimIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ClaimEnvelope
+}
+
+export type ManuscriptsGetClaimGetApiV1ClaimsClaimIdResponse =
+  ManuscriptsGetClaimGetApiV1ClaimsClaimIdResponses[keyof ManuscriptsGetClaimGetApiV1ClaimsClaimIdResponses]
+
+export type ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdData = {
+  body: ClaimUpdate
+  headers?: {
+    /**
+     * If-Match
+     */
+    "If-Match"?: string | null
+  }
+  path: {
+    /**
+     * Claim Id
+     */
+    claim_id: string
+  }
+  query?: never
+  url: "/api/v1/claims/{claim_id}"
+}
+
+export type ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdErrors = {
+  /**
+   * Malformed request or missing idempotency key.
+   */
+  400: ContractErrorResponse
+  /**
+   * The action is not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found (no disclosure).
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+   */
+  409: ContractErrorResponse
+  /**
+   * If-Match precondition failed.
+   */
+  412: ContractErrorResponse
+  /**
+   * DOCX safety limit exceeded.
+   */
+  413: ContractErrorResponse
+  /**
+   * Unsupported document media or capability.
+   */
+  415: ContractErrorResponse
+  /**
+   * Validation or source locator error.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match precondition is required.
+   */
+  428: ContractErrorResponse
+  /**
+   * External capability unavailable.
+   */
+  503: ContractErrorResponse
+}
+
+export type ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdError =
+  ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdErrors[keyof ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdErrors]
+
+export type ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ClaimEnvelope
+}
+
+export type ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdResponse =
+  ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdResponses[keyof ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdResponses]
+
+export type ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsData =
+  {
+    body?: never
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Claim Id
+       */
+      claim_id: string
+    }
+    query?: never
+    url: "/api/v1/claims/{claim_id}/confirmation-requests"
+  }
+
+export type ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsErrors =
+  {
+    /**
+     * Malformed request or missing idempotency key.
+     */
+    400: ContractErrorResponse
+    /**
+     * The action is not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found (no disclosure).
+     */
+    404: ContractErrorResponse
+    /**
+     * Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.
+     */
+    409: ContractErrorResponse
+    /**
+     * If-Match precondition failed.
+     */
+    412: ContractErrorResponse
+    /**
+     * DOCX safety limit exceeded.
+     */
+    413: ContractErrorResponse
+    /**
+     * Unsupported document media or capability.
+     */
+    415: ContractErrorResponse
+    /**
+     * Validation or source locator error.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match precondition is required.
+     */
+    428: ContractErrorResponse
+    /**
+     * External capability unavailable.
+     */
+    503: ContractErrorResponse
+  }
+
+export type ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsError =
+  ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsErrors[keyof ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsErrors]
+
+export type ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ApprovalRequestEnvelope
+  }
+
+export type ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsResponse =
+  ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsResponses[keyof ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsResponses]
 
 export type JobsListProjectJobsGetApiV1ProjectsProjectIdJobsData = {
   body?: never

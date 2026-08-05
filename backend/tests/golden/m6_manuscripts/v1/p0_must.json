@@ -1,0 +1,40 @@
+{
+  "schema_version": "m6-manuscript-golden/1.0",
+  "cases": [
+    {
+      "id": "citation-causality-format",
+      "checks": ["CITATION", "CAUSALITY", "BASIC_FORMAT"],
+      "paragraphs": [
+        {"text": "The intervention causes improvement in all adults (Smith, 2020).  N = 42.", "style": "Normal"},
+        {"text": "References", "style": "Heading 1"},
+        {"text": "Jones, A. (2021). Unused. doi:bad", "style": "Normal"},
+        {"text": "Jones, A. (2021). Duplicate.", "style": "Normal"}
+      ],
+      "expected_codes": [
+        "CAUSAL_OVERCLAIM",
+        "DUPLICATE_REFERENCE",
+        "IN_TEXT_CITATION_MISSING_REFERENCE",
+        "INVALID_DOI_FORMAT",
+        "POPULATION_OVERGENERALIZATION",
+        "PUNCTUATION_ISSUE",
+        "UNUSED_REFERENCE"
+      ]
+    },
+    {
+      "id": "numeric-heading-figure-unit",
+      "checks": ["NUMERIC_CONSISTENCY", "BASIC_FORMAT"],
+      "paragraphs": [
+        {"text": "Results", "style": "Heading 1"},
+        {"text": "Subgroup", "style": "Heading 3"},
+        {"text": "N = 40 and Figure 1 show a 5kg change.", "style": "Normal"},
+        {"text": "N = 42 and Figure 3 provide the sensitivity result.", "style": "Normal"}
+      ],
+      "expected_codes": [
+        "FIGURE_NUMBERING_ISSUE",
+        "HEADING_LEVEL_ISSUE",
+        "SAMPLE_SIZE_MISMATCH",
+        "UNIT_FORMAT_ISSUE"
+      ]
+    }
+  ]
+}

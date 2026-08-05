@@ -81,6 +81,8 @@ services:
 
   postgres:
     image: pgvector/pgvector:0.8.2-pg17
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-reca}
       POSTGRES_USER: ${POSTGRES_USER:-reca}

@@ -702,6 +702,140 @@ class FigureIssueStatus(StrEnum):
     INVALIDATED = "INVALIDATED"
 
 
+class ManuscriptStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    ARCHIVED = "ARCHIVED"
+    INVALIDATED = "INVALIDATED"
+
+
+class ManuscriptVersionType(StrEnum):
+    ORIGINAL = "ORIGINAL"
+    USER_UPLOAD = "USER_UPLOAD"
+    AUTO_FIXED = "AUTO_FIXED"
+    USER_REVISED = "USER_REVISED"
+    DERIVED = "DERIVED"
+
+
+class ManuscriptVersionStatus(StrEnum):
+    UPLOADED = "UPLOADED"
+    AVAILABLE = "AVAILABLE"
+    FAILED = "FAILED"
+    INVALIDATED = "INVALIDATED"
+
+
+class ManuscriptCheckRunStatus(StrEnum):
+    UPLOADED = "UPLOADED"
+    QUEUED = "QUEUED"
+    PARSING = "PARSING"
+    CHECKING_RULES = "CHECKING_RULES"
+    CHECKING_PROJECT_CONSISTENCY = "CHECKING_PROJECT_CONSISTENCY"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    LOW_CONFIDENCE = "LOW_CONFIDENCE"
+    CANCELLED = "CANCELLED"
+
+
+class ManuscriptIssueType(StrEnum):
+    IN_TEXT_CITATION_MISSING_REFERENCE = "IN_TEXT_CITATION_MISSING_REFERENCE"
+    UNUSED_REFERENCE = "UNUSED_REFERENCE"
+    CITATION_METADATA_MISMATCH = "CITATION_METADATA_MISMATCH"
+    DUPLICATE_REFERENCE = "DUPLICATE_REFERENCE"
+    INVALID_DOI_FORMAT = "INVALID_DOI_FORMAT"
+    SAMPLE_SIZE_MISMATCH = "SAMPLE_SIZE_MISMATCH"
+    STATISTIC_MISMATCH = "STATISTIC_MISMATCH"
+    FIGURE_TEXT_MISMATCH = "FIGURE_TEXT_MISMATCH"
+    CAUSAL_OVERCLAIM = "CAUSAL_OVERCLAIM"
+    POPULATION_OVERGENERALIZATION = "POPULATION_OVERGENERALIZATION"
+    CONSENSUS_OVERCLAIM = "CONSENSUS_OVERCLAIM"
+    TERMINOLOGY_INCONSISTENCY = "TERMINOLOGY_INCONSISTENCY"
+    UNDEFINED_ABBREVIATION = "UNDEFINED_ABBREVIATION"
+    HEADING_LEVEL_ISSUE = "HEADING_LEVEL_ISSUE"
+    FIGURE_NUMBERING_ISSUE = "FIGURE_NUMBERING_ISSUE"
+    UNIT_FORMAT_ISSUE = "UNIT_FORMAT_ISSUE"
+    PUNCTUATION_ISSUE = "PUNCTUATION_ISSUE"
+
+
+class ManuscriptIssueSeverity(StrEnum):
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+    INFO = "INFO"
+
+
+class ManuscriptIssueStatus(StrEnum):
+    OPEN = "OPEN"
+    ACKNOWLEDGED = "ACKNOWLEDGED"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
+    RESOLVED = "RESOLVED"
+    INVALIDATED = "INVALIDATED"
+
+
+class ManuscriptEvidenceType(StrEnum):
+    LITERATURE_RECORD = "LITERATURE_RECORD"
+    EVIDENCE_SPAN = "EVIDENCE_SPAN"
+    ANALYSIS_RESULT = "ANALYSIS_RESULT"
+    FIGURE = "FIGURE"
+    MANUSCRIPT_LOCATION = "MANUSCRIPT_LOCATION"
+    RULE = "RULE"
+
+
+class ManuscriptTransformationStatus(StrEnum):
+    DRAFT = "DRAFT"
+    NEEDS_APPROVAL = "NEEDS_APPROVAL"
+    APPROVED = "APPROVED"
+    REJECTED = "REJECTED"
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+    INVALIDATED = "INVALIDATED"
+
+
+class ClaimStatus(StrEnum):
+    DRAFT = "DRAFT"
+    NEEDS_EVIDENCE = "NEEDS_EVIDENCE"
+    SUPPORTED = "SUPPORTED"
+    CONFLICTED = "CONFLICTED"
+    INSUFFICIENT = "INSUFFICIENT"
+    CONFIRMED = "CONFIRMED"
+    REJECTED = "REJECTED"
+    INVALIDATED = "INVALIDATED"
+
+
+class ClaimType(StrEnum):
+    LITERATURE_SUMMARY = "LITERATURE_SUMMARY"
+    CONSENSUS = "CONSENSUS"
+    CONTROVERSY = "CONTROVERSY"
+    EVIDENCE_GAP = "EVIDENCE_GAP"
+    TOPIC_RATIONALE = "TOPIC_RATIONALE"
+    DATA_DESCRIPTION = "DATA_DESCRIPTION"
+    STATISTICAL_RESULT = "STATISTICAL_RESULT"
+    INTERPRETATION = "INTERPRETATION"
+    MANUSCRIPT_STATEMENT = "MANUSCRIPT_STATEMENT"
+
+
+class ClaimConfidence(StrEnum):
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+    UNKNOWN = "UNKNOWN"
+
+
+class AuditResultStatus(StrEnum):
+    QUEUED = "QUEUED"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+
+
+class AuditType(StrEnum):
+    REVISION_DRIFT_AUDIT = "REVISION_DRIFT_AUDIT"
+
+
 class ArtifactRelationType(StrEnum):
     DERIVED_FROM = "DERIVED_FROM"
     GENERATED_FROM = "GENERATED_FROM"
@@ -726,6 +860,8 @@ class JobTaskType(StrEnum):
     ANALYSIS_RUN = "ANALYSIS_RUN"
     FIGURE_RENDER = "FIGURE_RENDER"
     MANUSCRIPT_CHECK = "MANUSCRIPT_CHECK"
+    MANUSCRIPT_TRANSFORM = "MANUSCRIPT_TRANSFORM"
+    MANUSCRIPT_REVISION_AUDIT = "MANUSCRIPT_REVISION_AUDIT"
     EVIDENCE_AUDIT = "EVIDENCE_AUDIT"
     REPRO_PACKAGE_EXPORT = "REPRO_PACKAGE_EXPORT"
 
@@ -3879,6 +4015,513 @@ class FigureValidationIssue(SQLModel, table=True):
     created_at: datetime = Field(
         default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
     )  # type: ignore
+
+
+class Manuscript(SQLModel, table=True):
+    __tablename__ = "manuscripts"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_manuscripts_id_project"),
+        ForeignKeyConstraint(
+            ["current_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_manuscripts_current_version_scope",
+            ondelete="RESTRICT",
+            use_alter=True,
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_manuscripts_lock_version"),
+        Index("ix_manuscripts_project_status", "project_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    title: str | None = Field(default=None, max_length=500)
+    current_version_id: uuid.UUID | None = Field(default=None, index=True)
+    status: ManuscriptStatus = Field(
+        default=ManuscriptStatus.ACTIVE,
+        sa_column=Column(
+            SAEnum(ManuscriptStatus, name="manuscript_status"), nullable=False
+        ),
+    )
+    lock_version: int = Field(default=1, ge=1)
+    created_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class ManuscriptVersion(SQLModel, table=True):
+    __tablename__ = "manuscript_versions"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_manuscript_versions_id_project"),
+        UniqueConstraint(
+            "manuscript_id", "version_number", name="uq_manuscript_versions_number"
+        ),
+        UniqueConstraint("artifact_id", name="uq_manuscript_versions_artifact"),
+        ForeignKeyConstraint(
+            ["manuscript_id", "project_id"],
+            ["manuscripts.id", "manuscripts.project_id"],
+            name="fk_manuscript_versions_manuscript_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_manuscript_versions_artifact_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["parent_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_manuscript_versions_parent_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("version_number >= 1", name="ck_manuscript_versions_number"),
+        CheckConstraint(
+            "source_hash ~ '^[0-9a-f]{64}$'", name="ck_manuscript_versions_hash"
+        ),
+        Index(
+            "ix_manuscript_versions_manuscript_created", "manuscript_id", "created_at"
+        ),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    manuscript_id: uuid.UUID = Field(index=True)
+    project_id: uuid.UUID = Field(index=True)
+    version_number: int = Field(ge=1)
+    parent_version_id: uuid.UUID | None = Field(default=None, index=True)
+    artifact_id: uuid.UUID = Field(index=True)
+    version_type: ManuscriptVersionType = Field(
+        sa_column=Column(
+            SAEnum(ManuscriptVersionType, name="manuscript_version_type"),
+            nullable=False,
+        )
+    )
+    source_transformation_id: uuid.UUID | None = Field(default=None, index=True)
+    status: ManuscriptVersionStatus = Field(
+        default=ManuscriptVersionStatus.AVAILABLE,
+        sa_column=Column(
+            SAEnum(ManuscriptVersionStatus, name="manuscript_version_status"),
+            nullable=False,
+        ),
+    )
+    source_hash: str = Field(max_length=64)
+    parse_snapshot: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    created_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class ManuscriptCheckRun(SQLModel, table=True):
+    __tablename__ = "manuscript_check_runs"
+    __table_args__ = (
+        UniqueConstraint(
+            "id", "project_id", name="uq_manuscript_check_runs_id_project"
+        ),
+        UniqueConstraint(
+            "manuscript_version_id",
+            "idempotency_key",
+            name="uq_manuscript_check_runs_idempotency",
+        ),
+        ForeignKeyConstraint(
+            ["manuscript_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_manuscript_check_runs_version_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["processing_run_id", "project_id"],
+            ["processing_runs.id", "processing_runs.project_id"],
+            name="fk_manuscript_check_runs_processing_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "issue_count >= 0 AND high_issue_count >= 0",
+            name="ck_manuscript_check_runs_counts",
+        ),
+        CheckConstraint(
+            "source_hash ~ '^[0-9a-f]{64}$'", name="ck_manuscript_check_runs_hash"
+        ),
+        Index("ix_manuscript_check_runs_project_status", "project_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    manuscript_version_id: uuid.UUID = Field(index=True)
+    rule_set_version: str = Field(max_length=100)
+    parser_version: str = Field(max_length=100)
+    source_hash: str = Field(max_length=64)
+    idempotency_key: str = Field(max_length=255)
+    requested_checks: list[str] = Field(
+        default_factory=list, sa_column=Column(JSONB, nullable=False)
+    )
+    status: ManuscriptCheckRunStatus = Field(
+        default=ManuscriptCheckRunStatus.QUEUED,
+        sa_column=Column(
+            SAEnum(ManuscriptCheckRunStatus, name="manuscript_check_run_status"),
+            nullable=False,
+        ),
+    )
+    issue_count: int = 0
+    high_issue_count: int = 0
+    processing_run_id: uuid.UUID | None = Field(default=None, index=True)
+    source_model_invocation_id: uuid.UUID | None = Field(
+        default=None,
+        foreign_key="model_invocations.id",
+        index=True,
+        ondelete="RESTRICT",
+    )
+    degradation: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    error_code: str | None = Field(default=None, max_length=100)
+    requested_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class ManuscriptIssue(SQLModel, table=True):
+    __tablename__ = "manuscript_issues"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_manuscript_issues_id_project"),
+        UniqueConstraint(
+            "manuscript_check_run_id",
+            "finding_hash",
+            name="uq_manuscript_issues_finding",
+        ),
+        ForeignKeyConstraint(
+            ["manuscript_check_run_id", "project_id"],
+            ["manuscript_check_runs.id", "manuscript_check_runs.project_id"],
+            name="fk_manuscript_issues_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["manuscript_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_manuscript_issues_version_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "finding_hash ~ '^[0-9a-f]{64}$'", name="ck_manuscript_issues_hash"
+        ),
+        CheckConstraint(
+            "NOT auto_fixable OR severity IN ('LOW', 'INFO')",
+            name="ck_manuscript_issues_auto_fix_risk",
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_manuscript_issues_lock"),
+        Index("ix_manuscript_issues_run_status", "manuscript_check_run_id", "status"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    manuscript_check_run_id: uuid.UUID = Field(index=True)
+    manuscript_version_id: uuid.UUID = Field(index=True)
+    issue_type: ManuscriptIssueType = Field(
+        sa_column=Column(
+            SAEnum(ManuscriptIssueType, name="manuscript_issue_type"), nullable=False
+        )
+    )
+    severity: ManuscriptIssueSeverity = Field(
+        sa_column=Column(
+            SAEnum(ManuscriptIssueSeverity, name="manuscript_issue_severity"),
+            nullable=False,
+        )
+    )
+    section_name: str | None = Field(default=None, max_length=500)
+    paragraph_index: int | None = Field(default=None, ge=0)
+    table_index: int | None = Field(default=None, ge=0)
+    locator: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    original_text: str | None = Field(default=None, sa_column=Column(Text))
+    normalized_reference: str | None = Field(default=None, sa_column=Column(Text))
+    reason: str = Field(sa_column=Column(Text, nullable=False))
+    suggestion: str | None = Field(default=None, sa_column=Column(Text))
+    finding_hash: str = Field(max_length=64)
+    confidence: str = Field(default="HIGH", max_length=30)
+    auto_fixable: bool = False
+    status: ManuscriptIssueStatus = Field(
+        default=ManuscriptIssueStatus.OPEN,
+        sa_column=Column(
+            SAEnum(ManuscriptIssueStatus, name="manuscript_issue_status"),
+            nullable=False,
+        ),
+    )
+    lock_version: int = Field(default=1, ge=1)
+    decision_reason: str | None = Field(default=None, sa_column=Column(Text))
+    decided_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    source_model_invocation_id: uuid.UUID | None = Field(
+        default=None,
+        foreign_key="model_invocations.id",
+        index=True,
+        ondelete="RESTRICT",
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    resolved_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class ManuscriptIssueEvidence(SQLModel, table=True):
+    __tablename__ = "manuscript_issue_evidence"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["manuscript_issue_id", "project_id"],
+            ["manuscript_issues.id", "manuscript_issues.project_id"],
+            name="fk_manuscript_issue_evidence_issue_project",
+            ondelete="RESTRICT",
+        ),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    manuscript_issue_id: uuid.UUID = Field(index=True)
+    evidence_type: ManuscriptEvidenceType = Field(
+        sa_column=Column(
+            SAEnum(ManuscriptEvidenceType, name="manuscript_evidence_type"),
+            nullable=False,
+        )
+    )
+    evidence_object_type: str = Field(max_length=100)
+    evidence_object_id: uuid.UUID | None = Field(default=None, index=True)
+    evidence_text: str | None = Field(default=None, sa_column=Column(Text))
+    evidence_hash: str = Field(max_length=64)
+    evidence_metadata: dict[str, Any] | None = Field(
+        default=None, sa_column=Column("metadata", JSONB, nullable=True)
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+
+
+class ManuscriptTransformation(SQLModel, table=True):
+    __tablename__ = "manuscript_transformations"
+    __table_args__ = (
+        UniqueConstraint(
+            "id", "project_id", name="uq_manuscript_transformations_id_project"
+        ),
+        ForeignKeyConstraint(
+            ["manuscript_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_manuscript_transformations_input_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["output_manuscript_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_manuscript_transformations_output_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["approval_record_id", "project_id"],
+            ["approval_records.id", "approval_records.project_id"],
+            name="fk_manuscript_transformations_approval_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "payload_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_manuscript_transformations_payload_hash",
+        ),
+        CheckConstraint(
+            "preview_hash IS NULL OR preview_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_manuscript_transformations_preview_hash",
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_manuscript_transformations_lock"),
+        Index("ix_manuscript_transformations_project_status", "project_id", "status"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    manuscript_version_id: uuid.UUID = Field(index=True)
+    approved_issue_ids: list[str] = Field(
+        default_factory=list, sa_column=Column(JSONB, nullable=False)
+    )
+    plan_payload: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    input_artifact_hash: str = Field(max_length=64)
+    preview: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    preview_hash: str | None = Field(default=None, max_length=64)
+    approval_record_id: uuid.UUID | None = Field(default=None, index=True)
+    output_manuscript_version_id: uuid.UUID | None = Field(default=None, index=True)
+    idempotency_key: str | None = Field(default=None, max_length=255, index=True)
+    status: ManuscriptTransformationStatus = Field(
+        default=ManuscriptTransformationStatus.DRAFT,
+        sa_column=Column(
+            SAEnum(
+                ManuscriptTransformationStatus, name="manuscript_transformation_status"
+            ),
+            nullable=False,
+        ),
+    )
+    payload_hash: str = Field(max_length=64)
+    lock_version: int = Field(default=1, ge=1)
+    error_code: str | None = Field(default=None, max_length=100)
+    created_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class Claim(SQLModel, table=True):
+    __tablename__ = "claims"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_claims_id_project"),
+        ForeignKeyConstraint(
+            ["approval_record_id", "project_id"],
+            ["approval_records.id", "approval_records.project_id"],
+            name="fk_claims_approval_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("text_hash ~ '^[0-9a-f]{64}$'", name="ck_claims_text_hash"),
+        CheckConstraint("source_hash ~ '^[0-9a-f]{64}$'", name="ck_claims_source_hash"),
+        CheckConstraint("lock_version >= 1", name="ck_claims_lock"),
+        Index("ix_claims_project_status", "project_id", "status"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    claim_type: ClaimType = Field(
+        sa_column=Column(SAEnum(ClaimType, name="claim_type"), nullable=False)
+    )
+    claim_text: str = Field(sa_column=Column(Text, nullable=False))
+    normalized_claim: str | None = Field(default=None, sa_column=Column(Text))
+    scope_statement: str | None = Field(default=None, sa_column=Column(Text))
+    source_object_type: str = Field(max_length=100)
+    source_object_id: uuid.UUID = Field(index=True)
+    source_location: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    source_hash: str = Field(max_length=64)
+    text_hash: str = Field(max_length=64)
+    status: ClaimStatus = Field(
+        default=ClaimStatus.DRAFT,
+        sa_column=Column(SAEnum(ClaimStatus, name="claim_status"), nullable=False),
+    )
+    confidence: ClaimConfidence = Field(
+        default=ClaimConfidence.UNKNOWN,
+        sa_column=Column(
+            SAEnum(ClaimConfidence, name="claim_confidence"), nullable=False
+        ),
+    )
+    created_by_actor_type: AuditActorType = Field(
+        default=AuditActorType.USER,
+        sa_column=Column(
+            SAEnum(AuditActorType, name="audit_actor_type"), nullable=False
+        ),
+    )
+    created_by_actor_id: str | None = Field(default=None, max_length=255)
+    approval_record_id: uuid.UUID | None = Field(default=None, index=True)
+    lock_version: int = Field(default=1, ge=1)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    confirmed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class AuditResult(SQLModel, table=True):
+    __tablename__ = "audit_results"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_audit_results_id_project"),
+        ForeignKeyConstraint(
+            ["before_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_audit_results_before_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["after_version_id", "project_id"],
+            ["manuscript_versions.id", "manuscript_versions.project_id"],
+            name="fk_audit_results_after_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["processing_run_id", "project_id"],
+            ["processing_runs.id", "processing_runs.project_id"],
+            name="fk_audit_results_processing_project",
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "project_id", "idempotency_key", name="uq_audit_results_idempotency"
+        ),
+        CheckConstraint(
+            "result_hash IS NULL OR result_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_audit_results_hash",
+        ),
+        CheckConstraint(
+            "before_source_hash ~ '^[0-9a-f]{64}$' AND after_source_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_audit_results_source_hashes",
+        ),
+        Index("ix_audit_results_project_status", "project_id", "status"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    audit_type: AuditType = Field(
+        sa_column=Column(SAEnum(AuditType, name="audit_type"), nullable=False)
+    )
+    before_version_id: uuid.UUID = Field(index=True)
+    after_version_id: uuid.UUID = Field(index=True)
+    manuscript_id: uuid.UUID = Field(index=True)
+    status: AuditResultStatus = Field(
+        default=AuditResultStatus.QUEUED,
+        sa_column=Column(
+            SAEnum(AuditResultStatus, name="audit_result_status"), nullable=False
+        ),
+    )
+    rule_set_version: str = Field(max_length=100)
+    before_source_hash: str = Field(max_length=64)
+    after_source_hash: str = Field(max_length=64)
+    idempotency_key: str = Field(max_length=255)
+    request_snapshot: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    result: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    result_hash: str | None = Field(default=None, max_length=64)
+    processing_run_id: uuid.UUID | None = Field(default=None, index=True)
+    requested_by: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    error_code: str | None = Field(default=None, max_length=100)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
+    )  # type: ignore
+    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
 
 
 class Job(SQLModel, table=True):

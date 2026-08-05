@@ -53,6 +53,8 @@ planned RECA business capability for that project is implemented.
 | PyAlex | <https://github.com/J535D165/pyalex> | `0.21` / `v0.21` / `875c708cbb6e449feebc46d2a7a26af8ed8b2fdd` | `DIRECT_DEPENDENCY_WITH_PROVIDER` | `DIRECT_DEPENDENCY` | `backend/pyproject.toml`, `uv.lock`, Provider and Recorded tests |
 | pypdf | <https://github.com/py-pdf/pypdf> | `6.14.2` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Explicit low-confidence page-text fallback |
 | defusedxml | <https://github.com/tiran/defusedxml> | `0.7.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Secure parsing boundary for untrusted GROBID TEI |
+| python-docx | <https://github.com/python-openxml/python-docx> | `1.2.0` / `v1.2.0` / research commit `e45454602b53e8e572b179ccf1c91093ec9f4ed7` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M6 supported DOCX traversal and derived-document edits behind RECA-owned contracts |
+| lxml | <https://github.com/lxml/lxml> | `6.1.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M6 controlled OOXML enhancement only for golden-tested package parts and relationships |
 | Pandera | <https://github.com/unionai-oss/pandera> | `0.32.1` / `v0.32.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M4 P0 dataframe validation runtime; RECA-owned Run/Issue normalization remains authoritative |
 | pandas | <https://github.com/pandas-dev/pandas> | `3.0.5` / `v3.0.5` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | Deterministic in-process CSV/dataframe parsing used behind RECA-owned contracts |
 | openpyxl | <https://foss.heptapod.net/openpyxl/openpyxl> | `3.1.5` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | XLSX structure/value reader constrained to read-only, data-only and no-link mode |
@@ -61,6 +63,27 @@ planned RECA business capability for that project is implemented.
 | statsmodels | <https://github.com/statsmodels/statsmodels> | `0.14.6` / `v0.14.6` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 simple OLS structured numerical runtime; textual Summary is non-authoritative |
 | Matplotlib | <https://github.com/matplotlib/matplotlib> | `3.11.1` / `v3.11.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 deterministic Agg figure renderer using fixed RECA templates |
 | Noto CJK fonts | <https://github.com/notofonts/noto-cjk> | Debian `fonts-noto-cjk` `1:20220127+repack1-1` | `SYSTEM_PACKAGE` | `ALREADY_INTEGRATED` | Fixed headless CJK font supplied by the Worker image; font files are SIL Open Font License 1.1 |
+
+## M6 manuscript runtime dependencies
+
+- Projects: python-docx, lxml and defusedxml
+- Repositories: <https://github.com/python-openxml/python-docx>, <https://github.com/lxml/lxml> and <https://github.com/tiran/defusedxml>
+- Upstream Commit/Tag: python-docx `1.2.0` / `v1.2.0` with research commit `e45454602b53e8e572b179ccf1c91093ec9f4ed7`; lxml `6.1.1`; defusedxml `0.7.1`
+- License: python-docx MIT; lxml BSD-3-Clause; defusedxml Python Software Foundation License
+- License files: installed package metadata and upstream license files
+- Integration mode: `DIRECT_DEPENDENCY + CONTROLLED_OOXML_ENHANCEMENT`
+- Status: `DIRECT_DEPENDENCY`
+- Copied paths: none
+- Modified paths: none in upstream source
+- Modification summary: python-docx exposes supported paragraphs, runs, tables, styles, images and package relationships; lxml is restricted to explicitly tested OOXML gaps; defusedxml remains the parser for untrusted XML boundaries. Third-party objects never enter persistence or API contracts.
+- Attribution location: this notice, `backend/pyproject.toml`, `uv.lock`, ADR-005 and `docs/source-research/projects/python-docx.md`
+- Special restrictions: original DOCX Artifacts and ManuscriptVersions are immutable; macros, executable/embedded content, unsafe ZIP members and active external relationships are not executed or fetched; tracked changes, fields, text boxes, numbering and unknown parts are reported as unsupported or low confidence unless a golden-tested reader covers them
+- Source of truth: RECA ManuscriptVersion, Artifact SHA-256, versioned locator, rule-set/fixer metadata, ApprovalRecord and AuditResult
+- Fallback: preserve the original Artifact, fail or degrade the check explicitly, and disable automatic fixing when package preservation cannot be proven
+- Acceptance tests: Python 3.14 Worker image wheel installation, DOCX/OOXML Spike, security negatives, golden parsing, package round-trip preservation and derived-file hash/lineage checks
+- Upgrade requirement: rerun Python 3.14 wheel, DOCX golden/security, unknown-part round-trip, dependency audit and license checks before changing any of these versions
+- Commercialization review: normal MIT/BSD-3-Clause/PSFL dependency attribution; RECA root license remains pending
+- Reviewed at: 2026-08-05
 
 ## M4 data quality runtime dependencies
 
@@ -292,7 +315,7 @@ these projects by this documentation task.
 | ASReview | `d3e863c94e1945ace7848b6ca5bcf2fb1eecbdb5` | Apache-2.0 | `DIRECT_DEPENDENCY_WITH_PROVIDER` | `RESEARCHED` | None; experiment required |
 | DVC | `f74c1c0e709de61f571905802bc0c75035dc6ef2` | Apache-2.0 | `DEVELOPMENT_ONLY` | `RESEARCHED` | None |
 | Great Expectations | `33614cd70a407f8b9589fa2cf5f1cb1d7d0723aa` | Apache-2.0 | `DESIGN_REFERENCE` | `RESEARCHED` | None |
-| python-docx | `e45454602b53e8e572b179ccf1c91093ec9f4ed7` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None |
+| python-docx | `1.2.0` / `v1.2.0` / `e45454602b53e8e572b179ccf1c91093ec9f4ed7` | MIT | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | `backend/pyproject.toml`, `uv.lock`, M6 stage-0 Worker/OOXML Spike |
 | CSL Styles | `1de508b010b2643c8b13b082947f1054bc33357f` | CC BY-SA 3.0; selected file rights require review | `RESOURCE_SNAPSHOT` | `PLANNED` | None; no styles copied |
 | citeproc-js | `cc9153c45293af878de08cafddbefe6ea150c380` | CPAL/AGPL metadata conflict unresolved | `DEFERRED` | `RESEARCHED` | None |
 | xyflow / React Flow | `360f5b13e2bc6899ea06b4be1a49b068d86926cf` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None |

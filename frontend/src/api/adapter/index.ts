@@ -86,6 +86,29 @@ import {
   loginLoginAccessTokenPostApiV1LoginAccessToken,
   loginRecoverPasswordPostApiV1PasswordRecoveryEmail,
   loginResetPasswordPostApiV1ResetPassword,
+  manuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAccept,
+  manuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRuns,
+  manuscriptsCreateClaimPostApiV1ProjectsProjectIdClaims,
+  manuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlans,
+  manuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscripts,
+  manuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAudits,
+  manuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscript,
+  manuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownload,
+  manuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecute,
+  manuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunId,
+  manuscriptsGetClaimGetApiV1ClaimsClaimId,
+  manuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanId,
+  manuscriptsGetIssueGetApiV1ManuscriptIssuesIssueId,
+  manuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptId,
+  manuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditId,
+  manuscriptsGetVersionGetApiV1ManuscriptVersionsVersionId,
+  manuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssues,
+  manuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersions,
+  manuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreview,
+  manuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdReject,
+  manuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequests,
+  manuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequests,
+  manuscriptsUpdateClaimPatchApiV1ClaimsClaimId,
   projectsAddProjectMemberPostApiV1ProjectsProjectIdMembers,
   projectsArchiveProjectPostApiV1ProjectsProjectIdArchive,
   projectsCreateProjectPostApiV1Projects,
@@ -156,6 +179,12 @@ export type {
   AssumptionCheckStatus,
   AuditListEnvelope,
   BodyLoginLoginAccessTokenPostApiV1LoginAccessToken as Body_login_login_access_token_post_api_v1_login_access_token,
+  ClaimCreate,
+  ClaimEnvelope,
+  ClaimPublic,
+  ClaimStatus,
+  ClaimType,
+  ClaimUpdate,
   CurrentResearchQuestionEnvelope,
   DependenciesHealthResponse,
   DependencyCheck,
@@ -194,6 +223,7 @@ export type {
   FigureRenderRunStatus,
   FigureStatus,
   FigureValidationIssuePublic,
+  FixPlanCreate,
   JobListEnvelope,
   JobPublic,
   LiteratureCandidatePublic,
@@ -217,11 +247,35 @@ export type {
   LiteratureSearchResultsEnvelope,
   LiteratureSearchRunPublic,
   LiveHealthResponse,
+  ManuscriptCheckRequestEnvelope,
+  ManuscriptCheckRunEnvelope,
+  ManuscriptCheckRunPublic,
+  ManuscriptCheckRunStatus,
+  ManuscriptCreate,
+  ManuscriptCreatedEnvelope,
+  ManuscriptEnvelope,
+  ManuscriptIssueEnvelope,
+  ManuscriptIssueListEnvelope,
+  ManuscriptIssuePublic,
+  ManuscriptIssueSeverity,
+  ManuscriptIssueStatus,
+  ManuscriptIssueType,
+  ManuscriptPublic,
+  ManuscriptTransformationEnvelope,
+  ManuscriptTransformationPublic,
+  ManuscriptTransformationStatus,
+  ManuscriptVersionEnvelope,
+  ManuscriptVersionListEnvelope,
+  ManuscriptVersionPublic,
+  ManuscriptVersionStatus,
+  ManuscriptVersionType,
   MemberAdd,
   MemberListEnvelope,
   MemberUpdate,
   ProjectCreate,
   ProjectListEnvelope,
+  ProjectManuscriptDiscoveryEnvelope,
+  ProjectManuscriptDiscoveryPublic,
   ProjectMemberPublic,
   ProjectOverviewPublic,
   ProjectPublic,
@@ -240,6 +294,10 @@ export type {
   ResearchQuestionMarkReady,
   ResearchQuestionVersionCreate,
   ResearchQuestionVersionPublic,
+  RevisionAuditCreate,
+  RevisionAuditEnvelope,
+  RevisionAuditPublic,
+  RevisionAuditRequestEnvelope,
   Token,
   TopicGenerationCreate,
   UpdatePassword,
@@ -1716,6 +1774,221 @@ export class DataCleaningApi {
         ),
       ),
       "Dataset version comparison response",
+    )
+}
+
+export class ManuscriptsApi {
+  static discover = (projectId: string) =>
+    unwrap(
+      manuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscript({
+        path: { project_id: projectId },
+      }),
+    )
+
+  static create = (
+    projectId: string,
+    body: import("../generated/types.gen").ManuscriptCreate,
+  ) =>
+    unwrap(
+      manuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscripts({
+        path: { project_id: projectId },
+        body,
+      }),
+    )
+
+  static get = (manuscriptId: string) =>
+    unwrap(
+      manuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptId({
+        path: { manuscript_id: manuscriptId },
+      }),
+    )
+
+  static versions = (manuscriptId: string) =>
+    unwrap(
+      manuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersions({
+        path: { manuscript_id: manuscriptId },
+      }),
+    )
+
+  static version = (versionId: string) =>
+    unwrap(
+      manuscriptsGetVersionGetApiV1ManuscriptVersionsVersionId({
+        path: { version_id: versionId },
+      }),
+    )
+
+  static download = (versionId: string) =>
+    unwrap(
+      manuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownload({
+        path: { version_id: versionId },
+      }),
+    )
+
+  static startCheck = (
+    versionId: string,
+    body: import("../generated/types.gen").CheckRunCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      manuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRuns({
+        path: { version_id: versionId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+
+  static checkRun = (runId: string) =>
+    unwrap(
+      manuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunId({
+        path: { run_id: runId },
+      }),
+    )
+
+  static issues = (runId: string) =>
+    unwrap(
+      manuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssues({
+        path: { run_id: runId },
+      }),
+    )
+
+  static issue = (issueId: string) =>
+    unwrap(
+      manuscriptsGetIssueGetApiV1ManuscriptIssuesIssueId({
+        path: { issue_id: issueId },
+      }),
+    )
+
+  static acceptIssue = (
+    issueId: string,
+    lockVersion: number,
+    reason?: string,
+  ) =>
+    unwrap(
+      manuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAccept({
+        path: { issue_id: issueId },
+        headers: { "If-Match": String(lockVersion) },
+        body: { reason: reason ?? null },
+      }),
+    )
+
+  static rejectIssue = (issueId: string, lockVersion: number, reason: string) =>
+    unwrap(
+      manuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdReject({
+        path: { issue_id: issueId },
+        headers: { "If-Match": String(lockVersion) },
+        body: { reason },
+      }),
+    )
+
+  static createFixPlan = (
+    versionId: string,
+    issueIds: string[],
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      manuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlans({
+        path: { version_id: versionId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body: { issue_ids: issueIds },
+      }),
+    )
+
+  static fixPlan = (planId: string) =>
+    unwrap(
+      manuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanId({
+        path: { plan_id: planId },
+      }),
+    )
+
+  static previewFixPlan = (planId: string, lockVersion: number) =>
+    unwrap(
+      manuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreview({
+        path: { plan_id: planId },
+        headers: { "If-Match": String(lockVersion) },
+      }),
+    )
+
+  static requestFixApproval = (planId: string, idempotencyKey: string) =>
+    unwrap(
+      manuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequests(
+        {
+          path: { plan_id: planId },
+          headers: { "Idempotency-Key": idempotencyKey },
+        },
+      ),
+    )
+
+  static executeFixPlan = (planId: string, idempotencyKey: string) =>
+    unwrap(
+      manuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecute({
+        path: { plan_id: planId },
+        headers: { "Idempotency-Key": idempotencyKey },
+      }),
+    )
+
+  static startRevisionAudit = (
+    projectId: string,
+    body: import("../generated/types.gen").RevisionAuditCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      manuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAudits(
+        {
+          path: { project_id: projectId },
+          headers: { "Idempotency-Key": idempotencyKey },
+          body,
+        },
+      ),
+    )
+
+  static revisionAudit = (auditId: string) =>
+    unwrap(
+      manuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditId({
+        path: { audit_id: auditId },
+      }),
+    )
+
+  static createClaim = (
+    projectId: string,
+    body: import("../generated/types.gen").ClaimCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      manuscriptsCreateClaimPostApiV1ProjectsProjectIdClaims({
+        path: { project_id: projectId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+
+  static claim = (claimId: string) =>
+    unwrap(
+      manuscriptsGetClaimGetApiV1ClaimsClaimId({
+        path: { claim_id: claimId },
+      }),
+    )
+
+  static updateClaim = (
+    claimId: string,
+    body: import("../generated/types.gen").ClaimUpdate,
+    lockVersion: number,
+  ) =>
+    unwrap(
+      manuscriptsUpdateClaimPatchApiV1ClaimsClaimId({
+        path: { claim_id: claimId },
+        headers: { "If-Match": String(lockVersion) },
+        body,
+      }),
+    )
+
+  static requestClaimConfirmation = (claimId: string, idempotencyKey: string) =>
+    unwrap(
+      manuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequests(
+        {
+          path: { claim_id: claimId },
+          headers: { "Idempotency-Key": idempotencyKey },
+        },
+      ),
     )
 }
 

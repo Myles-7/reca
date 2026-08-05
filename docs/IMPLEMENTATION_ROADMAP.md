@@ -439,8 +439,8 @@ M0 Regression Baseline 适用于 M1–M9，后续里程碑不得让 M0 已通过
 | M3 | COMPLETION APPROVED | M2 COMPLETED | 十字段矩阵、EvidenceSpan、用户决策、当前证据分析与 3 个候选问题；工程 Exit Gate 已通过，真实论文科学指标延期且未测量 | [M3 Evidence Matrix](roadmap/milestones/M3_EVIDENCE_MATRIX.md) |
 | M4 | COMPLETED | M1 | DatasetVersion、质量检查、CleaningPlan 与转换；Exit Gate 于 2026-08-04 通过 | [M4 Data Quality](roadmap/milestones/M4_DATA_QUALITY.md) |
 | M5 | COMPLETED | M4 | 六种确定性分析、不可变 AnalysisResult、五类科研 Figure 与生产 Workspace；Exit Gate 于 2026-08-05 通过 | [M5 Analysis and Figures](roadmap/milestones/M5_ANALYSIS_AND_FIGURES.md) |
-| M6 | READY | M3 + M5 | M5 handoff 已冻结，可开始 DOCX、Claim、核心检查与 MANU-P0-018 | [M6 Manuscript and Claims](roadmap/milestones/M6_MANUSCRIPT_AND_CLAIMS.md) |
-| M7 | PLANNED | M3 + M5 + M6 | Evidence Graph、AuditResult、失效传播与 ReproPackage | [M7 Evidence and Export](roadmap/milestones/M7_EVIDENCE_AND_EXPORT.md) |
+| M6 | APPROVED_WITH_ISSUES | M3 + M5 | Stage 5 Exit Gate 通过；保留 Windows host-only PostgreSQL runner 限制 | [M6 Manuscript and Claims](roadmap/milestones/M6_MANUSCRIPT_AND_CLAIMS.md) |
+| M7 | ALLOWED | M3 + M5 + M6 | 可开始 Evidence Graph、失效传播与 ReproPackage；不得回写 M6 不可变事实 | [M7 Evidence and Export](roadmap/milestones/M7_EVIDENCE_AND_EXPORT.md) |
 | M8 | PLANNED | M7 | StageResolver、受控单总控 Agent、ToolCall 与 AgentRun | [M8 Agent](roadmap/milestones/M8_AGENT.md) |
 | M9 | PLANNED | M8 | 离线演示、故障演练、发布门禁与 Release Candidate | [M9 Demo and Release](roadmap/milestones/M9_DEMO_AND_RELEASE.md) |
 

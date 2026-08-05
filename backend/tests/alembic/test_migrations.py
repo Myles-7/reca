@@ -187,7 +187,7 @@ def test_m2_scoping_migration_registers_reversible_job_type() -> None:
     assert "NEEDS_USER_INPUT" not in migration
 
 
-def test_m5_migration_graph_has_one_contiguous_head() -> None:
+def test_m6_migration_graph_has_one_contiguous_head() -> None:
     repository_root = Path(__file__).resolve().parents[3]
     config = Config(str(repository_root / "backend/alembic.ini"))
     config.set_main_option(
@@ -195,11 +195,35 @@ def test_m5_migration_graph_has_one_contiguous_head() -> None:
     )
     scripts = ScriptDirectory.from_config(config)
 
-    assert scripts.get_heads() == ["0016_m5_figures"]
+    assert scripts.get_heads() == ["0017_m6_manuscripts"]
     revisions = list(scripts.walk_revisions(base="base", head="heads"))
     assert revisions[-1].down_revision is None
     for current, parent in zip(revisions, revisions[1:], strict=False):
         assert current.down_revision == parent.revision
+
+
+def test_m6_manuscript_migration_freezes_scope_and_immutability() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    migration_path = (
+        repository_root / "backend/app/alembic/versions/0017_m6_manuscripts.py"
+    )
+    migration = migration_path.read_text(encoding="utf-8")
+    assert 'down_revision: str | None = "0016_m5_figures"' in migration
+    for table in (
+        "manuscripts",
+        "manuscript_versions",
+        "manuscript_check_runs",
+        "manuscript_issues",
+        "manuscript_issue_evidence",
+        "manuscript_transformations",
+        "claims",
+        "audit_results",
+    ):
+        assert f'"{table}"' in migration
+    assert "fk_manuscripts_current_version_scope" in migration
+    assert "fk_manuscript_versions_artifact_project" in migration
+    assert "trg_manuscript_versions_immutable" in migration
+    assert "MANUSCRIPT_REVISION_AUDIT" in migration
 
 
 def test_m4_data_quality_migration_freezes_eight_tables_and_scope_constraints() -> None:

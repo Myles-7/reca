@@ -801,6 +801,17 @@ def fail_job(
             error_code=error_code,
             worker_id=worker_id,
         )
+    elif job.task_type == JobTaskType.MANUSCRIPT_CHECK:
+        from app.manuscripts.service import mark_failed_check_job
+
+        mark_failed_check_job(session, job=job, error_code=error_code)
+    elif job.task_type in {
+        JobTaskType.MANUSCRIPT_REVISION_AUDIT,
+        JobTaskType.MANUSCRIPT_TRANSFORM,
+    }:
+        from app.manuscripts.stage2 import mark_failed_stage2_job
+
+        mark_failed_stage2_job(session, job=job, error_code=error_code)
     _audit(
         session,
         job=job,

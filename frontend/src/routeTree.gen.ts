@@ -25,6 +25,7 @@ import { Route as LayoutProjectsProjectIdRouteImport } from './routes/_layout/pr
 import { Route as LayoutProjectsProjectIdAnalysisRouteImport } from './routes/_layout/projects.$projectId_.analysis'
 import { Route as LayoutProjectsProjectIdDataRouteImport } from './routes/_layout/projects.$projectId_.data'
 import { Route as LayoutProjectsProjectIdLiteratureRouteImport } from './routes/_layout/projects.$projectId_.literature'
+import { Route as LayoutProjectsProjectIdManuscriptRouteImport } from './routes/_layout/projects.$projectId_.manuscript'
 import { Route as LayoutProjectsProjectIdResearchQuestionRouteImport } from './routes/_layout/projects.$projectId_.research-question'
 import { Route as LayoutProjectsProjectIdDocumentsDocumentIdRouteImport } from './routes/_layout/projects.$projectId_.documents.$documentId'
 import { Route as LayoutProjectsProjectIdQueryPlansQueryPlanIdRouteImport } from './routes/_layout/projects.$projectId_.query-plans.$queryPlanId'
@@ -111,6 +112,12 @@ const LayoutProjectsProjectIdLiteratureRoute =
     path: '/$projectId/literature',
     getParentRoute: () => LayoutProjectsRoute,
   } as any)
+const LayoutProjectsProjectIdManuscriptRoute =
+  LayoutProjectsProjectIdManuscriptRouteImport.update({
+    id: '/$projectId_/manuscript',
+    path: '/$projectId/manuscript',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
 const LayoutProjectsProjectIdResearchQuestionRoute =
   LayoutProjectsProjectIdResearchQuestionRouteImport.update({
     id: '/$projectId_/research-question',
@@ -146,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
   '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
+  '/projects/$projectId/manuscript': typeof LayoutProjectsProjectIdManuscriptRoute
   '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
   '/projects/$projectId/documents/$documentId': typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
   '/projects/$projectId/query-plans/$queryPlanId': typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
@@ -165,6 +173,7 @@ export interface FileRoutesByTo {
   '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
   '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
+  '/projects/$projectId/manuscript': typeof LayoutProjectsProjectIdManuscriptRoute
   '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
   '/projects/$projectId/documents/$documentId': typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
   '/projects/$projectId/query-plans/$queryPlanId': typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
@@ -187,6 +196,7 @@ export interface FileRoutesById {
   '/_layout/projects/$projectId_/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/_layout/projects/$projectId_/data': typeof LayoutProjectsProjectIdDataRoute
   '/_layout/projects/$projectId_/literature': typeof LayoutProjectsProjectIdLiteratureRoute
+  '/_layout/projects/$projectId_/manuscript': typeof LayoutProjectsProjectIdManuscriptRoute
   '/_layout/projects/$projectId_/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
   '/_layout/projects/$projectId_/documents/$documentId': typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
   '/_layout/projects/$projectId_/query-plans/$queryPlanId': typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
     | '/projects/$projectId/literature'
+    | '/projects/$projectId/manuscript'
     | '/projects/$projectId/research-question'
     | '/projects/$projectId/documents/$documentId'
     | '/projects/$projectId/query-plans/$queryPlanId'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
     | '/projects/$projectId/literature'
+    | '/projects/$projectId/manuscript'
     | '/projects/$projectId/research-question'
     | '/projects/$projectId/documents/$documentId'
     | '/projects/$projectId/query-plans/$queryPlanId'
@@ -249,6 +261,7 @@ export interface FileRouteTypes {
     | '/_layout/projects/$projectId_/analysis'
     | '/_layout/projects/$projectId_/data'
     | '/_layout/projects/$projectId_/literature'
+    | '/_layout/projects/$projectId_/manuscript'
     | '/_layout/projects/$projectId_/research-question'
     | '/_layout/projects/$projectId_/documents/$documentId'
     | '/_layout/projects/$projectId_/query-plans/$queryPlanId'
@@ -379,6 +392,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsProjectIdLiteratureRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
+    '/_layout/projects/$projectId_/manuscript': {
+      id: '/_layout/projects/$projectId_/manuscript'
+      path: '/$projectId/manuscript'
+      fullPath: '/projects/$projectId/manuscript'
+      preLoaderRoute: typeof LayoutProjectsProjectIdManuscriptRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
     '/_layout/projects/$projectId_/research-question': {
       id: '/_layout/projects/$projectId_/research-question'
       path: '/$projectId/research-question'
@@ -409,6 +429,7 @@ interface LayoutProjectsRouteChildren {
   LayoutProjectsProjectIdAnalysisRoute: typeof LayoutProjectsProjectIdAnalysisRoute
   LayoutProjectsProjectIdDataRoute: typeof LayoutProjectsProjectIdDataRoute
   LayoutProjectsProjectIdLiteratureRoute: typeof LayoutProjectsProjectIdLiteratureRoute
+  LayoutProjectsProjectIdManuscriptRoute: typeof LayoutProjectsProjectIdManuscriptRoute
   LayoutProjectsProjectIdResearchQuestionRoute: typeof LayoutProjectsProjectIdResearchQuestionRoute
   LayoutProjectsProjectIdDocumentsDocumentIdRoute: typeof LayoutProjectsProjectIdDocumentsDocumentIdRoute
   LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute: typeof LayoutProjectsProjectIdQueryPlansQueryPlanIdRoute
@@ -421,6 +442,8 @@ const LayoutProjectsRouteChildren: LayoutProjectsRouteChildren = {
   LayoutProjectsProjectIdDataRoute: LayoutProjectsProjectIdDataRoute,
   LayoutProjectsProjectIdLiteratureRoute:
     LayoutProjectsProjectIdLiteratureRoute,
+  LayoutProjectsProjectIdManuscriptRoute:
+    LayoutProjectsProjectIdManuscriptRoute,
   LayoutProjectsProjectIdResearchQuestionRoute:
     LayoutProjectsProjectIdResearchQuestionRoute,
   LayoutProjectsProjectIdDocumentsDocumentIdRoute:

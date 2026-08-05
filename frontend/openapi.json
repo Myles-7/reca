@@ -10620,6 +10620,3388 @@
         }
       }
     },
+    "/api/v1/projects/{project_id}/manuscripts": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Create Manuscript",
+        "operationId": "manuscripts_create_manuscript_post_api_v1_projects_project_id_manuscripts",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManuscriptCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptCreatedEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/manuscript": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Discover Project Manuscript",
+        "operationId": "manuscripts_discover_project_manuscript_get_api_v1_projects_project_id_manuscript",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectManuscriptDiscoveryEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscripts/{manuscript_id}": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Get Manuscript",
+        "operationId": "manuscripts_get_manuscript_get_api_v1_manuscripts_manuscript_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "manuscript_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Manuscript Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscripts/{manuscript_id}/versions": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "List Versions",
+        "operationId": "manuscripts_list_versions_get_api_v1_manuscripts_manuscript_id_versions",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "manuscript_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Manuscript Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptVersionListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-versions/{version_id}": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Get Version",
+        "operationId": "manuscripts_get_version_get_api_v1_manuscript-versions_version_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptVersionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-versions/{version_id}/download": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Download Version",
+        "operationId": "manuscripts_download_version_get_api_v1_manuscript-versions_version_id_download",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptDownloadEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-versions/{version_id}/check-runs": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Create Check Run",
+        "operationId": "manuscripts_create_check_run_post_api_v1_manuscript-versions_version_id_check-runs",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckRunCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptCheckRequestEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-check-runs/{run_id}": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Get Check Run",
+        "operationId": "manuscripts_get_check_run_get_api_v1_manuscript-check-runs_run_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptCheckRunEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-check-runs/{run_id}/issues": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "List Issues",
+        "operationId": "manuscripts_list_issues_get_api_v1_manuscript-check-runs_run_id_issues",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptIssueListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-issues/{issue_id}": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Get Issue",
+        "operationId": "manuscripts_get_issue_get_api_v1_manuscript-issues_issue_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Issue Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptIssueEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-issues/{issue_id}/accept": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Accept Issue",
+        "operationId": "manuscripts_accept_issue_post_api_v1_manuscript-issues_issue_id_accept",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Issue Id"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptIssueEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-issues/{issue_id}/reject": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Reject Issue",
+        "operationId": "manuscripts_reject_issue_post_api_v1_manuscript-issues_issue_id_reject",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "issue_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Issue Id"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptIssueEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/manuscript-revision-audits": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Create Revision Audit",
+        "operationId": "manuscripts_create_revision_audit_post_api_v1_projects_project_id_manuscript-revision-audits",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevisionAuditCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionAuditRequestEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-revision-audits/{audit_id}": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Get Revision Audit",
+        "operationId": "manuscripts_get_revision_audit_get_api_v1_manuscript-revision-audits_audit_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "audit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Audit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionAuditEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-versions/{version_id}/fix-plans": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Create Fix Plan",
+        "operationId": "manuscripts_create_fix_plan_post_api_v1_manuscript-versions_version_id_fix-plans",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FixPlanCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptTransformationEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-fix-plans/{plan_id}": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Get Fix Plan",
+        "operationId": "manuscripts_get_fix_plan_get_api_v1_manuscript-fix-plans_plan_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptTransformationEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-fix-plans/{plan_id}/preview": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Preview Fix Plan",
+        "operationId": "manuscripts_preview_fix_plan_post_api_v1_manuscript-fix-plans_plan_id_preview",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManuscriptTransformationEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-fix-plans/{plan_id}/approval-requests": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Request Fix Approval",
+        "operationId": "manuscripts_request_fix_approval_post_api_v1_manuscript-fix-plans_plan_id_approval-requests",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalRequestEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manuscript-fix-plans/{plan_id}/execute": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Execute Fix Plan",
+        "operationId": "manuscripts_execute_fix_plan_post_api_v1_manuscript-fix-plans_plan_id_execute",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransformationExecutionEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/claims": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Create Claim",
+        "operationId": "manuscripts_create_claim_post_api_v1_projects_project_id_claims",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claim_id}": {
+      "get": {
+        "tags": ["manuscripts"],
+        "summary": "Get Claim",
+        "operationId": "manuscripts_get_claim_get_api_v1_claims_claim_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "claim_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Claim Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["manuscripts"],
+        "summary": "Update Claim",
+        "operationId": "manuscripts_update_claim_patch_api_v1_claims_claim_id",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "claim_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Claim Id"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/claims/{claim_id}/confirmation-requests": {
+      "post": {
+        "tags": ["manuscripts"],
+        "summary": "Request Claim Confirmation",
+        "operationId": "manuscripts_request_claim_confirmation_post_api_v1_claims_claim_id_confirmation-requests",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "claim_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Claim Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalRequestEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request or missing idempotency key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The action is not allowed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found (no disclosure).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict or stale input, including approval stale/expired, fix not approved, hash mismatch, unsupported DOCX, low-confidence input, or invalid state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "If-Match precondition failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "DOCX safety limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported document media or capability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation or source locator error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "If-Match precondition is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "External capability unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/projects/{project_id}/jobs": {
       "get": {
         "tags": ["jobs"],
@@ -13416,48 +16798,19 @@
         "required": ["decision_reason"],
         "title": "ApprovalRejectRequest"
       },
-      "ApprovalRequestPublic": {
+      "ApprovalRequestEnvelope": {
         "properties": {
-          "approval_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Approval Id"
+          "data": {
+            "$ref": "#/components/schemas/app__api__m6_responses__ApprovalRequestPublic"
           },
-          "cleaning_plan_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Cleaning Plan Id"
-          },
-          "status": {
-            "type": "string",
-            "title": "Status"
-          },
-          "payload_hash": {
-            "type": "string",
-            "title": "Payload Hash"
-          },
-          "expires_at": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Expires At"
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
           }
         },
+        "additionalProperties": false,
         "type": "object",
-        "required": [
-          "approval_id",
-          "cleaning_plan_id",
-          "status",
-          "payload_hash",
-          "expires_at"
-        ],
-        "title": "ApprovalRequestPublic"
+        "required": ["data", "meta"],
+        "title": "ApprovalRequestEnvelope"
       },
       "ApprovalRequesterPublic": {
         "properties": {
@@ -14124,6 +17477,11 @@
         "enum": ["SUCCEEDED", "FAILED", "DENIED"],
         "title": "AuditOutcome"
       },
+      "AuditResultStatus": {
+        "type": "string",
+        "enum": ["QUEUED", "RUNNING", "COMPLETED", "FAILED", "CANCELLED"],
+        "title": "AuditResultStatus"
+      },
       "AuditTargetPublic": {
         "properties": {
           "type": {
@@ -14157,6 +17515,11 @@
         "type": "object",
         "required": ["type", "id", "label"],
         "title": "AuditTargetPublic"
+      },
+      "AuditType": {
+        "type": "string",
+        "enum": ["REVISION_DRIFT_AUDIT"],
+        "title": "AuditType"
       },
       "Body_datasets_upload_dataset_post_api_v1_projects_project_id_datasets": {
         "properties": {
@@ -14520,6 +17883,446 @@
         "type": "object",
         "required": ["target_type"],
         "title": "CastTypeParameters"
+      },
+      "CheckRunCreate": {
+        "properties": {
+          "checks": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "CITATION",
+                "NUMERIC_CONSISTENCY",
+                "CAUSALITY",
+                "TERMINOLOGY",
+                "BASIC_FORMAT"
+              ]
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Checks"
+          },
+          "use_project_literature": {
+            "type": "boolean",
+            "title": "Use Project Literature",
+            "default": true
+          },
+          "use_project_analysis_results": {
+            "type": "boolean",
+            "title": "Use Project Analysis Results",
+            "default": true
+          },
+          "use_project_figures": {
+            "type": "boolean",
+            "title": "Use Project Figures",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["checks"],
+        "title": "CheckRunCreate"
+      },
+      "ClaimConfidence": {
+        "type": "string",
+        "enum": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"],
+        "title": "ClaimConfidence"
+      },
+      "ClaimCreate": {
+        "properties": {
+          "claim_type": {
+            "$ref": "#/components/schemas/ClaimType"
+          },
+          "source_object_type": {
+            "type": "string",
+            "enum": [
+              "manuscript_version",
+              "analysis_result",
+              "figure",
+              "evidence_span"
+            ],
+            "title": "Source Object Type"
+          },
+          "source_object_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Object Id"
+          },
+          "source_location": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Source Location"
+          },
+          "claim_text": {
+            "type": "string",
+            "maxLength": 20000,
+            "minLength": 1,
+            "title": "Claim Text"
+          },
+          "normalized_claim": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Normalized Claim"
+          },
+          "scope_statement": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Statement"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClaimStatus",
+            "default": "NEEDS_EVIDENCE"
+          },
+          "confidence": {
+            "$ref": "#/components/schemas/ClaimConfidence",
+            "default": "UNKNOWN"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "claim_type",
+          "source_object_type",
+          "source_object_id",
+          "source_location",
+          "claim_text"
+        ],
+        "title": "ClaimCreate"
+      },
+      "ClaimEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ClaimPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ClaimEnvelope"
+      },
+      "ClaimPublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "claim_type": {
+            "$ref": "#/components/schemas/ClaimType"
+          },
+          "claim_text": {
+            "type": "string",
+            "title": "Claim Text"
+          },
+          "normalized_claim": {
+            "type": "string",
+            "title": "Normalized Claim"
+          },
+          "scope_statement": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Statement"
+          },
+          "source_object_type": {
+            "type": "string",
+            "title": "Source Object Type"
+          },
+          "source_object_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Object Id"
+          },
+          "source_location": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Source Location"
+          },
+          "source_hash": {
+            "type": "string",
+            "title": "Source Hash"
+          },
+          "text_hash": {
+            "type": "string",
+            "title": "Text Hash"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClaimStatus"
+          },
+          "confidence": {
+            "$ref": "#/components/schemas/ClaimConfidence"
+          },
+          "created_by_actor_type": {
+            "$ref": "#/components/schemas/AuditActorType"
+          },
+          "created_by_actor_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By Actor Id"
+          },
+          "approval_record_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approval Record Id"
+          },
+          "lock_version": {
+            "type": "integer",
+            "title": "Lock Version"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "confirmed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed At"
+          },
+          "invalidated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalidated At"
+          },
+          "invalidation_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalidation Reason"
+          },
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "claim_type",
+          "claim_text",
+          "normalized_claim",
+          "scope_statement",
+          "source_object_type",
+          "source_object_id",
+          "source_location",
+          "source_hash",
+          "text_hash",
+          "status",
+          "confidence",
+          "created_by_actor_type",
+          "created_by_actor_id",
+          "approval_record_id",
+          "lock_version",
+          "created_at",
+          "updated_at",
+          "confirmed_at",
+          "invalidated_at",
+          "invalidation_reason",
+          "allowed_actions"
+        ],
+        "title": "ClaimPublic"
+      },
+      "ClaimStatus": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "NEEDS_EVIDENCE",
+          "SUPPORTED",
+          "CONFLICTED",
+          "INSUFFICIENT",
+          "CONFIRMED",
+          "REJECTED",
+          "INVALIDATED"
+        ],
+        "title": "ClaimStatus"
+      },
+      "ClaimType": {
+        "type": "string",
+        "enum": [
+          "LITERATURE_SUMMARY",
+          "CONSENSUS",
+          "CONTROVERSY",
+          "EVIDENCE_GAP",
+          "TOPIC_RATIONALE",
+          "DATA_DESCRIPTION",
+          "STATISTICAL_RESULT",
+          "INTERPRETATION",
+          "MANUSCRIPT_STATEMENT"
+        ],
+        "title": "ClaimType"
+      },
+      "ClaimUpdate": {
+        "properties": {
+          "claim_text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20000,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Claim Text"
+          },
+          "normalized_claim": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Normalized Claim"
+          },
+          "scope_statement": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Statement"
+          },
+          "source_object_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "manuscript_version",
+                  "analysis_result",
+                  "figure",
+                  "evidence_span"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Object Type"
+          },
+          "source_object_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Object Id"
+          },
+          "source_location": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Location"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ClaimStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ClaimConfidence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ClaimUpdate"
       },
       "CleaningPlanCreate": {
         "properties": {
@@ -19555,6 +23358,24 @@
         ],
         "title": "FigureValidationIssuePublic"
       },
+      "FixPlanCreate": {
+        "properties": {
+          "issue_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Issue Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["issue_ids"],
+        "title": "FixPlanCreate"
+      },
       "FoundationCounts": {
         "properties": {
           "members": {
@@ -19874,6 +23695,25 @@
         "required": ["operator", "column_id", "values"],
         "title": "InFilter"
       },
+      "IssueDecision": {
+        "properties": {
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "IssueDecision"
+      },
       "IssueRowsSelector": {
         "properties": {
           "selector_type": {
@@ -20183,6 +24023,8 @@
           "ANALYSIS_RUN",
           "FIGURE_RENDER",
           "MANUSCRIPT_CHECK",
+          "MANUSCRIPT_TRANSFORM",
+          "MANUSCRIPT_REVISION_AUDIT",
           "EVIDENCE_AUDIT",
           "REPRO_PACKAGE_EXPORT"
         ],
@@ -21768,7 +25610,7 @@
       "M4Envelope_ApprovalRequestPublic_": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/ApprovalRequestPublic"
+            "$ref": "#/components/schemas/app__api__m4_responses__ApprovalRequestPublic"
           },
           "meta": {
             "$ref": "#/components/schemas/M4ResponseMeta"
@@ -21924,7 +25766,7 @@
       "M4Envelope_TransformationExecutionPublic_": {
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/TransformationExecutionPublic"
+            "$ref": "#/components/schemas/app__api__m4_responses__TransformationExecutionPublic"
           },
           "meta": {
             "$ref": "#/components/schemas/M4ResponseMeta"
@@ -22077,6 +25919,34 @@
         "type": "object",
         "title": "M5ResponseMeta"
       },
+      "M6ResponseMeta": {
+        "properties": {
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "1.0"
+          },
+          "idempotency_replayed": {
+            "type": "boolean",
+            "title": "Idempotency Replayed",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "M6ResponseMeta"
+      },
       "ManualEvidenceSpanCreate": {
         "properties": {
           "page_number": {
@@ -22113,6 +25983,1265 @@
           "user_declared_read_scope"
         ],
         "title": "ManualEvidenceSpanCreate"
+      },
+      "ManuscriptCheckRequestEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManuscriptCheckRequestPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptCheckRequestEnvelope"
+      },
+      "ManuscriptCheckRequestPublic": {
+        "properties": {
+          "manuscript_check_run": {
+            "$ref": "#/components/schemas/ManuscriptCheckRunPublic"
+          },
+          "job": {
+            "$ref": "#/components/schemas/JobPublic"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["manuscript_check_run", "job"],
+        "title": "ManuscriptCheckRequestPublic"
+      },
+      "ManuscriptCheckRunEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManuscriptCheckRunPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptCheckRunEnvelope"
+      },
+      "ManuscriptCheckRunPublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "manuscript_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Manuscript Version Id"
+          },
+          "rule_set_version": {
+            "type": "string",
+            "title": "Rule Set Version"
+          },
+          "parser_version": {
+            "type": "string",
+            "title": "Parser Version"
+          },
+          "source_hash": {
+            "type": "string",
+            "title": "Source Hash"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "title": "Idempotency Key"
+          },
+          "requested_checks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Requested Checks"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ManuscriptCheckRunStatus"
+          },
+          "issue_count": {
+            "type": "integer",
+            "title": "Issue Count"
+          },
+          "high_issue_count": {
+            "type": "integer",
+            "title": "High Issue Count"
+          },
+          "processing_run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Processing Run Id"
+          },
+          "source_model_invocation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Model Invocation Id"
+          },
+          "degradation": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "requested_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requested By"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "manuscript_version_id",
+          "rule_set_version",
+          "parser_version",
+          "source_hash",
+          "idempotency_key",
+          "requested_checks",
+          "status",
+          "issue_count",
+          "high_issue_count",
+          "processing_run_id",
+          "source_model_invocation_id",
+          "degradation",
+          "error_code",
+          "requested_by",
+          "started_at",
+          "completed_at",
+          "created_at",
+          "job_id",
+          "allowed_actions"
+        ],
+        "title": "ManuscriptCheckRunPublic"
+      },
+      "ManuscriptCheckRunStatus": {
+        "type": "string",
+        "enum": [
+          "UPLOADED",
+          "QUEUED",
+          "PARSING",
+          "CHECKING_RULES",
+          "CHECKING_PROJECT_CONSISTENCY",
+          "NEEDS_REVIEW",
+          "COMPLETED",
+          "FAILED",
+          "LOW_CONFIDENCE",
+          "CANCELLED"
+        ],
+        "title": "ManuscriptCheckRunStatus"
+      },
+      "ManuscriptCreate": {
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["artifact_id"],
+        "title": "ManuscriptCreate"
+      },
+      "ManuscriptCreatedEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManuscriptCreatedPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptCreatedEnvelope"
+      },
+      "ManuscriptCreatedPublic": {
+        "properties": {
+          "manuscript": {
+            "$ref": "#/components/schemas/ManuscriptPublic"
+          },
+          "version": {
+            "$ref": "#/components/schemas/ManuscriptVersionPublic"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["manuscript", "version"],
+        "title": "ManuscriptCreatedPublic"
+      },
+      "ManuscriptDownloadEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ArtifactDownload"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptDownloadEnvelope"
+      },
+      "ManuscriptEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManuscriptPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptEnvelope"
+      },
+      "ManuscriptEvidenceType": {
+        "type": "string",
+        "enum": [
+          "LITERATURE_RECORD",
+          "EVIDENCE_SPAN",
+          "ANALYSIS_RESULT",
+          "FIGURE",
+          "MANUSCRIPT_LOCATION",
+          "RULE"
+        ],
+        "title": "ManuscriptEvidenceType"
+      },
+      "ManuscriptIssueEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManuscriptIssuePublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptIssueEnvelope"
+      },
+      "ManuscriptIssueEvidencePublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "manuscript_issue_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Manuscript Issue Id"
+          },
+          "evidence_type": {
+            "$ref": "#/components/schemas/ManuscriptEvidenceType"
+          },
+          "evidence_object_type": {
+            "type": "string",
+            "title": "Evidence Object Type"
+          },
+          "evidence_object_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Object Id"
+          },
+          "evidence_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Text"
+          },
+          "evidence_hash": {
+            "type": "string",
+            "title": "Evidence Hash"
+          },
+          "evidence_metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Metadata"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "manuscript_issue_id",
+          "evidence_type",
+          "evidence_object_type",
+          "evidence_object_id",
+          "evidence_text",
+          "evidence_hash",
+          "evidence_metadata",
+          "created_at"
+        ],
+        "title": "ManuscriptIssueEvidencePublic"
+      },
+      "ManuscriptIssueListEnvelope": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ManuscriptIssuePublic"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptIssueListEnvelope"
+      },
+      "ManuscriptIssuePublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "manuscript_check_run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Manuscript Check Run Id"
+          },
+          "manuscript_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Manuscript Version Id"
+          },
+          "issue_type": {
+            "$ref": "#/components/schemas/ManuscriptIssueType"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/ManuscriptIssueSeverity"
+          },
+          "section_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section Name"
+          },
+          "paragraph_index": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Paragraph Index"
+          },
+          "table_index": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Table Index"
+          },
+          "locator": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Locator"
+          },
+          "original_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Text"
+          },
+          "normalized_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Normalized Reference"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "suggestion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Suggestion"
+          },
+          "finding_hash": {
+            "type": "string",
+            "title": "Finding Hash"
+          },
+          "confidence": {
+            "type": "string",
+            "title": "Confidence"
+          },
+          "auto_fixable": {
+            "type": "boolean",
+            "title": "Auto Fixable"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ManuscriptIssueStatus"
+          },
+          "lock_version": {
+            "type": "integer",
+            "title": "Lock Version"
+          },
+          "decision_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Reason"
+          },
+          "decided_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided By"
+          },
+          "source_model_invocation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Model Invocation Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved At"
+          },
+          "invalidated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalidated At"
+          },
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/ManuscriptIssueEvidencePublic"
+            },
+            "type": "array",
+            "title": "Evidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "manuscript_check_run_id",
+          "manuscript_version_id",
+          "issue_type",
+          "severity",
+          "section_name",
+          "paragraph_index",
+          "table_index",
+          "locator",
+          "original_text",
+          "normalized_reference",
+          "reason",
+          "suggestion",
+          "finding_hash",
+          "confidence",
+          "auto_fixable",
+          "status",
+          "lock_version",
+          "decision_reason",
+          "decided_by",
+          "source_model_invocation_id",
+          "created_at",
+          "resolved_at",
+          "invalidated_at",
+          "allowed_actions"
+        ],
+        "title": "ManuscriptIssuePublic"
+      },
+      "ManuscriptIssueSeverity": {
+        "type": "string",
+        "enum": ["HIGH", "MEDIUM", "LOW", "INFO"],
+        "title": "ManuscriptIssueSeverity"
+      },
+      "ManuscriptIssueStatus": {
+        "type": "string",
+        "enum": [
+          "OPEN",
+          "ACKNOWLEDGED",
+          "ACCEPTED",
+          "REJECTED",
+          "RESOLVED",
+          "INVALIDATED"
+        ],
+        "title": "ManuscriptIssueStatus"
+      },
+      "ManuscriptIssueType": {
+        "type": "string",
+        "enum": [
+          "IN_TEXT_CITATION_MISSING_REFERENCE",
+          "UNUSED_REFERENCE",
+          "CITATION_METADATA_MISMATCH",
+          "DUPLICATE_REFERENCE",
+          "INVALID_DOI_FORMAT",
+          "SAMPLE_SIZE_MISMATCH",
+          "STATISTIC_MISMATCH",
+          "FIGURE_TEXT_MISMATCH",
+          "CAUSAL_OVERCLAIM",
+          "POPULATION_OVERGENERALIZATION",
+          "CONSENSUS_OVERCLAIM",
+          "TERMINOLOGY_INCONSISTENCY",
+          "UNDEFINED_ABBREVIATION",
+          "HEADING_LEVEL_ISSUE",
+          "FIGURE_NUMBERING_ISSUE",
+          "UNIT_FORMAT_ISSUE",
+          "PUNCTUATION_ISSUE"
+        ],
+        "title": "ManuscriptIssueType"
+      },
+      "ManuscriptPublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "current_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ManuscriptStatus"
+          },
+          "lock_version": {
+            "type": "integer",
+            "title": "Lock Version"
+          },
+          "created_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "invalidated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalidated At"
+          },
+          "invalidation_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalidation Reason"
+          },
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "title",
+          "current_version_id",
+          "status",
+          "lock_version",
+          "created_by",
+          "created_at",
+          "updated_at",
+          "invalidated_at",
+          "invalidation_reason",
+          "allowed_actions"
+        ],
+        "title": "ManuscriptPublic"
+      },
+      "ManuscriptStatus": {
+        "type": "string",
+        "enum": ["ACTIVE", "ARCHIVED", "INVALIDATED"],
+        "title": "ManuscriptStatus"
+      },
+      "ManuscriptTransformationEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManuscriptTransformationPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptTransformationEnvelope"
+      },
+      "ManuscriptTransformationPublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "manuscript_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Manuscript Version Id"
+          },
+          "approved_issue_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Approved Issue Ids"
+          },
+          "plan_payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Plan Payload"
+          },
+          "input_artifact_hash": {
+            "type": "string",
+            "title": "Input Artifact Hash"
+          },
+          "preview": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview"
+          },
+          "preview_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Hash"
+          },
+          "approval_record_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approval Record Id"
+          },
+          "output_manuscript_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Manuscript Version Id"
+          },
+          "idempotency_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idempotency Key"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ManuscriptTransformationStatus"
+          },
+          "payload_hash": {
+            "type": "string",
+            "title": "Payload Hash"
+          },
+          "lock_version": {
+            "type": "integer",
+            "title": "Lock Version"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "created_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "manuscript_version_id",
+          "approved_issue_ids",
+          "plan_payload",
+          "input_artifact_hash",
+          "preview",
+          "preview_hash",
+          "approval_record_id",
+          "output_manuscript_version_id",
+          "idempotency_key",
+          "status",
+          "payload_hash",
+          "lock_version",
+          "error_code",
+          "created_by",
+          "created_at",
+          "updated_at",
+          "completed_at",
+          "job_id",
+          "allowed_actions"
+        ],
+        "title": "ManuscriptTransformationPublic"
+      },
+      "ManuscriptTransformationStatus": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "NEEDS_APPROVAL",
+          "APPROVED",
+          "REJECTED",
+          "QUEUED",
+          "RUNNING",
+          "COMPLETED",
+          "FAILED",
+          "CANCELLED",
+          "INVALIDATED"
+        ],
+        "title": "ManuscriptTransformationStatus"
+      },
+      "ManuscriptVersionEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ManuscriptVersionPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptVersionEnvelope"
+      },
+      "ManuscriptVersionListEnvelope": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ManuscriptVersionPublic"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ManuscriptVersionListEnvelope"
+      },
+      "ManuscriptVersionPublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "manuscript_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Manuscript Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "version_number": {
+            "type": "integer",
+            "title": "Version Number"
+          },
+          "parent_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Version Id"
+          },
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "version_type": {
+            "$ref": "#/components/schemas/ManuscriptVersionType"
+          },
+          "source_transformation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Transformation Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ManuscriptVersionStatus"
+          },
+          "source_hash": {
+            "type": "string",
+            "title": "Source Hash"
+          },
+          "parse_snapshot": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parse Snapshot"
+          },
+          "created_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "invalidated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalidated At"
+          },
+          "invalidation_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalidation Reason"
+          },
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "manuscript_id",
+          "project_id",
+          "version_number",
+          "parent_version_id",
+          "artifact_id",
+          "version_type",
+          "source_transformation_id",
+          "status",
+          "source_hash",
+          "parse_snapshot",
+          "created_by",
+          "created_at",
+          "invalidated_at",
+          "invalidation_reason",
+          "allowed_actions"
+        ],
+        "title": "ManuscriptVersionPublic"
+      },
+      "ManuscriptVersionStatus": {
+        "type": "string",
+        "enum": ["UPLOADED", "AVAILABLE", "FAILED", "INVALIDATED"],
+        "title": "ManuscriptVersionStatus"
+      },
+      "ManuscriptVersionType": {
+        "type": "string",
+        "enum": [
+          "ORIGINAL",
+          "USER_UPLOAD",
+          "AUTO_FIXED",
+          "USER_REVISED",
+          "DERIVED"
+        ],
+        "title": "ManuscriptVersionType"
       },
       "MapCategoryAction": {
         "properties": {
@@ -22864,6 +27993,73 @@
         "type": "object",
         "required": ["data", "pagination", "meta"],
         "title": "ProjectListEnvelope"
+      },
+      "ProjectManuscriptDiscoveryEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ProjectManuscriptDiscoveryPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ProjectManuscriptDiscoveryEnvelope"
+      },
+      "ProjectManuscriptDiscoveryPublic": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": ["NONE", "ACTIVE", "ARCHIVED", "INVALIDATED"],
+            "title": "State"
+          },
+          "current_manuscript": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManuscriptPublic"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "current_version": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManuscriptVersionPublic"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "manuscripts": {
+            "items": {
+              "$ref": "#/components/schemas/ManuscriptPublic"
+            },
+            "type": "array",
+            "title": "Manuscripts"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/ManuscriptVersionPublic"
+            },
+            "type": "array",
+            "title": "Versions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state",
+          "current_manuscript",
+          "current_version",
+          "manuscripts",
+          "versions"
+        ],
+        "title": "ProjectManuscriptDiscoveryPublic"
       },
       "ProjectMemberPublic": {
         "properties": {
@@ -24876,6 +30072,254 @@
         "required": ["request_id"],
         "title": "ResponseMeta"
       },
+      "RevisionAuditCreate": {
+        "properties": {
+          "baseline_manuscript_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Baseline Manuscript Version Id"
+          },
+          "candidate_manuscript_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Candidate Manuscript Version Id"
+          },
+          "referenced_result_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Referenced Result Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "baseline_manuscript_version_id",
+          "candidate_manuscript_version_id"
+        ],
+        "title": "RevisionAuditCreate"
+      },
+      "RevisionAuditEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/RevisionAuditPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "RevisionAuditEnvelope"
+      },
+      "RevisionAuditPublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "audit_type": {
+            "$ref": "#/components/schemas/AuditType"
+          },
+          "before_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Before Version Id"
+          },
+          "after_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "After Version Id"
+          },
+          "manuscript_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Manuscript Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AuditResultStatus"
+          },
+          "rule_set_version": {
+            "type": "string",
+            "title": "Rule Set Version"
+          },
+          "before_source_hash": {
+            "type": "string",
+            "title": "Before Source Hash"
+          },
+          "after_source_hash": {
+            "type": "string",
+            "title": "After Source Hash"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "title": "Idempotency Key"
+          },
+          "request_snapshot": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Request Snapshot"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "result_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Hash"
+          },
+          "processing_run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Processing Run Id"
+          },
+          "requested_by": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requested By"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Actions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "audit_type",
+          "before_version_id",
+          "after_version_id",
+          "manuscript_id",
+          "status",
+          "rule_set_version",
+          "before_source_hash",
+          "after_source_hash",
+          "idempotency_key",
+          "request_snapshot",
+          "result",
+          "result_hash",
+          "processing_run_id",
+          "requested_by",
+          "error_code",
+          "created_at",
+          "completed_at",
+          "job_id",
+          "allowed_actions"
+        ],
+        "title": "RevisionAuditPublic"
+      },
+      "RevisionAuditRequestEnvelope": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/RevisionAuditRequestPublic"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "RevisionAuditRequestEnvelope"
+      },
+      "RevisionAuditRequestPublic": {
+        "properties": {
+          "audit_result": {
+            "$ref": "#/components/schemas/RevisionAuditPublic"
+          },
+          "job": {
+            "$ref": "#/components/schemas/JobPublic"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["audit_result", "job"],
+        "title": "RevisionAuditRequestPublic"
+      },
       "ScatterParameters": {
         "properties": {
           "width_inches": {
@@ -25443,18 +30887,19 @@
         ],
         "title": "TopicGenerationRunPublic"
       },
-      "TransformationExecutionPublic": {
+      "TransformationExecutionEnvelope": {
         "properties": {
-          "transformation": {
-            "$ref": "#/components/schemas/DataTransformationPublic"
+          "data": {
+            "$ref": "#/components/schemas/app__api__m6_responses__TransformationExecutionPublic"
           },
-          "job": {
-            "$ref": "#/components/schemas/JobPublic"
+          "meta": {
+            "$ref": "#/components/schemas/M6ResponseMeta"
           }
         },
+        "additionalProperties": false,
         "type": "object",
-        "required": ["transformation", "job"],
-        "title": "TransformationExecutionPublic"
+        "required": ["data", "meta"],
+        "title": "TransformationExecutionEnvelope"
       },
       "UnavailableAction": {
         "properties": {
@@ -26180,6 +31625,132 @@
           "selected_worksheet_name"
         ],
         "title": "WorksheetsPublic"
+      },
+      "app__api__m4_responses__ApprovalRequestPublic": {
+        "properties": {
+          "approval_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Approval Id"
+          },
+          "cleaning_plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Cleaning Plan Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "payload_hash": {
+            "type": "string",
+            "title": "Payload Hash"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "approval_id",
+          "cleaning_plan_id",
+          "status",
+          "payload_hash",
+          "expires_at"
+        ],
+        "title": "ApprovalRequestPublic"
+      },
+      "app__api__m4_responses__TransformationExecutionPublic": {
+        "properties": {
+          "transformation": {
+            "$ref": "#/components/schemas/DataTransformationPublic"
+          },
+          "job": {
+            "$ref": "#/components/schemas/JobPublic"
+          }
+        },
+        "type": "object",
+        "required": ["transformation", "job"],
+        "title": "TransformationExecutionPublic"
+      },
+      "app__api__m6_responses__ApprovalRequestPublic": {
+        "properties": {
+          "approval_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Approval Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ApprovalStatus"
+          },
+          "payload_hash": {
+            "type": "string",
+            "title": "Payload Hash"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "plan_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Id"
+          },
+          "claim_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Claim Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["approval_id", "status", "payload_hash", "expires_at"],
+        "title": "ApprovalRequestPublic"
+      },
+      "app__api__m6_responses__TransformationExecutionPublic": {
+        "properties": {
+          "transformation": {
+            "$ref": "#/components/schemas/ManuscriptTransformationPublic"
+          },
+          "job": {
+            "$ref": "#/components/schemas/JobPublic"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["transformation", "job"],
+        "title": "TransformationExecutionPublic"
       }
     },
     "securitySchemes": {

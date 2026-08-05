@@ -289,6 +289,75 @@ import type {
   LoginResetPasswordPostApiV1ResetPasswordResponses,
   LoginTestTokenPostApiV1LoginTestTokenData,
   LoginTestTokenPostApiV1LoginTestTokenResponses,
+  ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptData,
+  ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptErrors,
+  ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptResponses,
+  ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsData,
+  ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsErrors,
+  ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsResponses,
+  ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsData,
+  ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsErrors,
+  ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsResponses,
+  ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansData,
+  ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansErrors,
+  ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansResponses,
+  ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsData,
+  ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsErrors,
+  ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsResponses,
+  ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsData,
+  ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsErrors,
+  ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsResponses,
+  ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptData,
+  ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptErrors,
+  ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptResponses,
+  ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadData,
+  ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadErrors,
+  ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadResponses,
+  ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteData,
+  ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteErrors,
+  ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteResponses,
+  ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdData,
+  ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdErrors,
+  ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdResponses,
+  ManuscriptsGetClaimGetApiV1ClaimsClaimIdData,
+  ManuscriptsGetClaimGetApiV1ClaimsClaimIdErrors,
+  ManuscriptsGetClaimGetApiV1ClaimsClaimIdResponses,
+  ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdData,
+  ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdErrors,
+  ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdResponses,
+  ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdData,
+  ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdErrors,
+  ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdResponses,
+  ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdData,
+  ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdErrors,
+  ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdResponses,
+  ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdData,
+  ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdErrors,
+  ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdResponses,
+  ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdData,
+  ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdErrors,
+  ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdResponses,
+  ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesData,
+  ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesErrors,
+  ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesResponses,
+  ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsData,
+  ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsErrors,
+  ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsResponses,
+  ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewData,
+  ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewErrors,
+  ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewResponses,
+  ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectData,
+  ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectErrors,
+  ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectResponses,
+  ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsData,
+  ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsErrors,
+  ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsResponses,
+  ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsData,
+  ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsErrors,
+  ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsResponses,
+  ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdData,
+  ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdErrors,
+  ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdResponses,
   ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersData,
   ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersErrors,
   ProjectsAddProjectMemberPostApiV1ProjectsProjectIdMembersResponses,
@@ -3533,6 +3602,599 @@ export const figuresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatNa
     >({
       security: [{ scheme: "bearer", type: "http" }],
       url: "/api/v1/figures/{figure_id}/downloads/{format_name}",
+      ...options,
+    })
+
+/**
+ * Create Manuscript
+ */
+export const manuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscripts =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsResponses,
+    ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsResponses,
+      ManuscriptsCreateManuscriptPostApiV1ProjectsProjectIdManuscriptsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/manuscripts",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Discover Project Manuscript
+ */
+export const manuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscript =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptResponses,
+    ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptResponses,
+      ManuscriptsDiscoverProjectManuscriptGetApiV1ProjectsProjectIdManuscriptErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/manuscript",
+      ...options,
+    })
+
+/**
+ * Get Manuscript
+ */
+export const manuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdResponses,
+  ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdResponses,
+    ManuscriptsGetManuscriptGetApiV1ManuscriptsManuscriptIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscripts/{manuscript_id}",
+    ...options,
+  })
+
+/**
+ * List Versions
+ */
+export const manuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersions = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsResponses,
+  ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsResponses,
+    ManuscriptsListVersionsGetApiV1ManuscriptsManuscriptIdVersionsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscripts/{manuscript_id}/versions",
+    ...options,
+  })
+
+/**
+ * Get Version
+ */
+export const manuscriptsGetVersionGetApiV1ManuscriptVersionsVersionId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdResponses,
+  ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdResponses,
+    ManuscriptsGetVersionGetApiV1ManuscriptVersionsVersionIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscript-versions/{version_id}",
+    ...options,
+  })
+
+/**
+ * Download Version
+ */
+export const manuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownload =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadResponses,
+    ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadResponses,
+      ManuscriptsDownloadVersionGetApiV1ManuscriptVersionsVersionIdDownloadErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/manuscript-versions/{version_id}/download",
+      ...options,
+    })
+
+/**
+ * Create Check Run
+ */
+export const manuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRuns =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsResponses,
+    ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsResponses,
+      ManuscriptsCreateCheckRunPostApiV1ManuscriptVersionsVersionIdCheckRunsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/manuscript-versions/{version_id}/check-runs",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Check Run
+ */
+export const manuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdResponses,
+  ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdResponses,
+    ManuscriptsGetCheckRunGetApiV1ManuscriptCheckRunsRunIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscript-check-runs/{run_id}",
+    ...options,
+  })
+
+/**
+ * List Issues
+ */
+export const manuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssues = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesResponses,
+  ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesResponses,
+    ManuscriptsListIssuesGetApiV1ManuscriptCheckRunsRunIdIssuesErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscript-check-runs/{run_id}/issues",
+    ...options,
+  })
+
+/**
+ * Get Issue
+ */
+export const manuscriptsGetIssueGetApiV1ManuscriptIssuesIssueId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdResponses,
+  ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdResponses,
+    ManuscriptsGetIssueGetApiV1ManuscriptIssuesIssueIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscript-issues/{issue_id}",
+    ...options,
+  })
+
+/**
+ * Accept Issue
+ */
+export const manuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAccept = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptResponses,
+  ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptResponses,
+    ManuscriptsAcceptIssuePostApiV1ManuscriptIssuesIssueIdAcceptErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscript-issues/{issue_id}/accept",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Reject Issue
+ */
+export const manuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdReject = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectResponses,
+  ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectResponses,
+    ManuscriptsRejectIssuePostApiV1ManuscriptIssuesIssueIdRejectErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscript-issues/{issue_id}/reject",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Create Revision Audit
+ */
+export const manuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAudits =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsResponses,
+    ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsResponses,
+      ManuscriptsCreateRevisionAuditPostApiV1ProjectsProjectIdManuscriptRevisionAuditsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/manuscript-revision-audits",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Revision Audit
+ */
+export const manuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdResponses,
+    ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdResponses,
+      ManuscriptsGetRevisionAuditGetApiV1ManuscriptRevisionAuditsAuditIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/manuscript-revision-audits/{audit_id}",
+      ...options,
+    })
+
+/**
+ * Create Fix Plan
+ */
+export const manuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlans =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansResponses,
+    ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansResponses,
+      ManuscriptsCreateFixPlanPostApiV1ManuscriptVersionsVersionIdFixPlansErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/manuscript-versions/{version_id}/fix-plans",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Fix Plan
+ */
+export const manuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdResponses,
+  ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdResponses,
+    ManuscriptsGetFixPlanGetApiV1ManuscriptFixPlansPlanIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/manuscript-fix-plans/{plan_id}",
+    ...options,
+  })
+
+/**
+ * Preview Fix Plan
+ */
+export const manuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreview =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewResponses,
+    ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewResponses,
+      ManuscriptsPreviewFixPlanPostApiV1ManuscriptFixPlansPlanIdPreviewErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/manuscript-fix-plans/{plan_id}/preview",
+      ...options,
+    })
+
+/**
+ * Request Fix Approval
+ */
+export const manuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequests =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsResponses,
+    ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsResponses,
+      ManuscriptsRequestFixApprovalPostApiV1ManuscriptFixPlansPlanIdApprovalRequestsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/manuscript-fix-plans/{plan_id}/approval-requests",
+      ...options,
+    })
+
+/**
+ * Execute Fix Plan
+ */
+export const manuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecute =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteResponses,
+    ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteResponses,
+      ManuscriptsExecuteFixPlanPostApiV1ManuscriptFixPlansPlanIdExecuteErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/manuscript-fix-plans/{plan_id}/execute",
+      ...options,
+    })
+
+/**
+ * Create Claim
+ */
+export const manuscriptsCreateClaimPostApiV1ProjectsProjectIdClaims = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsResponses,
+  ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsResponses,
+    ManuscriptsCreateClaimPostApiV1ProjectsProjectIdClaimsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/claims",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Claim
+ */
+export const manuscriptsGetClaimGetApiV1ClaimsClaimId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<ManuscriptsGetClaimGetApiV1ClaimsClaimIdData, ThrowOnError>,
+): RequestResult<
+  ManuscriptsGetClaimGetApiV1ClaimsClaimIdResponses,
+  ManuscriptsGetClaimGetApiV1ClaimsClaimIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ManuscriptsGetClaimGetApiV1ClaimsClaimIdResponses,
+    ManuscriptsGetClaimGetApiV1ClaimsClaimIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/claims/{claim_id}",
+    ...options,
+  })
+
+/**
+ * Update Claim
+ */
+export const manuscriptsUpdateClaimPatchApiV1ClaimsClaimId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdResponses,
+  ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).patch<
+    ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdResponses,
+    ManuscriptsUpdateClaimPatchApiV1ClaimsClaimIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/claims/{claim_id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Request Claim Confirmation
+ */
+export const manuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequests =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsResponses,
+    ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsResponses,
+      ManuscriptsRequestClaimConfirmationPostApiV1ClaimsClaimIdConfirmationRequestsErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/claims/{claim_id}/confirmation-requests",
       ...options,
     })
 
