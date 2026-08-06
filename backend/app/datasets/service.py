@@ -887,6 +887,18 @@ def invalidate_version(
     version.status = DatasetVersionStatus.INVALIDATED
     version.invalidated_at = get_datetime_utc()
     version.invalidation_reason = payload.reason.strip()
+    from app.evidence_graph.invalidation import propagate_invalidation
+    from app.models import EvidenceObjectType
+
+    propagate_invalidation(
+        session,
+        project_id=version.project_id,
+        object_type=EvidenceObjectType.DATASET_VERSION,
+        object_id=version.id,
+        reason=version.invalidation_reason,
+        actor_type=AuditActorType.USER,
+        actor_id=str(actor.id),
+    )
     for plan in session.exec(
         select(FigurePlan).where(
             FigurePlan.dataset_version_id == version.id,
@@ -911,6 +923,15 @@ def invalidate_version(
             f"Upstream DatasetVersion invalidated: {version.invalidation_reason}"
         )
         session.add(figure)
+        propagate_invalidation(
+            session,
+            project_id=version.project_id,
+            object_type=EvidenceObjectType.FIGURE,
+            object_id=figure.id,
+            reason=figure.invalidation_reason,
+            actor_type=AuditActorType.USER,
+            actor_id=str(actor.id),
+        )
     if dataset.current_version_id == version.id:
         replacement = session.exec(
             select(DatasetVersion)

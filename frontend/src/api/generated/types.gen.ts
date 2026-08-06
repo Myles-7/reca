@@ -1266,6 +1266,21 @@ export type AuditLogPublic = {
 export type AuditOutcome = "SUCCEEDED" | "FAILED" | "DENIED"
 
 /**
+ * AuditResultOutcome
+ */
+export type AuditResultOutcome =
+  | "VERIFIED"
+  | "NEEDS_REVIEW"
+  | "INSUFFICIENT_EVIDENCE"
+  | "SOURCE_INCOMPLETE"
+  | "CONFLICTED"
+  | "DATA_MISMATCH"
+  | "FIGURE_MISMATCH"
+  | "OVERCLAIM_RISK"
+  | "REJECTED_BY_USER"
+  | "INVALIDATED"
+
+/**
  * AuditResultStatus
  */
 export type AuditResultStatus =
@@ -1296,7 +1311,17 @@ export type AuditTargetPublic = {
 /**
  * AuditType
  */
-export type AuditType = "REVISION_DRIFT_AUDIT"
+export type AuditType =
+  | "REVISION_DRIFT_AUDIT"
+  | "LITERATURE_EVIDENCE_AUDIT"
+  | "NUMERIC_CONSISTENCY_AUDIT"
+  | "FIGURE_VERSION_AUDIT"
+  | "CAUSALITY_AUDIT"
+  | "CLAIM_COMPLETENESS_AUDIT"
+  | "EXPORT_READINESS_AUDIT"
+  | "READ_SCOPE_AUDIT"
+  | "PROMPT_CONTRACT_AUDIT"
+  | "DEGRADATION_AUDIT"
 
 /**
  * Body_datasets_upload_dataset_post_api_v1_projects_project_id_datasets
@@ -1510,6 +1535,99 @@ export type CheckRunCreate = {
 }
 
 /**
+ * ClaimAuditCreate
+ */
+export type ClaimAuditCreate = {
+  /**
+   * Request Ai Explanation
+   */
+  request_ai_explanation?: boolean
+}
+
+/**
+ * ClaimAuditEnvelope
+ */
+export type ClaimAuditEnvelope = {
+  data: ClaimAuditPublic
+  meta: ResponseMeta
+}
+
+/**
+ * ClaimAuditPublic
+ */
+export type ClaimAuditPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  audit_type: AuditType
+  /**
+   * Target Object Type
+   */
+  target_object_type: string | null
+  /**
+   * Target Object Id
+   */
+  target_object_id: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  execution_status: AuditResultStatus
+  outcome: AuditResultOutcome | null
+  /**
+   * Source Snapshot Hash
+   */
+  source_snapshot_hash: string | null
+  /**
+   * Result Hash
+   */
+  result_hash: string | null
+  /**
+   * Findings
+   */
+  findings: Array<{
+    [key: string]: unknown
+  }>
+  /**
+   * Limitations
+   */
+  limitations: Array<string>
+  /**
+   * Degraded
+   */
+  degraded: boolean
+  /**
+   * Rule Set Version
+   */
+  rule_set_version: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ClaimAuditRequestData
+ */
+export type ClaimAuditRequestData = {
+  audit_result: ClaimAuditPublic
+  job: JobPublic
+}
+
+/**
+ * ClaimAuditRequestEnvelope
+ */
+export type ClaimAuditRequestEnvelope = {
+  data: ClaimAuditRequestData
+  meta: ResponseMeta
+}
+
+/**
  * ClaimConfidence
  */
 export type ClaimConfidence = "HIGH" | "MEDIUM" | "LOW" | "UNKNOWN"
@@ -1559,6 +1677,103 @@ export type ClaimCreate = {
 export type ClaimEnvelope = {
   data: ClaimPublic
   meta: M6ResponseMeta
+}
+
+/**
+ * ClaimEvidenceLinkCreate
+ */
+export type ClaimEvidenceLinkCreate = {
+  evidence_object_type: EvidenceObjectType
+  /**
+   * Evidence Object Id
+   */
+  evidence_object_id: string
+  relation_type: EvidenceRelationType
+  strength?: EvidenceLinkStrength
+  /**
+   * Explanation
+   */
+  explanation?: string | null
+  /**
+   * Suggestion
+   */
+  suggestion?: boolean
+}
+
+/**
+ * ClaimEvidenceLinkEnvelope
+ */
+export type ClaimEvidenceLinkEnvelope = {
+  data: ClaimEvidenceLinkPublic
+  meta: ResponseMeta
+}
+
+/**
+ * ClaimEvidenceLinkListEnvelope
+ */
+export type ClaimEvidenceLinkListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ClaimEvidenceLinkPublic>
+  meta: ResponseMeta
+}
+
+/**
+ * ClaimEvidenceLinkPublic
+ */
+export type ClaimEvidenceLinkPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Claim Id
+   */
+  claim_id: string
+  evidence: EvidenceReference
+  relation_type: EvidenceRelationType
+  strength: EvidenceLinkStrength
+  status: EvidenceLinkStatus
+  /**
+   * Explanation
+   */
+  explanation: string | null
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Confirmed At
+   */
+  confirmed_at: string | null
+  /**
+   * Invalidated At
+   */
+  invalidated_at: string | null
+  /**
+   * Invalidation Reason
+   */
+  invalidation_reason: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ClaimEvidenceLinkTransition
+ */
+export type ClaimEvidenceLinkTransition = {
+  status: EvidenceLinkStatus
+  /**
+   * Reason
+   */
+  reason?: string | null
 }
 
 /**
@@ -1942,6 +2157,41 @@ export type CleaningPlanUpdate = {
     | UnavailableAction
   > | null
 }
+
+/**
+ * CompletenessItem
+ */
+export type CompletenessItem = {
+  /**
+   * Code
+   */
+  code: string
+  status: CompletenessStatus
+  /**
+   * Source Object Ids
+   */
+  source_object_ids?: Array<string>
+  /**
+   * Limitations
+   */
+  limitations?: Array<string>
+  /**
+   * Missing Actions
+   */
+  missing_actions?: Array<string>
+}
+
+/**
+ * CompletenessStatus
+ */
+export type CompletenessStatus =
+  | "SATISFIED"
+  | "MISSING"
+  | "STALE"
+  | "RESTRICTED"
+  | "CONFLICTED"
+  | "NOT_APPLICABLE"
+  | "UNKNOWN"
 
 /**
  * ConfidenceLevel
@@ -3256,6 +3506,34 @@ export type EvidenceCandidateDto = {
 }
 
 /**
+ * EvidenceCompleteness
+ */
+export type EvidenceCompleteness = {
+  /**
+   * Rule Set Version
+   */
+  rule_set_version: string
+  /**
+   * Claim Id
+   */
+  claim_id: string
+  /**
+   * Scope
+   */
+  scope: {
+    [key: string]: unknown
+  }
+  /**
+   * Items
+   */
+  items: Array<CompletenessItem>
+  /**
+   * Limitations
+   */
+  limitations?: Array<string>
+}
+
+/**
  * EvidenceGapItem
  */
 export type EvidenceGapItem = {
@@ -3289,6 +3567,158 @@ export type EvidenceGapItem = {
 }
 
 /**
+ * EvidenceGraphEnvelope
+ */
+export type EvidenceGraphEnvelope = {
+  data: EvidenceGraphProjection
+  meta: ResponseMeta
+}
+
+/**
+ * EvidenceGraphProjection
+ */
+export type EvidenceGraphProjection = {
+  /**
+   * Nodes
+   */
+  nodes: Array<GraphNode>
+  /**
+   * Edges
+   */
+  edges: Array<GraphEdge>
+  /**
+   * Completeness
+   */
+  completeness: {
+    [key: string]: EvidenceCompleteness
+  }
+  /**
+   * Partial
+   */
+  partial: boolean
+  /**
+   * Next Cursor
+   */
+  next_cursor: string | null
+  /**
+   * Limitations
+   */
+  limitations: Array<string>
+  /**
+   * Scope
+   */
+  scope: {
+    [key: string]: unknown
+  }
+}
+
+/**
+ * EvidenceLinkStatus
+ */
+export type EvidenceLinkStatus =
+  | "SUGGESTED"
+  | "ACTIVE"
+  | "REJECTED"
+  | "INVALIDATED"
+
+/**
+ * EvidenceLinkStrength
+ */
+export type EvidenceLinkStrength = "STRONG" | "MODERATE" | "WEAK" | "UNKNOWN"
+
+/**
+ * EvidenceObjectType
+ */
+export type EvidenceObjectType =
+  | "LITERATURE_RECORD"
+  | "EVIDENCE_SPAN"
+  | "DATASET_VERSION"
+  | "DATA_TRANSFORMATION"
+  | "ANALYSIS_PLAN"
+  | "ANALYSIS_RUN"
+  | "ANALYSIS_RESULT"
+  | "FIGURE"
+  | "MANUSCRIPT_VERSION"
+  | "APPROVAL"
+  | "AUDIT_RESULT"
+
+/**
+ * EvidenceReference
+ */
+export type EvidenceReference = {
+  /**
+   * Project Id
+   */
+  project_id: string
+  object_type: EvidenceObjectType
+  /**
+   * Object Id
+   */
+  object_id: string
+  /**
+   * Raw Status
+   */
+  raw_status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  /**
+   * Source Hash
+   */
+  source_hash: string
+  /**
+   * Source Version
+   */
+  source_version: {
+    [key: string]: unknown
+  }
+  /**
+   * Label
+   */
+  label: string
+  /**
+   * Detail Intent
+   */
+  detail_intent: string
+  /**
+   * Invalidated
+   */
+  invalidated?: boolean
+  /**
+   * Stale
+   */
+  stale?: boolean
+  /**
+   * Restricted
+   */
+  restricted?: boolean
+  /**
+   * Limitations
+   */
+  limitations?: Array<string>
+  /**
+   * Allowed Actions
+   */
+  allowed_actions?: Array<string>
+}
+
+/**
+ * EvidenceRelationType
+ */
+export type EvidenceRelationType =
+  | "SUPPORTED_BY"
+  | "CONTRADICTED_BY"
+  | "DERIVED_FROM"
+  | "TRANSFORMED_FROM"
+  | "ANALYZED_BY"
+  | "PRODUCED_BY"
+  | "VISUALIZED_AS"
+  | "CONFIRMED_BY"
+  | "AUDITED_BY"
+  | "INVALIDATED_BY"
+
+/**
  * EvidenceRetrievalMode
  */
 export type EvidenceRetrievalMode = "KEYWORD" | "HYBRID"
@@ -3301,6 +3731,11 @@ export type EvidenceReviewStatus =
   | "REVIEWED"
   | "CONFIRMED"
   | "REJECTED"
+
+/**
+ * EvidenceRisk
+ */
+export type EvidenceRisk = "LOW" | "MEDIUM" | "HIGH" | "UNKNOWN"
 
 /**
  * EvidenceSearchData
@@ -3715,6 +4150,259 @@ export type EvidenceType =
   | "SAMPLE_DESCRIPTION"
   | "LIMITATION"
   | "OTHER"
+
+/**
+ * ExportCandidate
+ */
+export type ExportCandidate = {
+  /**
+   * Object Type
+   */
+  object_type: string
+  /**
+   * Object Id
+   */
+  object_id: string | null
+  /**
+   * Artifact Id
+   */
+  artifact_id: string | null
+  /**
+   * Package Path
+   */
+  package_path: string
+  /**
+   * Sha256
+   */
+  sha256: string | null
+  include_status: ExportItemIncludeStatus
+  /**
+   * Exclusion Reason
+   */
+  exclusion_reason?: string | null
+  /**
+   * License Status
+   */
+  license_status: string
+  /**
+   * Sensitive
+   */
+  sensitive: boolean
+  /**
+   * Redistribution
+   */
+  redistribution: string
+  /**
+   * Source Version
+   */
+  source_version?: {
+    [key: string]: unknown
+  }
+}
+
+/**
+ * ExportCreateData
+ */
+export type ExportCreateData = {
+  export: ExportPublic
+  readiness: ExportReadiness
+  approval?: ApprovalPublic | null
+  job?: JobPublic | null
+}
+
+/**
+ * ExportCreateEnvelope
+ */
+export type ExportCreateEnvelope = {
+  data: ExportCreateData
+  meta: ResponseMeta
+}
+
+/**
+ * ExportEnvelope
+ */
+export type ExportEnvelope = {
+  data: ExportPublic
+  meta: ResponseMeta
+}
+
+/**
+ * ExportItemIncludeStatus
+ */
+export type ExportItemIncludeStatus =
+  | "INCLUDED"
+  | "EXCLUDED"
+  | "METADATA_ONLY"
+  | "REFERENCE_ONLY"
+  | "BLOCKED"
+  | "MISSING"
+
+/**
+ * ExportPublic
+ */
+export type ExportPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  export_type: ExportType
+  status: ExportStatus
+  /**
+   * Scope
+   */
+  scope: {
+    [key: string]: unknown
+  }
+  /**
+   * Scope Hash
+   */
+  scope_hash: string
+  /**
+   * Readiness Audit Id
+   */
+  readiness_audit_id: string | null
+  /**
+   * Approval Record Id
+   */
+  approval_record_id: string | null
+  /**
+   * Job Id
+   */
+  job_id: string | null
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ExportReadiness
+ */
+export type ExportReadiness = {
+  /**
+   * Audit Id
+   */
+  audit_id: string
+  /**
+   * Ready
+   */
+  ready: boolean
+  /**
+   * Blocking Issues
+   */
+  blocking_issues: Array<ReadinessIssue>
+  /**
+   * Warnings
+   */
+  warnings: Array<ReadinessIssue>
+  /**
+   * Requires Confirmation
+   */
+  requires_confirmation: boolean
+  /**
+   * Candidate Items
+   */
+  candidate_items: Array<ExportCandidate>
+  /**
+   * Limitations
+   */
+  limitations: Array<string>
+  /**
+   * Snapshot
+   */
+  snapshot: {
+    [key: string]: unknown
+  }
+  /**
+   * Snapshot Hash
+   */
+  snapshot_hash: string
+  /**
+   * Rule Set Version
+   */
+  rule_set_version: string
+}
+
+/**
+ * ExportReadinessEnvelope
+ */
+export type ExportReadinessEnvelope = {
+  data: ExportReadiness
+  meta: ResponseMeta
+}
+
+/**
+ * ExportReadinessRequest
+ */
+export type ExportReadinessRequest = {
+  /**
+   * Include Original Literature Files
+   */
+  include_original_literature_files?: boolean
+  /**
+   * Include Dataset Versions
+   */
+  include_dataset_versions?: boolean
+  /**
+   * Include Sensitive Data
+   */
+  include_sensitive_data?: boolean
+  /**
+   * Include Agent Logs
+   */
+  include_agent_logs?: boolean
+  /**
+   * Include Model Output Artifacts
+   */
+  include_model_output_artifacts?: boolean
+  /**
+   * Acknowledge License Warnings
+   */
+  acknowledge_license_warnings?: boolean
+}
+
+/**
+ * ExportStatus
+ */
+export type ExportStatus =
+  | "DRAFT"
+  | "VALIDATING"
+  | "NEEDS_CONFIRMATION"
+  | "QUEUED"
+  | "PACKAGING"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED"
+
+/**
+ * ExportType
+ */
+export type ExportType =
+  | "REPRO_PACKAGE"
+  | "LITERATURE_MATRIX"
+  | "DATA_QUALITY_REPORT"
+  | "ANALYSIS_REPORT"
+  | "MANUSCRIPT_CHECK_REPORT"
 
 /**
  * FieldConfirmationStatus
@@ -4354,6 +5042,109 @@ export type FoundationCounts = {
    * Audit Events
    */
   audit_events: number
+}
+
+/**
+ * GraphEdge
+ */
+export type GraphEdge = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Source
+   */
+  source: string
+  /**
+   * Target
+   */
+  target: string
+  /**
+   * Relation Type
+   */
+  relation_type: string
+  strength?: EvidenceLinkStrength | null
+  /**
+   * Raw Status
+   */
+  raw_status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  risk: EvidenceRisk
+  /**
+   * Invalidated
+   */
+  invalidated: boolean
+  /**
+   * Source Kind
+   */
+  source_kind: string
+}
+
+/**
+ * GraphNode
+ */
+export type GraphNode = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Node Type
+   */
+  node_type: string
+  /**
+   * Object Id
+   */
+  object_id: string
+  /**
+   * Label
+   */
+  label: string
+  /**
+   * Raw Status
+   */
+  raw_status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  risk: EvidenceRisk
+  /**
+   * Invalidated
+   */
+  invalidated: boolean
+  /**
+   * Stale
+   */
+  stale: boolean
+  /**
+   * Source Kind
+   */
+  source_kind: string
+  /**
+   * Detail Intent
+   */
+  detail_intent: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Limitations
+   */
+  limitations: Array<string>
+  /**
+   * Lane
+   */
+  lane?: string | null
+  /**
+   * Rank
+   */
+  rank?: number | null
 }
 
 /**
@@ -7406,6 +8197,28 @@ export type QueryPlanUpdate = {
 }
 
 /**
+ * ReadinessIssue
+ */
+export type ReadinessIssue = {
+  /**
+   * Code
+   */
+  code: string
+  /**
+   * Object Type
+   */
+  object_type: string
+  /**
+   * Object Id
+   */
+  object_id?: string | null
+  /**
+   * Message
+   */
+  message: string
+}
+
+/**
  * ReadyHealthResponse
  */
 export type ReadyHealthResponse = {
@@ -7524,6 +8337,206 @@ export type ReplaceValueParameters = {
    * Replacement
    */
   replacement: string | number | number | boolean | null
+}
+
+/**
+ * ReproPackageCreate
+ */
+export type ReproPackageCreate = {
+  /**
+   * Include Original Literature Files
+   */
+  include_original_literature_files?: boolean
+  /**
+   * Include Dataset Versions
+   */
+  include_dataset_versions?: boolean
+  /**
+   * Include Sensitive Data
+   */
+  include_sensitive_data?: boolean
+  /**
+   * Include Agent Logs
+   */
+  include_agent_logs?: boolean
+  /**
+   * Include Model Output Artifacts
+   */
+  include_model_output_artifacts?: boolean
+  /**
+   * Acknowledge License Warnings
+   */
+  acknowledge_license_warnings?: boolean
+}
+
+/**
+ * ReproPackageDownloadData
+ */
+export type ReproPackageDownloadData = {
+  package: ReproPackagePublic
+  download: ArtifactDownload
+}
+
+/**
+ * ReproPackageDownloadEnvelope
+ */
+export type ReproPackageDownloadEnvelope = {
+  data: ReproPackageDownloadData
+  meta: ResponseMeta
+}
+
+/**
+ * ReproPackageEnvelope
+ */
+export type ReproPackageEnvelope = {
+  data: ReproPackagePublic
+  meta: ResponseMeta
+}
+
+/**
+ * ReproPackageHistoryEnvelope
+ */
+export type ReproPackageHistoryEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ReproPackageHistoryItem>
+  pagination: PaginationMeta
+  meta: ResponseMeta
+}
+
+/**
+ * ReproPackageHistoryItem
+ */
+export type ReproPackageHistoryItem = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Export Id
+   */
+  export_id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  /**
+   * Manifest Artifact Id
+   */
+  manifest_artifact_id: string
+  /**
+   * Package Version
+   */
+  package_version: number
+  /**
+   * Schema Version
+   */
+  schema_version: string
+  /**
+   * Contains Sensitive Data
+   */
+  contains_sensitive_data: boolean
+  /**
+   * Contains Restricted Data
+   */
+  contains_restricted_data: boolean
+  /**
+   * File Count
+   */
+  file_count: number
+  /**
+   * Total Size Bytes
+   */
+  total_size_bytes: number
+  /**
+   * Sha256
+   */
+  sha256: string
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+}
+
+/**
+ * ReproPackagePublic
+ */
+export type ReproPackagePublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Export Id
+   */
+  export_id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Artifact Id
+   */
+  artifact_id: string
+  /**
+   * Manifest Artifact Id
+   */
+  manifest_artifact_id: string
+  /**
+   * Package Version
+   */
+  package_version: number
+  /**
+   * Schema Version
+   */
+  schema_version: string
+  /**
+   * Contains Sensitive Data
+   */
+  contains_sensitive_data: boolean
+  /**
+   * Contains Restricted Data
+   */
+  contains_restricted_data: boolean
+  /**
+   * File Count
+   */
+  file_count: number
+  /**
+   * Total Size Bytes
+   */
+  total_size_bytes: number
+  /**
+   * Sha256
+   */
+  sha256: string
+  /**
+   * Manifest Sha256
+   */
+  manifest_sha256: string
+  /**
+   * Manifest
+   */
+  manifest: {
+    [key: string]: unknown
+  }
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
 }
 
 /**
@@ -12467,6 +13480,812 @@ export type EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdRespons
 
 export type EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponse =
   EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses[keyof EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses]
+
+export type EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksData =
+  {
+    body?: never
+    path: {
+      /**
+       * Claim Id
+       */
+      claim_id: string
+    }
+    query?: {
+      /**
+       * Include Invalidated
+       */
+      include_invalidated?: boolean
+    }
+    url: "/api/v1/claims/{claim_id}/evidence-links"
+  }
+
+export type EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match is required.
+     */
+    428: ContractErrorResponse
+  }
+
+export type EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksError =
+  EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksErrors[keyof EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksErrors]
+
+export type EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ClaimEvidenceLinkListEnvelope
+  }
+
+export type EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksResponse =
+  EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksResponses[keyof EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksResponses]
+
+export type EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksData =
+  {
+    body: ClaimEvidenceLinkCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Claim Id
+       */
+      claim_id: string
+    }
+    query?: never
+    url: "/api/v1/claims/{claim_id}/evidence-links"
+  }
+
+export type EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match is required.
+     */
+    428: ContractErrorResponse
+  }
+
+export type EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksError =
+  EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksErrors[keyof EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksErrors]
+
+export type EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksResponses =
+  {
+    /**
+     * Successful Response
+     */
+    201: ClaimEvidenceLinkEnvelope
+  }
+
+export type EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksResponse =
+  EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksResponses[keyof EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksResponses]
+
+export type EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdData = {
+  body?: never
+  path: {
+    /**
+     * Link Id
+     */
+    link_id: string
+  }
+  query?: never
+  url: "/api/v1/evidence-links/{link_id}"
+}
+
+export type EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdErrors = {
+  /**
+   * Malformed request.
+   */
+  400: ContractErrorResponse
+  /**
+   * Action not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found.
+   */
+  404: ContractErrorResponse
+  /**
+   * State conflict.
+   */
+  409: ContractErrorResponse
+  /**
+   * Stale If-Match.
+   */
+  412: ContractErrorResponse
+  /**
+   * Invalid contract input.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match is required.
+   */
+  428: ContractErrorResponse
+}
+
+export type EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdError =
+  EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdErrors[keyof EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdErrors]
+
+export type EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ClaimEvidenceLinkEnvelope
+}
+
+export type EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdResponse =
+  EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdResponses[keyof EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdResponses]
+
+export type EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdData =
+  {
+    body: ClaimEvidenceLinkTransition
+    headers?: {
+      /**
+       * If-Match
+       */
+      "If-Match"?: string | null
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Link Id
+       */
+      link_id: string
+    }
+    query?: never
+    url: "/api/v1/evidence-links/{link_id}"
+  }
+
+export type EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match is required.
+     */
+    428: ContractErrorResponse
+  }
+
+export type EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdError =
+  EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdErrors[keyof EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdErrors]
+
+export type EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ClaimEvidenceLinkEnvelope
+  }
+
+export type EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdResponse =
+  EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdResponses[keyof EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdResponses]
+
+export type EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: {
+      /**
+       * Root Claim Id
+       */
+      root_claim_id?: string | null
+      /**
+       * Depth
+       */
+      depth?: number
+      /**
+       * Node Types
+       */
+      node_types?: Array<string> | null
+      /**
+       * Risk Only
+       */
+      risk_only?: boolean
+      /**
+       * Include Invalidated
+       */
+      include_invalidated?: boolean
+      /**
+       * Cursor
+       */
+      cursor?: string | null
+      /**
+       * Limit
+       */
+      limit?: number
+    }
+    url: "/api/v1/projects/{project_id}/evidence-graph"
+  }
+
+export type EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+    /**
+     * If-Match is required.
+     */
+    428: ContractErrorResponse
+  }
+
+export type EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphError =
+  EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphErrors[keyof EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphErrors]
+
+export type EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: EvidenceGraphEnvelope
+  }
+
+export type EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphResponse =
+  EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphResponses[keyof EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphResponses]
+
+export type EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsData = {
+  body: ClaimAuditCreate
+  headers?: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key"?: string | null
+  }
+  path: {
+    /**
+     * Claim Id
+     */
+    claim_id: string
+  }
+  query?: never
+  url: "/api/v1/claims/{claim_id}/audits"
+}
+
+export type EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsErrors = {
+  /**
+   * Malformed request.
+   */
+  400: ContractErrorResponse
+  /**
+   * Action not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found.
+   */
+  404: ContractErrorResponse
+  /**
+   * State conflict.
+   */
+  409: ContractErrorResponse
+  /**
+   * Stale If-Match.
+   */
+  412: ContractErrorResponse
+  /**
+   * Invalid contract input.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match is required.
+   */
+  428: ContractErrorResponse
+}
+
+export type EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsError =
+  EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsErrors[keyof EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsErrors]
+
+export type EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: ClaimAuditRequestEnvelope
+  }
+
+export type EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsResponse =
+  EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsResponses[keyof EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsResponses]
+
+export type EvidenceGraphGetAuditGetApiV1AuditsAuditIdData = {
+  body?: never
+  path: {
+    /**
+     * Audit Id
+     */
+    audit_id: string
+  }
+  query?: never
+  url: "/api/v1/audits/{audit_id}"
+}
+
+export type EvidenceGraphGetAuditGetApiV1AuditsAuditIdErrors = {
+  /**
+   * Malformed request.
+   */
+  400: ContractErrorResponse
+  /**
+   * Action not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found.
+   */
+  404: ContractErrorResponse
+  /**
+   * State conflict.
+   */
+  409: ContractErrorResponse
+  /**
+   * Stale If-Match.
+   */
+  412: ContractErrorResponse
+  /**
+   * Invalid contract input.
+   */
+  422: ContractErrorResponse
+  /**
+   * If-Match is required.
+   */
+  428: ContractErrorResponse
+}
+
+export type EvidenceGraphGetAuditGetApiV1AuditsAuditIdError =
+  EvidenceGraphGetAuditGetApiV1AuditsAuditIdErrors[keyof EvidenceGraphGetAuditGetApiV1AuditsAuditIdErrors]
+
+export type EvidenceGraphGetAuditGetApiV1AuditsAuditIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ClaimAuditEnvelope
+}
+
+export type EvidenceGraphGetAuditGetApiV1AuditsAuditIdResponse =
+  EvidenceGraphGetAuditGetApiV1AuditsAuditIdResponses[keyof EvidenceGraphGetAuditGetApiV1AuditsAuditIdResponses]
+
+export type ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckData =
+  {
+    body: ExportReadinessRequest
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/exports/readiness-check"
+  }
+
+export type ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+  }
+
+export type ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckError =
+  ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckErrors[keyof ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckErrors]
+
+export type ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ExportReadinessEnvelope
+  }
+
+export type ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckResponse =
+  ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckResponses[keyof ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckResponses]
+
+export type ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageData =
+  {
+    body: ReproPackageCreate
+    headers?: {
+      /**
+       * Idempotency-Key
+       */
+      "Idempotency-Key"?: string | null
+    }
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: never
+    url: "/api/v1/projects/{project_id}/exports/repro-package"
+  }
+
+export type ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+  }
+
+export type ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageError =
+  ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageErrors[keyof ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageErrors]
+
+export type ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: ExportCreateEnvelope
+  }
+
+export type ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageResponse =
+  ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageResponses[keyof ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageResponses]
+
+export type ExportsGetExportGetApiV1ExportsExportIdData = {
+  body?: never
+  path: {
+    /**
+     * Export Id
+     */
+    export_id: string
+  }
+  query?: never
+  url: "/api/v1/exports/{export_id}"
+}
+
+export type ExportsGetExportGetApiV1ExportsExportIdErrors = {
+  /**
+   * Malformed request.
+   */
+  400: ContractErrorResponse
+  /**
+   * Action not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found.
+   */
+  404: ContractErrorResponse
+  /**
+   * State conflict.
+   */
+  409: ContractErrorResponse
+  /**
+   * Stale If-Match.
+   */
+  412: ContractErrorResponse
+  /**
+   * Invalid contract input.
+   */
+  422: ContractErrorResponse
+}
+
+export type ExportsGetExportGetApiV1ExportsExportIdError =
+  ExportsGetExportGetApiV1ExportsExportIdErrors[keyof ExportsGetExportGetApiV1ExportsExportIdErrors]
+
+export type ExportsGetExportGetApiV1ExportsExportIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ExportEnvelope
+}
+
+export type ExportsGetExportGetApiV1ExportsExportIdResponse =
+  ExportsGetExportGetApiV1ExportsExportIdResponses[keyof ExportsGetExportGetApiV1ExportsExportIdResponses]
+
+export type ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesData =
+  {
+    body?: never
+    path: {
+      /**
+       * Project Id
+       */
+      project_id: string
+    }
+    query?: {
+      /**
+       * Page
+       */
+      page?: number
+      /**
+       * Page Size
+       */
+      page_size?: number
+    }
+    url: "/api/v1/projects/{project_id}/repro-packages"
+  }
+
+export type ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+  }
+
+export type ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesError =
+  ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesErrors[keyof ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesErrors]
+
+export type ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ReproPackageHistoryEnvelope
+  }
+
+export type ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesResponse =
+  ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesResponses[keyof ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesResponses]
+
+export type ExportsGetReproPackageGetApiV1ReproPackagesPackageIdData = {
+  body?: never
+  path: {
+    /**
+     * Package Id
+     */
+    package_id: string
+  }
+  query?: never
+  url: "/api/v1/repro-packages/{package_id}"
+}
+
+export type ExportsGetReproPackageGetApiV1ReproPackagesPackageIdErrors = {
+  /**
+   * Malformed request.
+   */
+  400: ContractErrorResponse
+  /**
+   * Action not allowed.
+   */
+  403: ContractErrorResponse
+  /**
+   * Resource not found.
+   */
+  404: ContractErrorResponse
+  /**
+   * State conflict.
+   */
+  409: ContractErrorResponse
+  /**
+   * Stale If-Match.
+   */
+  412: ContractErrorResponse
+  /**
+   * Invalid contract input.
+   */
+  422: ContractErrorResponse
+}
+
+export type ExportsGetReproPackageGetApiV1ReproPackagesPackageIdError =
+  ExportsGetReproPackageGetApiV1ReproPackagesPackageIdErrors[keyof ExportsGetReproPackageGetApiV1ReproPackagesPackageIdErrors]
+
+export type ExportsGetReproPackageGetApiV1ReproPackagesPackageIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ReproPackageEnvelope
+}
+
+export type ExportsGetReproPackageGetApiV1ReproPackagesPackageIdResponse =
+  ExportsGetReproPackageGetApiV1ReproPackagesPackageIdResponses[keyof ExportsGetReproPackageGetApiV1ReproPackagesPackageIdResponses]
+
+export type ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadData =
+  {
+    body?: never
+    path: {
+      /**
+       * Package Id
+       */
+      package_id: string
+    }
+    query?: never
+    url: "/api/v1/repro-packages/{package_id}/download"
+  }
+
+export type ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadErrors =
+  {
+    /**
+     * Malformed request.
+     */
+    400: ContractErrorResponse
+    /**
+     * Action not allowed.
+     */
+    403: ContractErrorResponse
+    /**
+     * Resource not found.
+     */
+    404: ContractErrorResponse
+    /**
+     * State conflict.
+     */
+    409: ContractErrorResponse
+    /**
+     * Stale If-Match.
+     */
+    412: ContractErrorResponse
+    /**
+     * Invalid contract input.
+     */
+    422: ContractErrorResponse
+  }
+
+export type ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadError =
+  ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadErrors[keyof ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadErrors]
+
+export type ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ReproPackageDownloadEnvelope
+  }
+
+export type ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadResponse =
+  ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadResponses[keyof ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadResponses]
 
 export type ArtifactsListProjectArtifactsGetApiV1ProjectsProjectIdArtifactsData =
   {

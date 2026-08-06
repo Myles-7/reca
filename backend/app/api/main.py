@@ -10,6 +10,8 @@ from app.api.routes import (
     datasets,
     documents,
     evidence,
+    evidence_graph,
+    exports,
     figures,
     health,
     jobs,
@@ -25,6 +27,7 @@ from app.api.routes import (
 )
 from app.cleaning import service as cleaning_service
 from app.core.config import settings
+from app.exports import service as export_service
 from app.figures import service as figure_service
 from app.manuscripts import stage2 as manuscript_stage2
 from app.research_questions import service as research_question_service
@@ -34,6 +37,7 @@ cleaning_service.register_approval_handlers()
 analysis_service.register_approval_handlers()
 figure_service.register_approval_handlers()
 manuscript_stage2.register_approval_handlers()
+export_service.register_approval_handlers()
 
 api_router = APIRouter()
 api_router.include_router(health.router)
@@ -46,6 +50,8 @@ api_router.include_router(query_plans.router)
 api_router.include_router(literature.router)
 api_router.include_router(documents.router)
 api_router.include_router(evidence.router)
+api_router.include_router(evidence_graph.router)
+api_router.include_router(exports.router)
 api_router.include_router(artifacts.router)
 api_router.include_router(datasets.router)
 api_router.include_router(data_quality.router)

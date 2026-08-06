@@ -137,6 +137,7 @@ services:
       VALKEY_URL: valkey://valkey:6379/0
       MINIO_ENDPOINT: http://minio:9000
       MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://127.0.0.1:9000}
+      MINIO_BUCKET: ${MINIO_BUCKET:-reca}
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-reca-local-admin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-reca-local-minio-password-change-before-shared-use}
       GROBID_URL: http://grobid:8070
@@ -176,6 +177,7 @@ services:
     volumes:
       - minio_data:/data
     networks:
+      - edge
       - internal
     restart: unless-stopped
 

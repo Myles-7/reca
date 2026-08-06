@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from functools import cached_property
 from pathlib import Path
-from typing import Any, Literal, Self
+from typing import Any, Literal, Self, cast
 
 from pydantic import (
     AnyHttpUrl,
@@ -47,6 +48,11 @@ class Settings(BaseSettings):
     DEMO_MODE: bool = False
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     MAX_UPLOAD_BYTES: int = Field(default=50_000_000, gt=0)
+    EXPORT_MAX_MEMBERS: int = Field(default=5_000, ge=1, le=50_000)
+    EXPORT_MAX_ITEM_BYTES: int = Field(default=100_000_000, gt=0)
+    EXPORT_MAX_TOTAL_BYTES: int = Field(default=500_000_000, gt=0)
+    EXPORT_MAX_PATH_DEPTH: int = Field(default=16, ge=1, le=64)
+    EXPORT_MAX_COMPRESSION_RATIO: int = Field(default=100, ge=1, le=10_000)
     CONNECT_TIMEOUT_SECONDS: float = Field(default=5.0, gt=0, le=60)
     REQUEST_TIMEOUT_SECONDS: float = Field(default=30.0, gt=0, le=300)
 
@@ -208,4 +214,4 @@ class Settings(BaseSettings):
 
 
 # Pydantic Settings resolves required values from the environment at runtime.
-settings = Settings()  # type: ignore[call-arg]
+settings = cast(Callable[[], Settings], Settings)()

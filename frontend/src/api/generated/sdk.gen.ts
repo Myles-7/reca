@@ -197,6 +197,27 @@ import type {
   EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdData,
   EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdErrors,
   EvidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunIdResponses,
+  EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsData,
+  EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsErrors,
+  EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsResponses,
+  EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksData,
+  EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksErrors,
+  EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksResponses,
+  EvidenceGraphGetAuditGetApiV1AuditsAuditIdData,
+  EvidenceGraphGetAuditGetApiV1AuditsAuditIdErrors,
+  EvidenceGraphGetAuditGetApiV1AuditsAuditIdResponses,
+  EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphData,
+  EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphErrors,
+  EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphResponses,
+  EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdData,
+  EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdErrors,
+  EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdResponses,
+  EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksData,
+  EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksErrors,
+  EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksResponses,
+  EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdData,
+  EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdErrors,
+  EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdResponses,
   EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsData,
   EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsErrors,
   EvidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisionsResponses,
@@ -206,6 +227,24 @@ import type {
   EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdData,
   EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdErrors,
   EvidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldIdResponses,
+  ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageData,
+  ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageErrors,
+  ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageResponses,
+  ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadData,
+  ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadErrors,
+  ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadResponses,
+  ExportsGetExportGetApiV1ExportsExportIdData,
+  ExportsGetExportGetApiV1ExportsExportIdErrors,
+  ExportsGetExportGetApiV1ExportsExportIdResponses,
+  ExportsGetReproPackageGetApiV1ReproPackagesPackageIdData,
+  ExportsGetReproPackageGetApiV1ReproPackagesPackageIdErrors,
+  ExportsGetReproPackageGetApiV1ReproPackagesPackageIdResponses,
+  ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesData,
+  ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesErrors,
+  ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesResponses,
+  ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckData,
+  ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckErrors,
+  ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckResponses,
   FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansData,
   FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansErrors,
   FiguresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlansResponses,
@@ -2302,6 +2341,341 @@ export const evidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunId = <
     url: "/api/v1/topic-generation-runs/{run_id}",
     ...options,
   })
+
+/**
+ * List Evidence Links
+ */
+export const evidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinks =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksResponses,
+    EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksResponses,
+      EvidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinksErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/claims/{claim_id}/evidence-links",
+      ...options,
+    })
+
+/**
+ * Create Evidence Link
+ */
+export const evidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinks =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksResponses,
+    EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksResponses,
+      EvidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinksErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/claims/{claim_id}/evidence-links",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Evidence Link
+ */
+export const evidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdResponses,
+  EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdResponses,
+    EvidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/evidence-links/{link_id}",
+    ...options,
+  })
+
+/**
+ * Transition Evidence Link
+ */
+export const evidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkId =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdResponses,
+    EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).patch<
+      EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdResponses,
+      EvidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkIdErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/evidence-links/{link_id}",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Evidence Graph
+ */
+export const evidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraph =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphResponses,
+    EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphResponses,
+      EvidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraphErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/evidence-graph",
+      ...options,
+    })
+
+/**
+ * Create Claim Audit
+ */
+export const evidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAudits = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsResponses,
+  EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsResponses,
+    EvidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAuditsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/claims/{claim_id}/audits",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Audit
+ */
+export const evidenceGraphGetAuditGetApiV1AuditsAuditId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    EvidenceGraphGetAuditGetApiV1AuditsAuditIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  EvidenceGraphGetAuditGetApiV1AuditsAuditIdResponses,
+  EvidenceGraphGetAuditGetApiV1AuditsAuditIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    EvidenceGraphGetAuditGetApiV1AuditsAuditIdResponses,
+    EvidenceGraphGetAuditGetApiV1AuditsAuditIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/audits/{audit_id}",
+    ...options,
+  })
+
+/**
+ * Readiness Check
+ */
+export const exportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheck =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckResponses,
+    ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckResponses,
+      ExportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheckErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/exports/readiness-check",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Create Repro Package
+ */
+export const exportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackage =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageResponses,
+    ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).post<
+      ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageResponses,
+      ExportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackageErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/projects/{project_id}/exports/repro-package",
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+/**
+ * Get Export
+ */
+export const exportsGetExportGetApiV1ExportsExportId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<ExportsGetExportGetApiV1ExportsExportIdData, ThrowOnError>,
+): RequestResult<
+  ExportsGetExportGetApiV1ExportsExportIdResponses,
+  ExportsGetExportGetApiV1ExportsExportIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ExportsGetExportGetApiV1ExportsExportIdResponses,
+    ExportsGetExportGetApiV1ExportsExportIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/exports/{export_id}",
+    ...options,
+  })
+
+/**
+ * List Repro Packages
+ */
+export const exportsListReproPackagesGetApiV1ProjectsProjectIdReproPackages = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesResponses,
+  ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesResponses,
+    ExportsListReproPackagesGetApiV1ProjectsProjectIdReproPackagesErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/repro-packages",
+    ...options,
+  })
+
+/**
+ * Get Repro Package
+ */
+export const exportsGetReproPackageGetApiV1ReproPackagesPackageId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ExportsGetReproPackageGetApiV1ReproPackagesPackageIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  ExportsGetReproPackageGetApiV1ReproPackagesPackageIdResponses,
+  ExportsGetReproPackageGetApiV1ReproPackagesPackageIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    ExportsGetReproPackageGetApiV1ReproPackagesPackageIdResponses,
+    ExportsGetReproPackageGetApiV1ReproPackagesPackageIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/repro-packages/{package_id}",
+    ...options,
+  })
+
+/**
+ * Download Repro Package
+ */
+export const exportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownload =
+  <ThrowOnError extends boolean = false>(
+    options: Options<
+      ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadData,
+      ThrowOnError
+    >,
+  ): RequestResult<
+    ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadResponses,
+    ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadErrors,
+    ThrowOnError
+  > =>
+    (options.client ?? client).get<
+      ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadResponses,
+      ExportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownloadErrors,
+      ThrowOnError
+    >({
+      security: [{ scheme: "bearer", type: "http" }],
+      url: "/api/v1/repro-packages/{package_id}/download",
+      ...options,
+    })
 
 /**
  * List Project Artifacts

@@ -2,6 +2,7 @@ import re
 from pathlib import Path
 
 import pytest
+import yaml
 
 pytestmark = pytest.mark.no_database
 
@@ -62,3 +63,22 @@ def test_environment_template_covers_required_core_configuration() -> None:
 
     for variable in required:
         assert f"{variable}=" in content
+
+
+def test_api_and_worker_share_the_configured_minio_bucket() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    content = (repository_root / "docker-compose.yml").read_text(encoding="utf-8")
+    worker_section = content.split("\n  worker:\n", 1)[1].split("\n  minio:\n", 1)[0]
+
+    assert "MINIO_BUCKET: ${MINIO_BUCKET:-reca}" in worker_section
+
+
+def test_minio_public_download_port_has_an_edge_network_path() -> None:
+    repository_root = Path(__file__).resolve().parents[3]
+    compose = yaml.safe_load(
+        (repository_root / "docker-compose.yml").read_text(encoding="utf-8")
+    )
+    minio = compose["services"]["minio"]
+
+    assert set(minio["networks"]) == {"edge", "internal"}
+    assert minio["ports"] == ["127.0.0.1:${MINIO_PORT:-9000}:9000"]

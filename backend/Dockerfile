@@ -35,6 +35,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY ./backend/scripts /app/backend/scripts
 
 COPY ./backend/pyproject.toml ./backend/alembic.ini /app/backend/
+COPY ./uv.lock ./bun.lock /app/
 
 COPY ./backend/app /app/backend/app
 

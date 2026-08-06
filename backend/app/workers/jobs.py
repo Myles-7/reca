@@ -66,6 +66,14 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
                 from app.manuscripts.stage2 import mark_cancelled_stage2_job
 
                 mark_cancelled_stage2_job(session, job=job)
+            if job is not None and job.task_type == JobTaskType.EVIDENCE_AUDIT:
+                from app.evidence_graph.auditors import mark_cancelled_audit_job
+
+                mark_cancelled_audit_job(session, job=job)
+            if job is not None and job.task_type == JobTaskType.REPRO_PACKAGE_EXPORT:
+                from app.exports.service import mark_cancelled_export_job
+
+                mark_cancelled_export_job(session, job=job)
             return {"job_id": job_id, "claimed": False}
         job = session.get(Job, parsed_job_id)
         assert job is not None
@@ -91,6 +99,14 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
         except Exception as error:
             error_code = str(getattr(error, "code", "JOB_EXECUTION_FAILED"))
             retryable = bool(getattr(error, "retryable", True))
+            if job.task_type == JobTaskType.EVIDENCE_AUDIT:
+                from app.evidence_graph.auditors import mark_failed_audit_job
+
+                mark_failed_audit_job(session, job=job, error_code=error_code)
+            if job.task_type == JobTaskType.REPRO_PACKAGE_EXPORT:
+                from app.exports.service import mark_failed_export_job
+
+                mark_failed_export_job(session, job=job, error_code=error_code)
             service.fail_job(
                 session,
                 job_id=job.id,
@@ -302,6 +318,28 @@ def _execute_manuscript_transform(
     )
 
 
+def _execute_evidence_audit(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.evidence_graph.auditors import execute_claim_audit_job
+
+    audit = execute_claim_audit_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="audit_result", output_object_id=audit.id
+    )
+
+
+def _execute_repro_package_export(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    from app.exports.packager import execute_export_job
+
+    package = execute_export_job(session, job=job, run_id=run_id)
+    return JobExecutionResult(
+        output_object_type="repro_package", output_object_id=package.id
+    )
+
+
 register_job_handler(
     JobTaskType.RESEARCH_QUESTION_SCOPING,
     _execute_research_question_scoping,
@@ -324,3 +362,5 @@ register_job_handler(
     JobTaskType.MANUSCRIPT_REVISION_AUDIT, _execute_manuscript_revision_audit
 )
 register_job_handler(JobTaskType.MANUSCRIPT_TRANSFORM, _execute_manuscript_transform)
+register_job_handler(JobTaskType.EVIDENCE_AUDIT, _execute_evidence_audit)
+register_job_handler(JobTaskType.REPRO_PACKAGE_EXPORT, _execute_repro_package_export)

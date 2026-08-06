@@ -43,6 +43,7 @@ from app.models import (
     ArtifactType,
     AuditActorType,
     AuditResult,
+    AuditResultOutcome,
     AuditResultStatus,
     AuditType,
     Claim,
@@ -142,7 +143,25 @@ def audit_data(
     )
     return manuscript_service._encoded(
         {
-            **audit.model_dump(),
+            "id": audit.id,
+            "project_id": audit.project_id,
+            "audit_type": audit.audit_type,
+            "before_version_id": audit.before_version_id,
+            "after_version_id": audit.after_version_id,
+            "manuscript_id": audit.manuscript_id,
+            "status": audit.status,
+            "rule_set_version": audit.rule_set_version,
+            "before_source_hash": audit.before_source_hash,
+            "after_source_hash": audit.after_source_hash,
+            "idempotency_key": audit.idempotency_key,
+            "request_snapshot": audit.request_snapshot,
+            "result": audit.result,
+            "result_hash": audit.result_hash,
+            "processing_run_id": audit.processing_run_id,
+            "requested_by": audit.requested_by,
+            "error_code": audit.error_code,
+            "created_at": audit.created_at,
+            "completed_at": audit.completed_at,
             "job_id": job.id if job else None,
             "allowed_actions": allowed,
         }
@@ -330,6 +349,16 @@ def execute_revision_audit_job(
         action="manuscript.audit",
         for_update=True,
     )
+    if (
+        audit.before_version_id is None
+        or audit.after_version_id is None
+        or audit.manuscript_id is None
+    ):
+        raise ContractError(
+            status_code=409,
+            code="REVISION_AUDIT_SHAPE_INVALID",
+            message="Revision audit version snapshot is incomplete.",
+        )
     before, before_artifact = _load_version(
         session, audit.before_version_id, audit.project_id
     )
@@ -439,6 +468,13 @@ def execute_revision_audit_job(
     }
     audit.result = audit_payload
     audit.result_hash = project_service.request_hash(audit_payload)
+    audit.findings = findings
+    audit.evidence_object_ids = audit_payload["evidence_ids"]
+    audit.limitations = audit_payload["limitations"]
+    audit.degraded = False
+    audit.outcome = (
+        AuditResultOutcome.NEEDS_REVIEW if findings else AuditResultOutcome.VERIFIED
+    )
     audit.status = AuditResultStatus.COMPLETED
     audit.completed_at = get_datetime_utc()
     session.add(audit)

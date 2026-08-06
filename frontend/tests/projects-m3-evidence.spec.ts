@@ -27,6 +27,15 @@ const fieldCodes = [
   "LIMITATION",
 ] as const
 
+async function expectTrustedPdfHighlight(page: Page) {
+  await expect(page.locator(".m3-pdf-canvas-wrap")).toHaveAttribute(
+    "data-render-state",
+    "ready",
+    { timeout: 15_000 },
+  )
+  await expect(page.locator(".m3-pdf-highlight")).toHaveCount(1)
+}
+
 async function captureVisual(page: Page, name: string) {
   const outputDirectory = process.env.RECA_M3_VISUAL_DIR
   if (!outputDirectory) return
@@ -386,7 +395,7 @@ test("M3 deep link refresh restores server matrix, PDF page and trusted highligh
     page.getByText("Server evidence literature").first(),
   ).toBeVisible()
   await expect(page.locator(".m3-pdf-canvas-wrap canvas")).toBeVisible()
-  await expect(page.locator(".m3-pdf-highlight")).toHaveCount(1)
+  await expectTrustedPdfHighlight(page)
   const matrixPane = await page.locator(".m3-matrix-pane").boundingBox()
   const pdfPane = await page.locator(".m3-pdf-pane").boundingBox()
   expect(matrixPane).not.toBeNull()
@@ -403,7 +412,7 @@ test("M3 deep link refresh restores server matrix, PDF page and trusted highligh
   ).toBe(0)
   await captureVisual(page, "m3-desktop-matrix-pdf")
   await page.reload()
-  await expect(page.locator(".m3-pdf-highlight")).toHaveCount(1)
+  await expectTrustedPdfHighlight(page)
   expect(matrixLoads).toBeGreaterThanOrEqual(2)
 })
 
@@ -423,7 +432,7 @@ test("tablet switches between stable matrix and evidence panes", async ({
   await page.getByRole("button", { name: "Evidence", exact: true }).click()
   await expect(matrixPane).toBeHidden()
   await expect(pdfPane).toBeVisible()
-  await expect(page.locator(".m3-pdf-highlight")).toHaveCount(1)
+  await expectTrustedPdfHighlight(page)
   await captureVisual(page, "m3-tablet-evidence-pane")
 
   const overflow = await page.evaluate(() => ({

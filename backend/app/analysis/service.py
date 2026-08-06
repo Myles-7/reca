@@ -1140,6 +1140,31 @@ def invalidate_run(
     run.invalidated_at = get_datetime_utc()
     run.invalidation_reason = payload.reason.strip()
     session.add(run)
+    from app.evidence_graph.invalidation import propagate_invalidation
+    from app.models import EvidenceObjectType
+
+    propagate_invalidation(
+        session,
+        project_id=run.project_id,
+        object_type=EvidenceObjectType.ANALYSIS_RUN,
+        object_id=run.id,
+        reason=run.invalidation_reason,
+        actor_type=AuditActorType.USER,
+        actor_id=str(actor.id),
+    )
+    for result in session.exec(
+        select(AnalysisResult).where(AnalysisResult.analysis_run_id == run.id)
+    ):
+        propagate_invalidation(
+            session,
+            project_id=run.project_id,
+            object_type=EvidenceObjectType.ANALYSIS_RESULT,
+            object_id=result.id,
+            reason=run.invalidation_reason,
+            source_hash=result.result_hash,
+            actor_type=AuditActorType.USER,
+            actor_id=str(actor.id),
+        )
     for figure in session.exec(
         select(Figure).where(
             Figure.analysis_run_id == run.id,
@@ -1152,6 +1177,15 @@ def invalidate_run(
             f"Upstream AnalysisRun invalidated: {run.invalidation_reason}"
         )
         session.add(figure)
+        propagate_invalidation(
+            session,
+            project_id=run.project_id,
+            object_type=EvidenceObjectType.FIGURE,
+            object_id=figure.id,
+            reason=figure.invalidation_reason,
+            actor_type=AuditActorType.USER,
+            actor_id=str(actor.id),
+        )
     _audit(
         session,
         project_id=run.project_id,

@@ -94,6 +94,17 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "approval.decide",
             "approval.cancel",
             "audit.read",
+            "evidence.read",
+            "evidence.link.create",
+            "evidence.link.confirm",
+            "evidence.link.reject",
+            "evidence.link.invalidate",
+            "evidence.audit.run",
+            "export.read",
+            "export.readiness",
+            "export.create",
+            "export.confirm",
+            "export.download",
         }
     ),
     ProjectMemberRole.EDITOR: frozenset(
@@ -136,6 +147,17 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "approval.read",
             "approval.cancel",
             "audit.read",
+            "evidence.read",
+            "evidence.link.create",
+            "evidence.link.confirm",
+            "evidence.link.reject",
+            "evidence.link.invalidate",
+            "evidence.audit.run",
+            "export.read",
+            "export.readiness",
+            "export.create",
+            "export.confirm",
+            "export.download",
         }
     ),
     ProjectMemberRole.REVIEWER: frozenset(
@@ -161,6 +183,15 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "approval.decide",
             "approval.cancel",
             "audit.read",
+            "evidence.read",
+            "evidence.link.create",
+            "evidence.link.confirm",
+            "evidence.link.reject",
+            "evidence.link.invalidate",
+            "evidence.audit.run",
+            "export.read",
+            "export.readiness",
+            "export.download",
         }
     ),
     ProjectMemberRole.VIEWER: frozenset(
@@ -177,6 +208,10 @@ ROLE_ACTIONS: dict[ProjectMemberRole, frozenset[str]] = {
             "approval.read",
             "approval.cancel",
             "audit.read",
+            "evidence.read",
+            "export.read",
+            "export.readiness",
+            "export.download",
         }
     ),
 }

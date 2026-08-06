@@ -122,9 +122,8 @@ def test_m3_empty_upgrade_repeat_check_and_safe_downgrade() -> None:
     try:
         settings.POSTGRES_DB = database_name
         config = _alembic_config()
-        command.upgrade(config, "head")
-        command.upgrade(config, "head")
-        command.check(config)
+        command.upgrade(config, "0013_m3_evidence_matrix")
+        command.upgrade(config, "0013_m3_evidence_matrix")
 
         table_names = set(inspect(test_engine).get_table_names())
         assert {
@@ -143,6 +142,8 @@ def test_m3_empty_upgrade_repeat_check_and_safe_downgrade() -> None:
         command.downgrade(config, "0012_document_upload")
         assert "evidence_spans" not in set(inspect(test_engine).get_table_names())
         command.upgrade(config, "head")
+        command.upgrade(config, "head")
+        command.check(config)
     finally:
         settings.POSTGRES_DB = original_database
         test_engine.dispose()

@@ -39,8 +39,12 @@ def _encoded_dict(value: Any) -> dict[str, Any]:
 
 PayloadResolver = Callable[[Session, ApprovalRecord], dict[str, Any]]
 payload_resolvers: dict[str, PayloadResolver] = {}
-DecisionHandler = Callable[[Session, ApprovalRecord, ApprovalStatus, User], None]
+PostCommitAction = Callable[[], None]
+DecisionHandler = Callable[
+    [Session, ApprovalRecord, ApprovalStatus, User], PostCommitAction | None
+]
 decision_handlers: dict[str, DecisionHandler] = {}
+decision_permission_actions: dict[str, str] = {}
 
 
 @dataclass(frozen=True)
@@ -71,9 +75,14 @@ def register_payload_resolver(
 
 
 def register_decision_handler(
-    target_object_type: str, handler: DecisionHandler
+    target_object_type: str,
+    handler: DecisionHandler,
+    *,
+    permission_action: str | None = None,
 ) -> None:
     decision_handlers[target_object_type] = handler
+    if permission_action is not None:
+        decision_permission_actions[target_object_type] = permission_action
 
 
 def _audit(
@@ -642,11 +651,23 @@ def decide_approval(
         )
     if decision not in {ApprovalStatus.APPROVED, ApprovalStatus.REJECTED}:
         raise ValueError("decision must be APPROVED or REJECTED")
-    approval, access = _visible_approval(
+    approval = session.exec(
+        select(ApprovalRecord)
+        .where(ApprovalRecord.id == approval_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    ).first()
+    if approval is None:
+        raise ContractError(
+            status_code=404, code="RESOURCE_NOT_FOUND", message="Resource not found."
+        )
+    access = _authorize(
         session,
+        approval=approval,
         actor=actor,
-        approval_id=approval_id,
-        action="approval.decide",
+        action=decision_permission_actions.get(
+            approval.target_object_type, "approval.decide"
+        ),
         for_update=True,
     )
     path = (
@@ -711,8 +732,9 @@ def decide_approval(
     session.add(approval)
     session.flush([approval])
     handler = decision_handlers.get(approval.target_object_type)
-    if handler is not None:
-        handler(session, approval, decision, actor)
+    post_commit_action = (
+        handler(session, approval, decision, actor) if handler is not None else None
+    )
     _audit(
         session,
         approval=approval,
@@ -745,6 +767,8 @@ def decide_approval(
         result=result,
     )
     project_service._commit(session)
+    if post_commit_action is not None:
+        post_commit_action()
     return result
 
 

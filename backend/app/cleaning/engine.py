@@ -13,13 +13,18 @@ from fastapi.encoders import jsonable_encoder
 
 from app.api.errors import ContractError
 from app.cleaning.schemas import (
+    AllRowsSelector,
     CastTypeAction,
     CleaningActionInput,
+    IssueRowsSelector,
     MapCategoryAction,
     MarkMissingAction,
+    NumericRangeSelector,
     RenameColumnAction,
     ReplaceValueAction,
     RowSelector,
+    ValueEqualsSelector,
+    ValueInSelector,
 )
 from app.models import DatasetColumn, DatasetColumnType
 
@@ -75,23 +80,29 @@ def _selector_mask(
     columns: dict[uuid.UUID, str],
     issue_rows: dict[uuid.UUID, tuple[int, ...]],
 ) -> pd.Series:
-    if selector.selector_type == "ALL_ROWS":
+    if isinstance(selector, AllRowsSelector):
         return pd.Series(True, index=frame.index)
-    if selector.selector_type == "ISSUE_ROWS":
+    if isinstance(selector, IssueRowsSelector):
         indexes = {
             index for issue_id in selector.issue_ids for index in issue_rows[issue_id]
         }
         return frame.index.to_series().isin(indexes)
     column = columns[selector.column_id]
     series = frame[column]
-    if selector.selector_type == "VALUE_EQUALS":
+    if isinstance(selector, ValueEqualsSelector):
         return series == selector.value
-    if selector.selector_type == "VALUE_IN":
+    if isinstance(selector, ValueInSelector):
         return series.isin(selector.values)
     if selector.selector_type == "IS_NULL":
         return series.isna() | series.astype("string").str.strip().eq("")
     if selector.selector_type == "IS_NOT_NULL":
         return ~(series.isna() | series.astype("string").str.strip().eq(""))
+    if not isinstance(selector, NumericRangeSelector):
+        raise ContractError(
+            status_code=422,
+            code="CLEANING_SELECTOR_INVALID",
+            message="The row selector is not supported.",
+        )
     numeric = pd.to_numeric(series, errors="coerce")
     mask = numeric.notna()
     if selector.minimum is not None:

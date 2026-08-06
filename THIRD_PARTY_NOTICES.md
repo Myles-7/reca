@@ -318,7 +318,7 @@ these projects by this documentation task.
 | python-docx | `1.2.0` / `v1.2.0` / `e45454602b53e8e572b179ccf1c91093ec9f4ed7` | MIT | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | `backend/pyproject.toml`, `uv.lock`, M6 stage-0 Worker/OOXML Spike |
 | CSL Styles | `1de508b010b2643c8b13b082947f1054bc33357f` | CC BY-SA 3.0; selected file rights require review | `RESOURCE_SNAPSHOT` | `PLANNED` | None; no styles copied |
 | citeproc-js | `cc9153c45293af878de08cafddbefe6ea150c380` | CPAL/AGPL metadata conflict unresolved | `DEFERRED` | `RESEARCHED` | None |
-| xyflow / React Flow | `360f5b13e2bc6899ea06b4be1a49b068d86926cf` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None |
+| xyflow / React Flow | `360f5b13e2bc6899ea06b4be1a49b068d86926cf` | MIT | `DIRECT_DEPENDENCY` | `ALREADY_INTEGRATED` | `@xyflow/react` 12.11.2 in `frontend/package.json` and `bun.lock`; M7 server-projected Evidence Workspace and stage-0 browser Spike; React Flow is presentation-only and cannot persist authority edges |
 | Zotero | `4ec5ba9c279841b09231db82a61e30bd9e7dc6ef` | AGPL-3.0 plus third-party notices | `DESIGN_REFERENCE` | `RESEARCHED` | None; no source/assets copied |
 | Zotero Web Library | `556d0bf6b1b48fa8402a91afa62b15533b713013` | AGPL-3.0 | `DESIGN_REFERENCE` | `RESEARCHED` | None; no source/assets copied |
 | OpenAI Agents SDK | `0ffa36840cb812488738f6fc5be3d3a1f51397b7` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None; M8 only |

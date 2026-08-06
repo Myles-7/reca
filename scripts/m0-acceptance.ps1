@@ -58,6 +58,19 @@ function Invoke-NodeAudit {
     Add-Result "node-security-audit" "FAIL" $LASTEXITCODE $log
 }
 
+function Invoke-PythonAudit {
+    $exitCode = 1
+    for ($attempt = 1; $attempt -le 3; $attempt++) {
+        & python -m uv run pip-audit
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -eq 0) { return }
+        if ($attempt -lt 3) {
+            Write-Output "pip-audit attempt $attempt failed; retrying after $($attempt * 2) seconds."
+            Start-Sleep -Seconds ($attempt * 2)
+        }
+    }
+    $global:LASTEXITCODE = $exitCode
+}
 $secretBytes = New-Object byte[] 48
 $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
 $rng.GetBytes($secretBytes)
@@ -151,6 +164,7 @@ try {
                     --volume "${root}/tests/golden:/app/tests/golden:ro" `
                     --volume "${root}/frontend/src/shared/environment.ts:/app/frontend/src/shared/environment.ts:ro" `
                     --volume "${root}/.env.example:/app/.env.example:ro" `
+                    --volume "${root}/docker-compose.yml:/app/docker-compose.yml:ro" `
                     api pytest -q
             }
         }
@@ -178,7 +192,7 @@ try {
         }
     }
     Invoke-Step "repository-secret-scan" { $secretMatches = git grep -n -E "BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|AKIA[0-9A-Z]{16}" -- . ":(exclude).env.example" ":(exclude)scripts/m0-acceptance.ps1"; if ($LASTEXITCODE -gt 1) { throw "Secret scan could not run" }; if ($secretMatches) { throw "Secret pattern detected" }; $global:LASTEXITCODE = 0 }
-    Invoke-Step "python-security-audit" { python -m uv run pip-audit }
+    Invoke-Step "python-security-audit" { Invoke-PythonAudit }
     Invoke-NodeAudit
     Invoke-Step "post-run-git-status" {
         $currentTrackedStatus = @(git status --porcelain --untracked-files=no)

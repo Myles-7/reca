@@ -58,9 +58,22 @@ import {
   evidenceGetLiteratureExtractionGetApiV1LiteratureExtractionsExtractionId,
   evidenceGetLiteratureMatrixGetApiV1ProjectsProjectIdLiteratureMatrix,
   evidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunId,
+  evidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAudits,
+  evidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinks,
+  evidenceGraphGetAuditGetApiV1AuditsAuditId,
+  evidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraph,
+  evidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkId,
+  evidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinks,
+  evidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkId,
   evidenceListLiteratureDecisionsGetApiV1LiteratureLiteratureIdDecisions,
   evidenceSearchProjectEvidencePostApiV1ProjectsProjectIdEvidenceSearch,
   evidenceUpdateLiteratureExtractionFieldPatchApiV1LiteratureExtractionFieldsFieldId,
+  exportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackage,
+  exportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownload,
+  exportsGetExportGetApiV1ExportsExportId,
+  exportsGetReproPackageGetApiV1ReproPackagesPackageId,
+  exportsListReproPackagesGetApiV1ProjectsProjectIdReproPackages,
+  exportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheck,
   figuresCreateFigurePlanPostApiV1ProjectsProjectIdFigurePlans,
   figuresDownloadFigureFormatGetApiV1FiguresFigureIdDownloadsFormatName,
   figuresGetFigureGetApiV1FiguresFigureId,
@@ -179,8 +192,17 @@ export type {
   AssumptionCheckStatus,
   AuditListEnvelope,
   BodyLoginLoginAccessTokenPostApiV1LoginAccessToken as Body_login_login_access_token_post_api_v1_login_access_token,
+  ClaimAuditCreate,
+  ClaimAuditEnvelope,
+  ClaimAuditPublic,
+  ClaimAuditRequestEnvelope,
   ClaimCreate,
   ClaimEnvelope,
+  ClaimEvidenceLinkCreate,
+  ClaimEvidenceLinkEnvelope,
+  ClaimEvidenceLinkListEnvelope,
+  ClaimEvidenceLinkPublic,
+  ClaimEvidenceLinkTransition,
   ClaimPublic,
   ClaimStatus,
   ClaimType,
@@ -198,6 +220,14 @@ export type {
   DocumentType,
   DocumentUploadEnvelope,
   EvidenceCandidateDto,
+  EvidenceCompleteness,
+  EvidenceGraphEnvelope,
+  EvidenceGraphProjection,
+  EvidenceLinkStatus,
+  EvidenceLinkStrength,
+  EvidenceObjectType,
+  EvidenceReference,
+  EvidenceRelationType,
   EvidenceSearchEnvelope,
   EvidenceSearchRequest,
   EvidenceSetSummaryCreate,
@@ -205,6 +235,15 @@ export type {
   EvidenceSetSummaryPublic,
   EvidenceSpanPublic,
   EvidenceSpanVerificationCreate,
+  ExportCandidate,
+  ExportCreateEnvelope,
+  ExportEnvelope,
+  ExportItemIncludeStatus,
+  ExportPublic,
+  ExportReadiness,
+  ExportReadinessEnvelope,
+  ExportReadinessRequest,
+  ExportStatus,
   FieldConfirmationStatus,
   FieldEvidenceStatus,
   FigureArtifactPublic,
@@ -224,6 +263,8 @@ export type {
   FigureStatus,
   FigureValidationIssuePublic,
   FixPlanCreate,
+  GraphEdge,
+  GraphNode,
   JobListEnvelope,
   JobPublic,
   LiteratureCandidatePublic,
@@ -289,6 +330,12 @@ export type {
   QueryPlanPublic,
   QueryPlanUpdate,
   ReadyHealthResponse,
+  ReproPackageCreate,
+  ReproPackageDownloadEnvelope,
+  ReproPackageEnvelope,
+  ReproPackageHistoryEnvelope,
+  ReproPackageHistoryItem,
+  ReproPackagePublic,
   ResearchQuestionCreate,
   ResearchQuestionData,
   ResearchQuestionMarkReady,
@@ -1090,6 +1137,137 @@ export class EvidenceApi {
     unwrap(
       evidenceGetTopicGenerationRunGetApiV1TopicGenerationRunsRunId({
         path: { run_id: runId },
+      }),
+    )
+}
+
+export type EvidenceGraphQuery = {
+  root_claim_id?: string | null
+  depth?: number
+  node_types?: string[] | null
+  risk_only?: boolean
+  include_invalidated?: boolean
+  cursor?: string | null
+  limit?: number
+}
+
+export class EvidenceGraphApi {
+  static graph = (projectId: string, query: EvidenceGraphQuery = {}) =>
+    unwrap(
+      evidenceGraphGetEvidenceGraphGetApiV1ProjectsProjectIdEvidenceGraph({
+        path: { project_id: projectId },
+        query,
+      }),
+    )
+  static links = (claimId: string, includeInvalidated = false) =>
+    unwrap(
+      evidenceGraphListEvidenceLinksGetApiV1ClaimsClaimIdEvidenceLinks({
+        path: { claim_id: claimId },
+        query: { include_invalidated: includeInvalidated },
+      }),
+    )
+  static link = (linkId: string) =>
+    unwrap(
+      evidenceGraphGetEvidenceLinkGetApiV1EvidenceLinksLinkId({
+        path: { link_id: linkId },
+      }),
+    )
+  static createLink = (
+    claimId: string,
+    body: import("../generated/types.gen").ClaimEvidenceLinkCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceGraphCreateEvidenceLinkPostApiV1ClaimsClaimIdEvidenceLinks({
+        path: { claim_id: claimId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static transitionLink = (
+    linkId: string,
+    lockVersion: number,
+    body: import("../generated/types.gen").ClaimEvidenceLinkTransition,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceGraphTransitionEvidenceLinkPatchApiV1EvidenceLinksLinkId({
+        path: { link_id: linkId },
+        headers: {
+          "If-Match": `"${lockVersion}"`,
+          "Idempotency-Key": idempotencyKey,
+        },
+        body,
+      }),
+    )
+  static createAudit = (
+    claimId: string,
+    body: import("../generated/types.gen").ClaimAuditCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      evidenceGraphCreateClaimAuditPostApiV1ClaimsClaimIdAudits({
+        path: { claim_id: claimId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static audit = (auditId: string) =>
+    unwrap(
+      evidenceGraphGetAuditGetApiV1AuditsAuditId({
+        path: { audit_id: auditId },
+      }),
+    )
+}
+
+export class ExportsApi {
+  static readiness = (
+    projectId: string,
+    body: import("../generated/types.gen").ExportReadinessRequest,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      exportsReadinessCheckPostApiV1ProjectsProjectIdExportsReadinessCheck({
+        path: { project_id: projectId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static createReproPackage = (
+    projectId: string,
+    body: import("../generated/types.gen").ReproPackageCreate,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      exportsCreateReproPackagePostApiV1ProjectsProjectIdExportsReproPackage({
+        path: { project_id: projectId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body,
+      }),
+    )
+  static get = (exportId: string) =>
+    unwrap(
+      exportsGetExportGetApiV1ExportsExportId({
+        path: { export_id: exportId },
+      }),
+    )
+  static package = (packageId: string) =>
+    unwrap(
+      exportsGetReproPackageGetApiV1ReproPackagesPackageId({
+        path: { package_id: packageId },
+      }),
+    )
+  static packages = (projectId: string, query: PageQuery = {}) =>
+    unwrap(
+      exportsListReproPackagesGetApiV1ProjectsProjectIdReproPackages({
+        path: { project_id: projectId },
+        query,
+      }),
+    )
+  static download = (packageId: string) =>
+    unwrap(
+      exportsDownloadReproPackageGetApiV1ReproPackagesPackageIdDownload({
+        path: { package_id: packageId },
       }),
     )
 }

@@ -187,7 +187,7 @@ def test_m2_scoping_migration_registers_reversible_job_type() -> None:
     assert "NEEDS_USER_INPUT" not in migration
 
 
-def test_m6_migration_graph_has_one_contiguous_head() -> None:
+def test_m7_migration_graph_has_one_contiguous_head() -> None:
     repository_root = Path(__file__).resolve().parents[3]
     config = Config(str(repository_root / "backend/alembic.ini"))
     config.set_main_option(
@@ -195,7 +195,7 @@ def test_m6_migration_graph_has_one_contiguous_head() -> None:
     )
     scripts = ScriptDirectory.from_config(config)
 
-    assert scripts.get_heads() == ["0017_m6_manuscripts"]
+    assert scripts.get_heads() == ["0018_m7_evidence_export"]
     revisions = list(scripts.walk_revisions(base="base", head="heads"))
     assert revisions[-1].down_revision is None
     for current, parent in zip(revisions, revisions[1:], strict=False):

@@ -7,7 +7,7 @@ import sys
 import time
 from contextvars import ContextVar
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, TextIO
 from uuid import uuid4
 
 from fastapi import Request
@@ -30,6 +30,10 @@ def request_id_from_header(value: str | None) -> str:
 
 def current_request_id() -> str:
     return _request_id.get()
+
+
+class RecaJsonStreamHandler(logging.StreamHandler[TextIO]):
+    pass
 
 
 class JsonFormatter(logging.Formatter):
@@ -56,11 +60,10 @@ def configure_logging() -> None:
     logger.setLevel(settings.LOG_LEVEL)
     logger.propagate = False
 
-    if any(getattr(handler, "_reca_structured", False) for handler in logger.handlers):
+    if any(isinstance(handler, RecaJsonStreamHandler) for handler in logger.handlers):
         return
 
-    handler = logging.StreamHandler(sys.stdout)
-    handler._reca_structured = True  # type: ignore[attr-defined]
+    handler = RecaJsonStreamHandler(sys.stdout)
     handler.setFormatter(JsonFormatter())
     logger.addHandler(handler)
 

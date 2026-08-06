@@ -24,6 +24,8 @@ from app.cleaning.schemas import (
     CleaningActionInput,
     CleaningPlanCreate,
     CleaningPlanUpdate,
+    IssueRowsSelector,
+    RenameColumnAction,
     UnavailableAction,
 )
 from app.core.observability import current_request_id
@@ -294,7 +296,7 @@ def _validate_action_scope(
                 message="An action references a column outside the source DatasetVersion.",
             )
         issue_ids = set(action.source_issue_ids)
-        if action.row_selector.selector_type == "ISSUE_ROWS":
+        if isinstance(action.row_selector, IssueRowsSelector):
             issue_ids.update(action.row_selector.issue_ids)
         if issue_ids:
             issues = session.exec(
@@ -314,7 +316,7 @@ def _validate_action_scope(
 
 
 def _risk(action: CleaningActionInput) -> CleaningRiskLevel:
-    if action.action_type == "RENAME_COLUMN":
+    if isinstance(action, RenameColumnAction):
         return CleaningRiskLevel.LOW
     if action.action_type == "CAST_TYPE":
         return CleaningRiskLevel.HIGH
@@ -545,7 +547,7 @@ def _issue_rows(
     ids: set[uuid.UUID] = set()
     for action in actions:
         ids.update(action.source_issue_ids)
-        if action.row_selector.selector_type == "ISSUE_ROWS":
+        if isinstance(action.row_selector, IssueRowsSelector):
             ids.update(action.row_selector.issue_ids)
     if not ids:
         return {}
@@ -573,7 +575,7 @@ def _masked_samples(
     sensitive = {column.source_name for column in columns if column.is_sensitive}
     by_id = {column.id: column for column in columns}
     for action in actions:
-        if action.action_type != "RENAME_COLUMN":
+        if not isinstance(action, RenameColumnAction):
             continue
         for column_id in action.target_columns:
             column = by_id[column_id]
@@ -1174,7 +1176,12 @@ def _safe_export_value(value: Any) -> Any:
 def _serialize(frame: pd.DataFrame, file_format: DatasetFileFormat) -> bytes:
     safe = frame.map(_safe_export_value)
     if file_format == DatasetFileFormat.CSV:
-        csv_text = cast(str, safe.to_csv(index=False, lineterminator="\n"))
+        csv_text = safe.to_csv(index=False, lineterminator="\n")
+        if not isinstance(csv_text, str):
+            raise TransformationExecutionError(
+                "CLEANING_SERIALIZATION_INVALID",
+                "CSV serialization did not return text.",
+            )
         return csv_text.encode("utf-8")
     workbook = Workbook(write_only=True)
     sheet = workbook.create_sheet("CleanedData")
@@ -1498,7 +1505,7 @@ def execute_transformation_job(
                 action.target_columns[0]
             ].source_name
             for action in actions
-            if action.action_type == "RENAME_COLUMN"
+            if isinstance(action, RenameColumnAction)
         }
         source_by_name = {column.source_name: column for column in columns}
         target_columns: list[DatasetColumn] = []

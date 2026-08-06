@@ -89,8 +89,10 @@ ClaimEvidenceLink without the normal Service path.
 
 ## RECA current state
 
-React Flow is planned for M7 evidence-chain visualization. It is not installed
-or implemented by this research phase.
+React Flow is installed as `@xyflow/react` 12.11.2 and used by the M7 production
+Evidence Workspace for server-projected graph visualization. RECA-owned custom
+nodes and mappers keep it outside the graph authority boundary; connect does not
+persist ClaimEvidenceLink or domain edges.
 
 ## Recommended integration mode
 

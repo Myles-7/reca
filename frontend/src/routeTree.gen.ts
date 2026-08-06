@@ -24,6 +24,7 @@ import { Route as LayoutProjectsIndexRouteImport } from './routes/_layout/projec
 import { Route as LayoutProjectsProjectIdRouteImport } from './routes/_layout/projects.$projectId'
 import { Route as LayoutProjectsProjectIdAnalysisRouteImport } from './routes/_layout/projects.$projectId_.analysis'
 import { Route as LayoutProjectsProjectIdDataRouteImport } from './routes/_layout/projects.$projectId_.data'
+import { Route as LayoutProjectsProjectIdEvidenceRouteImport } from './routes/_layout/projects.$projectId_.evidence'
 import { Route as LayoutProjectsProjectIdLiteratureRouteImport } from './routes/_layout/projects.$projectId_.literature'
 import { Route as LayoutProjectsProjectIdManuscriptRouteImport } from './routes/_layout/projects.$projectId_.manuscript'
 import { Route as LayoutProjectsProjectIdResearchQuestionRouteImport } from './routes/_layout/projects.$projectId_.research-question'
@@ -106,6 +107,12 @@ const LayoutProjectsProjectIdDataRoute =
     path: '/$projectId/data',
     getParentRoute: () => LayoutProjectsRoute,
   } as any)
+const LayoutProjectsProjectIdEvidenceRoute =
+  LayoutProjectsProjectIdEvidenceRouteImport.update({
+    id: '/$projectId_/evidence',
+    path: '/$projectId/evidence',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
 const LayoutProjectsProjectIdLiteratureRoute =
   LayoutProjectsProjectIdLiteratureRouteImport.update({
     id: '/$projectId_/literature',
@@ -152,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/projects/': typeof LayoutProjectsIndexRoute
   '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
+  '/projects/$projectId/evidence': typeof LayoutProjectsProjectIdEvidenceRoute
   '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
   '/projects/$projectId/manuscript': typeof LayoutProjectsProjectIdManuscriptRoute
   '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -172,6 +180,7 @@ export interface FileRoutesByTo {
   '/projects': typeof LayoutProjectsIndexRoute
   '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
+  '/projects/$projectId/evidence': typeof LayoutProjectsProjectIdEvidenceRoute
   '/projects/$projectId/literature': typeof LayoutProjectsProjectIdLiteratureRoute
   '/projects/$projectId/manuscript': typeof LayoutProjectsProjectIdManuscriptRoute
   '/projects/$projectId/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -195,6 +204,7 @@ export interface FileRoutesById {
   '/_layout/projects/': typeof LayoutProjectsIndexRoute
   '/_layout/projects/$projectId_/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/_layout/projects/$projectId_/data': typeof LayoutProjectsProjectIdDataRoute
+  '/_layout/projects/$projectId_/evidence': typeof LayoutProjectsProjectIdEvidenceRoute
   '/_layout/projects/$projectId_/literature': typeof LayoutProjectsProjectIdLiteratureRoute
   '/_layout/projects/$projectId_/manuscript': typeof LayoutProjectsProjectIdManuscriptRoute
   '/_layout/projects/$projectId_/research-question': typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
+    | '/projects/$projectId/evidence'
     | '/projects/$projectId/literature'
     | '/projects/$projectId/manuscript'
     | '/projects/$projectId/research-question'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
+    | '/projects/$projectId/evidence'
     | '/projects/$projectId/literature'
     | '/projects/$projectId/manuscript'
     | '/projects/$projectId/research-question'
@@ -260,6 +272,7 @@ export interface FileRouteTypes {
     | '/_layout/projects/'
     | '/_layout/projects/$projectId_/analysis'
     | '/_layout/projects/$projectId_/data'
+    | '/_layout/projects/$projectId_/evidence'
     | '/_layout/projects/$projectId_/literature'
     | '/_layout/projects/$projectId_/manuscript'
     | '/_layout/projects/$projectId_/research-question'
@@ -385,6 +398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsProjectIdDataRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
+    '/_layout/projects/$projectId_/evidence': {
+      id: '/_layout/projects/$projectId_/evidence'
+      path: '/$projectId/evidence'
+      fullPath: '/projects/$projectId/evidence'
+      preLoaderRoute: typeof LayoutProjectsProjectIdEvidenceRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
     '/_layout/projects/$projectId_/literature': {
       id: '/_layout/projects/$projectId_/literature'
       path: '/$projectId/literature'
@@ -428,6 +448,7 @@ interface LayoutProjectsRouteChildren {
   LayoutProjectsIndexRoute: typeof LayoutProjectsIndexRoute
   LayoutProjectsProjectIdAnalysisRoute: typeof LayoutProjectsProjectIdAnalysisRoute
   LayoutProjectsProjectIdDataRoute: typeof LayoutProjectsProjectIdDataRoute
+  LayoutProjectsProjectIdEvidenceRoute: typeof LayoutProjectsProjectIdEvidenceRoute
   LayoutProjectsProjectIdLiteratureRoute: typeof LayoutProjectsProjectIdLiteratureRoute
   LayoutProjectsProjectIdManuscriptRoute: typeof LayoutProjectsProjectIdManuscriptRoute
   LayoutProjectsProjectIdResearchQuestionRoute: typeof LayoutProjectsProjectIdResearchQuestionRoute
@@ -440,6 +461,7 @@ const LayoutProjectsRouteChildren: LayoutProjectsRouteChildren = {
   LayoutProjectsIndexRoute: LayoutProjectsIndexRoute,
   LayoutProjectsProjectIdAnalysisRoute: LayoutProjectsProjectIdAnalysisRoute,
   LayoutProjectsProjectIdDataRoute: LayoutProjectsProjectIdDataRoute,
+  LayoutProjectsProjectIdEvidenceRoute: LayoutProjectsProjectIdEvidenceRoute,
   LayoutProjectsProjectIdLiteratureRoute:
     LayoutProjectsProjectIdLiteratureRoute,
   LayoutProjectsProjectIdManuscriptRoute:

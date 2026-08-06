@@ -8,11 +8,13 @@ import {
   ListTree,
   Monitor,
   Moon,
+  Network,
   PanelRightClose,
   PanelRightOpen,
   RotateCcw,
   Smartphone,
   Sun,
+  Table2,
   Tablet,
   Trash2,
 } from "lucide-react"
@@ -28,6 +30,12 @@ import { evidenceAnalysisFixtures } from "@/features/evidence-analysis/fixtures"
 import { EvidenceAnalysisWorkspace } from "@/features/evidence-analysis/ui/EvidenceAnalysisWorkspace"
 import { evidenceMatrixFixtures } from "@/features/evidence-matrix/fixtures"
 import { EvidenceMatrixWorkspace } from "@/features/evidence-matrix/ui/EvidenceMatrixWorkspace"
+import { evidenceWorkspaceFixtures } from "@/features/evidence-workspace/fixtures"
+import type { EvidenceWorkspaceView } from "@/features/evidence-workspace/model"
+import {
+  type EvidenceGraphMode,
+  EvidenceWorkspace,
+} from "@/features/evidence-workspace/ui"
 import { literatureFixtures } from "@/features/literature/fixtures"
 import { LiteratureWorkspace } from "@/features/literature/ui/LiteratureWorkspace"
 import { projectWorkspaceFixtures } from "@/features/projects/fixtures"
@@ -52,6 +60,7 @@ type ModuleId =
   | "evidence-analysis"
   | "topic-candidates"
   | "data-workspace"
+  | "evidence-workspace"
 type ThemeChoice = "light" | "dark" | "system"
 type ViewportChoice = "desktop" | "tablet" | "mobile"
 
@@ -78,6 +87,7 @@ const modules: ReadonlyArray<{
   { id: "evidence-analysis", label: "Evidence Analysis", icon: FlaskConical },
   { id: "topic-candidates", label: "Topic Candidates", icon: ClipboardList },
   { id: "data-workspace", label: "Data Workspace", icon: Database },
+  { id: "evidence-workspace", label: "Evidence Workspace", icon: Network },
 ]
 
 const viewportOptions: ReadonlyArray<{
@@ -121,6 +131,9 @@ const evidenceMatrixFixtureOptions = evidenceMatrixFixtures
 const evidenceAnalysisFixtureOptions = evidenceAnalysisFixtures
 const topicCandidatesFixtureOptions = topicCandidatesFixtures
 const dataWorkspaceFixtureOptions = dataWorkspaceFixtures
+const evidenceWorkspaceFixtureOptions = evidenceWorkspaceFixtures.map(
+  (fixture) => ({ id: fixture.id, label: fixture.title }),
+)
 
 const defaultFixtureIds: Record<ModuleId, string> = {
   foundations: "visual-foundations",
@@ -133,6 +146,7 @@ const defaultFixtureIds: Record<ModuleId, string> = {
   "evidence-analysis": evidenceAnalysisFixtureOptions[0].id,
   "topic-candidates": topicCandidatesFixtureOptions[0].id,
   "data-workspace": dataWorkspaceFixtureOptions[0].id,
+  "evidence-workspace": evidenceWorkspaceFixtureOptions[0].id,
 }
 
 const moduleStatus: Record<
@@ -185,6 +199,13 @@ const moduleStatus: Record<
     { label: "Open Design ready", state: "ready" },
     { label: "Production route pending", state: "pending" },
   ],
+  "evidence-workspace": [
+    { label: "Graph / Claims ready", state: "ready" },
+    { label: "62 typed fixtures ready", state: "ready" },
+    { label: "Audits / Exports ready", state: "ready" },
+    { label: "Stage 3 full matrix passed", state: "ready" },
+    { label: "Production route registered", state: "ready" },
+  ],
 }
 
 function fixtureOptionsFor(
@@ -199,6 +220,7 @@ function fixtureOptionsFor(
   if (module === "evidence-analysis") return evidenceAnalysisFixtureOptions
   if (module === "topic-candidates") return topicCandidatesFixtureOptions
   if (module === "data-workspace") return dataWorkspaceFixtureOptions
+  if (module === "evidence-workspace") return evidenceWorkspaceFixtureOptions
   return [{ id: "visual-foundations", label: "共享视觉基础" }]
 }
 
@@ -238,6 +260,10 @@ export function DesignPreviewWorkbench() {
   const [themeChoice, setThemeChoice] = useState<ThemeChoice>("system")
   const [systemDark, setSystemDark] = useState(false)
   const [viewport, setViewport] = useState<ViewportChoice>("desktop")
+  const [evidenceView, setEvidenceView] =
+    useState<EvidenceWorkspaceView>("graph")
+  const [evidenceGraphMode, setEvidenceGraphMode] =
+    useState<EvidenceGraphMode>("graph")
   const [showEventLog, setShowEventLog] = useState(true)
   const [eventLog, setEventLog] = useState<EventEntry[]>([])
   const [renderKey, setRenderKey] = useState(0)
@@ -276,6 +302,14 @@ export function DesignPreviewWorkbench() {
       ? Math.min(1, Math.max(0.35, (stageWidth - 36) / currentViewport.width))
       : 1
 
+  useEffect(() => {
+    if (module !== "evidence-workspace") return
+    const fixture = evidenceWorkspaceFixtures.find(
+      (item) => item.id === currentFixtureId,
+    )
+    if (fixture) setEvidenceView(fixture.initialView)
+  }, [currentFixtureId, module])
+
   const logIntent = (action: string, input?: unknown) => {
     setEventLog((entries) =>
       [
@@ -300,6 +334,8 @@ export function DesignPreviewWorkbench() {
     setFixtureIds({ ...defaultFixtureIds })
     setThemeChoice("system")
     setViewport("desktop")
+    setEvidenceView("graph")
+    setEvidenceGraphMode("graph")
     setShowEventLog(true)
     setEventLog([])
     setRenderKey((value) => value + 1)
@@ -406,11 +442,30 @@ export function DesignPreviewWorkbench() {
         />
       )
     }
+    if (module === "evidence-workspace") {
+      const fixture =
+        evidenceWorkspaceFixtures.find(
+          (item) => item.id === currentFixtureId,
+        ) ?? evidenceWorkspaceFixtures[0]
+      return (
+        <EvidenceWorkspace
+          content={fixture.content}
+          pendingAction={fixture.pendingAction}
+          mutationError={fixture.mutationError}
+          initialView={evidenceView}
+          graphMode={evidenceGraphMode}
+          onGraphModeChange={setEvidenceGraphMode}
+          onViewChange={setEvidenceView}
+          onRetry={() => logIntent("retry")}
+          onEvent={(event) => logIntent(event.action, event)}
+        />
+      )
+    }
     const fixture =
       projectWorkspaceFixtures.find((item) => item.id === currentFixtureId) ??
       projectWorkspaceFixtures[0]
     return <ProjectWorkspacePreview fixture={fixture} onIntent={logIntent} />
-  }, [currentFixtureId, module])
+  }, [currentFixtureId, evidenceGraphMode, evidenceView, module])
 
   return (
     <div className="preview-workbench" data-od-id="design-preview-workbench">
@@ -465,6 +520,44 @@ export function DesignPreviewWorkbench() {
               ))}
             </select>
           </label>
+          {module === "evidence-workspace" ? (
+            <>
+              <label className="preview-field preview-field--compact">
+                <span>视图</span>
+                <select
+                  value={evidenceView}
+                  onChange={(event) =>
+                    setEvidenceView(event.target.value as EvidenceWorkspaceView)
+                  }
+                >
+                  <option value="graph">图谱</option>
+                  <option value="claims">主张</option>
+                  <option value="audits">审计</option>
+                  <option value="exports">导出</option>
+                </select>
+              </label>
+              <div className="preview-segment" aria-label="图谱显示模式">
+                <button
+                  type="button"
+                  aria-pressed={evidenceGraphMode === "graph"}
+                  onClick={() => setEvidenceGraphMode("graph")}
+                  title="图谱画布"
+                >
+                  <Network aria-hidden="true" />
+                  <span>画布</span>
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={evidenceGraphMode === "table"}
+                  onClick={() => setEvidenceGraphMode("table")}
+                  title="表格回退"
+                >
+                  <Table2 aria-hidden="true" />
+                  <span>表格</span>
+                </button>
+              </div>
+            </>
+          ) : null}
           <div className="preview-segment" aria-label="预览主题">
             {(["light", "dark", "system"] as const).map((choice) => {
               const Icon =

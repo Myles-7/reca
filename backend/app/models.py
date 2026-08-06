@@ -1,7 +1,7 @@
 import uuid
 from datetime import UTC, date, datetime
 from enum import StrEnum
-from typing import Any
+from typing import Any, cast
 
 from pydantic import EmailStr
 from sqlalchemy import (
@@ -26,6 +26,11 @@ from sqlmodel import Field, SQLModel
 
 def get_datetime_utc() -> datetime:
     return datetime.now(UTC)
+
+
+def timezone_aware_datetime_type() -> type[Any]:
+    """Preserve SQLAlchemy timezone configuration across SQLModel's narrow type stub."""
+    return cast(type[Any], DateTime(timezone=True))
 
 
 # Shared properties
@@ -72,7 +77,7 @@ class User(UserBase, table=True):
     hashed_password: str
     created_at: datetime | None = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -834,6 +839,97 @@ class AuditResultStatus(StrEnum):
 
 class AuditType(StrEnum):
     REVISION_DRIFT_AUDIT = "REVISION_DRIFT_AUDIT"
+    LITERATURE_EVIDENCE_AUDIT = "LITERATURE_EVIDENCE_AUDIT"
+    NUMERIC_CONSISTENCY_AUDIT = "NUMERIC_CONSISTENCY_AUDIT"
+    FIGURE_VERSION_AUDIT = "FIGURE_VERSION_AUDIT"
+    CAUSALITY_AUDIT = "CAUSALITY_AUDIT"
+    CLAIM_COMPLETENESS_AUDIT = "CLAIM_COMPLETENESS_AUDIT"
+    EXPORT_READINESS_AUDIT = "EXPORT_READINESS_AUDIT"
+    READ_SCOPE_AUDIT = "READ_SCOPE_AUDIT"
+    PROMPT_CONTRACT_AUDIT = "PROMPT_CONTRACT_AUDIT"
+    DEGRADATION_AUDIT = "DEGRADATION_AUDIT"
+
+
+class AuditResultOutcome(StrEnum):
+    VERIFIED = "VERIFIED"
+    NEEDS_REVIEW = "NEEDS_REVIEW"
+    INSUFFICIENT_EVIDENCE = "INSUFFICIENT_EVIDENCE"
+    SOURCE_INCOMPLETE = "SOURCE_INCOMPLETE"
+    CONFLICTED = "CONFLICTED"
+    DATA_MISMATCH = "DATA_MISMATCH"
+    FIGURE_MISMATCH = "FIGURE_MISMATCH"
+    OVERCLAIM_RISK = "OVERCLAIM_RISK"
+    REJECTED_BY_USER = "REJECTED_BY_USER"
+    INVALIDATED = "INVALIDATED"
+
+
+class EvidenceObjectType(StrEnum):
+    LITERATURE_RECORD = "LITERATURE_RECORD"
+    EVIDENCE_SPAN = "EVIDENCE_SPAN"
+    DATASET_VERSION = "DATASET_VERSION"
+    DATA_TRANSFORMATION = "DATA_TRANSFORMATION"
+    ANALYSIS_PLAN = "ANALYSIS_PLAN"
+    ANALYSIS_RUN = "ANALYSIS_RUN"
+    ANALYSIS_RESULT = "ANALYSIS_RESULT"
+    FIGURE = "FIGURE"
+    MANUSCRIPT_VERSION = "MANUSCRIPT_VERSION"
+    APPROVAL = "APPROVAL"
+    AUDIT_RESULT = "AUDIT_RESULT"
+
+
+class EvidenceRelationType(StrEnum):
+    SUPPORTED_BY = "SUPPORTED_BY"
+    CONTRADICTED_BY = "CONTRADICTED_BY"
+    DERIVED_FROM = "DERIVED_FROM"
+    TRANSFORMED_FROM = "TRANSFORMED_FROM"
+    ANALYZED_BY = "ANALYZED_BY"
+    PRODUCED_BY = "PRODUCED_BY"
+    VISUALIZED_AS = "VISUALIZED_AS"
+    CONFIRMED_BY = "CONFIRMED_BY"
+    AUDITED_BY = "AUDITED_BY"
+    INVALIDATED_BY = "INVALIDATED_BY"
+
+
+class EvidenceLinkStrength(StrEnum):
+    STRONG = "STRONG"
+    MODERATE = "MODERATE"
+    WEAK = "WEAK"
+    UNKNOWN = "UNKNOWN"
+
+
+class EvidenceLinkStatus(StrEnum):
+    SUGGESTED = "SUGGESTED"
+    ACTIVE = "ACTIVE"
+    REJECTED = "REJECTED"
+    INVALIDATED = "INVALIDATED"
+
+
+class ExportType(StrEnum):
+    REPRO_PACKAGE = "REPRO_PACKAGE"
+    LITERATURE_MATRIX = "LITERATURE_MATRIX"
+    DATA_QUALITY_REPORT = "DATA_QUALITY_REPORT"
+    ANALYSIS_REPORT = "ANALYSIS_REPORT"
+    MANUSCRIPT_CHECK_REPORT = "MANUSCRIPT_CHECK_REPORT"
+
+
+class ExportStatus(StrEnum):
+    DRAFT = "DRAFT"
+    VALIDATING = "VALIDATING"
+    NEEDS_CONFIRMATION = "NEEDS_CONFIRMATION"
+    QUEUED = "QUEUED"
+    PACKAGING = "PACKAGING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+
+
+class ExportItemIncludeStatus(StrEnum):
+    INCLUDED = "INCLUDED"
+    EXCLUDED = "EXCLUDED"
+    METADATA_ONLY = "METADATA_ONLY"
+    REFERENCE_ONLY = "REFERENCE_ONLY"
+    BLOCKED = "BLOCKED"
+    MISSING = "MISSING"
 
 
 class ArtifactRelationType(StrEnum):
@@ -935,15 +1031,15 @@ class ResearchProject(SQLModel, table=True):
     lock_version: int = Field(default=1, ge=1)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     deleted_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -980,11 +1076,11 @@ class ProjectMember(SQLModel, table=True):
     )
     joined_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     removed_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1023,11 +1119,11 @@ class ResearchQuestion(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1142,7 +1238,7 @@ class ResearchQuestionVersion(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1210,11 +1306,11 @@ class QueryPlan(SQLModel, table=True):
     lock_version: int = Field(default=1, ge=1)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1269,7 +1365,7 @@ class LiteratureSearchRun(SQLModel, table=True):
     )
     fetched_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     status: JobStatus = Field(
         default=JobStatus.DRAFT,
@@ -1281,11 +1377,11 @@ class LiteratureSearchRun(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1371,15 +1467,15 @@ class LiteratureRecord(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     deleted_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1450,12 +1546,12 @@ class LiteratureSearchCandidate(SQLModel, table=True):
         ),
     )
     raw_source_data: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
-    fetched_at: datetime = Field(sa_type=DateTime(timezone=True))  # type: ignore
+    fetched_at: datetime = Field(sa_type=timezone_aware_datetime_type())
     degraded: bool = False
     imported_literature_record_id: uuid.UUID | None = Field(default=None, index=True)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1513,11 +1609,11 @@ class Artifact(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     deleted_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1572,11 +1668,11 @@ class Document(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1624,7 +1720,7 @@ class DocumentPage(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1676,7 +1772,7 @@ class DocumentChunk(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1752,15 +1848,15 @@ class LiteratureExtraction(SQLModel, table=True):
     lock_version: int = Field(default=1, ge=1)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     confirmed_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -1900,20 +1996,20 @@ class EvidenceSpan(SQLModel, table=True):
     reviewed_by_actor_id: str | None = Field(default=None, max_length=255)
     reviewed_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     verified_by_actor_id: str | None = Field(default=None, max_length=255)
     verified_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     invalidated_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2014,11 +2110,11 @@ class LiteratureExtractionField(SQLModel, table=True):
     lock_version: int = Field(default=1, ge=1)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2116,7 +2212,7 @@ class LiteratureExtractionFieldRevision(SQLModel, table=True):
     ai_schema_version: str | None = Field(default=None, max_length=50)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2174,7 +2270,7 @@ class EvidenceSpanVerificationRecord(SQLModel, table=True):
     source_text_hash: str = Field(max_length=64)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2257,7 +2353,7 @@ class LiteratureDecision(SQLModel, table=True):
     supersedes_decision_id: uuid.UUID | None = Field(default=None, index=True)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2308,7 +2404,7 @@ class EvidenceSetSummary(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2365,7 +2461,7 @@ class TopicGenerationRun(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2449,7 +2545,7 @@ class TopicCandidate(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2512,7 +2608,7 @@ class TopicCandidateEvidence(SQLModel, table=True):
     explanation: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2553,7 +2649,7 @@ class ArtifactRelation(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2591,7 +2687,7 @@ class ApprovalRecord(SQLModel, table=True):
     requested_by_actor_id: str | None = Field(default=None, max_length=255)
     requested_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     status: ApprovalStatus = Field(
         default=ApprovalStatus.PENDING,
@@ -2604,7 +2700,7 @@ class ApprovalRecord(SQLModel, table=True):
     )
     decision_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     decision_reason: str | None = Field(
         default=None, sa_column=Column(Text, nullable=True)
@@ -2616,7 +2712,7 @@ class ApprovalRecord(SQLModel, table=True):
     )
     expires_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     supersedes_approval_id: uuid.UUID | None = Field(
         default=None,
@@ -2626,7 +2722,7 @@ class ApprovalRecord(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2703,7 +2799,7 @@ class AuditLog(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2740,9 +2836,9 @@ class IdempotencyRecord(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
-    expires_at: datetime = Field(sa_type=DateTime(timezone=True))  # type: ignore
+    expires_at: datetime = Field(sa_type=timezone_aware_datetime_type())
 
 
 class Dataset(SQLModel, table=True):
@@ -2808,15 +2904,15 @@ class Dataset(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     deleted_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -2929,18 +3025,18 @@ class DatasetVersion(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     invalidated_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     invalidation_reason: str | None = Field(
         default=None, sa_column=Column(Text, nullable=True)
     )
     deleted_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -3029,11 +3125,11 @@ class DatasetColumn(SQLModel, table=True):
     lock_version: int = Field(default=1, ge=1)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     updated_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -3079,12 +3175,16 @@ class DataQualityRun(SQLModel, table=True):
     issue_count: int = Field(default=0, ge=0)
     high_issue_count: int = Field(default=0, ge=0)
     processing_run_id: uuid.UUID | None = Field(default=None, index=True)
-    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
-    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    started_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     error_code: str | None = Field(default=None, max_length=100)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class DataQualityIssue(SQLModel, table=True):
@@ -3151,9 +3251,11 @@ class DataQualityIssue(SQLModel, table=True):
         ),
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
-    resolved_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    resolved_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class CleaningPlan(SQLModel, table=True):
@@ -3216,11 +3318,11 @@ class CleaningPlan(SQLModel, table=True):
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     updated_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class CleaningPlanAction(SQLModel, table=True):
@@ -3279,8 +3381,8 @@ class CleaningPlanAction(SQLModel, table=True):
         )
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class DataTransformation(SQLModel, table=True):
@@ -3365,12 +3467,16 @@ class DataTransformation(SQLModel, table=True):
     output_artifact_id: uuid.UUID | None = Field(default=None, index=True)
     log_artifact_id: uuid.UUID | None = Field(default=None, index=True)
     processing_run_id: uuid.UUID | None = Field(default=None, index=True)
-    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
-    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    started_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     error_code: str | None = Field(default=None, max_length=100)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class AnalysisPlan(SQLModel, table=True):
@@ -3448,14 +3554,14 @@ class AnalysisPlan(SQLModel, table=True):
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     updated_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -3497,8 +3603,8 @@ class AnalysisAssumptionCheck(SQLModel, table=True):
     evidence: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
     blocks_approval: bool = False
     checked_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class AnalysisRun(SQLModel, table=True):
@@ -3601,15 +3707,19 @@ class AnalysisRun(SQLModel, table=True):
     requested_by: uuid.UUID | None = Field(
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
-    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
-    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    started_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     error_code: str | None = Field(default=None, max_length=100)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -3652,8 +3762,8 @@ class AnalysisResult(SQLModel, table=True):
     payload: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
     result_hash: str = Field(max_length=64)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class CodeArtifact(SQLModel, table=True):
@@ -3706,8 +3816,8 @@ class CodeArtifact(SQLModel, table=True):
     input_hash: str = Field(max_length=64)
     output_hash: str = Field(max_length=64)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class FigurePlan(SQLModel, table=True):
@@ -3771,14 +3881,14 @@ class FigurePlan(SQLModel, table=True):
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     updated_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -3851,12 +3961,16 @@ class FigureRenderRun(SQLModel, table=True):
     requested_by: uuid.UUID | None = Field(
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
-    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
-    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    started_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     error_code: str | None = Field(default=None, max_length=100)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class Figure(SQLModel, table=True):
@@ -3964,12 +4078,14 @@ class Figure(SQLModel, table=True):
     code_artifact_id: uuid.UUID = Field(index=True)
     approval_record_id: uuid.UUID | None = Field(default=None, index=True)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
-    confirmed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    confirmed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -4013,8 +4129,8 @@ class FigureValidationIssue(SQLModel, table=True):
     evidence: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
     blocks_confirmation: bool = False
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class Manuscript(SQLModel, table=True):
@@ -4049,14 +4165,14 @@ class Manuscript(SQLModel, table=True):
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     updated_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -4123,11 +4239,11 @@ class ManuscriptVersion(SQLModel, table=True):
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -4197,11 +4313,15 @@ class ManuscriptCheckRun(SQLModel, table=True):
     requested_by: uuid.UUID | None = Field(
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
-    started_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
-    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    started_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class ManuscriptIssue(SQLModel, table=True):
@@ -4281,12 +4401,14 @@ class ManuscriptIssue(SQLModel, table=True):
         ondelete="RESTRICT",
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
-    resolved_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    resolved_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class ManuscriptIssueEvidence(SQLModel, table=True):
@@ -4317,8 +4439,8 @@ class ManuscriptIssueEvidence(SQLModel, table=True):
         default=None, sa_column=Column("metadata", JSONB, nullable=True)
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class ManuscriptTransformation(SQLModel, table=True):
@@ -4387,12 +4509,14 @@ class ManuscriptTransformation(SQLModel, table=True):
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     updated_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
-    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class Claim(SQLModel, table=True):
@@ -4443,15 +4567,17 @@ class Claim(SQLModel, table=True):
     approval_record_id: uuid.UUID | None = Field(default=None, index=True)
     lock_version: int = Field(default=1, ge=1)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
     updated_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
-    confirmed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    confirmed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidated_at: datetime | None = Field(
-        default=None, sa_type=DateTime(timezone=True)
-    )  # type: ignore
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
     invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
 
 
@@ -4485,19 +4611,38 @@ class AuditResult(SQLModel, table=True):
             name="ck_audit_results_hash",
         ),
         CheckConstraint(
-            "before_source_hash ~ '^[0-9a-f]{64}$' AND after_source_hash ~ '^[0-9a-f]{64}$'",
+            "(before_source_hash IS NULL OR before_source_hash ~ '^[0-9a-f]{64}$') AND "
+            "(after_source_hash IS NULL OR after_source_hash ~ '^[0-9a-f]{64}$') AND "
+            "(source_snapshot_hash IS NULL OR source_snapshot_hash ~ '^[0-9a-f]{64}$')",
             name="ck_audit_results_source_hashes",
         ),
+        CheckConstraint(
+            "(audit_type = 'REVISION_DRIFT_AUDIT' AND before_version_id IS NOT NULL "
+            "AND after_version_id IS NOT NULL AND manuscript_id IS NOT NULL "
+            "AND before_source_hash IS NOT NULL AND after_source_hash IS NOT NULL) OR "
+            "(audit_type <> 'REVISION_DRIFT_AUDIT' AND target_object_type IS NOT NULL "
+            "AND target_object_id IS NOT NULL AND source_snapshot IS NOT NULL "
+            "AND source_snapshot_hash IS NOT NULL)",
+            name="ck_audit_results_target_shape",
+        ),
         Index("ix_audit_results_project_status", "project_id", "status"),
+        Index(
+            "ix_audit_results_project_target",
+            "project_id",
+            "target_object_type",
+            "target_object_id",
+        ),
     )
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     project_id: uuid.UUID = Field(index=True)
     audit_type: AuditType = Field(
         sa_column=Column(SAEnum(AuditType, name="audit_type"), nullable=False)
     )
-    before_version_id: uuid.UUID = Field(index=True)
-    after_version_id: uuid.UUID = Field(index=True)
-    manuscript_id: uuid.UUID = Field(index=True)
+    before_version_id: uuid.UUID | None = Field(default=None, index=True)
+    after_version_id: uuid.UUID | None = Field(default=None, index=True)
+    manuscript_id: uuid.UUID | None = Field(default=None, index=True)
+    target_object_type: str | None = Field(default=None, max_length=100, index=True)
+    target_object_id: uuid.UUID | None = Field(default=None, index=True)
     status: AuditResultStatus = Field(
         default=AuditResultStatus.QUEUED,
         sa_column=Column(
@@ -4505,23 +4650,304 @@ class AuditResult(SQLModel, table=True):
         ),
     )
     rule_set_version: str = Field(max_length=100)
-    before_source_hash: str = Field(max_length=64)
-    after_source_hash: str = Field(max_length=64)
+    before_source_hash: str | None = Field(default=None, max_length=64)
+    after_source_hash: str | None = Field(default=None, max_length=64)
+    source_snapshot: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    source_snapshot_hash: str | None = Field(default=None, max_length=64)
     idempotency_key: str = Field(max_length=255)
     request_snapshot: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
     result: dict[str, Any] | None = Field(
         default=None, sa_column=Column(JSONB, nullable=True)
     )
     result_hash: str | None = Field(default=None, max_length=64)
+    outcome: AuditResultOutcome | None = Field(
+        default=None,
+        sa_column=Column(
+            SAEnum(AuditResultOutcome, name="audit_result_outcome"), nullable=True
+        ),
+    )
+    findings: list[dict[str, Any]] = Field(
+        default_factory=list, sa_column=Column(JSONB, nullable=False)
+    )
+    evidence_object_ids: list[str] = Field(
+        default_factory=list, sa_column=Column(JSONB, nullable=False)
+    )
+    limitations: list[str] = Field(
+        default_factory=list, sa_column=Column(JSONB, nullable=False)
+    )
+    degraded: bool = False
     processing_run_id: uuid.UUID | None = Field(default=None, index=True)
     requested_by: uuid.UUID | None = Field(
         default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
     )
     error_code: str | None = Field(default=None, max_length=100)
     created_at: datetime = Field(
-        default_factory=get_datetime_utc, sa_type=DateTime(timezone=True)
-    )  # type: ignore
-    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+
+
+class ClaimEvidenceLink(SQLModel, table=True):
+    __tablename__ = "claim_evidence_links"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_claim_evidence_links_id_project"),
+        ForeignKeyConstraint(
+            ["claim_id", "project_id"],
+            ["claims.id", "claims.project_id"],
+            name="fk_claim_evidence_links_claim_project",
+            ondelete="RESTRICT",
+        ),
+        UniqueConstraint(
+            "project_id", "idempotency_key", name="uq_claim_evidence_links_idempotency"
+        ),
+        CheckConstraint(
+            "source_hash ~ '^[0-9a-f]{64}$'", name="ck_claim_evidence_links_hash"
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_claim_evidence_links_lock"),
+        CheckConstraint(
+            "(status = 'ACTIVE' AND confirmed_at IS NOT NULL) OR status <> 'ACTIVE'",
+            name="ck_claim_evidence_links_active_confirmation",
+        ),
+        CheckConstraint(
+            "(status = 'INVALIDATED' AND invalidated_at IS NOT NULL AND invalidation_reason IS NOT NULL) "
+            "OR status <> 'INVALIDATED'",
+            name="ck_claim_evidence_links_invalidation",
+        ),
+        Index("ix_claim_evidence_links_project_claim", "project_id", "claim_id"),
+        Index(
+            "ix_claim_evidence_links_project_evidence",
+            "project_id",
+            "evidence_object_type",
+            "evidence_object_id",
+        ),
+        Index("ix_claim_evidence_links_project_status", "project_id", "status"),
+        Index(
+            "uq_claim_evidence_links_canonical_live",
+            "project_id",
+            "claim_id",
+            "evidence_object_type",
+            "evidence_object_id",
+            "relation_type",
+            unique=True,
+            postgresql_where=text("status IN ('SUGGESTED', 'ACTIVE')"),
+        ),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    claim_id: uuid.UUID = Field(index=True)
+    evidence_object_type: EvidenceObjectType = Field(
+        sa_column=Column(
+            SAEnum(EvidenceObjectType, name="evidence_object_type"), nullable=False
+        )
+    )
+    evidence_object_id: uuid.UUID = Field(index=True)
+    relation_type: EvidenceRelationType = Field(
+        sa_column=Column(
+            SAEnum(EvidenceRelationType, name="evidence_relation_type"), nullable=False
+        )
+    )
+    strength: EvidenceLinkStrength = Field(
+        default=EvidenceLinkStrength.UNKNOWN,
+        sa_column=Column(
+            SAEnum(EvidenceLinkStrength, name="evidence_link_strength"), nullable=False
+        ),
+    )
+    status: EvidenceLinkStatus = Field(
+        default=EvidenceLinkStatus.SUGGESTED,
+        sa_column=Column(
+            SAEnum(EvidenceLinkStatus, name="evidence_link_status"), nullable=False
+        ),
+    )
+    source_hash: str = Field(max_length=64)
+    source_version: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    explanation: str | None = Field(default=None, sa_column=Column(Text))
+    created_by_actor_type: AuditActorType = Field(
+        sa_column=Column(
+            SAEnum(AuditActorType, name="audit_actor_type"), nullable=False
+        )
+    )
+    created_by_actor_id: str | None = Field(default=None, max_length=255)
+    idempotency_key: str = Field(max_length=255)
+    lock_version: int = Field(default=1, ge=1)
+    confirmed_by_user_id: uuid.UUID | None = Field(
+        default=None, foreign_key="user.id", index=True, ondelete="SET NULL"
+    )
+    confirmed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    invalidated_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    invalidation_reason: str | None = Field(default=None, sa_column=Column(Text))
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+
+
+class Export(SQLModel, table=True):
+    __tablename__ = "exports"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_exports_id_project"),
+        UniqueConstraint(
+            "project_id", "idempotency_key", name="uq_exports_idempotency"
+        ),
+        ForeignKeyConstraint(
+            ["readiness_audit_id", "project_id"],
+            ["audit_results.id", "audit_results.project_id"],
+            name="fk_exports_readiness_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["approval_record_id", "project_id"],
+            ["approval_records.id", "approval_records.project_id"],
+            name="fk_exports_approval_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["job_id", "project_id"],
+            ["jobs.id", "jobs.project_id"],
+            name="fk_exports_job_project",
+            ondelete="RESTRICT",
+            use_alter=True,
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_exports_lock"),
+        CheckConstraint("scope_hash ~ '^[0-9a-f]{64}$'", name="ck_exports_scope_hash"),
+        Index("ix_exports_project_status", "project_id", "status"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    export_type: ExportType = Field(
+        sa_column=Column(SAEnum(ExportType, name="export_type"), nullable=False)
+    )
+    status: ExportStatus = Field(
+        default=ExportStatus.DRAFT,
+        sa_column=Column(SAEnum(ExportStatus, name="export_status"), nullable=False),
+    )
+    requested_by_user_id: uuid.UUID = Field(
+        foreign_key="user.id", index=True, ondelete="RESTRICT"
+    )
+    scope: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    scope_hash: str = Field(max_length=64)
+    readiness_audit_id: uuid.UUID | None = Field(default=None, index=True)
+    approval_record_id: uuid.UUID | None = Field(default=None, index=True)
+    job_id: uuid.UUID | None = Field(default=None, index=True)
+    idempotency_key: str = Field(max_length=255)
+    lock_version: int = Field(default=1, ge=1)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    error_code: str | None = Field(default=None, max_length=100)
+
+
+class ReproPackage(SQLModel, table=True):
+    __tablename__ = "repro_packages"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_repro_packages_id_project"),
+        UniqueConstraint("export_id", name="uq_repro_packages_export"),
+        UniqueConstraint(
+            "project_id", "package_version", name="uq_repro_packages_version"
+        ),
+        ForeignKeyConstraint(
+            ["export_id", "project_id"],
+            ["exports.id", "exports.project_id"],
+            name="fk_repro_packages_export_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_repro_packages_artifact_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["manifest_artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_repro_packages_manifest_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("package_version >= 1", name="ck_repro_packages_version"),
+        CheckConstraint(
+            "file_count >= 0 AND total_size_bytes >= 0", name="ck_repro_packages_sizes"
+        ),
+        CheckConstraint("sha256 ~ '^[0-9a-f]{64}$'", name="ck_repro_packages_hash"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    export_id: uuid.UUID = Field(index=True)
+    project_id: uuid.UUID = Field(index=True)
+    artifact_id: uuid.UUID = Field(index=True)
+    manifest_artifact_id: uuid.UUID = Field(index=True)
+    package_version: int = Field(ge=1)
+    schema_version: str = Field(max_length=100)
+    contains_sensitive_data: bool = False
+    contains_restricted_data: bool = False
+    file_count: int = Field(ge=0)
+    total_size_bytes: int = Field(ge=0, sa_column=Column(BigInteger, nullable=False))
+    sha256: str = Field(max_length=64)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+
+
+class ExportItem(SQLModel, table=True):
+    __tablename__ = "export_items"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_export_items_id_project"),
+        UniqueConstraint("export_id", "package_path", name="uq_export_items_path"),
+        ForeignKeyConstraint(
+            ["export_id", "project_id"],
+            ["exports.id", "exports.project_id"],
+            name="fk_export_items_export_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["artifact_id", "project_id"],
+            ["artifacts.id", "artifacts.project_id"],
+            name="fk_export_items_artifact_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "package_path !~ '(^/|^[A-Za-z]:|\\\\|(^|/)\\.\\.(/|$)|\\x00)'",
+            name="ck_export_items_safe_path",
+        ),
+        CheckConstraint(
+            "sha256 IS NULL OR sha256 ~ '^[0-9a-f]{64}$'", name="ck_export_items_hash"
+        ),
+        Index("ix_export_items_project_export", "project_id", "export_id"),
+    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    export_id: uuid.UUID = Field(index=True)
+    project_id: uuid.UUID = Field(index=True)
+    object_type: str = Field(max_length=100)
+    object_id: uuid.UUID | None = Field(default=None, index=True)
+    artifact_id: uuid.UUID | None = Field(default=None, index=True)
+    package_path: str = Field(max_length=1024)
+    sha256: str | None = Field(default=None, max_length=64)
+    include_status: ExportItemIncludeStatus = Field(
+        sa_column=Column(
+            SAEnum(ExportItemIncludeStatus, name="export_item_include_status"),
+            nullable=False,
+        )
+    )
+    exclusion_reason: str | None = Field(default=None, sa_column=Column(Text))
+    source_snapshot: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
 
 
 class Job(SQLModel, table=True):
@@ -4573,23 +4999,23 @@ class Job(SQLModel, table=True):
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     queued_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     started_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     completed_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     last_heartbeat_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     error_code: str | None = Field(default=None, max_length=100)
     error_message: str | None = Field(
@@ -4652,11 +5078,11 @@ class ProcessingRun(SQLModel, table=True):
     )
     started_at: datetime | None = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     completed_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
 
 
@@ -4747,13 +5173,13 @@ class ModelInvocation(SQLModel, table=True):
     )
     started_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     completed_at: datetime | None = Field(
         default=None,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
-        sa_type=DateTime(timezone=True),  # type: ignore
+        sa_type=timezone_aware_datetime_type(),
     )

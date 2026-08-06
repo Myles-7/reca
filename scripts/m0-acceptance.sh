@@ -24,6 +24,19 @@ node_audit() {
   printf 'FAIL node-security-audit (see %s/node-security-audit.log)\n' "$evidence_root"
   failures=1
 }
+python_audit() {
+  local attempt
+  for attempt in 1 2 3; do
+    if python -m uv run pip-audit; then
+      return 0
+    fi
+    if [ "$attempt" -lt 3 ]; then
+      printf 'pip-audit attempt %s failed; retrying after %ss.\n' "$attempt" "$((attempt * 2))"
+      sleep "$((attempt * 2))"
+    fi
+  done
+  return 1
+}
 secret=$(openssl rand -base64 48 | tr -d '\n')
 minio_bucket="reca-m0-acceptance-$(openssl rand -hex 6)"
 cat >"$env_file" <<EOF
@@ -79,6 +92,7 @@ if [ "$failures" -eq 0 ]; then
       --volume "$root/backend/tests:/app/backend/tests:ro" \
       --volume "$root/frontend/src/shared/environment.ts:/app/frontend/src/shared/environment.ts:ro" \
       --volume "$root/.env.example:/app/.env.example:ro" \
+      --volume "$root/docker-compose.yml:/app/docker-compose.yml:ro" \
       api pytest -q
   fi
 else
@@ -89,7 +103,7 @@ step backend-tests python -m uv run pytest backend/tests -m no_database
 step frontend-dependencies bun install --frozen-lockfile
 step frontend-quality bun run --cwd frontend build
 step playwright-shell bash -c 'cd frontend && CI=1 RECA_PLAYWRIGHT_PORT=15174 bunx playwright test -c playwright.shell.config.ts --reporter=list'
-step python-security-audit python -m uv run pip-audit
+step python-security-audit python_audit
 node_audit
 step post-run-git-status sh -c 'test -z "$(git status --porcelain --untracked-files=no)"'
 exit "$failures"

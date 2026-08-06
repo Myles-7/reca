@@ -1,9 +1,10 @@
 from pathlib import Path
+from zipfile import ZipFile
 
 import pytest
 from docx import Document
 
-from app.manuscripts.parser import parse_docx
+from app.manuscripts.parser import _validated_snapshot, parse_docx
 from app.manuscripts.rules import run_rules
 from app.models import ManuscriptIssueType
 
@@ -35,6 +36,36 @@ def test_parser_emits_stable_locators_and_hash(tmp_path: Path) -> None:
         "cell": None,
     }
     assert first["text_hash"] == second["text_hash"]
+    assert "UNPROVEN_PART:word/numbering.xml" not in first["unsupported_features"]
+    assert first["unknown_parts"] == []
+
+
+def test_parser_rejects_non_object_worker_payload() -> None:
+    with pytest.raises(ValueError, match="invalid snapshot payload"):
+        _validated_snapshot([{"schema": "unexpected-list"}])
+
+
+def test_parser_marks_numbering_only_when_document_uses_it(tmp_path: Path) -> None:
+    path = tmp_path / "numbered.docx"
+    document = Document()
+    document.add_paragraph("Numbered item", style="List Number")
+    document.save(path)
+
+    snapshot = parse_docx(path)
+
+    assert "NUMBERING" in snapshot["unsupported_features"]
+    assert snapshot["confidence"] == "LOW"
+
+
+def test_parser_keeps_unrecognized_custom_xml_fail_closed(tmp_path: Path) -> None:
+    path = tmp_path / "custom.docx"
+    _document(path)
+    with ZipFile(path, "a") as package:
+        package.writestr("customXml/untrusted.xml", "<untrusted />")
+
+    snapshot = parse_docx(path)
+
+    assert "customXml/untrusted.xml" in snapshot["unknown_parts"]
 
 
 def test_p0_rules_find_citation_causality_duplicate_doi_and_format(
