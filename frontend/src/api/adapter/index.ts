@@ -1,5 +1,11 @@
 import { client } from "../generated/client.gen"
 import {
+  agentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessages,
+  agentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancel,
+  agentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRuns,
+  agentRunsGetAgentRunGetApiV1AgentRunsAgentRunId,
+  agentRunsGetToolCallGetApiV1ToolCallsToolCallId,
+  agentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCalls,
   analysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlans,
   analysisGetAnalysisPlanGetApiV1AnalysisPlansPlanId,
   analysisGetAnalysisResultsGetApiV1AnalysisRunsRunIdResults,
@@ -158,6 +164,10 @@ import {
 } from "../generated/sdk.gen"
 
 export type {
+  AgentMessageRequest,
+  AgentRunCreateRequest,
+  AgentRunEnvelope,
+  AgentRunPublic,
   AnalysisApprovalEnvelope,
   AnalysisApprovalPublic,
   AnalysisAssumptionPublic,
@@ -346,6 +356,9 @@ export type {
   RevisionAuditPublic,
   RevisionAuditRequestEnvelope,
   Token,
+  ToolCallEnvelope,
+  ToolCallLinkPublic,
+  ToolCallListEnvelope,
   TopicGenerationCreate,
   UpdatePassword,
   UserCreate,
@@ -2215,6 +2228,71 @@ export class JobsApi {
     }
     return stream as ReadableStream<Uint8Array>
   }
+}
+
+export class AgentRunsApi {
+  static create = (
+    projectId: string,
+    body: import("../generated/types.gen").AgentRunCreateRequest,
+    idempotencyKey: string,
+    correlationId?: string,
+  ) =>
+    unwrap(
+      agentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRuns({
+        path: { project_id: projectId },
+        headers: {
+          "Idempotency-Key": idempotencyKey,
+          ...(correlationId ? { "X-Correlation-ID": correlationId } : {}),
+        },
+        body,
+      }),
+    )
+
+  static get = (agentRunId: string) =>
+    unwrap(
+      agentRunsGetAgentRunGetApiV1AgentRunsAgentRunId({
+        path: { agent_run_id: agentRunId },
+      }),
+    )
+
+  static message = (
+    agentRunId: string,
+    message: string,
+    idempotencyKey: string,
+  ) =>
+    unwrap(
+      agentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessages({
+        path: { agent_run_id: agentRunId },
+        headers: { "Idempotency-Key": idempotencyKey },
+        body: { message },
+      }),
+    )
+
+  static toolCalls = (
+    agentRunId: string,
+    query: { page?: number; page_size?: number } = {},
+  ) =>
+    unwrap(
+      agentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCalls({
+        path: { agent_run_id: agentRunId },
+        query,
+      }),
+    )
+
+  static toolCall = (toolCallId: string) =>
+    unwrap(
+      agentRunsGetToolCallGetApiV1ToolCallsToolCallId({
+        path: { tool_call_id: toolCallId },
+      }),
+    )
+
+  static cancel = (agentRunId: string, idempotencyKey: string) =>
+    unwrap(
+      agentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancel({
+        path: { agent_run_id: agentRunId },
+        headers: { "Idempotency-Key": idempotencyKey },
+      }),
+    )
 }
 
 export class ApprovalsApi {

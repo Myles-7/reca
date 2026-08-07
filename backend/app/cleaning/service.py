@@ -768,7 +768,7 @@ def apply_approval_decision(
     approval: ApprovalRecord,
     decision: ApprovalStatus,
     actor: User,
-) -> None:
+) -> Any:
     if approval.approval_type != ApprovalType.CLEANING_PLAN_APPROVAL:
         raise ContractError(
             status_code=409,
@@ -828,6 +828,9 @@ def apply_approval_decision(
         approval_id=approval.id,
         after={"status": plan.status},
     )
+    from app.agent_runtime.orchestrator_service import approval_resume_post_commit
+
+    return approval_resume_post_commit(approval_id=approval.id, decision=decision)
 
 
 def register_approval_handlers() -> None:

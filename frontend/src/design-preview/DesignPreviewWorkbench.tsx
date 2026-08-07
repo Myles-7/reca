@@ -1,5 +1,6 @@
 import {
   BookOpenCheck,
+  Bot,
   ClipboardList,
   Database,
   FileText,
@@ -22,6 +23,12 @@ import { type ReactNode, useEffect, useMemo, useRef, useState } from "react"
 
 import { VisualThemeProvider } from "@/components/reca-visual-refresh"
 import { Button } from "@/components/ui/button"
+import { agentWorkspaceFixtures } from "@/features/agent-workspace/fixtures"
+import {
+  AgentWorkspace,
+  type AgentWorkspaceSurface,
+} from "@/features/agent-workspace/ui"
+import type { AgentWorkspaceEvent } from "@/features/agent-workspace/ui/contracts"
 import { dataWorkspaceFixtures } from "@/features/data-workspace/fixtures"
 import { DataWorkspace } from "@/features/data-workspace/ui/DataWorkspace"
 import { documentFixtures } from "@/features/documents/fixtures"
@@ -61,6 +68,7 @@ type ModuleId =
   | "topic-candidates"
   | "data-workspace"
   | "evidence-workspace"
+  | "agent-workspace"
 type ThemeChoice = "light" | "dark" | "system"
 type ViewportChoice = "desktop" | "tablet" | "mobile"
 
@@ -88,6 +96,7 @@ const modules: ReadonlyArray<{
   { id: "topic-candidates", label: "Topic Candidates", icon: ClipboardList },
   { id: "data-workspace", label: "Data Workspace", icon: Database },
   { id: "evidence-workspace", label: "Evidence Workspace", icon: Network },
+  { id: "agent-workspace", label: "Agent Workspace", icon: Bot },
 ]
 
 const viewportOptions: ReadonlyArray<{
@@ -134,6 +143,10 @@ const dataWorkspaceFixtureOptions = dataWorkspaceFixtures
 const evidenceWorkspaceFixtureOptions = evidenceWorkspaceFixtures.map(
   (fixture) => ({ id: fixture.id, label: fixture.title }),
 )
+const agentWorkspaceFixtureOptions = agentWorkspaceFixtures.map((fixture) => ({
+  id: fixture.id,
+  label: fixture.id,
+}))
 
 const defaultFixtureIds: Record<ModuleId, string> = {
   foundations: "visual-foundations",
@@ -147,6 +160,7 @@ const defaultFixtureIds: Record<ModuleId, string> = {
   "topic-candidates": topicCandidatesFixtureOptions[0].id,
   "data-workspace": dataWorkspaceFixtureOptions[0].id,
   "evidence-workspace": evidenceWorkspaceFixtureOptions[0].id,
+  "agent-workspace": agentWorkspaceFixtureOptions[0].id,
 }
 
 const moduleStatus: Record<
@@ -206,6 +220,13 @@ const moduleStatus: Record<
     { label: "Stage 3 full matrix passed", state: "ready" },
     { label: "Production route registered", state: "ready" },
   ],
+  "agent-workspace": [
+    { label: "58 typed fixtures ready", state: "ready" },
+    { label: "Stage 1 main panel ready", state: "ready" },
+    { label: "Stage 2 inspectors ready", state: "ready" },
+    { label: "Stage 3 full matrix passed", state: "ready" },
+    { label: "integration pending", state: "pending" },
+  ],
 }
 
 function fixtureOptionsFor(
@@ -221,6 +242,7 @@ function fixtureOptionsFor(
   if (module === "topic-candidates") return topicCandidatesFixtureOptions
   if (module === "data-workspace") return dataWorkspaceFixtureOptions
   if (module === "evidence-workspace") return evidenceWorkspaceFixtureOptions
+  if (module === "agent-workspace") return agentWorkspaceFixtureOptions
   return [{ id: "visual-foundations", label: "共享视觉基础" }]
 }
 
@@ -254,6 +276,47 @@ function summarizeInput(value: unknown, key = "input"): unknown {
   return { kind: typeof value }
 }
 
+function summarizeAgentEvent(event: AgentWorkspaceEvent) {
+  if (event.action === "create-run") {
+    return {
+      action: event.action,
+      goalLength: event.input.goal.length,
+      allowToolCalls: event.input.allowToolCalls,
+    }
+  }
+  if (event.action === "send-message") {
+    return {
+      action: event.action,
+      runId: maskIdentifier(event.input.runId),
+      messageLength: event.input.message.length,
+    }
+  }
+  if (event.action === "open-source") {
+    return {
+      action: event.action,
+      objectType: event.input.objectType,
+      objectId: maskIdentifier(event.input.objectId),
+    }
+  }
+  if (event.action === "open-approval") {
+    return {
+      action: event.action,
+      approvalId: maskIdentifier(event.input.approvalId),
+    }
+  }
+  if (event.action === "cancel-run") {
+    return { action: event.action, runId: maskIdentifier(event.input.runId) }
+  }
+  if (event.action === "retry-or-restart") {
+    return {
+      action: event.action,
+      runId: maskIdentifier(event.input.runId),
+      goalLength: event.input.goal.length,
+    }
+  }
+  return { action: event.action }
+}
+
 export function DesignPreviewWorkbench() {
   const [module, setModule] = useState<ModuleId>("foundations")
   const [fixtureIds, setFixtureIds] = useState(defaultFixtureIds)
@@ -264,6 +327,11 @@ export function DesignPreviewWorkbench() {
     useState<EvidenceWorkspaceView>("graph")
   const [evidenceGraphMode, setEvidenceGraphMode] =
     useState<EvidenceGraphMode>("graph")
+  const [agentSurface, setAgentSurface] =
+    useState<AgentWorkspaceSurface>("timeline")
+  const [agentSelectedToolCallId, setAgentSelectedToolCallId] = useState<
+    string | null
+  >(null)
   const [showEventLog, setShowEventLog] = useState(true)
   const [eventLog, setEventLog] = useState<EventEntry[]>([])
   const [renderKey, setRenderKey] = useState(0)
@@ -310,6 +378,14 @@ export function DesignPreviewWorkbench() {
     if (fixture) setEvidenceView(fixture.initialView)
   }, [currentFixtureId, module])
 
+  useEffect(() => {
+    if (module !== "agent-workspace") return
+    const fixture = agentWorkspaceFixtures.find(
+      (item) => item.id === currentFixtureId,
+    )
+    setAgentSelectedToolCallId(fixture?.selectedToolCallId ?? null)
+  }, [currentFixtureId, module])
+
   const logIntent = (action: string, input?: unknown) => {
     setEventLog((entries) =>
       [
@@ -336,6 +412,8 @@ export function DesignPreviewWorkbench() {
     setViewport("desktop")
     setEvidenceView("graph")
     setEvidenceGraphMode("graph")
+    setAgentSurface("timeline")
+    setAgentSelectedToolCallId(null)
     setShowEventLog(true)
     setEventLog([])
     setRenderKey((value) => value + 1)
@@ -461,11 +539,38 @@ export function DesignPreviewWorkbench() {
         />
       )
     }
+    if (module === "agent-workspace") {
+      const fixture =
+        agentWorkspaceFixtures.find((item) => item.id === currentFixtureId) ??
+        agentWorkspaceFixtures[0]
+      return (
+        <AgentWorkspace
+          content={fixture.content}
+          pendingAction={fixture.pendingAction}
+          mutationError={fixture.mutationError}
+          selectedToolCallId={agentSelectedToolCallId}
+          initialSurface={agentSurface}
+          onSurfaceChange={setAgentSurface}
+          onToolSelectionChange={setAgentSelectedToolCallId}
+          onRetry={() => logIntent("retry")}
+          onEvent={(event) =>
+            logIntent(event.action, summarizeAgentEvent(event))
+          }
+        />
+      )
+    }
     const fixture =
       projectWorkspaceFixtures.find((item) => item.id === currentFixtureId) ??
       projectWorkspaceFixtures[0]
     return <ProjectWorkspacePreview fixture={fixture} onIntent={logIntent} />
-  }, [currentFixtureId, evidenceGraphMode, evidenceView, module])
+  }, [
+    agentSelectedToolCallId,
+    agentSurface,
+    currentFixtureId,
+    evidenceGraphMode,
+    evidenceView,
+    module,
+  ])
 
   return (
     <div className="preview-workbench" data-od-id="design-preview-workbench">
@@ -557,6 +662,22 @@ export function DesignPreviewWorkbench() {
                 </button>
               </div>
             </>
+          ) : null}
+          {module === "agent-workspace" ? (
+            <label className="preview-field preview-field--compact">
+              <span>本地表面</span>
+              <select
+                value={agentSurface}
+                onChange={(event) =>
+                  setAgentSurface(event.target.value as AgentWorkspaceSurface)
+                }
+              >
+                <option value="timeline">时间线</option>
+                <option value="plan">计划</option>
+                <option value="tools">工具</option>
+                <option value="run">检查器</option>
+              </select>
+            </label>
           ) : null}
           <div className="preview-segment" aria-label="预览主题">
             {(["light", "dark", "system"] as const).map((choice) => {

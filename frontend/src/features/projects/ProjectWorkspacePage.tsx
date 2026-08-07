@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { ArrowLeft, FileQuestion } from "lucide-react"
+import { ArrowLeft, Bot, FileQuestion } from "lucide-react"
 
 import {
   EmptyState,
@@ -35,7 +35,13 @@ const workspaceTabs = [
   { id: "audit", label: "Audit" },
 ] as const
 
-export function ProjectWorkspacePage({ projectId }: { projectId: string }) {
+export function ProjectWorkspacePage({
+  projectId,
+  initialTab = "overview",
+}: {
+  projectId: string
+  initialTab?: (typeof workspaceTabs)[number]["id"]
+}) {
   const project = useProject(projectId)
 
   if (project.isLoading)
@@ -87,6 +93,11 @@ export function ProjectWorkspacePage({ projectId }: { projectId: string }) {
                 <FileQuestion aria-hidden="true" /> Research question
               </Link>
             </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link to="/projects/$projectId/agent" params={{ projectId }}>
+                <Bot aria-hidden="true" /> Research Agent
+              </Link>
+            </Button>
             <SourceBadge
               label={`lock v${project.data.lockVersion}`}
               kind="verified"
@@ -106,7 +117,7 @@ export function ProjectWorkspacePage({ projectId }: { projectId: string }) {
         </span>
       </p>
 
-      <Tabs defaultValue="overview" className="project-workspace-shell__tabs">
+      <Tabs defaultValue={initialTab} className="project-workspace-shell__tabs">
         <div className="project-workspace-shell__nav">
           <TabsList aria-label="Project workspace sections">
             {workspaceTabs.map((tab) => (

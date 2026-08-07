@@ -441,8 +441,8 @@ M0 Regression Baseline 适用于 M1–M9，后续里程碑不得让 M0 已通过
 | M5 | COMPLETED | M4 | 六种确定性分析、不可变 AnalysisResult、五类科研 Figure 与生产 Workspace；Exit Gate 于 2026-08-05 通过 | [M5 Analysis and Figures](roadmap/milestones/M5_ANALYSIS_AND_FIGURES.md) |
 | M6 | APPROVED_WITH_ISSUES | M3 + M5 | Stage 5 Exit Gate 通过；保留 Windows host-only PostgreSQL runner 限制 | [M6 Manuscript and Claims](roadmap/milestones/M6_MANUSCRIPT_AND_CLAIMS.md) |
 | M7 | COMPLETION APPROVED | M3 + M5 + M6 | Evidence Graph、失效传播、Export 与 ReproPackage；Exit Gate 于 2026-08-06 通过 | [M7 Evidence and Export](roadmap/milestones/M7_EVIDENCE_AND_EXPORT.md) |
-| M8 | ALLOWED | M7 COMPLETION APPROVED | 可开始 StageResolver、受控单总控 Agent、ToolCall 与 AgentRun；必须复用 M7 Service 边界 | [M8 Agent](roadmap/milestones/M8_AGENT.md) |
-| M9 | PLANNED | M8 | 离线演示、故障演练、发布门禁与 Release Candidate | [M9 Demo and Release](roadmap/milestones/M9_DEMO_AND_RELEASE.md) |
+| M8 | COMPLETION APPROVED | M7 COMPLETION APPROVED | One governed ResearchOrchestrator, durable Approval-bound resume, typed Tool/Worker reconciliation and production Agent panel; Exit Gate passed 2026-08-07 | [M8 Agent](roadmap/milestones/M8_AGENT.md) |
+| M9 | ENTRY ALLOWED | M8 EXIT PASS | Offline demo and release work may begin from the frozen M8 Tool, Approval, provider and direct-workspace boundaries | [M9 Demo and Release](roadmap/milestones/M9_DEMO_AND_RELEASE.md) |
 
 PromptContract manifest、ModelInvocation 和 requested/max/effective 数据访问治理必须在 M1 建立；Git 管理的清单固定为 `backend/app/agents/prompts/prompt-manifest.yaml`，供 M2/M3 模型任务使用。正式 Agent 运行时仍在 M8 接入。`MANU-P0-018` 仍由 M6 交付。
 

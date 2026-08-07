@@ -1,4 +1,4 @@
-﻿{
+{
   "openapi": "3.1.0",
   "info": { "title": "RECA", "version": "0.1.0" },
   "paths": {
@@ -1871,6 +1871,566 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/AuditListEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/agent-runs": {
+      "post": {
+        "tags": ["agent-runs"],
+        "summary": "Create Agent Run",
+        "operationId": "agent-runs_create_agent_run_post_api_v1_projects_project_id_agent-runs",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 255,
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "X-Correlation-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AgentRunCreateRequest" }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AgentRunEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/agent-runs/{agent_run_id}": {
+      "get": {
+        "tags": ["agent-runs"],
+        "summary": "Get Agent Run",
+        "operationId": "agent-runs_get_agent_run_get_api_v1_agent-runs_agent_run_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "agent_run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Agent Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AgentRunEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/agent-runs/{agent_run_id}/messages": {
+      "post": {
+        "tags": ["agent-runs"],
+        "summary": "Append Message",
+        "operationId": "agent-runs_append_message_post_api_v1_agent-runs_agent_run_id_messages",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "agent_run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Agent Run Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 255,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AgentMessageRequest" }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AgentRunEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/agent-runs/{agent_run_id}/tool-calls": {
+      "get": {
+        "tags": ["agent-runs"],
+        "summary": "List Tool Calls",
+        "operationId": "agent-runs_list_tool_calls_get_api_v1_agent-runs_agent_run_id_tool-calls",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "agent_run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Agent Run Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolCallListEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/tool-calls/{tool_call_id}": {
+      "get": {
+        "tags": ["agent-runs"],
+        "summary": "Get Tool Call",
+        "operationId": "agent-runs_get_tool_call_get_api_v1_tool-calls_tool_call_id",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "tool_call_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Tool Call Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ToolCallEnvelope" }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContractErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/agent-runs/{agent_run_id}/cancel": {
+      "post": {
+        "tags": ["agent-runs"],
+        "summary": "Cancel Agent Run",
+        "operationId": "agent-runs_cancel_agent_run_post_api_v1_agent-runs_agent_run_id_cancel",
+        "security": [{ "OAuth2PasswordBearer": [] }],
+        "parameters": [
+          {
+            "name": "agent_run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Agent Run Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 255,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AgentRunEnvelope" }
               }
             }
           },
@@ -14928,6 +15488,301 @@
   },
   "components": {
     "schemas": {
+      "AgentApprovalLinkPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "status": { "type": "string", "title": "Status" },
+          "known_status": { "type": "boolean", "title": "Known Status" },
+          "stale": { "type": "boolean", "title": "Stale" },
+          "expires_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Expires At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["id", "status", "known_status", "stale", "expires_at"],
+        "title": "AgentApprovalLinkPublic"
+      },
+      "AgentEventPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "sequence_number": { "type": "integer", "title": "Sequence Number" },
+          "event_type": { "type": "string", "title": "Event Type" },
+          "actor_type": { "type": "string", "title": "Actor Type" },
+          "safe_summary": { "$ref": "#/components/schemas/SafeSummaryPublic" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "sequence_number",
+          "event_type",
+          "actor_type",
+          "safe_summary",
+          "created_at"
+        ],
+        "title": "AgentEventPublic"
+      },
+      "AgentJobLinkPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "status": { "type": "string", "title": "Status" },
+          "known_status": { "type": "boolean", "title": "Known Status" },
+          "progress_percent": {
+            "type": "integer",
+            "title": "Progress Percent"
+          },
+          "retryable": { "type": "boolean", "title": "Retryable" },
+          "error_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Error Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "known_status",
+          "progress_percent",
+          "retryable",
+          "error_code"
+        ],
+        "title": "AgentJobLinkPublic"
+      },
+      "AgentMessageRequest": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["message"],
+        "title": "AgentMessageRequest"
+      },
+      "AgentPagination": {
+        "properties": {
+          "page": { "type": "integer", "title": "Page" },
+          "page_size": { "type": "integer", "title": "Page Size" },
+          "total": { "type": "integer", "title": "Total" },
+          "total_pages": { "type": "integer", "title": "Total Pages" },
+          "has_next": { "type": "boolean", "title": "Has Next" },
+          "has_previous": { "type": "boolean", "title": "Has Previous" }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "page",
+          "page_size",
+          "total",
+          "total_pages",
+          "has_next",
+          "has_previous"
+        ],
+        "title": "AgentPagination"
+      },
+      "AgentResponseMeta": {
+        "properties": {
+          "request_id": { "type": "string", "title": "Request Id" },
+          "schema_version": {
+            "type": "string",
+            "const": "1.0",
+            "title": "Schema Version",
+            "default": "1.0"
+          },
+          "idempotency_replayed": {
+            "type": "boolean",
+            "title": "Idempotency Replayed",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["request_id"],
+        "title": "AgentResponseMeta"
+      },
+      "AgentRunCreateRequest": {
+        "properties": {
+          "goal": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Goal"
+          },
+          "mode": {
+            "type": "string",
+            "const": "PLAN_AND_EXPLAIN",
+            "title": "Mode",
+            "default": "PLAN_AND_EXPLAIN"
+          },
+          "allow_tool_calls": {
+            "type": "boolean",
+            "title": "Allow Tool Calls",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["goal"],
+        "title": "AgentRunCreateRequest"
+      },
+      "AgentRunEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/AgentRunPublic" },
+          "meta": { "$ref": "#/components/schemas/AgentResponseMeta" }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "AgentRunEnvelope"
+      },
+      "AgentRunPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "agent_type": { "type": "string", "title": "Agent Type" },
+          "status": { "type": "string", "title": "Status" },
+          "known_status": { "type": "boolean", "title": "Known Status" },
+          "lock_version": { "type": "integer", "title": "Lock Version" },
+          "safe_input_summary": {
+            "$ref": "#/components/schemas/SafeSummaryPublic"
+          },
+          "safe_snapshot_summary": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Safe Snapshot Summary"
+          },
+          "snapshot_hash": { "type": "string", "title": "Snapshot Hash" },
+          "snapshot_revision": {
+            "type": "integer",
+            "title": "Snapshot Revision"
+          },
+          "snapshot_current": {
+            "type": "boolean",
+            "title": "Snapshot Current"
+          },
+          "source_object_versions": {
+            "additionalProperties": { "type": "string" },
+            "type": "object",
+            "title": "Source Object Versions"
+          },
+          "max_turns": { "type": "integer", "title": "Max Turns" },
+          "max_tool_calls": { "type": "integer", "title": "Max Tool Calls" },
+          "turn_count": { "type": "integer", "title": "Turn Count" },
+          "tool_call_count": { "type": "integer", "title": "Tool Call Count" },
+          "retry_of_agent_run_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Retry Of Agent Run Id"
+          },
+          "failure_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Failure Code"
+          },
+          "degradation_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Degradation Code"
+          },
+          "retryable": { "type": "boolean", "title": "Retryable" },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
+          "disabled_reasons": {
+            "additionalProperties": { "type": "string" },
+            "type": "object",
+            "title": "Disabled Reasons"
+          },
+          "job": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/AgentJobLinkPublic" },
+              { "type": "null" }
+            ]
+          },
+          "events": {
+            "items": { "$ref": "#/components/schemas/AgentEventPublic" },
+            "type": "array",
+            "title": "Events"
+          },
+          "model_invocations": {
+            "items": {
+              "$ref": "#/components/schemas/ModelInvocationLinkPublic"
+            },
+            "type": "array",
+            "title": "Model Invocations"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Completed At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "agent_type",
+          "status",
+          "known_status",
+          "lock_version",
+          "safe_input_summary",
+          "safe_snapshot_summary",
+          "snapshot_hash",
+          "snapshot_revision",
+          "snapshot_current",
+          "source_object_versions",
+          "max_turns",
+          "max_tool_calls",
+          "turn_count",
+          "tool_call_count",
+          "retry_of_agent_run_id",
+          "failure_code",
+          "degradation_code",
+          "retryable",
+          "allowed_actions",
+          "disabled_reasons",
+          "job",
+          "events",
+          "model_invocations",
+          "created_at",
+          "updated_at",
+          "completed_at"
+        ],
+        "title": "AgentRunPublic"
+      },
       "AllRowsSelector": {
         "properties": {
           "selector_type": {
@@ -22008,7 +22863,8 @@
           "MANUSCRIPT_TRANSFORM",
           "MANUSCRIPT_REVISION_AUDIT",
           "EVIDENCE_AUDIT",
-          "REPRO_PACKAGE_EXPORT"
+          "REPRO_PACKAGE_EXPORT",
+          "AGENT_ORCHESTRATION"
         ],
         "title": "JobTaskType"
       },
@@ -24541,6 +25397,61 @@
         "required": ["mode"],
         "title": "MissingDataPolicy"
       },
+      "ModelInvocationLinkPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "tool_call_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Tool Call Id"
+          },
+          "status": { "type": "string", "title": "Status" },
+          "known_status": { "type": "boolean", "title": "Known Status" },
+          "input_tokens": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Input Tokens"
+          },
+          "output_tokens": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Output Tokens"
+          },
+          "total_tokens": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Total Tokens"
+          },
+          "request_count": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Request Count"
+          },
+          "latency_ms": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Latency Ms"
+          },
+          "error_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Error Code"
+          },
+          "degraded": { "type": "boolean", "title": "Degraded" }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "tool_call_id",
+          "status",
+          "known_status",
+          "input_tokens",
+          "output_tokens",
+          "total_tokens",
+          "request_count",
+          "latency_ms",
+          "error_code",
+          "degraded"
+        ],
+        "title": "ModelInvocationLinkPublic"
+      },
       "NewPassword": {
         "properties": {
           "token": { "type": "string", "title": "Token" },
@@ -26632,6 +27543,31 @@
         "required": ["audit_result", "job"],
         "title": "RevisionAuditRequestPublic"
       },
+      "SafeSummaryPublic": {
+        "properties": {
+          "kind": { "type": "string", "title": "Kind" },
+          "text": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Text"
+          },
+          "attributes": {
+            "additionalProperties": {
+              "anyOf": [
+                { "type": "string" },
+                { "type": "integer" },
+                { "type": "boolean" },
+                { "type": "null" }
+              ]
+            },
+            "type": "object",
+            "title": "Attributes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["kind"],
+        "title": "SafeSummaryPublic"
+      },
       "ScatterParameters": {
         "properties": {
           "width_inches": {
@@ -26729,6 +27665,152 @@
         "type": "object",
         "required": ["access_token"],
         "title": "Token"
+      },
+      "ToolCallEnvelope": {
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ToolCallLinkPublic" },
+          "meta": { "$ref": "#/components/schemas/AgentResponseMeta" }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "meta"],
+        "title": "ToolCallEnvelope"
+      },
+      "ToolCallLinkPublic": {
+        "properties": {
+          "id": { "type": "string", "format": "uuid", "title": "Id" },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "agent_run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Agent Run Id"
+          },
+          "tool_name": { "type": "string", "title": "Tool Name" },
+          "tool_version": { "type": "string", "title": "Tool Version" },
+          "status": { "type": "string", "title": "Status" },
+          "known_status": { "type": "boolean", "title": "Known Status" },
+          "category": { "type": "string", "title": "Category" },
+          "confirmation": { "type": "string", "title": "Confirmation" },
+          "safe_input_summary": {
+            "$ref": "#/components/schemas/SafeSummaryPublic"
+          },
+          "safe_output_summary": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/SafeSummaryPublic" },
+              { "type": "null" }
+            ]
+          },
+          "approval": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/AgentApprovalLinkPublic" },
+              { "type": "null" }
+            ]
+          },
+          "job": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/AgentJobLinkPublic" },
+              { "type": "null" }
+            ]
+          },
+          "output_object_type": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Output Object Type"
+          },
+          "output_object_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Output Object Id"
+          },
+          "retry_of_tool_call_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Retry Of Tool Call Id"
+          },
+          "error_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Error Code"
+          },
+          "retryable": { "type": "boolean", "title": "Retryable" },
+          "allowed_actions": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Allowed Actions"
+          },
+          "disabled_reason_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Disabled Reason Code"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "started_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Completed At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "project_id",
+          "agent_run_id",
+          "tool_name",
+          "tool_version",
+          "status",
+          "known_status",
+          "category",
+          "confirmation",
+          "safe_input_summary",
+          "safe_output_summary",
+          "approval",
+          "job",
+          "output_object_type",
+          "output_object_id",
+          "retry_of_tool_call_id",
+          "error_code",
+          "retryable",
+          "allowed_actions",
+          "disabled_reason_code",
+          "created_at",
+          "started_at",
+          "completed_at"
+        ],
+        "title": "ToolCallLinkPublic"
+      },
+      "ToolCallListEnvelope": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/ToolCallLinkPublic" },
+            "type": "array",
+            "title": "Data"
+          },
+          "pagination": { "$ref": "#/components/schemas/AgentPagination" },
+          "meta": { "$ref": "#/components/schemas/AgentResponseMeta" }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["data", "pagination", "meta"],
+        "title": "ToolCallListEnvelope"
       },
       "TopicCandidatePublic": {
         "properties": {

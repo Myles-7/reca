@@ -22,6 +22,7 @@ import { Route as LayoutProjectsRouteImport } from './routes/_layout/projects'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
 import { Route as LayoutProjectsIndexRouteImport } from './routes/_layout/projects.index'
 import { Route as LayoutProjectsProjectIdRouteImport } from './routes/_layout/projects.$projectId'
+import { Route as LayoutProjectsProjectIdAgentRouteImport } from './routes/_layout/projects.$projectId_.agent'
 import { Route as LayoutProjectsProjectIdAnalysisRouteImport } from './routes/_layout/projects.$projectId_.analysis'
 import { Route as LayoutProjectsProjectIdDataRouteImport } from './routes/_layout/projects.$projectId_.data'
 import { Route as LayoutProjectsProjectIdEvidenceRouteImport } from './routes/_layout/projects.$projectId_.evidence'
@@ -95,6 +96,12 @@ const LayoutProjectsProjectIdRoute = LayoutProjectsProjectIdRouteImport.update({
   path: '/$projectId',
   getParentRoute: () => LayoutProjectsRoute,
 } as any)
+const LayoutProjectsProjectIdAgentRoute =
+  LayoutProjectsProjectIdAgentRouteImport.update({
+    id: '/$projectId_/agent',
+    path: '/$projectId/agent',
+    getParentRoute: () => LayoutProjectsRoute,
+  } as any)
 const LayoutProjectsProjectIdAnalysisRoute =
   LayoutProjectsProjectIdAnalysisRouteImport.update({
     id: '/$projectId_/analysis',
@@ -157,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof LayoutSettingsRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/projects/': typeof LayoutProjectsIndexRoute
+  '/projects/$projectId/agent': typeof LayoutProjectsProjectIdAgentRoute
   '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
   '/projects/$projectId/evidence': typeof LayoutProjectsProjectIdEvidenceRoute
@@ -178,6 +186,7 @@ export interface FileRoutesByTo {
   '/settings': typeof LayoutSettingsRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/projects': typeof LayoutProjectsIndexRoute
+  '/projects/$projectId/agent': typeof LayoutProjectsProjectIdAgentRoute
   '/projects/$projectId/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/projects/$projectId/data': typeof LayoutProjectsProjectIdDataRoute
   '/projects/$projectId/evidence': typeof LayoutProjectsProjectIdEvidenceRoute
@@ -202,6 +211,7 @@ export interface FileRoutesById {
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/_layout/projects/': typeof LayoutProjectsIndexRoute
+  '/_layout/projects/$projectId_/agent': typeof LayoutProjectsProjectIdAgentRoute
   '/_layout/projects/$projectId_/analysis': typeof LayoutProjectsProjectIdAnalysisRoute
   '/_layout/projects/$projectId_/data': typeof LayoutProjectsProjectIdDataRoute
   '/_layout/projects/$projectId_/evidence': typeof LayoutProjectsProjectIdEvidenceRoute
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/projects/$projectId'
     | '/projects/'
+    | '/projects/$projectId/agent'
     | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
     | '/projects/$projectId/evidence'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/projects/$projectId'
     | '/projects'
+    | '/projects/$projectId/agent'
     | '/projects/$projectId/analysis'
     | '/projects/$projectId/data'
     | '/projects/$projectId/evidence'
@@ -270,6 +282,7 @@ export interface FileRouteTypes {
     | '/_layout/settings'
     | '/_layout/projects/$projectId'
     | '/_layout/projects/'
+    | '/_layout/projects/$projectId_/agent'
     | '/_layout/projects/$projectId_/analysis'
     | '/_layout/projects/$projectId_/data'
     | '/_layout/projects/$projectId_/evidence'
@@ -384,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutProjectsProjectIdRouteImport
       parentRoute: typeof LayoutProjectsRoute
     }
+    '/_layout/projects/$projectId_/agent': {
+      id: '/_layout/projects/$projectId_/agent'
+      path: '/$projectId/agent'
+      fullPath: '/projects/$projectId/agent'
+      preLoaderRoute: typeof LayoutProjectsProjectIdAgentRouteImport
+      parentRoute: typeof LayoutProjectsRoute
+    }
     '/_layout/projects/$projectId_/analysis': {
       id: '/_layout/projects/$projectId_/analysis'
       path: '/$projectId/analysis'
@@ -446,6 +466,7 @@ declare module '@tanstack/react-router' {
 interface LayoutProjectsRouteChildren {
   LayoutProjectsProjectIdRoute: typeof LayoutProjectsProjectIdRoute
   LayoutProjectsIndexRoute: typeof LayoutProjectsIndexRoute
+  LayoutProjectsProjectIdAgentRoute: typeof LayoutProjectsProjectIdAgentRoute
   LayoutProjectsProjectIdAnalysisRoute: typeof LayoutProjectsProjectIdAnalysisRoute
   LayoutProjectsProjectIdDataRoute: typeof LayoutProjectsProjectIdDataRoute
   LayoutProjectsProjectIdEvidenceRoute: typeof LayoutProjectsProjectIdEvidenceRoute
@@ -459,6 +480,7 @@ interface LayoutProjectsRouteChildren {
 const LayoutProjectsRouteChildren: LayoutProjectsRouteChildren = {
   LayoutProjectsProjectIdRoute: LayoutProjectsProjectIdRoute,
   LayoutProjectsIndexRoute: LayoutProjectsIndexRoute,
+  LayoutProjectsProjectIdAgentRoute: LayoutProjectsProjectIdAgentRoute,
   LayoutProjectsProjectIdAnalysisRoute: LayoutProjectsProjectIdAnalysisRoute,
   LayoutProjectsProjectIdDataRoute: LayoutProjectsProjectIdDataRoute,
   LayoutProjectsProjectIdEvidenceRoute: LayoutProjectsProjectIdEvidenceRoute,

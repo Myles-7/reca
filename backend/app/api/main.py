@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.analysis import service as analysis_service
 from app.api.routes import (
+    agent_runs,
     analysis,
     approvals,
     artifacts,
@@ -45,6 +46,7 @@ api_router.include_router(login.router)
 api_router.include_router(users.router)
 api_router.include_router(utils.router)
 api_router.include_router(projects.router)
+api_router.include_router(agent_runs.router)
 api_router.include_router(research_questions.router)
 api_router.include_router(query_plans.router)
 api_router.include_router(literature.router)

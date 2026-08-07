@@ -5,6 +5,291 @@ export type ClientOptions = {
 }
 
 /**
+ * AgentApprovalLinkPublic
+ */
+export type AgentApprovalLinkPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  /**
+   * Stale
+   */
+  stale: boolean
+  /**
+   * Expires At
+   */
+  expires_at: string | null
+}
+
+/**
+ * AgentEventPublic
+ */
+export type AgentEventPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Sequence Number
+   */
+  sequence_number: number
+  /**
+   * Event Type
+   */
+  event_type: string
+  /**
+   * Actor Type
+   */
+  actor_type: string
+  safe_summary: SafeSummaryPublic
+  /**
+   * Created At
+   */
+  created_at: string
+}
+
+/**
+ * AgentJobLinkPublic
+ */
+export type AgentJobLinkPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  /**
+   * Progress Percent
+   */
+  progress_percent: number
+  /**
+   * Retryable
+   */
+  retryable: boolean
+  /**
+   * Error Code
+   */
+  error_code: string | null
+}
+
+/**
+ * AgentMessageRequest
+ */
+export type AgentMessageRequest = {
+  /**
+   * Message
+   */
+  message: string
+}
+
+/**
+ * AgentPagination
+ */
+export type AgentPagination = {
+  /**
+   * Page
+   */
+  page: number
+  /**
+   * Page Size
+   */
+  page_size: number
+  /**
+   * Total
+   */
+  total: number
+  /**
+   * Total Pages
+   */
+  total_pages: number
+  /**
+   * Has Next
+   */
+  has_next: boolean
+  /**
+   * Has Previous
+   */
+  has_previous: boolean
+}
+
+/**
+ * AgentResponseMeta
+ */
+export type AgentResponseMeta = {
+  /**
+   * Request Id
+   */
+  request_id: string
+  /**
+   * Schema Version
+   */
+  schema_version?: "1.0"
+  /**
+   * Idempotency Replayed
+   */
+  idempotency_replayed?: boolean
+}
+
+/**
+ * AgentRunCreateRequest
+ */
+export type AgentRunCreateRequest = {
+  /**
+   * Goal
+   */
+  goal: string
+  /**
+   * Mode
+   */
+  mode?: "PLAN_AND_EXPLAIN"
+  /**
+   * Allow Tool Calls
+   */
+  allow_tool_calls?: boolean
+}
+
+/**
+ * AgentRunEnvelope
+ */
+export type AgentRunEnvelope = {
+  data: AgentRunPublic
+  meta: AgentResponseMeta
+}
+
+/**
+ * AgentRunPublic
+ */
+export type AgentRunPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Agent Type
+   */
+  agent_type: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  /**
+   * Lock Version
+   */
+  lock_version: number
+  safe_input_summary: SafeSummaryPublic
+  /**
+   * Safe Snapshot Summary
+   */
+  safe_snapshot_summary: {
+    [key: string]: unknown
+  }
+  /**
+   * Snapshot Hash
+   */
+  snapshot_hash: string
+  /**
+   * Snapshot Revision
+   */
+  snapshot_revision: number
+  /**
+   * Snapshot Current
+   */
+  snapshot_current: boolean
+  /**
+   * Source Object Versions
+   */
+  source_object_versions: {
+    [key: string]: string
+  }
+  /**
+   * Max Turns
+   */
+  max_turns: number
+  /**
+   * Max Tool Calls
+   */
+  max_tool_calls: number
+  /**
+   * Turn Count
+   */
+  turn_count: number
+  /**
+   * Tool Call Count
+   */
+  tool_call_count: number
+  /**
+   * Retry Of Agent Run Id
+   */
+  retry_of_agent_run_id: string | null
+  /**
+   * Failure Code
+   */
+  failure_code: string | null
+  /**
+   * Degradation Code
+   */
+  degradation_code: string | null
+  /**
+   * Retryable
+   */
+  retryable: boolean
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Disabled Reasons
+   */
+  disabled_reasons: {
+    [key: string]: string
+  }
+  job: AgentJobLinkPublic | null
+  /**
+   * Events
+   */
+  events: Array<AgentEventPublic>
+  /**
+   * Model Invocations
+   */
+  model_invocations: Array<ModelInvocationLinkPublic>
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Updated At
+   */
+  updated_at: string
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+}
+
+/**
  * AllRowsSelector
  */
 export type AllRowsSelector = {
@@ -5474,6 +5759,7 @@ export type JobTaskType =
   | "MANUSCRIPT_REVISION_AUDIT"
   | "EVIDENCE_AUDIT"
   | "REPRO_PACKAGE_EXPORT"
+  | "AGENT_ORCHESTRATION"
 
 /**
  * LiteratureCandidatePublic
@@ -7436,6 +7722,56 @@ export type MissingDataPolicy = {
 }
 
 /**
+ * ModelInvocationLinkPublic
+ */
+export type ModelInvocationLinkPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Tool Call Id
+   */
+  tool_call_id: string | null
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  /**
+   * Input Tokens
+   */
+  input_tokens: number | null
+  /**
+   * Output Tokens
+   */
+  output_tokens: number | null
+  /**
+   * Total Tokens
+   */
+  total_tokens: number | null
+  /**
+   * Request Count
+   */
+  request_count: number | null
+  /**
+   * Latency Ms
+   */
+  latency_ms: number | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Degraded
+   */
+  degraded: boolean
+}
+
+/**
  * NewPassword
  */
 export type NewPassword = {
@@ -9049,6 +9385,26 @@ export type RevisionAuditRequestPublic = {
 }
 
 /**
+ * SafeSummaryPublic
+ */
+export type SafeSummaryPublic = {
+  /**
+   * Kind
+   */
+  kind: string
+  /**
+   * Text
+   */
+  text?: string | null
+  /**
+   * Attributes
+   */
+  attributes?: {
+    [key: string]: string | number | boolean | null
+  }
+}
+
+/**
  * ScatterParameters
  */
 export type ScatterParameters = {
@@ -9115,6 +9471,112 @@ export type Token = {
    * Token Type
    */
   token_type?: string
+}
+
+/**
+ * ToolCallEnvelope
+ */
+export type ToolCallEnvelope = {
+  data: ToolCallLinkPublic
+  meta: AgentResponseMeta
+}
+
+/**
+ * ToolCallLinkPublic
+ */
+export type ToolCallLinkPublic = {
+  /**
+   * Id
+   */
+  id: string
+  /**
+   * Project Id
+   */
+  project_id: string
+  /**
+   * Agent Run Id
+   */
+  agent_run_id: string
+  /**
+   * Tool Name
+   */
+  tool_name: string
+  /**
+   * Tool Version
+   */
+  tool_version: string
+  /**
+   * Status
+   */
+  status: string
+  /**
+   * Known Status
+   */
+  known_status: boolean
+  /**
+   * Category
+   */
+  category: string
+  /**
+   * Confirmation
+   */
+  confirmation: string
+  safe_input_summary: SafeSummaryPublic
+  safe_output_summary: SafeSummaryPublic | null
+  approval: AgentApprovalLinkPublic | null
+  job: AgentJobLinkPublic | null
+  /**
+   * Output Object Type
+   */
+  output_object_type: string | null
+  /**
+   * Output Object Id
+   */
+  output_object_id: string | null
+  /**
+   * Retry Of Tool Call Id
+   */
+  retry_of_tool_call_id: string | null
+  /**
+   * Error Code
+   */
+  error_code: string | null
+  /**
+   * Retryable
+   */
+  retryable: boolean
+  /**
+   * Allowed Actions
+   */
+  allowed_actions: Array<string>
+  /**
+   * Disabled Reason Code
+   */
+  disabled_reason_code: string | null
+  /**
+   * Created At
+   */
+  created_at: string
+  /**
+   * Started At
+   */
+  started_at: string | null
+  /**
+   * Completed At
+   */
+  completed_at: string | null
+}
+
+/**
+ * ToolCallListEnvelope
+ */
+export type ToolCallListEnvelope = {
+  /**
+   * Data
+   */
+  data: Array<ToolCallLinkPublic>
+  pagination: AgentPagination
+  meta: AgentResponseMeta
 }
 
 /**
@@ -11050,6 +11512,329 @@ export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsRespon
 
 export type ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponse =
   ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses[keyof ProjectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogsResponses]
+
+export type AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsData = {
+  body: AgentRunCreateRequest
+  headers: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key": string
+    /**
+     * X-Correlation-Id
+     */
+    "X-Correlation-ID"?: string | null
+  }
+  path: {
+    /**
+     * Project Id
+     */
+    project_id: string
+  }
+  query?: never
+  url: "/api/v1/projects/{project_id}/agent-runs"
+}
+
+export type AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsError =
+  AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsErrors[keyof AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsErrors]
+
+export type AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: AgentRunEnvelope
+  }
+
+export type AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsResponse =
+  AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsResponses[keyof AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsResponses]
+
+export type AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdData = {
+  body?: never
+  path: {
+    /**
+     * Agent Run Id
+     */
+    agent_run_id: string
+  }
+  query?: never
+  url: "/api/v1/agent-runs/{agent_run_id}"
+}
+
+export type AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdError =
+  AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdErrors[keyof AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdErrors]
+
+export type AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: AgentRunEnvelope
+}
+
+export type AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdResponse =
+  AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdResponses[keyof AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdResponses]
+
+export type AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesData = {
+  body: AgentMessageRequest
+  headers: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key": string
+  }
+  path: {
+    /**
+     * Agent Run Id
+     */
+    agent_run_id: string
+  }
+  query?: never
+  url: "/api/v1/agent-runs/{agent_run_id}/messages"
+}
+
+export type AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesError =
+  AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesErrors[keyof AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesErrors]
+
+export type AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: AgentRunEnvelope
+  }
+
+export type AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesResponse =
+  AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesResponses[keyof AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesResponses]
+
+export type AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsData = {
+  body?: never
+  path: {
+    /**
+     * Agent Run Id
+     */
+    agent_run_id: string
+  }
+  query?: {
+    /**
+     * Page
+     */
+    page?: number
+    /**
+     * Page Size
+     */
+    page_size?: number
+  }
+  url: "/api/v1/agent-runs/{agent_run_id}/tool-calls"
+}
+
+export type AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsError =
+  AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsErrors[keyof AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsErrors]
+
+export type AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: ToolCallListEnvelope
+  }
+
+export type AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsResponse =
+  AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsResponses[keyof AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsResponses]
+
+export type AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdData = {
+  body?: never
+  path: {
+    /**
+     * Tool Call Id
+     */
+    tool_call_id: string
+  }
+  query?: never
+  url: "/api/v1/tool-calls/{tool_call_id}"
+}
+
+export type AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdError =
+  AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdErrors[keyof AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdErrors]
+
+export type AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdResponses = {
+  /**
+   * Successful Response
+   */
+  200: ToolCallEnvelope
+}
+
+export type AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdResponse =
+  AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdResponses[keyof AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdResponses]
+
+export type AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelData = {
+  body?: never
+  headers: {
+    /**
+     * Idempotency-Key
+     */
+    "Idempotency-Key": string
+  }
+  path: {
+    /**
+     * Agent Run Id
+     */
+    agent_run_id: string
+  }
+  query?: never
+  url: "/api/v1/agent-runs/{agent_run_id}/cancel"
+}
+
+export type AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelErrors = {
+  /**
+   * Bad Request
+   */
+  400: ContractErrorResponse
+  /**
+   * Forbidden
+   */
+  403: ContractErrorResponse
+  /**
+   * Not Found
+   */
+  404: ContractErrorResponse
+  /**
+   * Conflict
+   */
+  409: ContractErrorResponse
+  /**
+   * Unprocessable Content
+   */
+  422: ContractErrorResponse
+}
+
+export type AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelError =
+  AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelErrors[keyof AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelErrors]
+
+export type AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelResponses =
+  {
+    /**
+     * Successful Response
+     */
+    202: AgentRunEnvelope
+  }
+
+export type AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelResponse =
+  AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelResponses[keyof AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelResponses]
 
 export type ResearchQuestionsCreateResearchQuestionPostApiV1ProjectsProjectIdResearchQuestionsData =
   {

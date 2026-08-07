@@ -62,7 +62,29 @@ planned RECA business capability for that project is implemented.
 | SciPy | <https://github.com/scipy/scipy> | `1.18.0` / `v1.18.0` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 approved comparisons, correlations and assumption checks behind RECA normalization |
 | statsmodels | <https://github.com/statsmodels/statsmodels> | `0.14.6` / `v0.14.6` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 simple OLS structured numerical runtime; textual Summary is non-authoritative |
 | Matplotlib | <https://github.com/matplotlib/matplotlib> | `3.11.1` / `v3.11.1` | `DIRECT_DEPENDENCY` | `DIRECT_DEPENDENCY` | M5 deterministic Agg figure renderer using fixed RECA templates |
+| OpenAI Agents SDK | <https://github.com/openai/openai-agents-python> | `0.19.1` / `v0.19.1` / research commit `0ffa36840cb812488738f6fc5be3d3a1f51397b7` | `DIRECT_DEPENDENCY` | `ALREADY_INTEGRATED` | `backend/pyproject.toml`, root `uv.lock`, M8 stage-0 Python 3.14 disposable Spike |
 | Noto CJK fonts | <https://github.com/notofonts/noto-cjk> | Debian `fonts-noto-cjk` `1:20220127+repack1-1` | `SYSTEM_PACKAGE` | `ALREADY_INTEGRATED` | Fixed headless CJK font supplied by the Worker image; font files are SIL Open Font License 1.1 |
+
+## M8 agent runtime dependency
+
+- Project: OpenAI Agents SDK
+- Repository: <https://github.com/openai/openai-agents-python>
+- Upstream Commit/Tag: package `0.19.1`, tag `v0.19.1`, research commit `0ffa36840cb812488738f6fc5be3d3a1f51397b7`
+- License: MIT
+- License file: installed package metadata and upstream `LICENSE`
+- Integration mode: `DIRECT_DEPENDENCY`
+- Status: `DIRECT_DEPENDENCY`
+- Copied paths: none
+- Modified paths: none in upstream source
+- Modification summary: exact dependency pin for one RECA ResearchOrchestrator; stage 0 adds disposable fake-model tests only and does not register a production Agent API or runtime
+- Attribution location: this notice, `backend/pyproject.toml`, root `uv.lock`, ADR-007 and `docs/source-research/projects/openai-agents-sdk.md`
+- Special restrictions: no P0 handoff, Agent-as-tool, Shell, Python, SQL, filesystem, ApplyPatch, generic HTTP, arbitrary URL, MCP discovery/server or hosted execution; SDK Session/Trace/RunState are not RECA business authority
+- Source of truth: RECA Project, AgentRun, ToolCall, ModelInvocation, ApprovalRecord and AuditLog
+- Fallback: existing structured M1-M7 pages and direct Mock/Recorded model task paths remain available when Agent runtime is unavailable or removed
+- Acceptance tests: Python 3.14 import; strict Function Tool and structured output; usage; max turns; timeout/cancel/failure; guardrails; trace redaction; Session deletion; Approval pause/resume; prohibited topology inspection
+- Upgrade requirement: rerun M8 SDK, approval, trace, RunState, contract, injection and dependency/license tests before changing the exact version
+- Commercialization review: normal MIT dependency attribution; RECA root license remains pending
+- Reviewed at: 2026-08-06
 
 ## M6 manuscript runtime dependencies
 
@@ -321,7 +343,6 @@ these projects by this documentation task.
 | xyflow / React Flow | `360f5b13e2bc6899ea06b4be1a49b068d86926cf` | MIT | `DIRECT_DEPENDENCY` | `ALREADY_INTEGRATED` | `@xyflow/react` 12.11.2 in `frontend/package.json` and `bun.lock`; M7 server-projected Evidence Workspace and stage-0 browser Spike; React Flow is presentation-only and cannot persist authority edges |
 | Zotero | `4ec5ba9c279841b09231db82a61e30bd9e7dc6ef` | AGPL-3.0 plus third-party notices | `DESIGN_REFERENCE` | `RESEARCHED` | None; no source/assets copied |
 | Zotero Web Library | `556d0bf6b1b48fa8402a91afa62b15533b713013` | AGPL-3.0 | `DESIGN_REFERENCE` | `RESEARCHED` | None; no source/assets copied |
-| OpenAI Agents SDK | `0ffa36840cb812488738f6fc5be3d3a1f51397b7` | MIT | `DIRECT_DEPENDENCY` | `PLANNED` | None; M8 only |
 | ARS-Codex | `f8d6b061efe98564a3f554c917fce66dcef6ca54` | CC BY-NC 4.0; file/upstream review required | `SELECTIVE_VENDOR` | `RESEARCHED` | None; `NONCOMMERCIAL_INTENT_DECLARED`, experiment and attribution review required |
 
 The RECA root license remains `PENDING_GOVERNANCE_DECISION`. No future root

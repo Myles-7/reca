@@ -4,11 +4,11 @@ Document version: `1.0.1`
 
 Document status: `APPROVED FOR M1 DEVELOPMENT`
 
-Research status: `PLANNED`
+Research status: `ALREADY_INTEGRATED`
 
 Last researched: 2026-07-31
 
-Last updated: 2026-07-31
+Last updated: 2026-08-06
 
 Phase summary: [Agent SDK and ARS workflow research](../../archive/open-source-research/OPEN_SOURCE_RESEARCH_PHASE_5_AGENT.md)
 
@@ -282,9 +282,10 @@ RECA should reuse testing ideas rather than copy upstream tests blindly:
 
 ## RECA current state
 
-OpenAI Agents SDK is currently only `PLANNED_M8`. No package dependency,
-runtime Agent, Session store, tracing exporter, handoff or hosted tool is present
-as a result of this research phase.
+OpenAI Agents SDK `0.19.1` is now pinned in `backend/pyproject.toml` and
+root `uv.lock` after the M8 stage-0 disposable Spike passed on Python 3.14.2.
+No production AgentRun API, Session store, tracing exporter, handoff, MCP server,
+hosted tool or production Orchestrator is registered by stage 0.
 
 RECA already defines the authoritative pieces the SDK must consume:
 
@@ -308,8 +309,8 @@ DIRECT_DEPENDENCY at M8
 + handoffs disabled for P0
 ```
 
-This is a research recommendation, not an implementation claim or dependency
-approval.
+The dependency decision is approved for M8 implementation. Production runtime
+registration remains staged work and is not a stage-0 completion claim.
 
 ## What to reuse
 
@@ -390,6 +391,49 @@ Before M8 implementation approval, build a disposable spike that:
 10. verifies no Shell, SQL, Python, ApplyPatch, unrestricted MCP or handoff is exposed;
 11. measures cancellation, timeout, max-turn and provider-failure degradation;
 12. confirms no stable API, Schema, Tool, Enum or milestone identifier changes.
+
+### M8 stage-0 result
+
+The disposable Spike at `backend/tests/spikes/test_m8_agents_sdk_spike.py`
+passed on 2026-08-06 with Python 3.14.2, Pydantic 2.13.4 and FastAPI 0.139.0.
+It verified one Orchestrator, two fake read-only Function Tools, strict schemas,
+structured output, usage accounting, max turns, timeout, cancellation, provider
+failure, invalid output, all guardrail classes, trace redaction, Session deletion,
+formal approval pause/resume, and stale/foreign/rejected approval rejection.
+
+Important findings:
+
+- `RunConfig.trace_include_sensitive_data` defaults to `true` in SDK 0.19.1;
+  RECA must always set it to `false` and test the effective trace payload.
+- serialized `RunState` contains tool arguments, call IDs and SDK/Agent-definition
+  coupled state; it requires minimization, encryption/retention policy, version
+  binding and fail-closed invalidation before production persistence.
+- SDK usage maps cleanly to ModelInvocation request/input/output/total token fields.
+- core installation brings the SDK-required `mcp` dependency even without extras;
+  RECA P0 must register no MCP server, discovery path or hosted tool.
+
+Implementation metadata:
+
+```text
+project: OpenAI Agents SDK
+repository: https://github.com/openai/openai-agents-python
+research_commit: 0ffa36840cb812488738f6fc5be3d3a1f51397b7
+upstream_commit_or_tag: v0.19.1 / package 0.19.1
+license: MIT
+license_file: upstream LICENSE / installed package metadata
+integration_mode: DIRECT_DEPENDENCY
+status: ALREADY_INTEGRATED
+copied_paths: none
+modified_paths: none upstream
+attribution_location: THIRD_PARTY_NOTICES.md
+special_restrictions: one Orchestrator; no handoff, MCP, hosted or arbitrary execution
+commercialization_review: normal MIT attribution; RECA root license remains pending
+source_of_truth: RECA Project, AgentRun, ToolCall, ModelInvocation, ApprovalRecord, AuditLog
+fallback: direct existing non-Agent Mock/Recorded/Live model task paths and structured pages
+acceptance_tests: backend/tests/spikes/test_m8_agents_sdk_spike.py
+reviewed_by: Codex stage-0 implementation
+reviewed_at: 2026-08-06
+```
 
 ## Attribution requirements
 

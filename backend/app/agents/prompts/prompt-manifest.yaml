@@ -169,6 +169,34 @@
       "max_allowed_data_access_level": "REDACTED_CONTENT",
       "status": "ACTIVE",
       "content_hash": "ae2ad3d878f65c822ec331a12ccdb65dd22dd597cba087cd86f09f9b2317692d"
+    },
+    {
+      "prompt_id": "research-orchestrator",
+      "prompt_version": "1.0.0",
+      "task_type": "RESEARCH_ORCHESTRATION",
+      "input_schema": {
+        "name": "ResearchOrchestratorInput",
+        "version": "1.0"
+      },
+      "output_schema": {
+        "name": "ResearchOrchestratorOutput",
+        "version": "1.0"
+      },
+      "allowed_tools": [
+        "get_project_state",
+        "get_pending_approvals",
+        "retrieve_evidence",
+        "profile_dataset",
+        "apply_approved_transformations"
+      ],
+      "required_source_types": [],
+      "optional_source_types": ["EvidenceSpan", "LiteratureRecord"],
+      "max_tool_calls": 8,
+      "failure_behavior": "FAIL_CLOSED",
+      "requested_data_access_level": "VERIFIED_EVIDENCE_ONLY",
+      "max_allowed_data_access_level": "VERIFIED_EVIDENCE_ONLY",
+      "status": "ACTIVE",
+      "content_hash": "5791889f134335fdc00737ba2fb3092d7dfd62ed0310c1d99ba3a37dcfa766b0"
     }
   ]
 }

@@ -11,6 +11,24 @@ import {
 } from "./client"
 import { client } from "./client.gen"
 import type {
+  AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesData,
+  AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesErrors,
+  AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesResponses,
+  AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelData,
+  AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelErrors,
+  AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelResponses,
+  AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsData,
+  AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsErrors,
+  AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsResponses,
+  AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdData,
+  AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdErrors,
+  AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdResponses,
+  AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdData,
+  AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdErrors,
+  AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdResponses,
+  AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsData,
+  AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsErrors,
+  AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsResponses,
   AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansData,
   AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansErrors,
   AnalysisCreateAnalysisPlanPostApiV1ProjectsProjectIdAnalysisPlansResponses,
@@ -1307,6 +1325,164 @@ export const projectsListProjectAuditLogsGetApiV1ProjectsProjectIdAuditLogs = <
   >({
     security: [{ scheme: "bearer", type: "http" }],
     url: "/api/v1/projects/{project_id}/audit-logs",
+    ...options,
+  })
+
+/**
+ * Create Agent Run
+ */
+export const agentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRuns = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsResponses,
+  AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsResponses,
+    AgentRunsCreateAgentRunPostApiV1ProjectsProjectIdAgentRunsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/projects/{project_id}/agent-runs",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * Get Agent Run
+ */
+export const agentRunsGetAgentRunGetApiV1AgentRunsAgentRunId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdResponses,
+  AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdResponses,
+    AgentRunsGetAgentRunGetApiV1AgentRunsAgentRunIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/agent-runs/{agent_run_id}",
+    ...options,
+  })
+
+/**
+ * Append Message
+ */
+export const agentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessages = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesResponses,
+  AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesResponses,
+    AgentRunsAppendMessagePostApiV1AgentRunsAgentRunIdMessagesErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/agent-runs/{agent_run_id}/messages",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  })
+
+/**
+ * List Tool Calls
+ */
+export const agentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCalls = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsResponses,
+  AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsResponses,
+    AgentRunsListToolCallsGetApiV1AgentRunsAgentRunIdToolCallsErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/agent-runs/{agent_run_id}/tool-calls",
+    ...options,
+  })
+
+/**
+ * Get Tool Call
+ */
+export const agentRunsGetToolCallGetApiV1ToolCallsToolCallId = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdResponses,
+  AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).get<
+    AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdResponses,
+    AgentRunsGetToolCallGetApiV1ToolCallsToolCallIdErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/tool-calls/{tool_call_id}",
+    ...options,
+  })
+
+/**
+ * Cancel Agent Run
+ */
+export const agentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancel = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelData,
+    ThrowOnError
+  >,
+): RequestResult<
+  AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelResponses,
+  AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelErrors,
+  ThrowOnError
+> =>
+  (options.client ?? client).post<
+    AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelResponses,
+    AgentRunsCancelAgentRunPostApiV1AgentRunsAgentRunIdCancelErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: "bearer", type: "http" }],
+    url: "/api/v1/agent-runs/{agent_run_id}/cancel",
     ...options,
   })
 

@@ -74,6 +74,12 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
                 from app.exports.service import mark_cancelled_export_job
 
                 mark_cancelled_export_job(session, job=job)
+            if job is not None and job.task_type == JobTaskType.AGENT_ORCHESTRATION:
+                from app.agent_runtime.orchestrator_service import (
+                    mark_cancelled_agent_job,
+                )
+
+                mark_cancelled_agent_job(session, job=job)
             return {"job_id": job_id, "claimed": False}
         job = session.get(Job, parsed_job_id)
         assert job is not None
@@ -107,6 +113,16 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
                 from app.exports.service import mark_failed_export_job
 
                 mark_failed_export_job(session, job=job, error_code=error_code)
+            if job.task_type == JobTaskType.AGENT_ORCHESTRATION:
+                from app.agent_runtime.orchestrator_service import mark_failed_agent_job
+
+                mark_failed_agent_job(session, job=job, error_code=error_code)
+            if job.task_type == JobTaskType.DATASET_TRANSFORM:
+                from app.agent_runtime.orchestrator_service import (
+                    notify_agent_tool_job_failed,
+                )
+
+                notify_agent_tool_job_failed(session, job=job, error_code=error_code)
             service.fail_job(
                 session,
                 job_id=job.id,
@@ -126,6 +142,22 @@ def _execute_job(self: object, job_id: str) -> dict[str, object]:
             output_object_id=result.output_object_id,
             log_artifact_id=result.log_artifact_id,
         )
+        if completed and job.task_type == JobTaskType.DATASET_TRANSFORM:
+            from app.agent_runtime.orchestrator_service import (
+                notify_agent_tool_job_completed,
+            )
+
+            session.refresh(job)
+            if (
+                result.output_object_type is not None
+                and result.output_object_id is not None
+            ):
+                notify_agent_tool_job_completed(
+                    session,
+                    job=job,
+                    output_object_type=result.output_object_type,
+                    output_object_id=result.output_object_id,
+                )
         return {"job_id": job_id, "claimed": True, "completed": completed}
 
 
@@ -258,6 +290,49 @@ def _execute_dataset_transform(
     )
 
 
+def _execute_agent_orchestration(
+    *, session: Session, job: Job, run_id: uuid.UUID
+) -> JobExecutionResult:
+    del run_id
+    import asyncio
+
+    from app.agent_runtime.orchestrator_service import execute_agent_run
+    from app.agent_runtime.sdk_adapter import ProviderMode
+    from app.models import AgentRun, User
+
+    agent_run = session.get(AgentRun, job.resource_id)
+    if (
+        agent_run is None
+        or agent_run.project_id != job.project_id
+        or agent_run.job_id != job.id
+    ):
+        raise RuntimeError("AGENT_RUN_JOB_SCOPE_INVALID")
+    actor = session.get(User, agent_run.requested_by_user_id)
+    if actor is None:
+        raise RuntimeError("AGENT_ACTOR_NOT_FOUND")
+    raw_mode = str(
+        (agent_run.safe_input_summary.get("attributes") or {}).get(
+            "provider_mode", ProviderMode.MOCK.value
+        )
+    )
+    try:
+        provider_mode = ProviderMode(raw_mode)
+    except ValueError as exc:
+        raise RuntimeError("AGENT_PROVIDER_MODE_INVALID") from exc
+    result = asyncio.run(
+        execute_agent_run(
+            session,
+            actor=actor,
+            project_id=job.project_id,
+            agent_run_id=agent_run.id,
+            provider_mode=provider_mode,
+        )
+    )
+    return JobExecutionResult(
+        output_object_type="agent_run", output_object_id=result.agent_run_id
+    )
+
+
 def _execute_analysis_run(
     *, session: Session, job: Job, run_id: uuid.UUID
 ) -> JobExecutionResult:
@@ -364,3 +439,4 @@ register_job_handler(
 register_job_handler(JobTaskType.MANUSCRIPT_TRANSFORM, _execute_manuscript_transform)
 register_job_handler(JobTaskType.EVIDENCE_AUDIT, _execute_evidence_audit)
 register_job_handler(JobTaskType.REPRO_PACKAGE_EXPORT, _execute_repro_package_export)
+register_job_handler(JobTaskType.AGENT_ORCHESTRATION, _execute_agent_orchestration)

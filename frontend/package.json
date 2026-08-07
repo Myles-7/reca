@@ -21,6 +21,7 @@
     "check:m5-fixtures": "node --test scripts/check-m5-fixtures.test.mjs",
     "check:m6-contracts": "node --test scripts/check-m6-contracts.test.mjs",
     "check:m7-fixtures": "bun test scripts/check-m7-fixtures.test.ts",
+    "check:m8-fixtures": "bun test scripts/check-m8-fixtures.test.ts",
     "test": "bun run test:e2e",
     "test:shell": "node ../node_modules/@playwright/test/cli.js test -c playwright.shell.config.ts",
     "test:e2e": "bunx playwright test -c playwright.shell.config.ts",

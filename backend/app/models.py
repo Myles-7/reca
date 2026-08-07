@@ -960,6 +960,7 @@ class JobTaskType(StrEnum):
     MANUSCRIPT_REVISION_AUDIT = "MANUSCRIPT_REVISION_AUDIT"
     EVIDENCE_AUDIT = "EVIDENCE_AUDIT"
     REPRO_PACKAGE_EXPORT = "REPRO_PACKAGE_EXPORT"
+    AGENT_ORCHESTRATION = "AGENT_ORCHESTRATION"
 
 
 class JobStatus(StrEnum):
@@ -979,6 +980,35 @@ class ModelInvocationStatus(StrEnum):
     RUNNING = "RUNNING"
     SUCCEEDED = "SUCCEEDED"
     FAILED = "FAILED"
+
+
+class AgentRunStatus(StrEnum):
+    CREATED = "CREATED"
+    PLANNING = "PLANNING"
+    WAITING_USER_INPUT = "WAITING_USER_INPUT"
+    WAITING_APPROVAL = "WAITING_APPROVAL"
+    CALLING_TOOL = "CALLING_TOOL"
+    REVIEWING = "REVIEWING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    CANCELLED = "CANCELLED"
+
+
+class ToolCallStatus(StrEnum):
+    REQUESTED = "REQUESTED"
+    WAITING_APPROVAL = "WAITING_APPROVAL"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+    DENIED = "DENIED"
+    CANCELLED = "CANCELLED"
+
+
+class AgentEventType(StrEnum):
+    USER_MESSAGE = "USER_MESSAGE"
+    CONTINUE_INTENT = "CONTINUE_INTENT"
+    ASSISTANT_SUMMARY = "ASSISTANT_SUMMARY"
+    RUNTIME_CHECKPOINT = "RUNTIME_CHECKPOINT"
 
 
 class ModelDataAccessLevel(StrEnum):
@@ -2762,6 +2792,23 @@ class AuditLog(SQLModel, table=True):
             name="fk_audit_logs_model_invocation_project",
             ondelete="RESTRICT",
         ),
+        ForeignKeyConstraint(
+            ["agent_run_id", "project_id"],
+            ["agent_runs.id", "agent_runs.project_id"],
+            name="fk_audit_logs_agent_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["tool_call_id", "project_id"],
+            ["tool_calls.id", "tool_calls.project_id"],
+            name="fk_audit_logs_tool_call_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "(agent_run_id IS NULL OR project_id IS NOT NULL) AND "
+            "(tool_call_id IS NULL OR project_id IS NOT NULL)",
+            name="ck_audit_logs_agent_scope",
+        ),
         Index("ix_audit_logs_project_created", "project_id", "created_at"),
     )
 
@@ -2794,6 +2841,8 @@ class AuditLog(SQLModel, table=True):
     job_id: uuid.UUID | None = Field(default=None, index=True)
     approval_id: uuid.UUID | None = Field(default=None, index=True)
     model_invocation_id: uuid.UUID | None = Field(default=None, index=True)
+    agent_run_id: uuid.UUID | None = Field(default=None, index=True)
+    tool_call_id: uuid.UUID | None = Field(default=None, index=True)
     outcome: AuditOutcome = Field(
         sa_column=Column(SAEnum(AuditOutcome, name="audit_outcome"), nullable=False)
     )
@@ -5086,6 +5135,254 @@ class ProcessingRun(SQLModel, table=True):
     )
 
 
+class AgentRun(SQLModel, table=True):
+    __tablename__ = "agent_runs"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_agent_runs_id_project"),
+        UniqueConstraint(
+            "project_id",
+            "requested_by_user_id",
+            "idempotency_key",
+            name="uq_agent_runs_actor_idempotency",
+        ),
+        ForeignKeyConstraint(
+            ["retry_of_agent_run_id", "project_id"],
+            ["agent_runs.id", "agent_runs.project_id"],
+            name="fk_agent_runs_retry_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["job_id", "project_id"],
+            ["jobs.id", "jobs.project_id"],
+            name="fk_agent_runs_job_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("lock_version >= 1", name="ck_agent_runs_lock_version"),
+        CheckConstraint("max_turns BETWEEN 1 AND 100", name="ck_agent_runs_max_turns"),
+        CheckConstraint(
+            "max_tool_calls BETWEEN 0 AND 200", name="ck_agent_runs_max_tool_calls"
+        ),
+        CheckConstraint("turn_count >= 0", name="ck_agent_runs_turn_count"),
+        CheckConstraint("tool_call_count >= 0", name="ck_agent_runs_tool_call_count"),
+        CheckConstraint(
+            "snapshot_hash ~ '^[0-9a-f]{64}$'", name="ck_agent_runs_snapshot_hash"
+        ),
+        CheckConstraint(
+            "request_payload_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_agent_runs_request_payload_hash",
+        ),
+        CheckConstraint(
+            "jsonb_typeof(source_object_versions) = 'object'",
+            name="ck_agent_runs_source_versions_object",
+        ),
+        CheckConstraint(
+            "(status IN ('COMPLETED', 'FAILED', 'CANCELLED') AND completed_at IS NOT NULL) "
+            "OR (status NOT IN ('COMPLETED', 'FAILED', 'CANCELLED') AND completed_at IS NULL)",
+            name="ck_agent_runs_terminal_completed_at",
+        ),
+        CheckConstraint(
+            "(status = 'FAILED' AND failure_code IS NOT NULL) OR "
+            "(status <> 'FAILED' AND failure_code IS NULL)",
+            name="ck_agent_runs_failure_fields",
+        ),
+        Index("ix_agent_runs_project_status", "project_id", "status"),
+        Index("ix_agent_runs_project_created", "project_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(
+        foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
+    )
+    requested_by_user_id: uuid.UUID = Field(
+        foreign_key="user.id", index=True, ondelete="RESTRICT"
+    )
+    agent_type: str = Field(default="RESEARCH_ORCHESTRATOR", max_length=100)
+    status: AgentRunStatus = Field(
+        default=AgentRunStatus.CREATED,
+        sa_column=Column(
+            SAEnum(AgentRunStatus, name="agent_run_status"), nullable=False
+        ),
+    )
+    request_id: str | None = Field(default=None, max_length=64, index=True)
+    correlation_id: str | None = Field(default=None, max_length=64, index=True)
+    idempotency_key: str = Field(max_length=255)
+    request_payload_hash: str = Field(max_length=64)
+    safe_input_summary: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    snapshot_schema_version: str = Field(max_length=50)
+    snapshot_revision: int = Field(ge=1)
+    snapshot_hash: str = Field(max_length=64)
+    source_object_versions: dict[str, Any] = Field(
+        sa_column=Column(JSONB, nullable=False)
+    )
+    safe_snapshot_summary: dict[str, Any] = Field(
+        sa_column=Column(JSONB, nullable=False)
+    )
+    max_turns: int = Field(default=12)
+    max_tool_calls: int = Field(default=24)
+    turn_count: int = Field(default=0)
+    tool_call_count: int = Field(default=0)
+    lock_version: int = Field(default=1)
+    retry_of_agent_run_id: uuid.UUID | None = Field(default=None, index=True)
+    job_id: uuid.UUID | None = Field(default=None, index=True)
+    failure_code: str | None = Field(default=None, max_length=100)
+    degradation: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB, nullable=True)
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+
+
+class ToolCall(SQLModel, table=True):
+    __tablename__ = "tool_calls"
+    __table_args__ = (
+        UniqueConstraint("id", "project_id", name="uq_tool_calls_id_project"),
+        UniqueConstraint(
+            "agent_run_id", "idempotency_key", name="uq_tool_calls_run_idempotency"
+        ),
+        ForeignKeyConstraint(
+            ["agent_run_id", "project_id"],
+            ["agent_runs.id", "agent_runs.project_id"],
+            name="fk_tool_calls_agent_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["retry_of_tool_call_id", "project_id"],
+            ["tool_calls.id", "tool_calls.project_id"],
+            name="fk_tool_calls_retry_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["approval_id", "project_id"],
+            ["approval_records.id", "approval_records.project_id"],
+            name="fk_tool_calls_approval_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["job_id", "project_id"],
+            ["jobs.id", "jobs.project_id"],
+            name="fk_tool_calls_job_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint(
+            "input_hash ~ '^[0-9a-f]{64}$'", name="ck_tool_calls_input_hash"
+        ),
+        CheckConstraint(
+            "output_hash IS NULL OR output_hash ~ '^[0-9a-f]{64}$'",
+            name="ck_tool_calls_output_hash",
+        ),
+        CheckConstraint("attempt_number >= 1", name="ck_tool_calls_attempt_number"),
+        CheckConstraint(
+            "(status IN ('COMPLETED', 'FAILED', 'DENIED', 'CANCELLED') AND completed_at IS NOT NULL) "
+            "OR (status NOT IN ('COMPLETED', 'FAILED', 'DENIED', 'CANCELLED') AND completed_at IS NULL)",
+            name="ck_tool_calls_terminal_completed_at",
+        ),
+        CheckConstraint(
+            "(status = 'COMPLETED' AND output_hash IS NOT NULL AND error_code IS NULL) OR "
+            "(status IN ('FAILED', 'DENIED') AND error_code IS NOT NULL) OR "
+            "(status NOT IN ('COMPLETED', 'FAILED', 'DENIED') AND output_hash IS NULL AND error_code IS NULL)",
+            name="ck_tool_calls_outcome_fields",
+        ),
+        CheckConstraint(
+            "(approval_id IS NULL) = (approval_payload_hash IS NULL)",
+            name="ck_tool_calls_approval_pair",
+        ),
+        CheckConstraint(
+            "(output_object_type IS NULL) = (output_object_id IS NULL)",
+            name="ck_tool_calls_output_object_pair",
+        ),
+        Index("ix_tool_calls_project_status", "project_id", "status"),
+        Index("ix_tool_calls_run_created", "agent_run_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    agent_run_id: uuid.UUID = Field(index=True)
+    requested_by_user_id: uuid.UUID = Field(
+        foreign_key="user.id", index=True, ondelete="RESTRICT"
+    )
+    tool_name: str = Field(max_length=100, index=True)
+    tool_version: str = Field(max_length=50)
+    status: ToolCallStatus = Field(
+        default=ToolCallStatus.REQUESTED,
+        sa_column=Column(
+            SAEnum(ToolCallStatus, name="tool_call_status"), nullable=False
+        ),
+    )
+    request_id: str | None = Field(default=None, max_length=64, index=True)
+    idempotency_key: str = Field(max_length=255)
+    input_hash: str = Field(max_length=64)
+    safe_input_summary: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    output_hash: str | None = Field(default=None, max_length=64)
+    safe_output_summary: dict[str, Any] | None = Field(
+        default=None, sa_column=Column(JSONB(none_as_null=True), nullable=True)
+    )
+    approval_id: uuid.UUID | None = Field(default=None, index=True)
+    approval_payload_hash: str | None = Field(default=None, max_length=64)
+    job_id: uuid.UUID | None = Field(default=None, index=True)
+    output_object_type: str | None = Field(default=None, max_length=100)
+    output_object_id: uuid.UUID | None = Field(default=None, index=True)
+    retry_of_tool_call_id: uuid.UUID | None = Field(default=None, index=True)
+    attempt_number: int = Field(default=1)
+    error_code: str | None = Field(default=None, max_length=100)
+    retryable: bool = False
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+    started_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+    completed_at: datetime | None = Field(
+        default=None, sa_type=timezone_aware_datetime_type()
+    )
+
+
+class AgentEvent(SQLModel, table=True):
+    __tablename__ = "agent_events"
+    __table_args__ = (
+        UniqueConstraint(
+            "agent_run_id", "sequence_number", name="uq_agent_events_run_sequence"
+        ),
+        ForeignKeyConstraint(
+            ["agent_run_id", "project_id"],
+            ["agent_runs.id", "agent_runs.project_id"],
+            name="fk_agent_events_agent_run_project",
+            ondelete="RESTRICT",
+        ),
+        CheckConstraint("sequence_number >= 1", name="ck_agent_events_sequence"),
+        CheckConstraint("content_hash ~ '^[0-9a-f]{64}$'", name="ck_agent_events_hash"),
+        Index("ix_agent_events_run_created", "agent_run_id", "created_at"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    project_id: uuid.UUID = Field(index=True)
+    agent_run_id: uuid.UUID = Field(index=True)
+    sequence_number: int
+    event_type: AgentEventType = Field(
+        sa_column=Column(
+            SAEnum(AgentEventType, name="agent_event_type"), nullable=False
+        )
+    )
+    actor_type: AuditActorType = Field(
+        sa_column=Column(
+            SAEnum(AuditActorType, name="audit_actor_type"), nullable=False
+        )
+    )
+    actor_id: str | None = Field(default=None, max_length=255)
+    safe_summary: dict[str, Any] = Field(sa_column=Column(JSONB, nullable=False))
+    content_hash: str = Field(max_length=64)
+    request_id: str | None = Field(default=None, max_length=64, index=True)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc, sa_type=timezone_aware_datetime_type()
+    )
+
+
 class ModelInvocation(SQLModel, table=True):
     __tablename__ = "model_invocations"
     __table_args__ = (
@@ -5111,6 +5408,18 @@ class ModelInvocation(SQLModel, table=True):
             name="ck_model_invocations_outcome_fields",
         ),
         UniqueConstraint("id", "project_id", name="uq_model_invocations_id_project"),
+        ForeignKeyConstraint(
+            ["agent_run_id", "project_id"],
+            ["agent_runs.id", "agent_runs.project_id"],
+            name="fk_model_invocations_agent_run_project",
+            ondelete="RESTRICT",
+        ),
+        ForeignKeyConstraint(
+            ["tool_call_id", "project_id"],
+            ["tool_calls.id", "tool_calls.project_id"],
+            name="fk_model_invocations_tool_call_project",
+            ondelete="RESTRICT",
+        ),
         Index("ix_model_invocations_project_status", "project_id", "status"),
         Index("ix_model_invocations_prompt", "prompt_id", "prompt_version"),
     )
@@ -5120,6 +5429,8 @@ class ModelInvocation(SQLModel, table=True):
         foreign_key="research_projects.id", index=True, ondelete="RESTRICT"
     )
     request_id: str | None = Field(default=None, max_length=64, index=True)
+    agent_run_id: uuid.UUID | None = Field(default=None, index=True)
+    tool_call_id: uuid.UUID | None = Field(default=None, index=True)
     actor_type: AuditActorType = Field(
         sa_column=Column(
             SAEnum(AuditActorType, name="audit_actor_type"), nullable=False
@@ -5171,6 +5482,12 @@ class ModelInvocation(SQLModel, table=True):
     implementation_metadata: dict[str, Any] | None = Field(
         default=None, sa_column=Column(JSONB, nullable=True)
     )
+    input_tokens: int | None = Field(default=None, ge=0)
+    output_tokens: int | None = Field(default=None, ge=0)
+    total_tokens: int | None = Field(default=None, ge=0)
+    request_count: int | None = Field(default=None, ge=0)
+    latency_ms: int | None = Field(default=None, ge=0)
+    redaction_policy_version: str | None = Field(default=None, max_length=50)
     started_at: datetime = Field(
         default_factory=get_datetime_utc,
         sa_type=timezone_aware_datetime_type(),

@@ -232,6 +232,9 @@ select {
 .preview-product-surface {
   min-height: 100%;
 }
+.preview-product-surface[data-module="agent-workspace"] {
+  height: 100%;
+}
 .preview-inspector {
   min-width: 0;
   overflow: auto;

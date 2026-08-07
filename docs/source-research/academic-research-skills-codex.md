@@ -430,6 +430,20 @@ implemented as a PromptContract candidate rather than a runtime Agent. A second
 spike should test claim-verification assets against M6-M7 EvidenceSpan and
 AuditResult fixtures.
 
+### M8 stage-0 effect decision
+
+`backend/tests/spikes/test_m8_ars_effect_spike.py` compared the RECA-native
+claim-verification rule path with the ARS checkpoint concept on a synthetic,
+prompt-injected claim fixture. Both paths retained the same strict-schema,
+source-preservation, conflict-transparency and injection-blocking outcomes; the
+ARS concept added estimated prompt tokens without a measured core benefit.
+
+Decision: `NO_COPY_FOR_M8_CORE`.
+
+No ARS Prompt, workflow, source, test asset or runtime was copied. Future
+selective reuse still requires an exact-path proposal, fixed source, file-level
+license review, attribution, modification record and a new measurable delta.
+
 ## 18. Phase 5 decision boundaries
 
 ```text

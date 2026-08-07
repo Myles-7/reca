@@ -16,12 +16,14 @@ from sqlmodel import Session, select
 from app.agents.prompts import PromptContract, PromptManifestError, get_prompt_contract
 from app.core.observability import current_request_id
 from app.models import (
+    AgentRun,
     AuditActorType,
     AuditLog,
     AuditOutcome,
     ModelDataAccessLevel,
     ModelInvocation,
     ModelInvocationStatus,
+    ToolCall,
     User,
     get_datetime_utc,
 )
@@ -93,6 +95,18 @@ class InvocationCreate:
     request_id: str | None = None
     retry_of_invocation_id: uuid.UUID | None = None
     execution_metadata: dict[str, Any] | None = None
+    agent_run_id: uuid.UUID | None = None
+    tool_call_id: uuid.UUID | None = None
+    redaction_policy_version: str | None = None
+
+
+class ModelUsage(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    input_tokens: int = 0
+    output_tokens: int = 0
+    request_count: int = 1
+    latency_ms: int = 0
 
 
 _ACCESS_RANK = {
@@ -330,6 +344,27 @@ def create_model_invocation(
         contract=contract,
         source_resolver=source_resolver,
     )
+    if command.agent_run_id is not None:
+        agent_run = session.get(AgentRun, command.agent_run_id)
+        if agent_run is None or agent_run.project_id != command.project_id:
+            raise _governance_error(
+                "MODEL_AGENT_RUN_INVALID",
+                "AgentRun is missing or belongs to another project",
+            )
+    if command.tool_call_id is not None:
+        tool_call = session.get(ToolCall, command.tool_call_id)
+        if (
+            tool_call is None
+            or tool_call.project_id != command.project_id
+            or (
+                command.agent_run_id is not None
+                and tool_call.agent_run_id != command.agent_run_id
+            )
+        ):
+            raise _governance_error(
+                "MODEL_TOOL_CALL_INVALID",
+                "ToolCall is missing or has inconsistent scope",
+            )
     if command.retry_of_invocation_id is not None:
         previous = session.get(ModelInvocation, command.retry_of_invocation_id)
         if previous is None or previous.project_id != command.project_id:
@@ -350,6 +385,8 @@ def create_model_invocation(
     invocation = ModelInvocation(
         project_id=command.project_id,
         request_id=request_id,
+        agent_run_id=command.agent_run_id,
+        tool_call_id=command.tool_call_id,
         actor_type=command.actor_type,
         actor_id=command.actor_id,
         task_type=command.task_type,
@@ -369,6 +406,7 @@ def create_model_invocation(
         input_hash=canonical_hash(command.sanitized_input),
         status=ModelInvocationStatus.PENDING,
         implementation_metadata=metadata,
+        redaction_policy_version=command.redaction_policy_version,
     )
     session.add(invocation)
     session.flush()
@@ -416,6 +454,7 @@ def complete_model_invocation(
     *,
     invocation_id: uuid.UUID,
     sanitized_output: Any,
+    usage: ModelUsage | None = None,
 ) -> ModelInvocation:
     invocation = session.exec(
         select(ModelInvocation)
@@ -439,6 +478,12 @@ def complete_model_invocation(
     invocation.status = ModelInvocationStatus.SUCCEEDED
     invocation.output_hash = output_hash
     invocation.completed_at = get_datetime_utc()
+    if usage is not None:
+        invocation.input_tokens = usage.input_tokens
+        invocation.output_tokens = usage.output_tokens
+        invocation.total_tokens = usage.input_tokens + usage.output_tokens
+        invocation.request_count = usage.request_count
+        invocation.latency_ms = usage.latency_ms
     session.add(invocation)
     _audit(
         session,
